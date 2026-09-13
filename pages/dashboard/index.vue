@@ -64,6 +64,31 @@
  </div>
  </section>
 
+  <!-- Redeem Points Promo -->
+  <section class="relative overflow-hidden rounded-2xl bg-[#FF5C1A] p-4 md:p-5 flex flex-col md:flex-row items-center justify-between group shadow-lg shadow-[#FF5C1A]/20">
+  <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:22px_22px] opacity-10"></div>
+  <div class="absolute right-0 top-0 w-64 h-64 bg-white/20 rounded-full blur-[80px] -mr-20 -mt-20"></div>
+
+  <div class="relative z-10 flex-1 w-full md:max-w-xl text-center md:text-left">
+  <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-md rounded-lg text-white ff-mono text-[10px] font-bold uppercase tracking-widest mb-3 md:mb-4 mx-auto md:mx-0">
+  <Trophy class="w-3.5 h-3.5 text-white" /> Turn Points into Cash
+  </div>
+  <h2 class="ff-display text-2xl md:text-3xl font-bold text-white tracking-tight mb-2 leading-tight">
+  Got Points? <br class="md:hidden" /> Redeem Them Now!
+  </h2>
+  <p class="text-sm md:text-base text-white/80 font-medium mb-6 md:mb-0 leading-relaxed max-w-sm mx-auto md:mx-0">
+  Convert your hard-earned Erranders points into real cash in your wallet and enjoy free meals.
+  </p>
+  </div>
+
+  <div class="relative z-10 w-full md:w-auto mt-4 md:mt-0 flex flex-col items-center">
+  <button @click="isRedeemModalOpen = true" class="w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 bg-white text-[#FF5C1A] rounded-xl text-sm font-bold hover:bg-[#FAF8F5] transition-all shadow-xl active:scale-95 whitespace-nowrap">
+  Redeem {{ user?.points || 0 }} pts <ArrowRight class="w-4 h-4" />
+  </button>
+  <p class="text-[10px] text-white/70 font-medium mt-2">Min. 500 points to redeem</p>
+  </div>
+  </section>
+
   <!-- Quick Actions -->
   <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
  <NuxtLink to="/meal-planner" class="bg-white border border-[#E7E2DA] rounded-xl p-4 md:p-4 flex items-center justify-between group hover:border-[#FF5C1A]/30 transition-all">
@@ -213,16 +238,25 @@
  </div>
  </section>
 
+ <RedeemPointsModal 
+  :is-open="isRedeemModalOpen"
+  :current-points="user?.points || 0"
+  @close="isRedeemModalOpen = false"
+  @redeemed="handlePointsRedeemed"
+ />
+
  </div>
 </template>
 
 <script setup lang="ts">
+import { useAuth } from '@/composables/modules/auth';
 import { useLandingPage } from '@/composables/modules/landing';
 import { useUser } from '@/composables/modules/auth/user';
-import { MapPin, Search, ArrowRight, PackageSearch, Tag, Star, Clock, Heart, Users, UtensilsCrossed, ShoppingCart, ShieldCheck, Trophy, Flame, BarChart3, RefreshCw, WifiOff, MoonStar, Rocket, Lock, Package } from 'lucide-vue-next';
+import { MapPin, Search, ArrowRight, PackageSearch, Tag, Star, Clock, Heart, Users, UtensilsCrossed, ShoppingCart, ShieldCheck, Trophy, Flame, BarChart3, RefreshCw, WifiOff, MoonStar, Rocket, Lock, Package, Coins } from 'lucide-vue-next';
 import { onMounted, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCustomToast } from '@/composables/core/useCustomToast';
+import RedeemPointsModal from '@/components/core/RedeemPointsModal.vue';
 
 definePageMeta({
  layout: 'student'
@@ -230,10 +264,22 @@ definePageMeta({
 
 const router = useRouter();
 const { user } = useUser();
+const { fetchProfile } = useAuth();
 const { loading, onlineVendors, fetchError, fetchHomeData } = useLandingPage();
 const { showToast } = useCustomToast();
 
+onMounted(async () => {
+  await fetchProfile();
+});
+
 const searchQuery = ref('');
+const isRedeemModalOpen = ref(false);
+
+const handlePointsRedeemed = (newPoints: number) => {
+  if (user.value) {
+    user.value.points = newPoints;
+  }
+};
 
 const quickStats = computed(() => [
  { 

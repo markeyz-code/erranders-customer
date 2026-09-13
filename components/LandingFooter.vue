@@ -93,8 +93,10 @@
           &copy; {{ new Date().getFullYear() }} Errander Inc. Delivering happiness.
         </p>
         <div class="flex items-center gap-6">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/1200px-PayPal.svg.png" class="h-6 object-contain grayscale opacity-30 hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer"/>
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1200px-Mastercard-logo.svg.png" class="h-6 object-contain grayscale opacity-30 hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer"/>
+          <a href="https://www.instagram.com/erranders.official1/">
+            <img src="@/assets/img/instagram.jpeg" class="h-6 object-contain rounded-lg transition-all cursor-pointer"/>
+          </a>
+          <!-- <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1200px-Mastercard-logo.svg.png" class="h-6 object-contain grayscale opacity-30 hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer"/> -->
         </div>
       </div>
       

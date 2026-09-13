@@ -29,7 +29,7 @@
 
         <form @submit.prevent="submitPhoneNumber" class="space-y-5">
           <div>
-            <label class="block text-xs font-bold text-gray-700 mb-2 tracking-wide uppercase">Your Phone Number</label>
+            <label class="block text-xs font-bold text-gray-700 mb-2 tracking-wide uppercase">Your Phone Number (Whatsapp)</label>
             <div class="flex relative rounded-xl bg-white border border-gray-300 focus-within:border-parentPrimary focus-within:ring-4 focus-within:ring-parentPrimary/10 transition-all">
               
               <!-- Custom Dropdown -->
