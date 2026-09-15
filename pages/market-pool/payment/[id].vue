@@ -79,7 +79,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { GATEWAY_ENDPOINT_WITH_AUTH as api } from '@/api_factory/axios.config'
 import { payments_api } from '@/api_factory/modules/payments'
 import { useCustomToast } from '@/composables/core/useCustomToast'
-import { useUser } from '@/composables/auth/user'
+import { useUser } from '@/composables/modules/auth/user'
 
 const route = useRoute()
 const router = useRouter()

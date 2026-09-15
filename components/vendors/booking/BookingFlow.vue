@@ -280,8 +280,9 @@
             </div>
 
           </div>
+        </div>
 
-          <!-- RIGHT COLUMN (Cart Summary) -->
+        <!-- RIGHT COLUMN (Cart Summary) -->
           <div class="hidden lg:block w-[400px] shrink-0">
             <div class="sticky top-8 bg-white rounded-2xl overflow-hidden flex flex-col h-[calc(100vh-8rem)] border border-gray-100/80">
               
