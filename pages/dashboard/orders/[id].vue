@@ -208,7 +208,7 @@
                   <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-sm">
                     <button @click="payForErrand" :disabled="isInitializingPayment || isPayingWithWallet" class="flex-1 w-full bg-[#FF5C1A] text-white font-bold px-4 h-11 rounded-lg hover:bg-[#e6511a] transition-colors disabled:opacity-50 flex items-center justify-center gap-2 text-xs">
                        <Zap v-if="!isInitializingPayment" class="w-3.5 h-3.5" />
-                       {{ isInitializingPayment ? 'Processing...' : 'Pay with Card' }}
+                       {{ isInitializingPayment ? 'Processing...' : 'Pay with Paystack' }}
                     </button>
                     <button 
                       @click="payForErrandWithWallet" 

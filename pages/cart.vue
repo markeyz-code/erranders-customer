@@ -364,7 +364,7 @@
                         <img src="~/assets/img/paystack.png" class="h-4 object-contain" alt="Paystack" />
                       </div>
                       <div>
-                        <p class="text-sm font-medium text-gray-900 leading-none mb-0.5">Pay with Card</p>
+                        <p class="text-sm font-medium text-gray-900 leading-none mb-0.5">Pay with Paystack</p>
                         <p class="text-xs font-medium text-gray-400">Instant & Secure</p>
                       </div>
                     </div>
