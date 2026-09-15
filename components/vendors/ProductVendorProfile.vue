@@ -2013,7 +2013,7 @@ watch(() => vendor.value ? cart.getVendorStats(vendor.value._id)?.packs : null, 
       if (!pack.packType || (!pack.packType.name && !pack.name)) {
         const defaultPack = vendor.value.packs[0];
         if (defaultPack) {
-          cart.setPackType(vendor.value._id, pack.id, { name: defaultPack.name, price: defaultPack.price });
+          cart.setPackType(vendor.value._id, pack.id, { name: defaultPack.name || 'Pack', price: defaultPack.price });
         }
       }
     });
