@@ -482,29 +482,7 @@
                    </div>
                 </div>
 
-                <!-- Rider Account Details -->
-                <div v-if="order.type === 'custom_errand' && order.erranderDetails?.accountNumber" class="p-5 rounded-2xl border border-gray-100 relative overflow-hidden">
-                   <div class="absolute left-0 top-0 w-1 h-full bg-[#FF5C1A]"></div>
-                   <div class="flex items-center gap-3 pl-2 mb-4">
-                      <div class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-[#FF5C1A] shrink-0">
-                         <CreditCard class="w-5 h-5" />
-                      </div>
-                      <div>
-                         <h4 class="font-bold text-gray-900 text-sm">Transfer Item Funds</h4>
-                         <p class="text-[11px] text-gray-400 mt-0.5 leading-relaxed">Send item payment directly to your rider.</p>
-                      </div>
-                   </div>
-                   <div class="flex items-center justify-between gap-4 p-4 rounded-xl bg-gray-900 text-white pl-2">
-                      <div>
-                         <p class="text-[9px] font-bold text-gray-400 tracking-widest uppercase mb-0.5">{{ order.erranderDetails.bankName }}</p>
-                         <p class="text-base font-bold tracking-widest font-mono leading-none">{{ order.erranderDetails.accountNumber }}</p>
-                         <p class="text-[11px] font-bold text-gray-300 mt-1">{{ order.erranderDetails.accountName }}</p>
-                      </div>
-                      <button @click="copyAccountDetails" class="p-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-all active:scale-95 shrink-0">
-                         <Copy class="w-4 h-4" />
-                      </button>
-                   </div>
-                </div>
+                <!-- Rider Account Details removed -->
 
                 <!-- Support -->
                 <NuxtLink to="/support" class="flex items-center justify-between p-4 rounded-2xl border border-gray-100 hover:border-gray-200 transition-colors group">
@@ -633,75 +611,7 @@
     </Transition>
   </Teleport>
 
-  <!-- P2P Payment Confirmation Modal -->
-  <UiModal
-    :is-open="isConfirmPaymentModalOpen"
-    title="Confirm Payment"
-    description="Please verify you've sent the money"
-    size="sm"
-    @close="isConfirmPaymentModalOpen = false"
-  >
-    <div class="flex flex-col items-center text-center py-4">
-      <div class="w-16 h-16 rounded-full bg-orange-50 border border-orange-100 flex items-center justify-center mb-4">
-        <Zap class="w-8 h-8 text-[#FF5C1A]" />
-      </div>
-      <h4 class="text-lg font-bold text-gray-900 mb-2">Are you sure?</h4>
-      <p class="text-sm text-gray-500 leading-relaxed max-w-[260px]">
-        You are about to confirm that you have transferred 
-        <strong class="text-gray-900">₦{{ order?.total?.toLocaleString() }}</strong> 
-        to the rider's bank account.
-      </p>
-
-      <div class="bg-gray-50 border border-gray-100 p-3 rounded-xl w-full mt-6 flex flex-col gap-1.5 text-left text-xs text-gray-600">
-        <div class="flex justify-between items-center">
-          <span>Bank:</span>
-          <span class="font-bold text-gray-900">{{ order?.errander?.bankDetails?.bankName }}</span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span>Account:</span>
-          <span class="font-bold text-gray-900">{{ order?.errander?.bankDetails?.accountNumber }}</span>
-        </div>
-      </div>
-
-      <div class="w-full mt-4">
-        <p class="text-xs font-bold text-left text-gray-700 mb-2">Proof of Payment</p>
-        <label 
-          class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors bg-white relative overflow-hidden"
-          :class="{ 'opacity-50 pointer-events-none': isUploadingProof }"
-        >
-          <div v-if="!proofOfPaymentUrl" class="flex flex-col items-center justify-center pt-5 pb-6">
-            <Loader2 v-if="isUploadingProof" class="w-6 h-6 text-gray-400 mb-2 animate-spin" />
-            <ImagePlus v-else class="w-6 h-6 text-gray-400 mb-2" />
-            <p class="text-xs text-gray-500 font-medium">Click to upload receipt</p>
-          </div>
-          <div v-else class="w-full h-full relative">
-            <img :src="proofOfPaymentUrl" class="w-full h-full object-cover" />
-            <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-              <span class="text-white text-xs font-bold">Change Image</span>
-            </div>
-          </div>
-          <input type="file" accept="image/*" class="hidden" @change="handleProofUpload" />
-        </label>
-      </div>
-    </div>
-
-    <template #footer>
-      <button 
-        @click="isConfirmPaymentModalOpen = false" 
-        class="px-5 py-3 w-full rounded-xl bg-gray-100 text-gray-500 font-bold text-sm hover:bg-gray-100 transition-colors"
-      >
-        Cancel
-      </button>
-      <button 
-        @click="confirmP2PPayment" 
-        :disabled="isPayingWithWallet || !proofOfPaymentUrl"
-        class="px-6 py-3 w-full justify-center text-center rounded-xl bg-[#FF5C1A] text-white font-bold text-sm hover:bg-[#e6511a] transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        <Loader2 v-if="isPayingWithWallet" class="w-4 h-4 animate-spin" />
-        <span>Yes, I have paid</span>
-      </button>
-    </template>
-    </UiModal>
+  <!-- P2P Payment Confirmation Modal removed -->
 
     <!-- Order Completed Modal -->
     <UiModal
@@ -1098,7 +1008,7 @@ const increaseFee = async () => {
 };
 
 const isAcceptingBid = ref<string | null>(null);
-const isConfirmPaymentModalOpen = ref(false);
+
 const isOrderCompletedModalOpen = ref(false);
 
 watch(() => order.value?.status, (newStatus) => {
@@ -1132,30 +1042,7 @@ const executeAcceptBid = async () => {
   }
 };
 
-const markAsPaidP2P = async () => {
-  if (!order.value?._id) return;
-  proofOfPaymentUrl.value = ''; // Reset when opening
-  isConfirmPaymentModalOpen.value = true;
-};
 
-const confirmP2PPayment = async () => {
-  if (!order.value?._id) return;
-  isPayingWithWallet.value = true;
-  try {
-    const res = await api.post(`/orders/${order.value._id}/custom/p2p-pay`, {
-      proofOfPayment: proofOfPaymentUrl.value
-    });
-    if (res.data) {
-      order.value = res.data;
-      showToast({ title: 'Success', message: 'Payment marked as sent. Awaiting errander confirmation.', toastType: 'success' });
-      isConfirmPaymentModalOpen.value = false;
-    }
-  } catch (e: any) {
-    showToast({ title: 'Payment Error', message: e.response?.data?.message || 'Failed to mark as paid', toastType: 'error' });
-  } finally {
-    isPayingWithWallet.value = false;
-  }
-};
 
 const payForErrand = async () => {
   isInitializingPayment.value = true;
@@ -1181,24 +1068,7 @@ const payForErrand = async () => {
 const isPayingWithWallet = ref(false);
 
 const isFundModalOpen = ref(false);
-const isUploadingProof = ref(false);
-const proofOfPaymentUrl = ref('');
 const fundAmountNeeded = ref(0);
-
-const handleProofUpload = async (event: Event) => {
-  const file = (event.target as HTMLInputElement).files?.[0];
-  if (!file) return;
-  
-  isUploadingProof.value = true;
-  try {
-    const res = await upload_api.uploadFile(file, 'image');
-    proofOfPaymentUrl.value = res?.data?.url || res?.url;
-  } catch (err: any) {
-    showToast({ title: 'Error', message: err.response?.data?.message || 'Failed to upload image', toastType: 'error' });
-  } finally {
-    isUploadingProof.value = false;
-  }
-};
 
 const initiateWalletTopup = async () => {
   try {
