@@ -322,38 +322,10 @@
  </div>
  </div>
  <div v-if="order.status === 'pending' || order.status === 'awaiting_payment'" class="mt-4">
-    <template v-if="order.type === 'custom_errand' && order.status === 'awaiting_payment' && order.errander?.bankDetails">
-      <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-4">
-        <p class="text-xs font-bold text-blue-800 uppercase tracking-wider mb-2">Direct Bank Transfer</p>
-        <p class="text-sm text-blue-900 mb-3">Please transfer <strong>₦{{ order.total.toLocaleString() }}</strong> to your errander to begin the errand.</p>
-        <div class="space-y-2 text-sm text-blue-900 bg-white/50 p-3 rounded-lg border border-blue-100/50">
-          <div class="flex justify-between items-center">
-            <span class="opacity-70">Bank Name</span>
-            <span class="font-semibold">{{ order.errander.bankDetails.bankName }}</span>
-          </div>
-          <div class="flex justify-between items-center">
-            <span class="opacity-70">Account Name</span>
-            <span class="font-semibold">{{ order.errander.bankDetails.accountName }}</span>
-          </div>
-          <div class="flex justify-between items-center">
-            <span class="opacity-70">Account Number</span>
-            <div class="flex items-center gap-2">
-              <span class="font-bold font-mono text-base tracking-wider">{{ order.errander.bankDetails.accountNumber }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <button @click="handleMarkAsPaid" :disabled="processingPayment" class="w-full py-3 bg-gray-900 hover:bg-black text-white rounded-xl text-sm font-bold tracking-wide transition-all shadow-md shadow-gray-900/20 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2">
-        <Loader2 v-if="processingPayment" class="w-4 h-4 animate-spin" />
-        <span>{{ processingPayment ? 'Processing...' : 'I Have Paid' }}</span>
-      </button>
-    </template>
-    <template v-else>
-      <button @click="payForOrder" :disabled="processingPayment" class="w-full py-3 bg-gray-900 hover:bg-black text-white rounded-xl text-sm font-bold tracking-wide transition-all shadow-md shadow-gray-900/20 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2">
-        <Loader2 v-if="processingPayment" class="w-4 h-4 animate-spin" />
-        <span>{{ processingPayment ? 'Initializing...' : 'Complete Payment Now' }}</span>
-      </button>
-    </template>
+    <button @click="payForOrder" :disabled="processingPayment" class="w-full py-3 bg-gray-900 hover:bg-black text-white rounded-xl text-sm font-bold tracking-wide transition-all shadow-md shadow-gray-900/20 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2">
+      <Loader2 v-if="processingPayment" class="w-4 h-4 animate-spin" />
+      <span>{{ processingPayment ? 'Initializing...' : 'Complete Payment Now' }}</span>
+    </button>
  </div>
  </div>
 

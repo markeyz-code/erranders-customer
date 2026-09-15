@@ -275,69 +275,7 @@
                     </div>
                   </label>
 
-                  <!-- Direct Transfer Option -->
-                  <label class="flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors" :class="paymentMethod === 'direct_transfer' ? 'border-parentPrimary bg-parentPrimary/5' : 'border-gray-100 hover:border-gray-200'">
-                    <input type="radio" v-model="paymentMethod" value="direct_transfer" class="hidden" />
-                    <div class="w-4 h-4 rounded-full border flex items-center justify-center shrink-0" :class="paymentMethod === 'direct_transfer' ? 'border-parentPrimary' : 'border-gray-300'">
-                      <div v-if="paymentMethod === 'direct_transfer'" class="w-2 h-2 rounded-full bg-parentPrimary"></div>
-                    </div>
-                    <div class="flex-1">
-                      <h4 class="text-sm font-semibold text-gray-900">Direct Bank Transfer</h4>
-                      <p class="text-xs text-gray-500 mt-0.5">Transfer directly to the vendor's bank account.</p>
-                    </div>
-                  </label>
-                </div>
 
-                <!-- Direct Transfer Details -->
-                <div v-if="paymentMethod === 'direct_transfer'" class="mt-4 p-4 bg-gray-50 rounded-xl space-y-4 animate-fade-in border border-gray-100">
-                  <div class="space-y-2">
-                    <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Vendor Account Details</h4>
-                    <div class="bg-white p-3 rounded-lg border border-gray-100 shadow-sm relative group">
-                      <div class="flex justify-between items-center mb-1">
-                        <span class="text-xs text-gray-500">Bank Name</span>
-                        <span class="text-sm font-semibold text-gray-900">{{ vendor.bankDetails?.bankName || vendor.bankName || 'Not specified' }}</span>
-                      </div>
-                      <div class="flex justify-between items-center mb-1">
-                        <span class="text-xs text-gray-500">Account Number</span>
-                        <div class="flex items-center gap-2">
-                          <span class="text-sm font-bold text-gray-900">{{ vendor.bankDetails?.accountNumber || vendor.accountNumber || 'Not specified' }}</span>
-                          <button @click="copyAccountDetails" class="text-gray-400 hover:text-parentPrimary transition-colors" title="Copy Account Number">
-                            <Copy class="w-4 h-4" />
-                          </button>
-                        </div>
-                      </div>
-                      <div class="flex justify-between items-center">
-                        <span class="text-xs text-gray-500">Account Name</span>
-                        <span class="text-xs font-medium text-gray-900">{{ vendor.bankDetails?.accountName || vendor.accountName || 'Not specified' }}</span>
-                      </div>
-                      
-                      <!-- Share button floating on hover for desktop, or static for mobile -->
-                      <button @click="shareAccountDetails" class="absolute top-3 right-3 text-gray-400 hover:text-parentPrimary transition-colors sm:opacity-0 sm:group-hover:opacity-100" title="Share Account Details">
-                        <Share2 class="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                  
-                  <div class="space-y-2">
-                    <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Upload Payment Receipt</h4>
-                    <input 
-                      type="file" 
-                      accept="image/*" 
-                      @change="handleProofUpload"
-                      class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-parentPrimary/10 file:text-parentPrimary hover:file:bg-parentPrimary/20 cursor-pointer"
-                    />
-                    
-                    <!-- Preview -->
-                    <div v-if="proofOfPaymentPreview" class="mt-3 relative rounded-lg overflow-hidden border border-gray-200 group w-fit">
-                      <img :src="proofOfPaymentPreview" class="w-full max-w-[200px] h-auto object-cover rounded-lg" />
-                      <button @click="clearProof" class="absolute top-1 right-1 bg-black/60 text-white p-1 rounded-full hover:bg-black/90 transition-colors opacity-0 group-hover:opacity-100">
-                        <X class="w-3 h-3" />
-                      </button>
-                    </div>
-
-                    <p class="text-[10px] text-gray-400">Please upload a screenshot of your successful transfer.</p>
-                  </div>
-                </div>
               </div>
             </div>
 

@@ -204,42 +204,6 @@
                 </div>
                 <h3 class="text-lg font-bold tracking-tight mb-1">Rider Accepted</h3>
 
-                <template v-if="order.type === 'custom_errand'">
-                   <template v-if="order.errander?.bankDetails">
-                     <p class="text-gray-400 text-xs w-full mb-5 text-center">Please transfer the fee directly to your errander to begin.</p>
-                     
-                     <div class="bg-gray-800 border border-gray-700 rounded-xl p-4 w-full mb-4 text-left">
-                       <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Direct Bank Transfer</p>
-                       <p class="text-sm text-gray-200 mb-3">Transfer <strong>₦{{ order.total.toLocaleString() }}</strong> to:</p>
-                       <div class="space-y-2 text-sm text-white bg-gray-900/50 p-3 rounded-lg border border-gray-700/50">
-                         <div class="flex justify-between items-center">
-                           <span class="opacity-70">Bank Name</span>
-                           <span class="font-semibold">{{ order.errander.bankDetails.bankName }}</span>
-                         </div>
-                         <div class="flex justify-between items-center">
-                           <span class="opacity-70">Account Name</span>
-                           <span class="font-semibold">{{ order.errander.bankDetails.accountName }}</span>
-                         </div>
-                         <div class="flex justify-between items-center">
-                           <span class="opacity-70">Account Number</span>
-                           <span class="font-bold font-mono tracking-wider">{{ order.errander.bankDetails.accountNumber }}</span>
-                         </div>
-                       </div>
-                     </div>
-   
-                     <button @click="markAsPaidP2P" :disabled="isPayingWithWallet" class="w-full bg-[#FF5C1A] text-white font-bold px-4 h-11 rounded-lg hover:bg-[#e6511a] transition-colors disabled:opacity-50 flex items-center justify-center gap-2 text-xs">
-                        <Zap v-if="!isPayingWithWallet" class="w-3.5 h-3.5" />
-                        {{ isPayingWithWallet ? 'Processing...' : 'I Have Paid' }}
-                     </button>
-                   </template>
-                   <template v-else>
-                     <div class="bg-gray-800 border border-gray-700 rounded-xl p-4 w-full mb-4 text-center">
-                       <p class="text-sm text-gray-300 w-full">The rider has not set up their bank account details yet. Please ask them to update their wallet settings to receive direct transfers.</p>
-                     </div>
-                   </template>
-                </template>
-
-                <template v-else>
                   <p class="text-gray-400 text-xs max-w-sm mb-5">Secure the rider by paying the escrow fee. This covers their labor and our platform convenience fee.</p>
                   <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-sm">
                     <button @click="payForErrand" :disabled="isInitializingPayment || isPayingWithWallet" class="flex-1 w-full bg-[#FF5C1A] text-white font-bold px-4 h-11 rounded-lg hover:bg-[#e6511a] transition-colors disabled:opacity-50 flex items-center justify-center gap-2 text-xs">
@@ -258,7 +222,6 @@
                       <ArrowRight class="w-4 h-4 text-gray-400 group-hover:-translate-x-0.5 transition-transform" />
                     </button>
                   </div>
-                </template>
              </div>
 
              <!--
