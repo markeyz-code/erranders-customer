@@ -86,7 +86,7 @@
  <div>
  <h4 class="text-sm font-bold text-emerald-900">Order Picked Up!</h4>
  <p class="text-[13px] text-emerald-800 mt-1 leading-relaxed">
- Your rider has successfully picked up your order and is currently on their way to deliver it to you. Keep an eye out!
+ Your Errand Ninja has successfully picked up your order and is currently on their way to deliver it to you. Keep an eye out!
  </p>
  </div>
  </div>

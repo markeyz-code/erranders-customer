@@ -91,7 +91,7 @@
                   <div>
                     <h4 class="text-sm font-bold text-emerald-900">Order Picked Up!</h4>
                     <p class="text-[13px] text-emerald-800 mt-1 leading-relaxed">
-                      Your rider has successfully picked up your order and is currently on their way to deliver it to you. Keep an eye out!
+                      Your Errand Ninja has successfully picked up your order and is currently on their way to deliver it to you. Keep an eye out!
                     </p>
                   </div>
                 </div>
@@ -104,7 +104,7 @@
                   <div>
                     <h4 class="text-sm font-bold text-purple-900">Package Hand-off In Progress</h4>
                     <p class="text-[13px] text-purple-800 mt-1 leading-relaxed">
-                      Your rider has arrived at a hand-off point<span v-if="order.interception?.point"> ({{ order.interception.point }})</span> and is waiting for a second rider to continue the delivery to you.
+                      Your Errand Ninja has arrived at a hand-off point<span v-if="order.interception?.point"> ({{ order.interception.point }})</span> and is waiting for a second rider to continue the delivery to you.
                     </p>
                   </div>
                 </div>

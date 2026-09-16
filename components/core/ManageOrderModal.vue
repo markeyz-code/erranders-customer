@@ -289,7 +289,7 @@ const order = ref<any>(null);
 const slides = [
   {
     title: 'Track your errand',
-    desc: 'See exactly where your rider is on the map.'
+    desc: 'See exactly where Your Errand Ninja is on the map.'
   },
   {
     title: 'Modify your order',
