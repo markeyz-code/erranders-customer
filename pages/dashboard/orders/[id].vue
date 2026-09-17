@@ -484,6 +484,17 @@
 
                 <!-- Rider Account Details removed -->
 
+                <!-- Proof of Items Photo -->
+                <div v-if="order.type === 'custom_errand' && order.itemsPhoto" class="p-5 rounded-2xl border border-gray-100 flex flex-col items-center">
+                   <h4 class="text-[11px] font-bold text-gray-400 mb-4 tracking-widest uppercase flex items-center gap-1.5 w-full">
+                     <Camera class="w-3.5 h-3.5" /> Proof of Purchased Items
+                   </h4>
+                   <div class="w-full h-48 rounded-xl overflow-hidden bg-gray-50 border border-gray-100 mb-3 cursor-pointer" @click="window.open(order.itemsPhoto, '_blank')">
+                     <img :src="order.itemsPhoto" class="w-full h-full object-cover hover:scale-105 transition-transform" />
+                   </div>
+                   <p class="text-xs text-gray-500 text-center">Your rider has uploaded a photo of the items purchased from the vendor.</p>
+                </div>
+
                 <!-- Support -->
                 <NuxtLink to="/support" class="flex items-center justify-between p-4 rounded-2xl border border-gray-100 hover:border-gray-200 transition-colors group">
                    <div class="flex items-center gap-3">
@@ -703,7 +714,8 @@ import {
   Loader2,
   ClipboardList,
   X,
-  ImagePlus
+  ImagePlus,
+  Camera
 } from 'lucide-vue-next';
 import { ref, onMounted, onUnmounted, reactive, computed, watch } from 'vue';
 import { useRoute, useRouter, useHead, useRuntimeConfig } from '#imports';

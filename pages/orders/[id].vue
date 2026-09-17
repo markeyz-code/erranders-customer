@@ -159,6 +159,19 @@
  <span class="font-bold text-gray-900">₦{{ (order.customDetails?.estimatedItemCost || 0).toLocaleString() }}</span>
  </div>
 
+ <!-- Proof of Items Photo -->
+ <div v-if="order.itemsPhoto" class="mt-4 pt-4 border-t border-gray-200">
+   <div class="p-4 rounded-xl border border-gray-100 flex flex-col items-center">
+     <h4 class="text-[11px] font-bold text-gray-400 mb-4 tracking-widest uppercase flex items-center gap-1.5 w-full">
+       <Camera class="w-3.5 h-3.5" /> Proof of Purchased Items
+     </h4>
+     <div class="w-full h-48 rounded-xl overflow-hidden bg-gray-50 border border-gray-100 mb-3 cursor-pointer" @click="window.open(order.itemsPhoto, '_blank')">
+       <img :src="order.itemsPhoto" class="w-full h-full object-cover hover:scale-105 transition-transform" />
+     </div>
+     <p class="text-xs text-gray-500 text-center">Your rider has uploaded a photo of the items purchased from the vendor.</p>
+   </div>
+ </div>
+
  <!-- Reconciliation Status / Approval -->
  <div v-if="order.reconciliationStatus && order.reconciliationStatus !== 'not_applicable'" class="mt-4 pt-4 border-t border-gray-200">
  <div v-if="order.reconciliationStatus === 'pending'" class="text-xs font-medium text-amber-600 bg-amber-50 p-3 rounded-xl border border-amber-100 flex items-center gap-2">
@@ -736,7 +749,7 @@
 import { 
  ArrowLeft, Phone, MapPin, Truck, ShoppingBag, 
  Package, CheckCircle2, AlertCircle, RefreshCw,
- Search, CreditCard, MessageSquare, Clock, LayoutGrid, Star, Inbox, LifeBuoy, Store, ShieldCheck, User, X, ChevronRight, HeadphonesIcon, Heart, Bike
+ Search, CreditCard, MessageSquare, Clock, LayoutGrid, Star, Inbox, LifeBuoy, Store, ShieldCheck, User, X, ChevronRight, HeadphonesIcon, Heart, Bike, Camera
 } from 'lucide-vue-next';
 import { useRoute, useRouter } from '#imports';
 import { ref, computed, onMounted, watch } from 'vue';
