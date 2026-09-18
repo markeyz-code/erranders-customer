@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isVisible" class="bg-gradient-to-r from-orange-500 to-red-500 text-white relative z-50">
+  <div v-if="isVisible" class="bg-gradient-to-r from-orange-500 to-red-500 text-white relative z-[999] w-full">
     <div class="max-w-7xl mx-auto py-3 px-3 sm:px-6 lg:px-8">
       <div class="pr-16 sm:text-center sm:px-16 flex flex-col md:flex-row items-center justify-center gap-2">
         <p class="font-medium text-sm text-center">

@@ -1,5 +1,6 @@
 <template>
   <div class="min-h-screen bg-white flex flex-col lg:flex-row selection:bg-[#FF5C1A]/15 selection:text-[#FF5C1A] w-full overflow-x-hidden pt-safe">
+    <CorePromoBanner />
     <FullScreenLoader></FullScreenLoader>
     <Toast ref="toastRef"></Toast>
 

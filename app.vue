@@ -4,7 +4,6 @@
     <UiToast />
     <CoreGlobalConfirmModal />
     <CoreNetworkStatusBanner />
-    <CorePromoBanner />
     <UiGlobalLoader />
     <NuxtLayout class="z-10">
       <NuxtPage class="z-10" />
