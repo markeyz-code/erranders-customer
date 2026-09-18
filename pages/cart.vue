@@ -784,7 +784,7 @@
                   <div class="flex justify-between items-end pt-2">
                     <div>
                       <p class="text-[9px] font-black text-gray-400 tracking-[0.2em] uppercase mb-1.5">Total Amount</p>
-                      <h3 class="text-2xl font-black text-white tracking-tighter drop-shadow-lg">₦{{ finalTotal.toLocaleString() }}</h3>
+                      <h3 class="text-2xl font-black text-gray-900 tracking-tighter">₦{{ finalTotal.toLocaleString() }}</h3>
                     </div>
                     <span class="text-[9px] font-bold text-gray-500 text-right leading-tight uppercase flex flex-col items-end gap-1">
                       <Lock class="w-3 h-3" />

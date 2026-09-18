@@ -689,6 +689,38 @@
         </button>
       </template>
     </UiModal>
+
+  <!-- Substitute Review Modal -->
+  <div v-if="showSubstituteReviewModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="showSubstituteReviewModal = false"></div>
+    <div class="relative w-full max-w-sm bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col p-6 text-center">
+      <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <RefreshCw class="w-8 h-8 text-[#FF5C1A]" />
+      </div>
+      
+      <h3 class="text-xl font-black text-gray-900 mb-2 tracking-tight">Review Substitute</h3>
+      <p class="text-sm font-medium text-gray-500 mb-6 leading-relaxed">
+        Your Errander noticed that <strong class="text-gray-900">{{ substituteData?.originalItemName }}</strong> is out of stock. They suggested swapping it with <strong class="text-[#FF5C1A]">{{ substituteData?.substituteName }}</strong>.
+      </p>
+      
+      <div class="flex gap-3 mt-2">
+        <button 
+          @click="resolveSubstitute(false)" 
+          :disabled="isResolvingSubstitute"
+          class="flex-1 py-3.5 bg-gray-100 text-gray-700 rounded-xl text-sm font-bold hover:bg-gray-200 transition-all disabled:opacity-50"
+        >
+          Decline & Refund
+        </button>
+        <button 
+          @click="resolveSubstitute(true)" 
+          :disabled="isResolvingSubstitute"
+          class="flex-1 py-3.5 bg-[#FF5C1A] text-white rounded-xl text-sm font-bold hover:bg-[#FF5C1A]/90 transition-all disabled:opacity-50 shadow-lg shadow-[#FF5C1A]/20"
+        >
+          Accept Swap
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
