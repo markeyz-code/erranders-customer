@@ -721,8 +721,38 @@
       </div>
     </div>
   </div>
-</template>
 
+  <!-- Custom Errand Topup Modal -->
+  <div v-if="showTopupModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="showTopupModal = false"></div>
+    <div class="relative w-full max-w-sm bg-white rounded-3xl shadow-2xl p-6 text-center">
+      <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <CreditCard class="w-8 h-8 text-blue-600" />
+      </div>
+      <h3 class="text-xl font-black text-gray-900 mb-2">Extra Funds Required</h3>
+      <p class="text-sm font-medium text-gray-500 mb-6 leading-relaxed">
+        Your Errander needs an extra <strong class="text-blue-600">₦{{ topupAmount.toLocaleString() }}</strong> to complete your custom errand.
+      </p>
+      
+      <div class="flex gap-3">
+        <button 
+          @click="showTopupModal = false"
+          class="flex-1 py-3.5 bg-gray-100 text-gray-700 rounded-xl text-sm font-bold hover:bg-gray-200 transition-all"
+        >
+          Cancel
+        </button>
+        <button 
+          @click="payTopup"
+          :disabled="isPayingTopup"
+          class="flex-1 py-3.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 disabled:opacity-50"
+        >
+          {{ isPayingTopup ? 'Paying...' : 'Pay from Wallet' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+</template>
 <script setup lang="ts">
 import {
   ShieldCheck,
