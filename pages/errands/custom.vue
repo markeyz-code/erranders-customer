@@ -673,10 +673,53 @@ const marketForm = ref({
   itemsList: ''
 })
 
+const checklistItems = ref<string[]>([''])
+const marketChecklistItems = ref<string[]>([''])
+
 const predefinedLocations = [
   'Block hostel', 'OPH hostel', 'Coorporative hostel', 'Faculty of Medicine',
   'College Library', 'Senate Building', 'Amphitheatre'
 ]
+
+// Restore draft state from sessionStorage
+const restoreDraft = () => {
+  try {
+    const draftStr = sessionStorage.getItem('customErrandDraft')
+    if (draftStr) {
+      const draft = JSON.parse(draftStr)
+      if (draft.errandType) errandType.value = draft.errandType
+      if (draft.form) {
+        form.value.description = draft.form.description || ''
+        form.value.pickupLocation = draft.form.pickupLocation || ''
+        form.value.dropoffLocation = draft.form.dropoffLocation || ''
+        form.value.estimatedItemCost = draft.form.estimatedItemCost || 0
+        form.value.runnerFee = draft.form.runnerFee || 0
+      }
+      if (draft.marketForm) {
+        marketForm.value.marketName = draft.marketForm.marketName || ''
+        marketForm.value.itemsList = draft.marketForm.itemsList || ''
+      }
+      if (draft.checklistItems) checklistItems.value = draft.checklistItems
+      if (draft.marketChecklistItems) marketChecklistItems.value = draft.marketChecklistItems
+      if (draft.step) step.value = draft.step
+    }
+  } catch (e) {
+    console.error('Failed to restore custom errand draft', e)
+  }
+}
+
+// Watch for changes and save draft
+watch([errandType, form, marketForm, checklistItems, marketChecklistItems, step], () => {
+  sessionStorage.setItem('customErrandDraft', JSON.stringify({
+    errandType: errandType.value,
+    form: form.value,
+    marketForm: marketForm.value,
+    checklistItems: checklistItems.value,
+    marketChecklistItems: marketChecklistItems.value,
+    step: step.value
+  }))
+}, { deep: true })
+
 
 const errandTemplates = [
   "Get drugs from the pharmacy",
@@ -696,6 +739,7 @@ onMounted(() => {
 })
 
 onMounted(async () => {
+  restoreDraft()
   // Settings fetch moved to fetchInitialData
 
   const saved = localStorage.getItem('recentDropoffs')
@@ -720,6 +764,7 @@ onMounted(async () => {
         
         if (orderId) {
           showToast({ title: 'Success!', message: 'Your errand is now live!', toastType: 'success' })
+          sessionStorage.removeItem('customErrandDraft')
           router.push(`/dashboard/orders/${orderId}`)
           return
         } else {
@@ -741,9 +786,7 @@ onMounted(async () => {
     }
   }
 })
-
-const checklistItems = ref<string[]>([''])
-
+// Removed duplicate checklistItems declaration
 const addItem = (index: number) => {
   checklistItems.value.splice(index + 1, 0, '')
   nextTick(() => {
@@ -777,9 +820,7 @@ const handleItemKeydown = (e: KeyboardEvent, index: number) => {
 watch(checklistItems, (newItems) => {
   form.value.description = newItems.filter(i => i.trim() !== '').join('\n')
 }, { deep: true })
-
-const marketChecklistItems = ref<string[]>([''])
-
+// Removed duplicate marketChecklistItems declaration
 const addMarketItem = (index: number) => {
   marketChecklistItems.value.splice(index + 1, 0, '')
   nextTick(() => {
@@ -1034,6 +1075,9 @@ const submitErrand = async () => {
     const response = await api.post('/orders', payload)
     const orderId = response.data._id || response.data.id
 
+
+    // Clear draft state after successfully creating order
+    sessionStorage.removeItem('customErrandDraft')
 
     // 2. Redirect to Negotiation Gateway to allow erranders to submit counter-bids
     navigateTo(`/negotiation?orderIds=${orderId}`)
