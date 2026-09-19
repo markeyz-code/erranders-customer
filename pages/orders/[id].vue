@@ -1052,11 +1052,11 @@ onMounted(() => {
  emit('register', { userId: user.value._id });
  }
 
- on('notification:new', (payload: any) => {
- if (payload.data?.orderId === route.params.id || ['ORDER_STATUS_UPDATE', 'NEW_ORDER'].includes(payload.type)) {
- fetchOrder();
- }
- });
+  on('notification:new', (payload: any) => {
+    if (payload.data?.orderId === route.params.id || payload.orderId === route.params.id || ['ORDER_STATUS_UPDATE', 'NEW_ORDER'].includes(payload.type)) {
+      fetchOrder();
+    }
+  });
  
  on('notification:order-status-update', (payload: any) => {
  if (!payload.orderId || payload.orderId === route.params.id) {

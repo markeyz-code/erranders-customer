@@ -1017,27 +1017,21 @@ watch(() => socket.value, (newSocket) => {
     // Listen for ALL notification types that could affect this order
     newSocket.on('notification:new', async (payload: any) => {
       const { type, data, title, body } = payload;
-      const relevantTypes = [
-        'ORDER_BIDS_UPDATE', 'ORDER_ACCEPTED', 'ORDER_STATUS_UPDATE', 
-        'ERRAND_VIEWER_ADDED', 'ORDER_BID_ACCEPTED', 'ORDER_CONFIRMED',
-        'ORDER_PREPARING', 'ORDER_READY', 'ORDER_IN_TRANSIT', 'ORDER_DELIVERED',
-        'ORDER_CANCELLED', 'ORDER_PAID', 'PAYMENT_CONFIRMED', 'SUBSTITUTE_REQUEST'
-      ];
+      const orderIdMatch = data?.orderId === route.params.id || data?.order?._id === route.params.id || payload.orderId === route.params.id;
+      
+      if (!orderIdMatch) return;
+      
       if (type === 'SUBSTITUTE_REQUEST') {
           substituteData.value = data;
           showSubstituteReviewModal.value = true;
           return;
-        }
-        
-        if (relevantTypes.includes(type)) {
-        if (data?.orderId === route.params.id || data?.order?._id === route.params.id) {
-           if (type !== 'ERRAND_VIEWER_ADDED') {
-             showToast({ title: title || 'Order Updated', message: body || 'Your order has been updated.', toastType: 'info' });
-           }
-           const res = await orders_api.getOrder(route.params.id as string);
-           order.value = res.data;
-        }
       }
+      
+      if (type !== 'ERRAND_VIEWER_ADDED') {
+        showToast({ title: title || 'Order Updated', message: body || 'Your order has been updated.', toastType: 'info' });
+      }
+      const res = await orders_api.getOrder(route.params.id as string);
+      order.value = res.data;
     });
 
     const refreshOrder = async (payload: any) => {
