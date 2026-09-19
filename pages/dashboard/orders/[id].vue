@@ -390,12 +390,15 @@
                    <div class="space-y-3">
                      <div v-for="item in order.items" :key="item._id" class="flex items-center justify-between gap-3">
                        <div class="flex items-center gap-2.5">
-                         <div class="w-9 h-9 rounded-lg bg-gray-50 border border-gray-100 overflow-hidden shrink-0">
+                         <div class="w-9 h-9 rounded-lg bg-gray-50 border border-gray-100 overflow-hidden shrink-0 relative">
                            <img v-if="item.image" :src="item.image" class="w-full h-full object-cover" />
                            <div v-else class="w-full h-full bg-gray-100 flex items-center justify-center"><Utensils class="w-4 h-4 text-gray-300" /></div>
                          </div>
                          <div>
-                           <h5 class="text-xs font-bold text-gray-900 line-clamp-1">{{ item.name }}</h5>
+                           <h5 class="text-xs font-bold text-gray-900 line-clamp-1 flex items-center gap-2">
+                             {{ item.name }}
+                             <span v-if="item.status === 'substituted'" class="px-1.5 py-0.5 rounded text-[8px] font-bold bg-blue-100 text-blue-600">Substituted</span>
+                           </h5>
                            <p class="text-[11px] text-gray-400 mt-0.5">Qty: <span class="text-gray-700 font-bold">{{ item.quantity }}</span></p>
                          </div>
                        </div>
