@@ -395,11 +395,22 @@
                            <div v-else class="w-full h-full bg-gray-100 flex items-center justify-center"><Utensils class="w-4 h-4 text-gray-300" /></div>
                          </div>
                          <div>
-                           <h5 class="text-xs font-bold text-gray-900 line-clamp-1 flex items-center gap-2">
-                             {{ item.name }}
-                             <span v-if="item.status === 'substituted'" class="px-1.5 py-0.5 rounded text-[8px] font-bold bg-blue-100 text-blue-600">Substituted</span>
-                           </h5>
-                           <p class="text-[11px] text-gray-400 mt-0.5">Qty: <span class="text-gray-700 font-bold">{{ item.quantity }}</span></p>
+                            <h5 v-if="item.status === 'substituted'" class="text-xs font-bold text-gray-900 flex flex-col gap-1">
+                              <div class="flex items-center gap-2 flex-wrap">
+                                <span class="text-gray-400 line-through">{{ item.substitutedWith?.originalName }}</span>
+                                <span class="text-[10px] text-gray-400">➔</span>
+                                <span class="text-blue-600 font-bold">{{ item.name }}</span>
+                                <span class="px-1.5 py-0.5 rounded text-[8px] font-bold bg-blue-100 text-blue-600">Substituted</span>
+                              </div>
+                            </h5>
+                            <h5 v-else class="text-xs font-bold text-gray-900 line-clamp-1 flex items-center gap-2">
+                              {{ item.name }}
+                              <span v-if="item.status === 'pending_substitute'" class="px-1.5 py-0.5 rounded text-[8px] font-bold bg-amber-100 text-amber-600">Substitute Pending</span>
+                            </h5>
+                            <p class="text-[11px] text-gray-400 mt-0.5">Qty: <span class="text-gray-700 font-bold">{{ item.quantity }}</span></p>
+                            <div v-if="item.status === 'substituted' && item.substitutedWith?.note" class="mt-1.5 bg-amber-50 rounded p-1.5 border border-amber-100">
+                              <p class="text-[10px] text-amber-700 italic">"{{ item.substitutedWith.note }}"</p>
+                            </div>
                          </div>
                        </div>
                        <p class="text-xs font-bold text-gray-900 shrink-0">₦{{ (item.price * item.quantity).toLocaleString() }}</p>
