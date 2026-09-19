@@ -408,6 +408,11 @@
                               <span v-if="item.status === 'pending_substitute'" class="px-1.5 py-0.5 rounded text-[8px] font-bold bg-amber-100 text-amber-600">Substitute Pending</span>
                             </h5>
                             <p class="text-[11px] text-gray-400 mt-0.5">Qty: <span class="text-gray-700 font-bold">{{ item.quantity }}</span></p>
+                            
+                            <button v-if="item.status === 'pending_substitute'" @click="resumeSubstitute(item)" class="mt-2 text-[10px] font-bold bg-[#FF5C1A] text-white px-2 py-1 rounded shadow-sm hover:bg-[#E04D12] active:scale-95 transition-all w-fit block">
+                              Review Substitute Option
+                            </button>
+                            
                             <div v-if="item.status === 'substituted' && item.substitutedWith?.note" class="mt-1.5 bg-amber-50 rounded p-1.5 border border-amber-100">
                               <p class="text-[10px] text-amber-700 italic">"{{ item.substitutedWith.note }}"</p>
                             </div>
@@ -1197,6 +1202,20 @@ const isPayingWithWallet = ref(false);
 
 const showSubstituteReviewModal = ref(false);
 const substituteData = ref<any>(null);
+
+const resumeSubstitute = (item: any) => {
+  if (!item || !item.substituteOptions || item.substituteOptions.length === 0) return;
+  substituteData.value = {
+    orderId: order.value._id,
+    itemId: item._id,
+    substituteItemId: item.substituteOptions[0]._id,
+    substituteItemIds: item.substituteOptions.map((opt: any) => opt._id),
+    substituteOptions: item.substituteOptions,
+    originalItemName: item.name,
+    substituteName: item.substituteOptions[0].name
+  };
+  showSubstituteReviewModal.value = true;
+};
 const isResolvingSubstitute = ref(false);
 const selectedSubstituteOptionId = ref<string | null>(null);
 const substituteNote = ref('');
