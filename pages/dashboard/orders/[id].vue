@@ -731,6 +731,16 @@
           </div>
         </button>
       </div>
+      
+      <div class="mb-6">
+        <label class="block text-xs font-bold text-gray-700 mb-2">Optional Note for Errander</label>
+        <textarea 
+          v-model="substituteNote" 
+          rows="2" 
+          placeholder="E.g. Please ask the vendor to slice it" 
+          class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none"
+        ></textarea>
+      </div>
 
       <div class="flex gap-3 mt-2">
         <button 
@@ -1175,6 +1185,7 @@ const showSubstituteReviewModal = ref(false);
 const substituteData = ref<any>(null);
 const isResolvingSubstitute = ref(false);
 const selectedSubstituteOptionId = ref<string | null>(null);
+const substituteNote = ref('');
 
 const originalSubstituteItem = computed(() => {
   if (!substituteData.value || !order.value) return null;
@@ -1238,7 +1249,8 @@ const resolveSubstitute = async (accept: boolean) => {
     await api.post(`/orders/${order.value._id}/substitute/resolve`, {
       itemId: substituteData.value.itemId,
       accept,
-      substituteItemId: accept ? selectedSubstituteOptionId.value : ''
+      substituteItemId: accept ? selectedSubstituteOptionId.value : '',
+      note: accept ? substituteNote.value : undefined
     });
     showToast({ 
       title: accept ? 'Substitute Accepted' : 'Substitute Declined', 
@@ -1248,6 +1260,7 @@ const resolveSubstitute = async (accept: boolean) => {
     showSubstituteReviewModal.value = false;
     substituteData.value = null;
     selectedSubstituteOptionId.value = null;
+    substituteNote.value = '';
     const res = await orders_api.getOrder(route.params.id as string);
     order.value = res.data;
   } catch (e: any) {
