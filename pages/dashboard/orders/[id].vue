@@ -206,18 +206,18 @@
 
                   <p class="text-gray-400 text-xs max-w-sm mb-5">Secure the rider by paying the escrow fee. This covers their labor and our platform convenience fee.</p>
                   <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-sm">
-                    <button @click="payForErrand" :disabled="isInitializingPayment || isPayingWithWallet" class="flex-1 w-full bg-[#FF5C1A] text-white font-bold px-4 h-11 rounded-lg hover:bg-[#e6511a] transition-colors disabled:opacity-50 flex items-center justify-center gap-2 text-xs">
+                    <button @click="payForErrand" :disabled="isInitializingPayment || isPayingWithWallet" class="w-full sm:flex-1 h-12 bg-[#FF5C1A] text-white font-bold px-4 rounded-lg hover:bg-[#e6511a] transition-colors disabled:opacity-50 flex items-center justify-center gap-2 text-xs shrink-0">
                        <Zap v-if="!isInitializingPayment" class="w-3.5 h-3.5" />
                        {{ isInitializingPayment ? 'Processing...' : 'Pay with Paystack' }}
                     </button>
                     <button 
                       @click="payForErrandWithWallet" 
                       :disabled="isInitializingPayment || isPayingWithWallet"
-                      class="flex-1 w-full bg-white text-gray-900 border border-gray-200 font-bold px-4 h-11 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 flex items-center justify-between text-xs relative group shadow-sm"
+                      class="w-full sm:flex-1 h-12 bg-white text-gray-900 border border-gray-200 font-bold px-4 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 flex items-center justify-between text-xs relative group shadow-sm shrink-0"
                     >
                       <div class="flex flex-col items-start text-left">
-                         <span class="font-bold flex items-center gap-1.5 leading-none">Wallet</span>
-                         <span class="text-[9px] font-medium text-gray-500 mt-1 uppercase tracking-widest leading-none">₦{{ walletBalance?.toLocaleString() || balance?.toLocaleString() || '0' }}</span>
+                         <span class="font-bold flex items-center gap-1.5 leading-none mt-1">Wallet</span>
+                         <span class="text-[10px] font-medium text-gray-500 mt-0.5 uppercase tracking-widest leading-none">₦{{ walletBalance?.toLocaleString() || balance?.toLocaleString() || '0' }}</span>
                       </div>
                       <ArrowRight class="w-4 h-4 text-gray-400 group-hover:-translate-x-0.5 transition-transform" />
                     </button>
@@ -489,10 +489,10 @@
                        <span class="text-gray-400 text-xs">Service Fee</span>
                        <span class="text-gray-900 font-bold text-xs">₦{{ (order.serviceFee || 0)?.toLocaleString() }}</span>
                      </div>
-                     <div class="flex justify-between items-center pb-3 border-b border-gray-100">
+                     <!-- <div class="flex justify-between items-center pb-3 border-b border-gray-100">
                        <span class="text-gray-400 text-xs">Transfer Fee</span>
                        <span class="text-gray-900 font-bold text-xs">₦{{ Math.max(0, Math.round(order.total - order.subtotal - (order.customDetails?.itemCostBuffer || 0) - order.deliveryFee - (order.serviceFee || 0)))?.toLocaleString() }}</span>
-                     </div>
+                     </div> -->
                    </div>
 
                    <div class="mt-4 p-3.5 rounded-xl bg-[#FF5C1A] text-white flex justify-between items-center">
@@ -1284,7 +1284,8 @@ const resolveSubstitute = async (accept: boolean) => {
       itemId: substituteData.value.itemId,
       accept,
       substituteItemId: accept ? selectedSubstituteOptionId.value : '',
-      note: accept ? substituteNote.value : undefined
+      note: accept ? substituteNote.value : undefined,
+      itemName: substituteData.value.originalItemName
     });
     showToast({ 
       title: accept ? 'Substitute Accepted' : 'Substitute Declined', 
