@@ -835,7 +835,8 @@ import {
   ClipboardList,
   X,
   ImagePlus,
-  Camera
+  Camera,
+  RefreshCw
 } from 'lucide-vue-next';
 import { ref, onMounted, onUnmounted, reactive, computed, watch } from 'vue';
 import { useRoute, useRouter, useHead, useRuntimeConfig } from '#imports';
