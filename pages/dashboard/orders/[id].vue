@@ -1021,9 +1021,15 @@ watch(() => socket.value, (newSocket) => {
         'ORDER_BIDS_UPDATE', 'ORDER_ACCEPTED', 'ORDER_STATUS_UPDATE', 
         'ERRAND_VIEWER_ADDED', 'ORDER_BID_ACCEPTED', 'ORDER_CONFIRMED',
         'ORDER_PREPARING', 'ORDER_READY', 'ORDER_IN_TRANSIT', 'ORDER_DELIVERED',
-        'ORDER_CANCELLED', 'ORDER_PAID', 'PAYMENT_CONFIRMED'
+        'ORDER_CANCELLED', 'ORDER_PAID', 'PAYMENT_CONFIRMED', 'SUBSTITUTE_REQUEST'
       ];
-      if (relevantTypes.includes(type)) {
+      if (type === 'SUBSTITUTE_REQUEST') {
+          substituteData.value = data;
+          showSubstituteReviewModal.value = true;
+          return;
+        }
+        
+        if (relevantTypes.includes(type)) {
         if (data?.orderId === route.params.id || data?.order?._id === route.params.id) {
            if (type !== 'ERRAND_VIEWER_ADDED') {
              showToast({ title: title || 'Order Updated', message: body || 'Your order has been updated.', toastType: 'info' });
@@ -1140,6 +1146,61 @@ const payForErrand = async () => {
 };
 
 const isPayingWithWallet = ref(false);
+
+
+const showSubstituteReviewModal = ref(false);
+const substituteData = ref<any>(null);
+const isResolvingSubstitute = ref(false);
+
+const resolveSubstitute = async (accept: boolean) => {
+  if (!substituteData.value) return;
+  isResolvingSubstitute.value = true;
+  try {
+    await api.post(`/orders/${order.value._id}/substitute/resolve`, {
+      itemId: substituteData.value.itemId,
+      accept,
+      substituteItemId: substituteData.value.substituteItemId
+    });
+    showToast({ 
+      title: accept ? 'Substitute Accepted' : 'Substitute Declined', 
+      message: accept ? 'The rider will pick up the new item.' : 'You will be refunded for this item.', 
+      toastType: 'success' 
+    });
+    showSubstituteReviewModal.value = false;
+    substituteData.value = null;
+    const res = await orders_api.getOrder(route.params.id as string);
+    order.value = res.data;
+  } catch (e: any) {
+    showToast({ title: 'Error', message: e.response?.data?.message || 'Action failed', toastType: 'error' });
+  } finally {
+    isResolvingSubstitute.value = false;
+  }
+};
+
+const showTopupModal = ref(false);
+const topupAmount = ref(0);
+const isPayingTopup = ref(false);
+
+const payTopup = async () => {
+  if (balance.value < topupAmount.value) {
+     showToast({ title: 'Insufficient Funds', message: 'Please fund your wallet first.', toastType: 'error' });
+     initiateWalletTopup(); // Reuse the same flow
+     return;
+  }
+  isPayingTopup.value = true;
+  try {
+     // call topup endpoint, guessing the path based on backend
+     await api.post(`/orders/${order.value._id}/custom/topup/pay`);
+     showToast({ title: 'Success', message: 'Extra funds paid from wallet', toastType: 'success' });
+     showTopupModal.value = false;
+     const res = await orders_api.getOrder(route.params.id as string);
+     order.value = res.data;
+  } catch(e: any) {
+     showToast({ title: 'Error', message: e.response?.data?.message || 'Topup failed', toastType: 'error' });
+  } finally {
+     isPayingTopup.value = false;
+  }
+};
 
 const isFundModalOpen = ref(false);
 const fundAmountNeeded = ref(0);
