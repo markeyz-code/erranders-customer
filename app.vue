@@ -1,22 +1,29 @@
 <template>
   <div>
-    <VitePwaManifest />
-    <UiToast />
-    <CoreGlobalConfirmModal />
-    <CoreNetworkStatusBanner />
-    <UiGlobalLoader />
-    <NuxtLayout class="z-10">
-      <NuxtPage class="z-10" />
-    </NuxtLayout>
-    
-    <CoreGlobalAdModal />
-    <ChatWidget />
-    <CoreWhatsAppWidget />
+    <!-- Platform Closed Overlay -->
+    <ClientOnly>
+      <CorePlatformClosed v-if="isPlatformClosed" />
+    </ClientOnly>
 
-    <CorePushNotificationPrompt />
-    <CoreCallOverlay />
-    <RequirePhoneModal />
-    <GenderSetupModal />
+    <template v-if="!isPlatformClosed">
+      <VitePwaManifest />
+      <UiToast />
+      <CoreGlobalConfirmModal />
+      <CoreNetworkStatusBanner />
+      <UiGlobalLoader />
+      <NuxtLayout class="z-10">
+        <NuxtPage class="z-10" />
+      </NuxtLayout>
+      
+      <CoreGlobalAdModal />
+      <ChatWidget />
+      <CoreWhatsAppWidget />
+
+      <CorePushNotificationPrompt />
+      <CoreCallOverlay />
+      <RequirePhoneModal />
+      <GenderSetupModal />
+    </template>
     
     <!-- Background Audio - Bottom Left -->
     <!-- <ClientOnly>
@@ -35,7 +42,7 @@ body {
 
 <script setup lang="ts">
 // Global app configuration
-import { onMounted, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRealtimeNotifications } from '@/composables/core/useRealtimeNotifications'
 import { useCart } from '@/composables/modules/cart'
 import { useStudentNotifications } from '@/composables/useStudentNotifications'
@@ -45,6 +52,8 @@ import { useWebRTC } from '@/composables/useWebRTC'
 import { useAuth } from '@/composables/modules/auth'
 import { useMarketPoolStore } from '@/stores/marketPool'
 
+const isPlatformClosed = ref(false)
+
 const { initCart } = useCart()
 const marketPoolStore = useMarketPoolStore()
 const { isLoggedIn } = useUser()
@@ -52,11 +61,26 @@ const { requestPermissionAndRegister, listenForNotifications } = useStudentNotif
 const { initSocketListeners } = useWebRTC()
 const { checkRedirectResult } = useAuth()
 
+// Check platform status
+const checkPlatformStatus = async () => {
+  try {
+    const config = useRuntimeConfig()
+    const baseUrl = (config.public.apiBase as string) || 'https://api.erranders.org'
+    const cleanBase = baseUrl.replace(/\/api\/v1\/?$/, '').replace(/\/$/, '')
+    const res = await $fetch<{ isClosed: boolean }>(`${cleanBase}/api/v1/settings/platform-status/public`)
+    isPlatformClosed.value = res?.isClosed ?? false
+  } catch (e) {
+    // If we can't reach the API, don't block the app
+    isPlatformClosed.value = false
+  }
+}
+
 initCart()
 marketPoolStore.initCart()
 useRealtimeNotifications()
 
 onMounted(() => {
+  checkPlatformStatus()
   checkRedirectResult()
   listenForNotifications()
   initSocketListeners()
@@ -106,3 +130,4 @@ useSeoMeta({
   twitterImage: 'https://errandr.com/og-image.jpg'
 })
 </script>
+
