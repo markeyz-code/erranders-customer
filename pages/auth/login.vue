@@ -12,7 +12,7 @@
         <p class="text-gray-500 text-lg">Sign in to order your favorites and track deliveries</p>
       </div>
 
-      <form @submit.prevent="handleLogin" class="space-y-6 max-w-md">
+      <!-- <form @submit.prevent="handleLogin" class="space-y-6 max-w-md">
         <UiAnimatedInput v-model="email" type="email" label="Email" required />
         <UiAnimatedInput v-model="password" type="password" label="Password" required />
         <div class="flex items-center justify-between">
@@ -29,12 +29,12 @@
       </form>
 
       <div class="max-w-md w-full mt-6">
-        <!-- Divider -->
         <div class="flex items-center gap-3 mb-6">
           <div class="flex-1 h-px bg-gray-100" />
           <span class="text-sm text-gray-400 font-bold">or</span>
           <div class="flex-1 h-px bg-gray-100" />
-        </div>
+        </div> -->
+        <div class="max-w-md w-full mt-6">
 
         <button type="button" @click="firebaseLogin()" :disabled="firebaseLoading" class="w-full py-3.5 border border-gray-100 rounded-2xl flex items-center justify-center gap-3 font-bold text-gray-700 hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
           <Loader2 v-if="firebaseLoading" class="animate-spin w-5 h-5" />

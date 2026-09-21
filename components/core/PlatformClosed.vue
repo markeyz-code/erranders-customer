@@ -75,7 +75,7 @@
 .bg-layer {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 30%, #16213e 60%, #0a0a0a 100%);
+  background: #ffffff;
   z-index: 0;
 }
 
@@ -162,7 +162,6 @@
 .logo {
   height: 48px;
   width: auto;
-  filter: drop-shadow(0 0 20px rgba(255, 92, 26, 0.3));
 }
 
 /* Status badge */
@@ -203,7 +202,7 @@
 .main-heading {
   font-size: 2rem;
   font-weight: 700;
-  color: #ffffff;
+  color: #111827;
   margin: 0 0 1rem 0;
   line-height: 1.2;
   animation: fadeUp 0.8s ease-out 0.3s both;
@@ -213,7 +212,7 @@
 .message-text {
   font-size: 1rem;
   line-height: 1.7;
-  color: rgba(255, 255, 255, 0.6);
+  color: #4b5563;
   margin: 0 0 1.5rem 0;
   max-width: 420px;
   animation: fadeUp 0.8s ease-out 0.4s both;
@@ -233,11 +232,11 @@
 .divider-line {
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.1), transparent);
 }
 
 .divider-icon {
-  color: rgba(255, 255, 255, 0.2);
+  color: rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
 }
@@ -246,7 +245,7 @@
 .cta-text {
   font-size: 0.875rem;
   line-height: 1.7;
-  color: rgba(255, 255, 255, 0.4);
+  color: #6b7280;
   margin: 0 0 2.5rem 0;
   animation: fadeUp 0.8s ease-out 0.6s both;
 }
@@ -257,7 +256,7 @@
   align-items: center;
   gap: 6px;
   font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.2);
+  color: rgba(0, 0, 0, 0.4);
   letter-spacing: 0.05em;
   animation: fadeUp 0.8s ease-out 0.7s both;
 }
