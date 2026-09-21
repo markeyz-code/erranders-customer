@@ -23,10 +23,7 @@
               <div :class="[
                 'w-8 h-8 rounded-full flex items-center justify-center',
                 {
-                  'bg-white/20 text-white': toast.type === 'error',
-                  'bg-white/20 text-white': toast.type === 'success', 
-                  'bg-white/20 text-white': toast.type === 'warning',
-                  'bg-white/20 text-white': toast.type === 'info',
+                  'bg-white/20 text-white': ['error', 'success', 'warning', 'info'].includes(toast.type),
                   'bg-gray-100 text-gray-600 border': toast.type === 'notification'
                 }
               ]">
@@ -41,10 +38,7 @@
               <h4 v-if="toast.title" :class="[
                 'font-bold text-sm mb-0.5',
                 {
-                  'text-white': toast.type === 'error',
-                  'text-white': toast.type === 'success',
-                  'text-white': toast.type === 'warning', 
-                  'text-white': toast.type === 'info',
+                  'text-white': ['error', 'success', 'warning', 'info'].includes(toast.type),
                   'text-gray-900': toast.type === 'notification'
                 }
               ]">
@@ -54,10 +48,7 @@
                 'font-medium leading-tight',
                 toast.title ? 'text-xs opacity-90' : 'text-sm',
                 {
-                  'text-white': toast.type === 'error',
-                  'text-white': toast.type === 'success',
-                  'text-white': toast.type === 'warning', 
-                  'text-white': toast.type === 'info',
+                  'text-white': ['error', 'success', 'warning', 'info'].includes(toast.type),
                   'text-gray-600': toast.type === 'notification'
                 }
               ]">
