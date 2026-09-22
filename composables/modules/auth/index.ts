@@ -39,11 +39,22 @@ export const useAuth = () => {
         if (userData && tokenValue) {
           setUser(userData);
           setToken(tokenValue);
-          showToast({
-            title: "Welcome Back!",
-            message: "You've successfully logged in with Google.",
-            toastType: "success",
-          });
+          
+          if (!userData.phone) {
+            showToast({
+              title: "Action Required",
+              message: "Please add your phone number and complete your profile setup.",
+              toastType: "info",
+            });
+            navigateTo('/dashboard/profile');
+          } else {
+            showToast({
+              title: "Welcome Back!",
+              message: "You've successfully logged in with Google.",
+              toastType: "success",
+            });
+            navigateTo('/dashboard');
+          }
         }
       }
     } catch (e: any) {
@@ -155,7 +166,15 @@ export const useAuth = () => {
       if (options.redirect) {
         const route = useRoute();
         try {
-          const redirectPath = (route.query.redirect as string) || '/dashboard';
+          let redirectPath = (route.query.redirect as string) || '/dashboard';
+          if (!userData.phone) {
+            redirectPath = '/dashboard/profile';
+            showToast({
+              title: "Action Required",
+              message: "Please add your phone number and complete your profile setup.",
+              toastType: "info",
+            });
+          }
           await navigateTo(redirectPath);
         } catch (navError) {
           // Ignore
