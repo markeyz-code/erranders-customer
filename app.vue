@@ -67,8 +67,8 @@ const checkPlatformStatus = async () => {
     const config = useRuntimeConfig()
     const baseUrl = (config.public.apiBase as string) || 'https://api.erranders.org'
     const cleanBase = baseUrl.replace(/\/api\/v1\/?$/, '').replace(/\/$/, '')
-    const res = await $fetch<{ isClosed: boolean }>(`${cleanBase}/api/v1/settings/platform-status/public`)
-    isPlatformClosed.value = res?.isClosed ?? false
+    const res = await $fetch<{ isStudentAppClosed: boolean; isClosed: boolean }>(`${cleanBase}/api/v1/settings/platform-status/public`)
+    isPlatformClosed.value = res?.isStudentAppClosed ?? res?.isClosed ?? false
   } catch (e) {
     // If we can't reach the API, don't block the app
     isPlatformClosed.value = false
