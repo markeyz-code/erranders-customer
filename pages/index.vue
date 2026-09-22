@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-white font-sans text-gray-900 scroll-smooth pb-24">
-  <CorePromoBanner />
+  <!-- <CorePromoBanner /> -->
   <!-- <CoreExamPromoBanner /> -->
   <BatchDeliveryBanner />
   <MarketPoolBanner />
