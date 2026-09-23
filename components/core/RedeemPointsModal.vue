@@ -101,6 +101,7 @@ import { ref, watch } from 'vue';
 import { Coins, Wallet, ArrowRight, AlertCircle, Loader2 } from 'lucide-vue-next';
 import { useNuxtApp } from '#app';
 import { useCustomToast } from '@/composables/core/useCustomToast';
+import { rewards_api } from '@/api_factory/modules/rewards';
 
 const props = defineProps<{
   isOpen: boolean;
@@ -108,7 +109,6 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits(['close', 'redeemed']);
-const { $api } = useNuxtApp();
 const { showToast } = useCustomToast();
 
 const pointsToRedeem = ref<number | ''>('');
@@ -127,7 +127,7 @@ const handleRedeem = async () => {
 
   loading.value = true;
   try {
-    const res = await $api.post('/rewards/redeem-wallet', { points: Number(pointsToRedeem.value) });
+    const res = await rewards_api.redeemPoints(Number(pointsToRedeem.value));
     showToast({
         title: "Success",
         message: res.data.message || 'Points redeemed successfully!',

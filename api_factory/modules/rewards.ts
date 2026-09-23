@@ -12,5 +12,8 @@ export const rewards_api = {
   },
   spinWheel(deviceId?: string) {
     return GATEWAY_ENDPOINT.post("/rewards/spin-the-wheel", { deviceId });
+  },
+  redeemPoints(points: number) {
+    return GATEWAY_ENDPOINT.post("/rewards/redeem-wallet", { points });
   }
 };
