@@ -127,19 +127,31 @@ const handleRedeem = async () => {
 
   loading.value = true;
   try {
-    const res = await rewards_api.redeemPoints(Number(pointsToRedeem.value));
+    const res = await rewards_api.redeemPoints(Number(pointsToRedeem.value)) as any;
+
+    if (res?.type === 'ERROR') {
+      showToast({
+        title: "Error",
+        message: res?.data?.message || 'Failed to redeem points',
+        toastType: "error",
+        duration: 3000
+      });
+      return;
+    }
+
     showToast({
         title: "Success",
-        message: res.data.message || 'Points redeemed successfully!',
+        message: res?.data?.message || 'Points redeemed successfully!',
         toastType: "success",
         duration: 3000
       });
-    emit('redeemed', res.data.remainingPoints);
+    emit('redeemed', res?.data?.remainingPoints);
     emit('close');
   } catch (error: any) {
+    console.error("Redeem error:", error);
     showToast({
         title: "Error",
-        message: error.response?.data?.message || 'Failed to redeem points',
+        message: error?.response?.data?.message || error?.message || 'Failed to redeem points',
         toastType: "error",
         duration: 3000
       });

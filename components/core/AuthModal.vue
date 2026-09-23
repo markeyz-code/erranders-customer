@@ -59,10 +59,10 @@
                   <Loader2 v-if="loading" class="animate-spin w-6 h-6" />
                   {{ loading ? 'signing in...' : 'sign in' }}
                 </button>
-              </form>
+              </form> -->
 
               <div class="max-w-md w-full mx-auto mt-6">
-                <div class="flex items-center gap-3 mb-6">
+                <!-- <div class="flex items-center gap-3 mb-6">
                   <div class="flex-1 h-px bg-gray-100" />
                   <span class="text-sm text-gray-400 font-bold">or</span>
                   <div class="flex-1 h-px bg-gray-100" />
