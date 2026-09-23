@@ -76,6 +76,11 @@
                   <button @click="editOrder" class="w-full py-3.5 bg-orange-50 hover:bg-orange-100 text-orange-600 rounded-2xl text-sm font-bold tracking-wide transition-all border border-orange-100 active:scale-[0.98]">
                     Edit Order
                   </button>
+
+                  <button @click="cancelPendingOrder" :disabled="cancellingOrder" class="w-full py-3.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-2xl text-sm font-bold tracking-wide transition-all border border-red-100 active:scale-[0.98]">
+                    <Loader2 v-if="cancellingOrder" class="w-4 h-4 animate-spin inline mr-2" />
+                    <span>{{ cancellingOrder ? 'Cancelling...' : 'Cancel Order' }}</span>
+                  </button>
                   
                   <button @click="showFeedback = !showFeedback" class="w-full py-3 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
                     Having issues? Let us know
@@ -124,6 +129,7 @@ const showFeedback = ref(false)
 const feedback = ref('')
 const submitting = ref(false)
 const processingPayment = ref(false)
+const cancellingOrder = ref(false)
 const { showToast } = useCustomToast()
 const cartStore = useCart()
 const { initializePayment } = usePayments()
@@ -196,6 +202,29 @@ const editOrder = () => {
   
   closeModal()
   navigateTo('/cart')
+}
+
+const cancelPendingOrder = async () => {
+  if (!props.order?._id) return
+  
+  cancellingOrder.value = true
+  try {
+    await orders_api.cancelOrder(props.order._id)
+    showToast({
+      title: 'Order Cancelled',
+      message: 'Your pending order has been cancelled.',
+      toastType: 'success'
+    })
+    closeModal()
+  } catch (error: any) {
+    showToast({
+      title: 'Error',
+      message: error.response?.data?.message || 'Failed to cancel order.',
+      toastType: 'error'
+    })
+  } finally {
+    cancellingOrder.value = false
+  }
 }
 
 const submitFeedback = async () => {
