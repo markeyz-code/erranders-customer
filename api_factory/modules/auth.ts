@@ -9,7 +9,7 @@ export const auth_api = {
     return GATEWAY_ENDPOINT.post('/auth/login', payload);
   },
 
-  firebaseLogin: (payload: { idToken: string }) => {
+  firebaseLogin: (payload: { idToken: string; isSignUp?: boolean }) => {
     return GATEWAY_ENDPOINT.post('/auth/firebase', payload);
   },
 
