@@ -178,32 +178,52 @@
  <Clock class="w-4 h-4" /> Rider will submit actual item cost after purchase.
  </div>
  
- <div v-else-if="order.reconciliationStatus === 'submitted'" class="bg-blue-50 p-4 rounded-xl border border-blue-100 space-y-3">
- <div class="flex items-start gap-3">
- <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0">
- 🧾
- </div>
- <div>
- <h4 class="text-sm font-bold text-blue-900">Approve Actual Cost</h4>
- <p class="text-xs text-blue-700 mt-1">The rider reported spending <strong>₦{{ order.actualItemCost?.toLocaleString() }}</strong>.</p>
- <p v-if="order.refundAmount > 0" class="text-[11px] font-bold text-emerald-600 mt-1">
- You will be refunded ₦{{ order.refundAmount.toLocaleString() }} to your wallet.
- </p>
- <p v-else-if="order.actualItemCost > order.customDetails?.estimatedItemCost" class="text-[11px] font-bold text-blue-600 mt-1">
- The rider covered the extra ₦{{ (order.actualItemCost - order.customDetails.estimatedItemCost).toLocaleString() }}.
- </p>
- </div>
- </div>
- <button 
- @click="approveReconciliation"
- :disabled="approvingReconciliation"
- class="w-full py-2.5 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
- >
- <Loader2 v-if="approvingReconciliation" class="w-4 h-4 animate-spin" />
- <span v-else>👍</span>
- {{ approvingReconciliation ? 'Approving...' : 'Approve & Confirm' }}
- </button>
- </div>
+   <div v-else-if="order.reconciliationStatus === 'submitted'" class="bg-blue-50 p-4 rounded-xl border border-blue-100 space-y-3">
+    <div class="flex items-start gap-3">
+      <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0">
+        🧾
+      </div>
+      <div class="flex-1">
+        <h4 class="text-sm font-bold text-blue-900 flex justify-between items-center">
+          Approve Actual Cost
+          <span v-if="reconciliationTimeLeft > 0" class="text-[10px] font-bold bg-amber-100 text-amber-700 px-2 py-1 rounded-full animate-pulse">
+            {{ formattedReconciliationTime }}
+          </span>
+          <span v-else class="text-[10px] font-bold bg-rose-100 text-rose-700 px-2 py-1 rounded-full">
+            EXPIRED
+          </span>
+        </h4>
+        <p class="text-xs text-blue-700 mt-1">The rider reported spending <strong>₦{{ order.actualItemCost?.toLocaleString() }}</strong>.</p>
+        
+        <div v-if="order.actualItemCost > order.customDetails?.estimatedItemCost" class="mt-2 p-2 bg-amber-50 border border-amber-200 rounded-lg text-[11px] text-amber-800 font-medium">
+          <p>⚠️ Price is higher than your estimate.</p>
+          <p class="mt-1 font-bold">Please approve quickly or the rider will cancel this item to save time!</p>
+        </div>
+
+        <p v-if="order.refundAmount > 0" class="text-[11px] font-bold text-emerald-600 mt-1">
+          You will be refunded ₦{{ order.refundAmount.toLocaleString() }} to your wallet.
+        </p>
+      </div>
+    </div>
+    
+    <div class="flex gap-2 mt-2">
+      <a 
+        :href="'tel:' + (order.errander?.phoneNumber || order.errander?.phone || '')"
+        class="flex-1 py-2.5 bg-white border border-blue-200 text-blue-700 rounded-lg text-xs font-bold hover:bg-blue-50 transition-all flex items-center justify-center gap-1.5"
+      >
+        <Phone class="w-3.5 h-3.5" /> Call Rider
+      </a>
+      <button 
+        @click="approveReconciliation"
+        :disabled="approvingReconciliation || reconciliationTimeLeft <= 0"
+        class="flex-[2] py-2.5 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+      >
+        <Loader2 v-if="approvingReconciliation" class="w-4 h-4 animate-spin" />
+        <span v-else>👍</span>
+        {{ approvingReconciliation ? 'Approving...' : (reconciliationTimeLeft <= 0 ? 'Timeout Expired' : 'Approve & Pay') }}
+      </button>
+    </div>
+  </div>
 
  <div v-else-if="order.reconciliationStatus === 'approved'" class="text-xs font-bold text-emerald-700 bg-emerald-50 p-3 rounded-xl border border-emerald-100 flex items-center justify-between">
  <div class="flex items-center gap-2">
@@ -1104,9 +1124,47 @@ onMounted(() => {
  });
 });
 
-watch(order, () => {
- checkAutoOpenChat();
+
+const reconciliationTimeLeft = ref(300); // 5 minutes in seconds
+let reconciliationInterval: any = null;
+
+const formattedReconciliationTime = computed(() => {
+  const mins = Math.floor(reconciliationTimeLeft.value / 60);
+  const secs = reconciliationTimeLeft.value % 60;
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
 });
+
+const startReconciliationTimer = () => {
+  clearInterval(reconciliationInterval);
+  if (order.value?.reconciliationStatus === 'submitted' && order.value?.reconciliationSubmittedAt) {
+    const submittedTime = new Date(order.value.reconciliationSubmittedAt).getTime();
+    const now = Date.now();
+    const elapsed = Math.floor((now - submittedTime) / 1000);
+    const remaining = 300 - elapsed;
+    
+    if (remaining > 0) {
+      reconciliationTimeLeft.value = remaining;
+      reconciliationInterval = setInterval(() => {
+        reconciliationTimeLeft.value--;
+        if (reconciliationTimeLeft.value <= 0) {
+          clearInterval(reconciliationInterval);
+        }
+      }, 1000);
+    } else {
+      reconciliationTimeLeft.value = 0;
+    }
+  }
+};
+
+watch(order, () => {
+  checkAutoOpenChat();
+  if (order.value?.reconciliationStatus === 'submitted') {
+    startReconciliationTimer();
+  } else {
+    clearInterval(reconciliationInterval);
+  }
+});
+
 
 const formatDate = (dateStr: string) => {
  if (!dateStr) return '';
