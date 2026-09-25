@@ -163,7 +163,7 @@
  <div v-if="order.itemsPhoto" class="mt-4 pt-4 border-t border-gray-200">
    <div class="p-4 rounded-xl border border-gray-100 flex flex-col items-center">
      <h4 class="text-[11px] font-bold text-gray-400 mb-4 tracking-widest uppercase flex items-center gap-1.5 w-full">
-       <Camera class="w-3.5 h-3.5" /> Proof of Purchased Items
+       <Camera, PartyPopper class="w-3.5 h-3.5" /> Proof of Purchased Items
      </h4>
      <div class="w-full h-48 rounded-xl overflow-hidden bg-gray-50 border border-gray-100 mb-3 cursor-pointer" @click="window.open(order.itemsPhoto, '_blank')">
        <img :src="order.itemsPhoto" class="w-full h-full object-cover hover:scale-105 transition-transform" />
@@ -478,25 +478,64 @@
  </div>
  </div>
 
- <!-- Already Rated State / Rate Button -->
- <div v-if="order.status === 'delivered'" class="bg-white rounded-[2rem] border border-gray-100 p-4 md:p-4 text-center">
- <div v-if="order.rating">
- <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4">
- <Star class="w-6 h-6 text-yellow-400 fill-yellow-400" />
- </div>
- <p class="text-[11px] font-medium text-emerald-600 ">You rated this delivery {{ order.rating }} stars</p>
- <p v-if="order.review" class="text-sm font-bold text-gray-400 mt-2">"{{ order.review }}"</p>
- </div>
- <div v-else>
- <h3 class="text-base font-medium text-gray-900 tracking-tight mb-4">How was your delivery?</h3>
- <button 
- @click="showRatingModal = true"
- class="w-full py-4 bg-gray-900 text-white rounded-2xl text-[11px] font-medium tracking-[0.2em] hover:bg-gray-800 transition-all shadow-black/10"
- >
- RATE YOUR EXPERIENCE
- </button>
- </div>
- </div>
+               <!-- Delivered Celebration / Rate -->
+              <div v-if="order.status === 'delivered'" class="bg-gradient-to-br from-emerald-50 to-green-50 rounded-[2rem] border border-emerald-100 p-6 text-center shadow-lg relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-200/50 rounded-full blur-3xl -translate-y-12 translate-x-12"></div>
+                
+                <div class="relative z-10">
+                  <div class="w-16 h-16 bg-white rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-sm animate-bounce-slow">
+                    <PartyPopper class="w-8 h-8 text-emerald-500" />
+                  </div>
+                  <h3 class="text-2xl font-bold text-gray-900 tracking-tight mb-2">Hooray! It's here! 🎉</h3>
+                  <p class="text-sm text-gray-600 mb-6 font-medium">
+                    Enjoy! We'd love to hear how {{ order.errander?.firstName || 'your errander' }} did.
+                  </p>
+                  
+                  <div v-if="order.erranderRating">
+                    <div class="bg-white/60 backdrop-blur-md rounded-2xl p-4 inline-block">
+                      <div class="flex items-center justify-center gap-1 mb-2">
+                        <Star v-for="i in 5" :key="i" class="w-5 h-5 transition-colors" :class="i <= order.erranderRating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200 fill-gray-200'" />
+                      </div>
+                      <p class="text-[11px] font-bold text-emerald-600 uppercase tracking-wider">Thanks for rating!</p>
+                      <p v-if="order.erranderReview" class="text-sm font-medium text-gray-600 mt-2 italic">"{{ order.erranderReview }}"</p>
+                    </div>
+                  </div>
+                  
+                  <div v-else class="bg-white/80 backdrop-blur-md rounded-2xl p-4 shadow-sm border border-emerald-100/50">
+                    <div class="flex justify-center gap-2 mb-4" @mouseleave="hoverRating = 0">
+                      <button 
+                        v-for="star in 5" 
+                        :key="star"
+                        @click="rating = star"
+                        @mouseover="hoverRating = star"
+                        class="p-2 transition-transform hover:scale-110 focus:outline-none"
+                      >
+                        <Star 
+                          class="w-8 h-8 transition-colors"
+                          :class="(hoverRating || rating) >= star ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200 fill-gray-200 hover:text-gray-300'"
+                        />
+                      </button>
+                    </div>
+                    
+                    <div v-if="rating > 0" class="space-y-3 animate-fade-in">
+                      <textarea
+                        v-model="reviewText"
+                        rows="2"
+                        placeholder="Say something nice about the rider..."
+                        class="w-full bg-white border border-emerald-100 rounded-xl p-3 text-sm font-medium focus:border-emerald-300 focus:ring-1 focus:ring-emerald-300 transition-all outline-none resize-none placeholder:text-gray-400 shadow-inner"
+                      ></textarea>
+                      <button 
+                        @click="submitRating"
+                        :disabled="submittingRating"
+                        class="w-full py-3 bg-emerald-600 text-white rounded-xl text-[11px] font-bold tracking-[0.2em] hover:bg-emerald-700 active:scale-95 transition-all shadow-md shadow-emerald-600/20 flex items-center justify-center gap-2 disabled:opacity-50"
+                      >
+                        <div v-if="submittingRating" class="w-4 h-4 border border-white/20 border-t-white rounded-full animate-spin" />
+                        <span v-else>SUBMIT REVIEW</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
  <!-- Help Section -->
  <div class="bg-parentPrimary rounded-2xl p-4 md:p-4 text-white relative overflow-hidden group">
