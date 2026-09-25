@@ -8,7 +8,7 @@
             <img src="@/assets/img/logo-light.png" class="w-auto h-8" alt="Errandr" />
           </div>
         </NuxtLink>
-        <h1 class="text-xl font-extrabold text-gray-900 mb-2 tracking-tight">Complete your profile</h1>
+        <h1 class="text-lg font-extrabold text-gray-900 mb-2 tracking-tight">Complete your profile</h1>
         <p class="text-gray-500 text-sm">Just a few more details to get you started.</p>
       </div>
 
@@ -32,7 +32,7 @@
       <form @submit.prevent="nextStep" class="space-y-6 w-full">
         <!-- Step 1: Personal Details -->
         <div v-if="currentStep === 1" class="space-y-4 animate-fade-in">
-          <h2 class="text-xl font-bold text-gray-900 mb-4">Personal Information</h2>
+          <h2 class="text-lg font-bold text-gray-900 mb-4">Personal Information</h2>
           <div class="space-y-2">
             <label class="text-sm font-bold text-gray-700">Phone Number *</label>
             <input v-model="form.phone" type="tel" required placeholder="+234..." class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-[#FF5C1A] focus:ring-4 focus:ring-[#FF5C1A]/10 transition-all text-sm outline-none" />
@@ -54,7 +54,7 @@
 
         <!-- Step 2: Preferences -->
         <div v-if="currentStep === 2" class="space-y-4 animate-fade-in">
-          <h2 class="text-xl font-bold text-gray-900 mb-4">Notification Preferences</h2>
+          <h2 class="text-lg font-bold text-gray-900 mb-4">Notification Preferences</h2>
           
           <label class="flex items-center gap-4 p-4 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors">
             <input type="checkbox" v-model="form.preferences.emailNotifications" class="w-5 h-5 accent-[#FF5C1A] rounded border-gray-300" />
@@ -83,7 +83,7 @@
 
         <!-- Step 3: Review -->
         <div v-if="currentStep === 3" class="space-y-4 animate-fade-in">
-          <h2 class="text-xl font-bold text-gray-900 mb-4">Review Your Info</h2>
+          <h2 class="text-lg font-bold text-gray-900 mb-4">Review Your Info</h2>
           <div class="bg-gray-50 p-5 rounded-xl border border-gray-100 space-y-3">
             <div class="flex justify-between border-b border-gray-200 pb-2">
               <span class="text-gray-500 text-sm">Phone</span>
@@ -111,16 +111,16 @@
 
         <!-- Navigation Buttons -->
         <div class="flex items-center gap-4 mt-5 pt-6 border-t border-gray-100">
-          <button v-if="currentStep > 1" type="button" @click="prevStep" :disabled="saving" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-bold text-sm transition-colors disabled:opacity-50">
+          <button v-if="currentStep > 1" type="button" @click="prevStep" :disabled="saving" class="flex-1 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-bold text-sm transition-colors disabled:opacity-50">
             Back
           </button>
           
-          <button v-if="currentStep < 3" type="submit" class="flex-1 py-2.5 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-bold text-sm transition-colors">
+          <button v-if="currentStep < 3" type="submit" class="flex-1 py-2 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-bold text-sm transition-colors">
             Continue
           </button>
           
-          <button v-if="currentStep === 3" type="button" @click="handleSave" :disabled="saving" class="flex-1 py-2.5 bg-[#008950] hover:bg-[#007040] text-white rounded-xl font-bold text-sm transition-colors flex items-center justify-center gap-2">
-            <Loader2 v-if="saving" class="animate-spin w-5 h-5" />
+          <button v-if="currentStep === 3" type="button" @click="handleSave" :disabled="saving" class="flex-1 py-2 bg-[#008950] hover:bg-[#007040] text-white rounded-xl font-bold text-sm transition-colors flex items-center justify-center gap-2">
+            <Loader2 v-if="saving" class="animate-spin w-4 h-4" />
             {{ saving ? 'Saving...' : 'Finish Setup' }}
           </button>
         </div>

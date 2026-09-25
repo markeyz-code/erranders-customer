@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen w-full flex flex-col items-center justify-center bg-white overflow-hidden py-8 px-4 sm:px-4 lg:px-5">
     <!-- Form Card -->
-    <div class="w-full max-w-md flex flex-col justify-center px-0 sm:px-4 py-8 bg-white sm:rounded-[2rem] relative z-10 my-8">
+    <div class="w-full max-w-sm flex flex-col justify-center px-0 sm:px-4 py-8 bg-white sm:rounded-[2rem] relative z-10 my-8">
       <div class="mb-6 text-center flex flex-col items-center">
         <NuxtLink to="/auth/forgot-password" class="inline-flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-900 transition-colors mb-6 group self-start absolute top-8 left-8 sm:static sm:mb-8 sm:self-center">
           <ArrowLeft class="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
@@ -9,14 +9,14 @@
         </NuxtLink>
         <NuxtLink to="/" class="flex items-center gap-2 mb-8 inline-block group">
                  <div class="flex items-center justify-center group-hover:scale-110 transition-transform">
-            <img src="@/assets/img/logo-light.png" class="w-auto h-10" alt="Errandr" />
+            <img src="@/assets/img/logo-light.png" class="w-auto h-9" alt="Errandr" />
           </div>
         </NuxtLink>
         <h1 class="text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">enter code</h1>
         <p class="text-gray-500 text-lg">We sent a verification code to <span class="font-semibold text-gray-900">{{ email }}</span></p>
       </div>
 
-      <form @submit.prevent="handleVerify" class="space-y-8 max-w-md">
+      <form @submit.prevent="handleVerify" class="space-y-8 max-w-sm">
         <div class="space-y-4">
           <label class="text-sm font-bold text-gray-700 ml-1">reset code</label>
           <UiOtpInput v-model="otp" @complete="handleVerify" />
@@ -25,8 +25,8 @@
         <p v-if="error" class="text-red-500 text-sm font-medium">{{ error }}</p>
 
         <button type="submit" :disabled="loading || !otp"
-          class="w-full py-2.5 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-bold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/20">
-          <Loader2 v-if="loading" class="animate-spin w-5 h-5" />
+          class="w-full py-2 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-bold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/20">
+          <Loader2 v-if="loading" class="animate-spin w-4 h-4" />
           {{ loading ? 'verifying...' : 'verify code' }}
         </button>
       </form>
