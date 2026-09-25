@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen w-full flex flex-col items-center justify-center bg-white overflow-hidden py-12 px-4 sm:px-4 lg:px-5">
+  <div class="min-h-screen w-full flex flex-col items-center justify-center bg-white overflow-hidden py-8 px-4 sm:px-4 lg:px-5">
     <!-- Form Card -->
-    <div class="w-full max-w-md flex flex-col justify-center px-0 sm:px-4 py-12 bg-white sm:rounded-[2rem] relative z-10 my-8">
-      <div class="mb-10 text-center flex flex-col items-center">
+    <div class="w-full max-w-md flex flex-col justify-center px-0 sm:px-4 py-8 bg-white sm:rounded-[2rem] relative z-10 my-8">
+      <div class="mb-6 text-center flex flex-col items-center">
         <NuxtLink to="/auth/login" class="inline-flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-900 transition-colors mb-6 group self-start absolute top-8 left-8 sm:static sm:mb-8 sm:self-center">
           <ArrowLeft class="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           Back to login
@@ -22,7 +22,7 @@
         <p v-if="error" class="text-red-500 text-sm font-medium">{{ error }}</p>
 
         <button type="submit" :disabled="loading"
-          class="w-full py-4 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-bold text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/20">
+          class="w-full py-2.5 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-bold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/20">
           <Loader2 v-if="loading" class="animate-spin w-5 h-5" />
           {{ loading ? 'sending code...' : 'send reset code' }}
         </button>

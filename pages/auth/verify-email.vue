@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen w-full flex flex-col items-center justify-center bg-white overflow-hidden py-12 px-4 sm:px-4 lg:px-5">
+  <div class="min-h-screen w-full flex flex-col items-center justify-center bg-white overflow-hidden py-8 px-4 sm:px-4 lg:px-5">
     <!-- Form Card -->
-    <div class="w-full max-w-md flex flex-col justify-center px-0 sm:px-4 py-12 bg-white sm:rounded-[2rem] relative z-10 my-8">
-      <div class="mb-10 text-center flex flex-col items-center">
+    <div class="w-full max-w-md flex flex-col justify-center px-0 sm:px-4 py-8 bg-white sm:rounded-[2rem] relative z-10 my-8">
+      <div class="mb-6 text-center flex flex-col items-center">
         <NuxtLink to="/" class="flex items-center gap-2 mb-8 inline-block group">
                  <div class="flex items-center justify-center group-hover:scale-110 transition-transform">
             <img src="@/assets/img/logo-light.png" class="w-auto h-10" alt="Errandr" />
@@ -21,7 +21,7 @@
         <p v-if="error" class="text-red-500 text-sm font-medium">{{ error }}</p>
 
         <button type="submit" :disabled="loading || !otp"
-          class="w-full py-4 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-[1.2rem] font-medium text-sm  transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/20 active:scale-95">
+          class="w-full py-2.5 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-[1.2rem] font-medium text-sm  transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/20 active:scale-95">
           <Loader2 v-if="loading" class="animate-spin w-5 h-5" />
           {{ loading ? 'Verifying...' : 'Verify email' }}
         </button>
