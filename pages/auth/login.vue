@@ -12,7 +12,7 @@
         <p class="text-gray-500 text-lg">Sign in to order your favorites and track deliveries</p>
       </div>
 
-      <!-- <form @submit.prevent="handleLogin" class="space-y-6 max-w-sm">
+      <form @submit.prevent="handleLogin" class="space-y-6 max-w-sm">
         <UiAnimatedInput v-model="email" type="email" label="Email" required />
         <UiAnimatedInput v-model="password" type="password" label="Password" required />
         <div class="flex items-center justify-between">
@@ -23,7 +23,7 @@
 
         <button type="submit" :disabled="loading"
           class="w-full py-2 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-bold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/20">
-          <Loader2 v-if="loading" class="animate-spin w-6 h-6" />
+          <Loader2 v-if="loading" class="animate-spin w-5 h-5" />
           {{ loading ? 'signing in...' : 'sign in' }}
         </button>
       </form>
@@ -33,8 +33,7 @@
           <div class="flex-1 h-px bg-gray-100" />
           <span class="text-sm text-gray-400 font-bold">or</span>
           <div class="flex-1 h-px bg-gray-100" />
-        </div> -->
-        <div class="max-w-sm w-full mt-6">
+        </div>
 
         <button type="button" @click="firebaseLogin()" :disabled="firebaseLoading" class="w-full py-2 border border-gray-100 rounded-xl flex items-center justify-center gap-3 font-bold text-gray-700 hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
           <Loader2 v-if="firebaseLoading" class="animate-spin w-4 h-4" />

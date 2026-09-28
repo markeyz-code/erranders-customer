@@ -12,7 +12,7 @@
         <p class="text-gray-500 text-lg">Join the campus delivery community</p>
       </div>
 
-      <!-- <form @submit.prevent="handleRegister" class="space-y-5 max-w-sm w-full">
+      <form @submit.prevent="handleRegister" class="space-y-4 max-w-sm w-full mb-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <UiAnimatedInput v-model="form.firstName" type="text" label="first name" required placeholder="" />
           <UiAnimatedInput v-model="form.lastName" type="text" label="last name" required placeholder="" />
@@ -29,12 +29,18 @@
 
         <button type="submit" :disabled="loading || validatingReferral"
           class="w-full py-2 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-bold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/20 mt-4">
-          <Loader2 v-if="loading || validatingReferral" class="animate-spin w-6 h-6" />
+          <Loader2 v-if="loading || validatingReferral" class="animate-spin w-5 h-5" />
           {{ loading || validatingReferral ? 'validating...' : 'create account' }}
         </button>
-      </form> -->
+      </form>
 
-      <div class="max-w-sm w-full mt-6">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="flex-1 h-px bg-gray-100" />
+        <span class="text-sm text-gray-400 font-bold">or</span>
+        <div class="flex-1 h-px bg-gray-100" />
+      </div>
+
+      <div class="max-w-sm w-full mt-2">
         <button type="button" @click="firebaseLogin()" :disabled="firebaseLoading" class="w-full py-2 border border-gray-100 rounded-xl flex items-center justify-center gap-3 font-bold text-gray-700 hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
           <Loader2 v-if="firebaseLoading" class="animate-spin w-4 h-4" />
           <svg v-else class="w-4 h-4" viewBox="0 0 24 24">
