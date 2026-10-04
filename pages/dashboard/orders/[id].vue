@@ -810,6 +810,32 @@
     </div>
   </div>
 
+  <!-- Arrival Modal -->
+  <div v-if="showArrivalModal" class="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl p-6 w-full max-w-sm relative animate-fade-in shadow-2xl flex flex-col items-center text-center">
+      <button @click="closeArrivalModal" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors">
+        <X class="w-4 h-4" />
+      </button>
+      
+      <div class="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mb-4">
+        <Sparkles class="w-8 h-8 text-emerald-600" />
+      </div>
+      
+      <h3 class="text-xl font-black text-gray-900 mb-2">Yepeeee! 🎉</h3>
+      <p class="text-sm text-gray-500 mb-6 font-medium">Your Errand ninja is almost here. Below is your verification code.</p>
+      
+      <div class="flex items-center justify-center gap-2 mb-6 w-full">
+        <div v-for="(digit, idx) in (order?.deliveryPin || '0000').split('')" :key="idx" class="w-12 h-14 rounded-xl bg-gray-900 flex items-center justify-center text-2xl font-black text-white shadow-inner">
+          {{ digit }}
+        </div>
+      </div>
+      
+      <button @click="copyVerificationCodeAndClose" class="w-full h-12 rounded-xl bg-[#FF5C1A] text-white font-bold flex items-center justify-center gap-2 hover:bg-[#e6511a] transition-colors shadow-lg shadow-[#FF5C1A]/20">
+        <Copy class="w-4 h-4" /> Copy Code
+      </button>
+    </div>
+  </div>
+
 </template>
 <script setup lang="ts">
 import {
@@ -1428,6 +1454,25 @@ const copyVerificationCode = async () => {
     showToast({ title: 'Failed', message: 'Could not copy code.', toastType: 'error' });
   }
 };
+
+const showArrivalModal = ref(false);
+const hasSeenArrivalModal = ref(false);
+
+const closeArrivalModal = () => {
+  showArrivalModal.value = false;
+  hasSeenArrivalModal.value = true;
+};
+
+const copyVerificationCodeAndClose = async () => {
+  await copyVerificationCode();
+  closeArrivalModal();
+};
+
+watch(() => order.value?.status, (newStatus) => {
+  if (newStatus === 'in_transit' && !hasSeenArrivalModal.value) {
+    showArrivalModal.value = true;
+  }
+}, { immediate: true });
 
 // Order Tracking Stepper Logic
 const CUSTOM_ERRAND_STEPS = [
