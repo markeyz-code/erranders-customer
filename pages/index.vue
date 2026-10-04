@@ -932,51 +932,16 @@ const currentHeadingIndex = ref(0)
 // ERRANDERS: UNILAG, YABATECH, CMUL - REAL LANDING PAGE CONTENT
 
 const heroHeadings = [
-  // THE VALUE PROP - ONE APP FOR EVERYTHING
-  { text: 'Food. Laundry. Nail Tech.<br/>Everything you need on <span class="text-parentPrimary">campus.</span>', lang: '🇳🇬 Pidgin' },
-  { text: 'Stop calling 10 vendors.<br/><span class="text-parentPrimary">One app solves</span> everything.', lang: '🇳🇬 Pidgin' },
-
-  // SERVICES FOCUS (Nail Tech, Laundry, etc.)
-  { text: 'Need a fresh fade or nails done?<br/>Book a <span class="text-parentPrimary">pro right to your hostel.</span>', lang: '🇬🇧 English' },
-  { text: 'Dirty clothes piling up?<br/>Laundry pickup in <span class="text-parentPrimary">15 mins.</span>', lang: '🇬🇧 English' },
-  { text: 'Nail tech, barbers, cleaners.<br/>Your campus <span class="text-parentPrimary">services on speed dial.</span>', lang: '🇬🇧 English' },
-
-  // FEATURES (Meal Autopilot, Market Pool)
-  { text: 'Tired of deciding what to eat?<br/>Set <span class="text-parentPrimary">Meal Autopilot</span> and forget it.', lang: '🇬🇧 English' },
-  { text: 'Group orders save money.<br/>Use <span class="text-parentPrimary">Market Pool</span> to cut delivery fees.', lang: '🇬🇧 English' },
-  { text: 'Schedule your meals for the week.<br/><span class="text-parentPrimary">Meal Autopilot</span> got you.', lang: '🇬🇧 English' },
-
-  // LOCAL LANGUAGES / SLANG
-  { text: 'Sapa hold you?<br/>₦500 chow waiting on <span class="text-parentPrimary">Erranders.</span>', lang: '🇳🇬 Pidgin' },
-  { text: 'Ebi n pa e?<br/>Order real food on <span class="text-parentPrimary">Erranders now.</span>', lang: '🇳🇬 Yoruba' },
-  { text: 'Agụụ na-agụ gị?<br/>Get your chow fast on <span class="text-parentPrimary">Erranders.</span>', lang: '🇳🇬 Igbo' },
-  { text: 'Kuna jin yunwa?<br/>Your food is ready on <span class="text-parentPrimary">Erranders.</span>', lang: '🇳🇬 Hausa' },
-  { text: 'Allowance drop?<br/>Time to chop life with <span class="text-parentPrimary">Erranders.</span>', lang: '🇳🇬 Pidgin' },
-  
-  // SPEED & CONVENIENCE
-  { text: 'Your Errander is on the way.<br/>Check <span class="text-parentPrimary">real-time tracking</span> now.', lang: '🇬🇧 English' },
-  { text: 'Ordering takes 60 seconds.<br/>Delivery in <span class="text-parentPrimary">30 mins max.</span>', lang: '🇬🇧 English' },
-
-  // VENDOR VARIETY - THE MULTI-VENDOR ANGLE
-  { text: 'Tired of suya guy today?<br/>Pick from <span class="text-parentPrimary">5 vendors right now.</span>', lang: '🇳🇬 Pidgin' },
-  { text: 'Choose your meal guy.<br/>Change tomorrow. That\'s the <span class="text-parentPrimary">Erranders vibe.</span>', lang: '🇳🇬 Pidgin' },
-
-  // HOSTEL LIFE - SPECIFIC PAIN POINTS
-  { text: 'Hostel kitchen ban?<br/>Food comes to <span class="text-parentPrimary">your room discreet.</span>', lang: '🇳🇬 Pidgin' },
-  { text: 'Warden watching.<br/>Erranders deliver so <span class="text-parentPrimary">smooth.</span> No drama.', lang: '🇳🇬 Pidgin' },
-  { text: 'Roommate fighting over chop?<br/>Order from <span class="text-parentPrimary">5 vendors</span> at once!', lang: '🇳🇬 Pidgin' },
-
-  // CUSTOM ERRANDS - UNIQUE VALUE
-  { text: 'Need to send package home?<br/>Set the price, <span class="text-parentPrimary">rider accepts,</span> done.', lang: '🇬🇧 English' },
-  { text: 'Pick up laundry from class?<br/>Send an <span class="text-parentPrimary">Errander</span> now. Done in 15.', lang: '🇬🇧 English' },
-
-  // CAMPUS-SPECIFIC
-  { text: '🎓 UNILAG to LEKKI express.<br/>Erranders your <span class="text-parentPrimary">campus plug.</span>', lang: '🇳🇬 Pidgin' },
-  { text: '🏢 YabaTech campus?<br/><span class="text-parentPrimary">Erranders here too.</span> Full service.', lang: '🇳🇬 Pidgin' },
-  { text: '📚 CMUL students?<br/><span class="text-parentPrimary">Your app is ready.</span> Everything covered.', lang: '🇳🇬 Pidgin' },
-
-  // EXAM PERIOD / STRESS
-  { text: '3AM final assignment?<br/>Food + coffee <span class="text-parentPrimary">incoming now.</span> You got this!', lang: '🇬🇧 English' },
+  { text: 'Sapa dey choke? 😩<br/>Use Erranders get <span class="text-parentPrimary">cheap chow.</span>', lang: '🇳🇬 Pidgin' },
+  { text: 'Want impress your babe? 😉<br/>Send her food via <span class="text-parentPrimary">Erranders.</span>', lang: '🇳🇬 Pidgin' },
+  { text: 'Agụụ na-egbu gị? 🥘<br/>Order food <span class="text-parentPrimary">sharp sharp!</span>', lang: '🇳🇬 Igbo' },
+  { text: 'Yunwa ta kusa kashe ka? 🏃‍♂️<br/>Your chow <span class="text-parentPrimary">dey on the way.</span>', lang: '🇳🇬 Hausa' },
+  { text: 'Dirty clothes full corner? 👕<br/>Book <span class="text-parentPrimary">laundry pickup</span> now.', lang: '🇬🇧 English' },
+  { text: 'Hair dey rough? 💈<br/>Bring <span class="text-parentPrimary">barber</span> to your hostel.', lang: '🇳🇬 Pidgin' },
+  { text: 'Reading for exams? 📚<br/>Make we run your <span class="text-parentPrimary">errands!</span>', lang: '🇬🇧 English' },
+  { text: 'Ebi n pa e? 😋<br/>Chop life, <span class="text-parentPrimary">forget sapa.</span>', lang: '🇳🇬 Yoruba' },
+  { text: 'Need a nail tech? 💅<br/>Book a pro <span class="text-parentPrimary">to your room.</span>', lang: '🇬🇧 English' },
+  { text: 'Tired of trekking? 🚶‍♂️<br/>Relax, just use <span class="text-parentPrimary">Erranders.</span>', lang: '🇳🇬 Pidgin' }
 ]
 
 const slangSlogans = [
