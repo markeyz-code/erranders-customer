@@ -20,14 +20,14 @@
       <!-- Dropdown for Month/Day Selection -->
       <div 
         v-if="isOpen"
-        class="absolute top-full left-0 mt-2 w-full bg-white rounded-xl shadow-sm border border-gray-100 border border-gray-100 p-4 z-50 animate-fade-in-up"
+        class="absolute top-full left-0 mt-2 w-full bg-white rounded-xl shadow-sm border border-gray-50 border border-gray-50 p-4 z-50 animate-fade-in-up"
       >
         <div class="flex gap-3">
           <div class="flex-1">
             <label class="block text-xs font-bold text-gray-500 mb-1">Month</label>
             <select 
               v-model="selectedMonth" 
-              class="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-[#FF5C1A]"
+              class="w-full p-2 bg-gray-50 border border-gray-25 rounded-lg focus:outline-none focus:border-[#FF5C1A]"
             >
               <option value="" disabled>Select</option>
               <option v-for="(month, index) in months" :key="month" :value="index">
@@ -39,7 +39,7 @@
             <label class="block text-xs font-bold text-gray-500 mb-1">Day</label>
             <select 
               v-model="selectedDay" 
-              class="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-[#FF5C1A]"
+              class="w-full p-2 bg-gray-50 border border-gray-25 rounded-lg focus:outline-none focus:border-[#FF5C1A]"
               :disabled="selectedMonth === ''"
             >
               <option value="" disabled>Select</option>

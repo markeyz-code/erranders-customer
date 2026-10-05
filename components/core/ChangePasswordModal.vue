@@ -5,7 +5,7 @@
       <div class="absolute inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity" @click="closeModal"></div>
       
       <!-- Modal Content -->
-      <div class="relative bg-white w-full max-w-sm rounded-3xl shadow-sm border border-gray-100 border border-gray-100 flex flex-col overflow-hidden animate-zoom-in">
+      <div class="relative bg-white w-full max-w-sm rounded-3xl shadow-sm border border-gray-50 border border-gray-50 flex flex-col overflow-hidden animate-zoom-in">
         <!-- Close Button -->
         <button 
           @click="closeModal"
@@ -43,7 +43,7 @@
                   v-model="form.currentPassword" 
                   :type="showCurrentPassword ? 'text' : 'password'"
                   placeholder="Enter current password"
-                  class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-parentPrimary/20 focus:border-parentPrimary transition-all pr-12"
+                  class="w-full px-4 py-3 bg-gray-50 border border-gray-25 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-parentPrimary/20 focus:border-parentPrimary transition-all pr-12"
                   required
                   :disabled="loading"
                 >
@@ -65,7 +65,7 @@
                   v-model="form.newPassword" 
                   :type="showNewPassword ? 'text' : 'password'"
                   placeholder="Enter new password"
-                  class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-parentPrimary/20 focus:border-parentPrimary transition-all pr-12"
+                  class="w-full px-4 py-3 bg-gray-50 border border-gray-25 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-parentPrimary/20 focus:border-parentPrimary transition-all pr-12"
                   required
                   minlength="8"
                   :disabled="loading"

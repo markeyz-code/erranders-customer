@@ -21,8 +21,8 @@
         <div 
           v-for="(faq, i) in faqs" 
           :key="i"
-          class="group bg-white rounded-[2rem] border border-gray-100 overflow-hidden transition-all duration-500 hover:shadow-sm border border-gray-100 hover:border-parentPrimary/20"
-          :class="{ 'ring-1 ring-parentPrimary/10 shadow-sm border border-gray-100': openIndex === i }"
+          class="group bg-white rounded-[2rem] border border-gray-50 overflow-hidden transition-all duration-500 hover:shadow-sm border border-gray-50 hover:border-parentPrimary/20"
+          :class="{ 'ring-1 ring-parentPrimary/10 shadow-sm border border-gray-50': openIndex === i }"
         >
           <button 
             @click="openIndex = openIndex === i ? -1 : i"

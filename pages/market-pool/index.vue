@@ -105,7 +105,7 @@
       </div>
 
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 lg:gap-5">
-        <div v-for="item in filteredItems" :key="item._id" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col hover:shadow-md transition-shadow cursor-pointer" @click="openProductModal(item)">
+        <div v-for="item in filteredItems" :key="item._id" class="bg-white rounded-2xl shadow-sm border border-gray-50 overflow-hidden flex flex-col hover:shadow-md transition-shadow cursor-pointer" @click="openProductModal(item)">
           <div class="h-40 bg-gray-50 relative overflow-hidden group">
             <template v-if="(item.images && item.images.length > 0) || item.imageUrl">
               <div class="flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full h-full" @scroll="handleScroll($event, item._id)">
@@ -195,19 +195,19 @@
         <div class="p-5 space-y-4">
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1.5">Item Name</label>
-            <input v-model="requestForm.itemName" type="text" placeholder="e.g. Sweet Potatoes" class="w-full bg-gray-50 text-gray-900 rounded-xl focus:ring-primary px-3 py-2.5 border border-gray-200 outline-none">
+            <input v-model="requestForm.itemName" type="text" placeholder="e.g. Sweet Potatoes" class="w-full bg-gray-50 text-gray-900 rounded-xl focus:ring-primary px-3 py-2.5 border border-gray-25 outline-none">
           </div>
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1.5">Target Quantity/Measurement</label>
-            <input v-model="requestForm.desiredQuantity" type="text" placeholder="e.g. 1 Paint Bucket" class="w-full bg-gray-50 text-gray-900 rounded-xl focus:ring-primary px-3 py-2.5 border border-gray-200 outline-none">
+            <input v-model="requestForm.desiredQuantity" type="text" placeholder="e.g. 1 Paint Bucket" class="w-full bg-gray-50 text-gray-900 rounded-xl focus:ring-primary px-3 py-2.5 border border-gray-25 outline-none">
           </div>
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1.5">Additional Details</label>
-            <textarea v-model="requestForm.description" placeholder="Any specific brand or preference?" class="w-full bg-gray-50 text-gray-900 rounded-xl focus:ring-primary px-3 py-2.5 border border-gray-200 outline-none resize-none h-20"></textarea>
+            <textarea v-model="requestForm.description" placeholder="Any specific brand or preference?" class="w-full bg-gray-50 text-gray-900 rounded-xl focus:ring-primary px-3 py-2.5 border border-gray-25 outline-none resize-none h-20"></textarea>
           </div>
         </div>
         <div class="p-4 bg-gray-50 border-t border-gray-100 flex gap-3">
-          <button @click="showRequestModal = false" class="flex-1 py-2.5 text-sm font-semibold text-gray-600 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl transition-colors">Cancel</button>
+          <button @click="showRequestModal = false" class="flex-1 py-2.5 text-sm font-semibold text-gray-600 bg-white border border-gray-25 hover:bg-gray-50 rounded-xl transition-colors">Cancel</button>
           <button @click="submitRequest" :disabled="submittingRequest" class="flex-1 py-2.5 text-sm font-bold text-white bg-primary hover:bg-primary/90 rounded-xl transition-all shadow-sm disabled:opacity-50">
             {{ submittingRequest ? 'Sending...' : 'Submit Request' }}
           </button>
@@ -220,13 +220,13 @@
       <div class="bg-white rounded-t-2xl sm:rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-slide-up" @click.stop>
         <div class="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
           <h3 class="font-bold text-gray-900">Add to Cart</h3>
-          <button @click="closeAddToCartModal" class="text-gray-400 hover:text-gray-600 p-1.5 hover:bg-gray-200 rounded-full transition-colors bg-white shadow-sm border border-gray-100">
+          <button @click="closeAddToCartModal" class="text-gray-400 hover:text-gray-600 p-1.5 hover:bg-gray-200 rounded-full transition-colors bg-white shadow-sm border border-gray-50">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
           </button>
         </div>
         
         <div v-if="selectedItem" class="p-5 space-y-5">
-          <div class="flex items-center gap-4 bg-gray-50 p-3 rounded-xl border border-gray-100">
+          <div class="flex items-center gap-4 bg-gray-50 p-3 rounded-xl border border-gray-50">
             <img :src="selectedItem.imageUrl" class="w-16 h-16 object-cover rounded-lg shadow-sm" />
             <div>
               <h4 class="font-bold text-gray-900 leading-tight">{{ selectedItem.name }}</h4>
@@ -238,9 +238,9 @@
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-2">Quantity</label>
             <div class="flex items-center gap-4">
-              <button @click="cartForm.quantity > 1 ? cartForm.quantity-- : null" class="w-10 h-10 rounded-full border border-gray-200 bg-gray-50 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors disabled:opacity-50 font-bold text-xl" :disabled="cartForm.quantity <= 1">-</button>
+              <button @click="cartForm.quantity > 1 ? cartForm.quantity-- : null" class="w-10 h-10 rounded-full border border-gray-25 bg-gray-50 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors disabled:opacity-50 font-bold text-xl" :disabled="cartForm.quantity <= 1">-</button>
               <span class="font-bold text-xl w-8 text-center">{{ cartForm.quantity }}</span>
-              <button @click="cartForm.quantity++" class="w-10 h-10 rounded-full border border-gray-200 bg-gray-50 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors font-bold text-xl">+</button>
+              <button @click="cartForm.quantity++" class="w-10 h-10 rounded-full border border-gray-25 bg-gray-50 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors font-bold text-xl">+</button>
             </div>
           </div>
           
@@ -252,7 +252,7 @@
             <textarea 
               v-model="cartForm.preferences" 
               placeholder="e.g. Golden Penny brand, Big sizes only, etc." 
-              class="w-full bg-gray-50 text-gray-900 rounded-xl focus:ring-primary px-3 py-2.5 border border-gray-200 outline-none resize-none h-20 text-sm"
+              class="w-full bg-gray-50 text-gray-900 rounded-xl focus:ring-primary px-3 py-2.5 border border-gray-25 outline-none resize-none h-20 text-sm"
             ></textarea>
           </div>
         </div>
@@ -322,7 +322,7 @@
             <p class="leading-relaxed whitespace-pre-wrap">{{ selectedProduct?.description || 'No detailed description provided for this item.' }}</p>
           </div>
           
-          <div v-if="selectedProduct?.targetQuantity > 0" class="mt-8 p-5 bg-gray-50 rounded-2xl border border-gray-100">
+          <div v-if="selectedProduct?.targetQuantity > 0" class="mt-8 p-5 bg-gray-50 rounded-2xl border border-gray-50">
             <h3 class="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
               <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
               Pool Progress

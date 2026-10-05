@@ -3,7 +3,7 @@
     <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl relative">
       <!-- Header -->
       <div class="bg-[#FF5C1A]/5 p-6 text-center border-b border-[#FF5C1A]/10">
-        <button v-if="mode !== 'cancel-intercept'" @click="$emit('update:show', false)" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-white rounded-full text-gray-400 hover:text-gray-900 shadow-sm transition-colors border border-gray-100 z-10">
+        <button v-if="mode !== 'cancel-intercept'" @click="$emit('update:show', false)" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-white rounded-full text-gray-400 hover:text-gray-900 shadow-sm transition-colors border border-gray-50 z-10">
           <X class="w-4 h-4" />
         </button>
         <div class="w-16 h-16 bg-[#FF5C1A] text-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-[#FF5C1A]/30">
@@ -19,7 +19,7 @@
 
       <!-- Content -->
       <div class="p-5 space-y-3 bg-white">
-        <a v-for="contact in contacts" :key="contact.name" :href="getWhatsAppLink(contact.phone)" target="_blank" class="flex items-center gap-4 w-full p-4 rounded-[1rem] border border-gray-100 bg-gray-50 hover:bg-[#25D366]/5 hover:border-[#25D366]/20 transition-all group cursor-pointer shadow-sm">
+        <a v-for="contact in contacts" :key="contact.name" :href="getWhatsAppLink(contact.phone)" target="_blank" class="flex items-center gap-4 w-full p-4 rounded-[1rem] border border-gray-50 bg-gray-50 hover:bg-[#25D366]/5 hover:border-[#25D366]/20 transition-all group cursor-pointer shadow-sm">
           <div class="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center text-[#25D366] group-hover:scale-110 group-hover:bg-[#25D366] group-hover:text-white transition-all">
              <MessageCircle class="w-5 h-5" />
           </div>

@@ -3,7 +3,7 @@
     <div v-if="isOpen" class="fixed inset-0 z-[999999] flex items-center justify-center p-4">
       <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="closeAd"></div>
       
-      <div class="relative w-full max-w-sm bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden animate-in zoom-in-95 duration-300">
+      <div class="relative w-full max-w-sm bg-white rounded-3xl shadow-sm border border-gray-50 overflow-hidden animate-in zoom-in-95 duration-300">
         <button 
           @click="closeAd"
           class="absolute top-4 right-4 z-10 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full backdrop-blur-md transition-all"
@@ -22,7 +22,7 @@
           
           <div class="px-4 pb-6 pt-0 text-center relative">
             <!-- Vendor Logo floating over the header -->
-            <div class="w-24 h-24 mx-auto -mt-12 rounded-2xl shadow-sm border border-gray-100 border-4 border-white overflow-hidden bg-white relative z-10 transform group-hover:scale-105 transition-transform duration-300">
+            <div class="w-24 h-24 mx-auto -mt-12 rounded-2xl shadow-sm border border-gray-50 border-4 border-white overflow-hidden bg-white relative z-10 transform group-hover:scale-105 transition-transform duration-300">
               <img 
                 :src="currentAd.data.logo || currentAd.data.bannerImage || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=200&q=80'" 
                 alt="Vendor Logo"
@@ -41,7 +41,7 @@
                 {{ currentAd.data.description || 'Order the best items around campus. Fresh, fast, and exactly what you need!' }}
               </p>
               
-              <button class="w-full py-3.5 bg-gray-900 text-white font-bold rounded-2xl shadow-sm border border-gray-100 hover:bg-black hover:shadow-sm border border-gray-100 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 group">
+              <button class="w-full py-3.5 bg-gray-900 text-white font-bold rounded-2xl shadow-sm border border-gray-50 hover:bg-black hover:shadow-sm border border-gray-50 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 group">
                 Check Them Out 
                 <ArrowRight class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
@@ -55,7 +55,7 @@
             <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1586880244406-556ebe35f282?auto=format&fit=crop&w=800&q=80')] bg-cover bg-center opacity-30 mix-blend-overlay"></div>
             <div class="absolute inset-0 bg-gradient-to-br from-[#FF5C1A]/90 to-orange-600/90"></div>
             <div class="absolute inset-0 flex items-center justify-center">
-              <div class="w-20 h-20 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center animate-pulse shadow-sm border border-gray-100">
+              <div class="w-20 h-20 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center animate-pulse shadow-sm border border-gray-50">
                 <Box class="w-10 h-10 text-white" />
               </div>
             </div>
@@ -66,7 +66,7 @@
             </span>
             <h3 class="text-2xl font-bold text-gray-900 mb-2">Need Something Else?</h3>
             <p class="text-sm text-gray-500 mb-5">Can't find what you are looking for? Request a custom errand and we'll handle the rest.</p>
-            <button class="w-full py-3 bg-[#FF5C1A] text-white font-bold rounded-xl shadow-sm border border-gray-100 hover:bg-orange-600 transition-all flex items-center justify-center gap-2">
+            <button class="w-full py-3 bg-[#FF5C1A] text-white font-bold rounded-xl shadow-sm border border-gray-50 hover:bg-orange-600 transition-all flex items-center justify-center gap-2">
               Book Custom Errand <ArrowRight class="w-4 h-4" />
             </button>
           </div>
@@ -86,9 +86,9 @@
                 <img 
                   :src="currentAd.data.user?.profileImage || `https://ui-avatars.com/api/?name=${currentAd.data.user?.firstName || 'E'}&background=fff&color=f59e0b`" 
                   alt="Dispatcher"
-                  class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-sm border border-gray-100"
+                  class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-sm border border-gray-50"
                 />
-                <div class="absolute -bottom-2 -right-2 bg-white text-amber-500 text-xs font-bold px-2 py-1 rounded-lg shadow-sm border border-gray-100 flex items-center gap-1">
+                <div class="absolute -bottom-2 -right-2 bg-white text-amber-500 text-xs font-bold px-2 py-1 rounded-lg shadow-sm border border-gray-50 flex items-center gap-1">
                   <Star class="w-3 h-3 fill-current" />
                   {{ currentAd.data.rating || '5.0' }}
                 </div>
@@ -101,7 +101,7 @@
             <p class="text-center text-sm text-gray-500 mb-4">
               {{ currentAd.data.user?.firstName || 'This Errander' }} is online and ready to handle your custom requests anywhere on campus.
             </p>
-            <button class="w-full py-3 bg-gray-900 text-white font-bold rounded-xl shadow-sm border border-gray-100 hover:bg-black transition-all flex items-center justify-center gap-2">
+            <button class="w-full py-3 bg-gray-900 text-white font-bold rounded-xl shadow-sm border border-gray-50 hover:bg-black transition-all flex items-center justify-center gap-2">
               Book with an Errander <ArrowRight class="w-4 h-4" />
             </button>
           </div>
@@ -118,17 +118,17 @@
           </div>
           
           <div class="p-4 bg-white text-center" :class="{ '-mt-10 relative z-10': currentAd.data.imageUrl }">
-            <div v-if="currentAd.data.imageUrl" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+            <div v-if="currentAd.data.imageUrl" class="bg-white rounded-2xl shadow-sm border border-gray-50 p-5">
               <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ currentAd.data.title || 'Special Offer' }}</h3>
               <p class="text-sm text-gray-500 mb-5">{{ currentAd.data.description }}</p>
-              <button class="w-full py-3 bg-[#FF5C1A] text-white font-bold rounded-xl shadow-sm border border-gray-100 hover:bg-orange-600 transition-all flex items-center justify-center gap-2">
+              <button class="w-full py-3 bg-[#FF5C1A] text-white font-bold rounded-xl shadow-sm border border-gray-50 hover:bg-orange-600 transition-all flex items-center justify-center gap-2">
                 {{ currentAd.data.ctaText || 'Learn More' }} <ExternalLink class="w-4 h-4" />
               </button>
             </div>
             <div v-else>
               <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ currentAd.data.title || 'Special Offer' }}</h3>
               <p class="text-sm text-gray-500 mb-5">{{ currentAd.data.description }}</p>
-              <button class="w-full py-3 bg-[#FF5C1A] text-white font-bold rounded-xl shadow-sm border border-gray-100 hover:bg-orange-600 transition-all flex items-center justify-center gap-2">
+              <button class="w-full py-3 bg-[#FF5C1A] text-white font-bold rounded-xl shadow-sm border border-gray-50 hover:bg-orange-600 transition-all flex items-center justify-center gap-2">
                 {{ currentAd.data.ctaText || 'Learn More' }} <ExternalLink class="w-4 h-4" />
               </button>
             </div>

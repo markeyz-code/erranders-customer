@@ -29,7 +29,7 @@
                 type="button"
                 @click="selectedGender = 'Male'"
                 :class="[
-                  'py-3 px-4 rounded-xl text-sm font-bold border-2 transition-all flex items-center justify-center gap-2',
+                  'py-3 px-4 rounded-xl text-sm font-bold border transition-all flex items-center justify-center gap-2',
                   selectedGender === 'Male' ? 'border-parentPrimary bg-parentPrimary/5 text-parentPrimary' : 'border-gray-200 text-gray-500 hover:border-gray-300'
                 ]"
               >
@@ -39,7 +39,7 @@
                 type="button"
                 @click="selectedGender = 'Female'"
                 :class="[
-                  'py-3 px-4 rounded-xl text-sm font-bold border-2 transition-all flex items-center justify-center gap-2',
+                  'py-3 px-4 rounded-xl text-sm font-bold border transition-all flex items-center justify-center gap-2',
                   selectedGender === 'Female' ? 'border-parentPrimary bg-parentPrimary/5 text-parentPrimary' : 'border-gray-200 text-gray-500 hover:border-gray-300'
                 ]"
               >
@@ -56,7 +56,7 @@
                 type="button"
                 @click="selectedPreference = 'Male'"
                 :class="[
-                  'py-3 px-2 rounded-xl text-[13px] font-bold border-2 transition-all flex flex-col items-center justify-center gap-1',
+                  'py-3 px-2 rounded-xl text-[13px] font-bold border transition-all flex flex-col items-center justify-center gap-1',
                   selectedPreference === 'Male' ? 'border-parentPrimary bg-parentPrimary/5 text-parentPrimary' : 'border-gray-200 text-gray-500 hover:border-gray-300'
                 ]"
               >
@@ -67,7 +67,7 @@
                 type="button"
                 @click="selectedPreference = 'Female'"
                 :class="[
-                  'py-3 px-2 rounded-xl text-[13px] font-bold border-2 transition-all flex flex-col items-center justify-center gap-1',
+                  'py-3 px-2 rounded-xl text-[13px] font-bold border transition-all flex flex-col items-center justify-center gap-1',
                   selectedPreference === 'Female' ? 'border-parentPrimary bg-parentPrimary/5 text-parentPrimary' : 'border-gray-200 text-gray-500 hover:border-gray-300'
                 ]"
               >
@@ -78,7 +78,7 @@
                 type="button"
                 @click="selectedPreference = 'Any'"
                 :class="[
-                  'py-3 px-2 rounded-xl text-[13px] font-bold border-2 transition-all flex flex-col items-center justify-center gap-1',
+                  'py-3 px-2 rounded-xl text-[13px] font-bold border transition-all flex flex-col items-center justify-center gap-1',
                   selectedPreference === 'Any' ? 'border-parentPrimary bg-parentPrimary/5 text-parentPrimary' : 'border-gray-200 text-gray-500 hover:border-gray-300'
                 ]"
               >
@@ -96,7 +96,7 @@
             :disabled="isSubmitting || !selectedGender || !selectedPreference"
             class="w-full py-4 bg-gray-900 text-white rounded-xl text-sm font-bold tracking-wider hover:bg-parentPrimary transition-all flex items-center justify-center gap-2 shadow-xl shadow-gray-900/10 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-900 mt-4"
           >
-            <span v-if="isSubmitting" class="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>
+            <span v-if="isSubmitting" class="w-5 h-5 border border-white/20 border-t-white rounded-full animate-spin"></span>
             <span v-else>Save Preferences</span>
           </button>
         </form>

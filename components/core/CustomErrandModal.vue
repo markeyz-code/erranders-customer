@@ -24,7 +24,7 @@
             leave-from="opacity-100 scale-100 translate-y-0"
             leave-to="opacity-0 scale-95 translate-y-4"
           >
-            <DialogPanel class="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-sm border border-gray-100 transition-all">
+            <DialogPanel class="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-sm border border-gray-50 transition-all">
               
               <!-- Header -->
               <div class="bg-gradient-to-r from-orange-50 to-white px-4 py-4 border-b border-orange-100 flex justify-between items-center">
@@ -57,25 +57,25 @@
                     <div class="mt-2 flex flex-wrap gap-2">
                       <button 
                         @click="form.description = 'Get drugs from the pharmacy'"
-                        class="text-xs font-medium px-3 py-1.5 bg-gray-50 border border-gray-100 rounded-full text-gray-600 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-colors"
+                        class="text-xs font-medium px-3 py-1.5 bg-gray-50 border border-gray-50 rounded-full text-gray-600 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-colors"
                       >
                         💊 Get drugs from the pharmacy
                       </button>
                       <button 
                         @click="form.description = 'Buy energy drinks and snacks for exam prep'"
-                        class="text-xs font-medium px-3 py-1.5 bg-gray-50 border border-gray-100 rounded-full text-gray-600 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-colors"
+                        class="text-xs font-medium px-3 py-1.5 bg-gray-50 border border-gray-50 rounded-full text-gray-600 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-colors"
                       >
                         ⚡ Buy energy drinks/snacks
                       </button>
                       <button 
                         @click="form.description = 'Print assignment and submit'"
-                        class="text-xs font-medium px-3 py-1.5 bg-gray-50 border border-gray-100 rounded-full text-gray-600 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-colors"
+                        class="text-xs font-medium px-3 py-1.5 bg-gray-50 border border-gray-50 rounded-full text-gray-600 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-colors"
                       >
                         🖨️ Print assignment
                       </button>
                       <button 
                         @click="form.description = 'Pick up a package'"
-                        class="text-xs font-medium px-3 py-1.5 bg-gray-50 border border-gray-100 rounded-full text-gray-600 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-colors"
+                        class="text-xs font-medium px-3 py-1.5 bg-gray-50 border border-gray-50 rounded-full text-gray-600 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-colors"
                       >
                         📦 Pick up a package
                       </button>
@@ -155,9 +155,9 @@
                       />
                     </div>
                     <div class="flex gap-2 mt-3">
-                      <button @click="form.runnerFee = 500" class="px-3 py-1.5 text-xs font-semibold border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-600 transition-colors">₦500</button>
-                      <button @click="form.runnerFee = 1000" class="px-3 py-1.5 text-xs font-semibold border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-600 transition-colors">₦1,000</button>
-                      <button @click="form.runnerFee = 2000" class="px-3 py-1.5 text-xs font-semibold border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-600 transition-colors">₦2,000</button>
+                      <button @click="form.runnerFee = 500" class="px-3 py-1.5 text-xs font-semibold border border-gray-25 rounded-lg hover:bg-gray-50 text-gray-600 transition-colors">₦500</button>
+                      <button @click="form.runnerFee = 1000" class="px-3 py-1.5 text-xs font-semibold border border-gray-25 rounded-lg hover:bg-gray-50 text-gray-600 transition-colors">₦1,000</button>
+                      <button @click="form.runnerFee = 2000" class="px-3 py-1.5 text-xs font-semibold border border-gray-25 rounded-lg hover:bg-gray-50 text-gray-600 transition-colors">₦2,000</button>
                     </div>
                   </div>
 
@@ -176,7 +176,7 @@
                 <!-- Step 3: Summary -->
                 <div v-if="step === 3" class="space-y-6 animate-fade-in">
                   
-                  <div class="bg-gray-50 rounded-2xl p-4 border border-gray-100">
+                  <div class="bg-gray-50 rounded-2xl p-4 border border-gray-50">
                     <h4 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Request Summary</h4>
                     
                     <div class="space-y-3">

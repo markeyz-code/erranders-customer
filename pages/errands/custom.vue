@@ -14,7 +14,7 @@
       </div>
 
       <div class="relative z-10 px-10 max-w-md">
-        <div class="inline-flex items-center gap-2 border-2 border-dashed border-[#FF5C1A] text-[#FF5C1A] rounded-full px-4 py-1.5 -rotate-[6deg] mb-8">
+        <div class="inline-flex items-center gap-2 border border-dashed border-[#FF5C1A] text-[#FF5C1A] rounded-full px-4 py-1.5 -rotate-[6deg] mb-8">
           <Stamp class="w-3.5 h-3.5" />
           <span class="font-sans text-sm font-bold  tracking-[0.15em]">You Set The Price</span>
         </div>
@@ -30,11 +30,11 @@
 
         <!-- Decorative waybill stubs -->
         <div class="mt-10 space-y-3">
-          <div class="rotate-[-2deg] rounded-sm px-4 py-3 shadow-sm border border-gray-100 bg-[#F7F4EC]">
+          <div class="rotate-[-2deg] rounded-sm px-4 py-3 shadow-sm border border-gray-50 bg-[#F7F4EC]">
             <p class="font-sans text-sm  tracking-wider text-[#766A61]">Faculty of Medicine → Block hostel</p>
             <p class="font-sans text-sm font-bold mt-0.5 text-[#170D08]">Print 40pg thesis draft — ₦800</p>
           </div>
-          <div class="rotate-[1.5deg] rounded-sm px-4 py-3 shadow-sm border border-gray-100 ml-6 bg-[#F3C9D2]">
+          <div class="rotate-[1.5deg] rounded-sm px-4 py-3 shadow-sm border border-gray-50 ml-6 bg-[#F3C9D2]">
             <p class="font-sans text-sm  tracking-wider text-[#766A61]">Yaba Market → OPH hostel</p>
             <p class="font-sans text-sm font-bold mt-0.5 text-[#170D08]">3 yards black velvet — ₦2,000</p>
           </div>
@@ -42,7 +42,7 @@
       </div>
 
       <div class="relative z-10 p-10">
-        <div class="border-2 border-dashed border-[#F7F4EC]/20 rounded-sm p-4 flex items-start gap-3">
+        <div class="border border-dashed border-[#F7F4EC]/20 rounded-sm p-4 flex items-start gap-3">
           <ShieldCheck class="w-5 h-5 shrink-0 mt-0.5 text-[#FF5C1A]" />
           <div>
             <p class="font-sans text-sm font-bold  tracking-wider text-[#F7F4EC]">Escrow held, not spent</p>
@@ -79,10 +79,10 @@
 
           <!-- The waybill card, with duplicate/triplicate sheets peeking behind -->
           <div class="relative">
-            <div class="hidden sm:block absolute inset-0 translate-x-2.5 translate-y-3.5 rotate-[2deg] rounded-sm shadow-sm border border-gray-100 bg-[#F6DE8C]"></div>
-            <div class="hidden sm:block absolute inset-0 translate-x-1 translate-y-1.5 rotate-[1deg] rounded-sm shadow-sm border border-gray-100 bg-[#F3C9D2]"></div>
+            <div class="hidden sm:block absolute inset-0 translate-x-2.5 translate-y-3.5 rotate-[2deg] rounded-sm shadow-sm border border-gray-50 bg-[#F6DE8C]"></div>
+            <div class="hidden sm:block absolute inset-0 translate-x-1 translate-y-1.5 rotate-[1deg] rounded-sm shadow-sm border border-gray-50 bg-[#F3C9D2]"></div>
 
-            <div class="relative sm:rounded-sm shadow-sm border border-gray-100 p-5 sm:p-10 bg-[#F7F4EC] sm:border border-[#170D08]/15">
+            <div class="relative sm:rounded-sm shadow-sm border border-gray-50 p-5 sm:p-10 bg-[#F7F4EC] sm:border border-[#170D08]/15">
 
               <!-- Waybill header -->
               <div class="flex justify-between items-start pb-5 border-b-2 border-dashed border-[#D8D2C4]">
@@ -133,7 +133,7 @@
                 <template v-if="errandType === 'custom'">
                   
                   <!-- Open Errand Pools Section -->
-                  <div v-if="openPools.length > 0 && !fetchingPools" class="bg-[#FF5C1A]/10 border-2 border-dashed border-[#FF5C1A] rounded-sm p-4 relative overflow-hidden">
+                  <div v-if="openPools.length > 0 && !fetchingPools" class="bg-[#FF5C1A]/10 border border-dashed border-[#FF5C1A] rounded-sm p-4 relative overflow-hidden">
                     <div class="absolute -right-5 -top-5 opacity-10">
                       <Layers class="w-20 h-20 text-[#FF5C1A]" />
                     </div>
@@ -166,7 +166,7 @@
                   <div class="flex flex-wrap gap-2">
                     <button
                       v-for="tmpl in (showAllTemplates ? errandTemplates : errandTemplates.slice(0, 4))" :key="tmpl" @click="applyTemplate(tmpl)"
-                      class="px-4 py-2 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-sm font-semibold rounded-full transition-colors flex items-center gap-2 shadow-sm"
+                      class="px-4 py-2 bg-white hover:bg-gray-50 border border-gray-25 text-gray-700 text-sm font-semibold rounded-full transition-colors flex items-center gap-2 shadow-sm"
                     >
                       <ListChecks class="w-4 h-4 text-gray-400" />
                       {{ tmpl }}
@@ -235,7 +235,7 @@
                         :class="isRecording ? 'bg-[#FF5C1A]/10 border-transparent text-[#FF5C1A]' : 'border-[#170D08]/15 text-[#766A61]'"
                         title="Record Voice Note"
                       >
-                        <span v-if="isRecording" class="absolute inset-0 rounded-sm animate-ping opacity-60 border-2 border-[#FF5C1A]"></span>
+                        <span v-if="isRecording" class="absolute inset-0 rounded-sm animate-ping opacity-60 border border-[#FF5C1A]"></span>
                         <Mic class="w-4 h-4 z-10" />
                       </button>
                       <label class="w-8 h-8 rounded-sm flex items-center justify-center cursor-pointer transition-colors border border-[#170D08]/15 text-[#766A61] hover:border-[#FF5C1A] hover:text-[#FF5C1A]" title="Attach Photo">
@@ -412,7 +412,7 @@
 
                       <div class="mt-6 pt-4 border-t-2 border-dashed border-[#D8D2C4]">
                         <label class="flex items-start gap-3 cursor-pointer group">
-                          <div class="mt-0.5 relative flex items-center justify-center w-5 h-5 rounded border-2 transition-colors"
+                          <div class="mt-0.5 relative flex items-center justify-center w-5 h-5 rounded border transition-colors"
                                :class="allowPoolJoin ? 'bg-[#FF5C1A] border-[#FF5C1A]' : 'border-[#170D08]/30 group-hover:border-[#FF5C1A]'">
                             <input type="checkbox" v-model="allowPoolJoin" class="sr-only" />
                             <svg v-if="allowPoolJoin" class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">

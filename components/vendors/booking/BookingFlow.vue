@@ -4,7 +4,7 @@
       <!-- Header -->
       <header class="bg-white border-b border-gray-100/60 shrink-0">
         <div class="max-w-[1400px] mx-auto px-4 md:px-5 py-3 flex items-center justify-between">
-          <button @click="handleBack" class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors">
+          <button @click="handleBack" class="w-10 h-10 rounded-full border border-gray-25 flex items-center justify-center hover:bg-gray-50 transition-colors">
             <ArrowLeft class="w-5 h-5 text-gray-700" />
           </button>
           
@@ -16,7 +16,7 @@
             <span :class="{'text-gray-900': step === 'confirm'}">Confirm</span>
           </div>
 
-          <button @click="$emit('close')" class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors">
+          <button @click="$emit('close')" class="w-10 h-10 rounded-full border border-gray-25 flex items-center justify-center hover:bg-gray-50 transition-colors">
             <X class="w-5 h-5 text-gray-700" />
           </button>
         </div>
@@ -52,7 +52,7 @@
                   v-for="service in filteredServices" 
                   :key="service._id"
                   @click="handleAddClick(service)"
-                  class="bg-white p-4 rounded-xl border border-gray-100/80 transition-all flex justify-between gap-4 cursor-pointer hover:border-gray-300 hover:shadow-sm text-left group"
+                  class="bg-white p-4 rounded-xl border border-gray-50/80 transition-all flex justify-between gap-4 cursor-pointer hover:border-gray-300 hover:shadow-sm text-left group"
                 >
                   <div>
                     <h3 class="font-bold text-gray-900 text-sm group-hover:text-parentPrimary transition-colors">{{ service.name }}</h3>
@@ -65,7 +65,7 @@
                     </p>
                   </div>
                   <div 
-                    class="w-9 h-9 rounded-full border border-gray-200/80 flex items-center justify-center group-hover:bg-gray-50 group-hover:border-gray-300 transition-colors shrink-0 self-center"
+                    class="w-9 h-9 rounded-full border border-gray-25/80 flex items-center justify-center group-hover:bg-gray-50 group-hover:border-gray-300 transition-colors shrink-0 self-center"
                   >
                     <Plus class="w-4 h-4 text-gray-600 group-hover:text-gray-900" />
                   </div>
@@ -73,7 +73,7 @@
               </div>
 
               <!-- Mobile: Cart preview on services step -->
-              <div v-if="cart.length" class="lg:hidden bg-white rounded-xl border border-gray-100/80 overflow-hidden mt-4">
+              <div v-if="cart.length" class="lg:hidden bg-white rounded-xl border border-gray-50/80 overflow-hidden mt-4">
                 <div class="px-4 py-3 border-b border-gray-50 flex justify-between items-center">
                   <span class="text-xs font-bold text-gray-500">Cart ({{ cart.length }})</span>
                   <span class="text-xs font-bold text-gray-900">NGN {{ cartTotal.toLocaleString() }}</span>
@@ -191,7 +191,7 @@
                     </div>
                   </button>
                 </div>
-                <div v-else class="flex flex-col items-center justify-center py-10 px-4 text-center bg-gray-50/50 rounded-[2rem] border border-gray-100/80 border-dashed">
+                <div v-else class="flex flex-col items-center justify-center py-10 px-4 text-center bg-gray-50/50 rounded-[2rem] border border-gray-50/80 border-dashed">
                   <div class="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center mb-3">
                     <CalendarX class="w-6 h-6 text-gray-400" />
                   </div>
@@ -254,12 +254,12 @@
                   v-model="bookingNotes" 
                   rows="2" 
                   placeholder="Any special requests?"
-                  class="w-full bg-gray-50 border border-gray-100/80 rounded-lg p-3 text-base outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary/20 transition-all resize-none"
+                  class="w-full bg-gray-50 border border-gray-50/80 rounded-lg p-3 text-base outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary/20 transition-all resize-none"
                 ></textarea>
               </div>
 
               <!-- Payment Method -->
-              <div class="bg-white p-4 rounded-xl border border-gray-100/80 space-y-4">
+              <div class="bg-white p-4 rounded-xl border border-gray-50/80 space-y-4">
                 <h3 class="font-semibold text-gray-900 text-sm">Payment Method</h3>
                 
                 <div class="flex flex-col gap-3">
@@ -284,7 +284,7 @@
 
         <!-- RIGHT COLUMN (Cart Summary) -->
           <div class="hidden lg:block w-[400px] shrink-0">
-            <div class="sticky top-8 bg-white rounded-2xl overflow-hidden flex flex-col h-[calc(100vh-8rem)] border border-gray-100/80">
+            <div class="sticky top-8 bg-white rounded-2xl overflow-hidden flex flex-col h-[calc(100vh-8rem)] border border-gray-50/80">
               
               <!-- Vendor Info -->
               <div class="p-4 border-b border-gray-50 flex gap-4 items-center shrink-0">
@@ -355,7 +355,7 @@
                 <button 
                   @click="handleContinue"
                   :disabled="!canContinue"
-                  class="w-full py-3 bg-[#1a1a1a] text-white rounded-xl font-bold text-sm shadow-sm border border-gray-100 hover:bg-black transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="w-full py-3 bg-[#1a1a1a] text-white rounded-xl font-bold text-sm shadow-sm border border-gray-50 hover:bg-black transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Loader2 v-if="loading" class="w-4 h-4 animate-spin" />
                   <template v-else-if="step === 'time' && isTimeBooked(selectedTime)">Join Waitlist <ArrowRight class="w-4 h-4" /></template>
@@ -391,7 +391,7 @@
                   <p class="text-[11px] text-gray-500 font-medium mt-0.5">{{ item.durationInMinutes }} mins {{ item.variantName ? `with ${item.service.name}` : '' }}</p>
                   
                   <!-- Extras -->
-                  <div v-if="item.extras?.length" class="mt-2 space-y-1 bg-white p-2 rounded-lg border border-gray-100">
+                  <div v-if="item.extras?.length" class="mt-2 space-y-1 bg-white p-2 rounded-lg border border-gray-50">
                     <div v-for="ext in item.extras" :key="ext.name" class="flex justify-between text-[11px] text-gray-500">
                       <span>+ {{ ext.name }}</span>
                       <span class="font-semibold text-gray-700">₦{{ ext.price.toLocaleString() }}</span>
@@ -432,7 +432,7 @@
             <button 
               @click="handleContinue"
               :disabled="!canContinue"
-              class="py-3.5 bg-[#1a1a1a] text-white rounded-2xl font-bold text-[15px] hover:bg-black transition-all flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm border border-gray-100 shadow-black/10"
+              class="py-3.5 bg-[#1a1a1a] text-white rounded-2xl font-bold text-[15px] hover:bg-black transition-all flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm border border-gray-50 shadow-black/10"
               :class="cart.length && step !== 'confirm' ? 'flex-[1.2]' : 'w-full'"
             >
               <Loader2 v-if="loading" class="w-5 h-5 animate-spin" />
@@ -752,8 +752,8 @@ const getCalendarDayClass = (day: number) => {
   const today = new Date();
   const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
   
-  if (selectedDate.value === iso) return 'bg-parentPrimary text-white shadow-sm border border-gray-100 font-bold';
-  if (todayIso === iso) return 'bg-gray-100 text-gray-900 font-bold border border-gray-200';
+  if (selectedDate.value === iso) return 'bg-parentPrimary text-white shadow-sm border border-gray-50 font-bold';
+  if (todayIso === iso) return 'bg-gray-100 text-gray-900 font-bold border border-gray-25';
   return 'text-gray-600 hover:bg-gray-50 border border-transparent';
 };
 

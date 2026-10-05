@@ -12,12 +12,12 @@
 
     <!-- Search Section -->
     <div class="relative group z-30 max-w-3xl mb-6">
-      <div class="relative shadow-sm hover:shadow-sm border border-gray-100 transition-shadow duration-300 rounded-2xl">
+      <div class="relative shadow-sm hover:shadow-sm border border-gray-50 transition-shadow duration-300 rounded-2xl">
         <input
           v-model="query"
           type="text"
           placeholder="Search for items or vendors..."
-          class="w-full pl-14 pr-12 py-4 bg-white border border-gray-200 rounded-2xl focus:ring-4 focus:ring-parentPrimary/10 focus:border-parentPrimary transition-all text-base font-medium text-gray-900 placeholder:text-gray-400 outline-none"
+          class="w-full pl-14 pr-12 py-4 bg-white border border-gray-25 rounded-2xl focus:ring-4 focus:ring-parentPrimary/10 focus:border-parentPrimary transition-all text-base font-medium text-gray-900 placeholder:text-gray-400 outline-none"
           autofocus
           @input="debouncedSearch"
         />
@@ -43,7 +43,7 @@
         <div
           v-for="item in results"
           :key="item._id"
-          class="bg-white rounded-2xl p-2.5 md:p-3 border border-gray-100 hover:border-parentPrimary/30 hover:shadow-sm border border-gray-100 transition-all duration-300 group relative overflow-hidden flex flex-col h-full justify-between"
+          class="bg-white rounded-2xl p-2.5 md:p-3 border border-gray-50 hover:border-parentPrimary/30 hover:shadow-sm border border-gray-50 transition-all duration-300 group relative overflow-hidden flex flex-col h-full justify-between"
           :class="{ 'cursor-pointer': item.isOpen !== false && item.vendor?.isOpen !== false, 'opacity-75 cursor-not-allowed': item.isOpen === false || item.vendor?.isOpen === false }"
           @click="handleItemClick(item)"
         >
@@ -57,7 +57,7 @@
               </div>
               <!-- Price Badge -->
               <div v-if="item.price !== undefined" class="absolute bottom-2 left-2">
-                <span class="px-2.5 py-1 bg-white/95 backdrop-blur-md rounded-lg text-xs font-bold text-gray-900 border border-gray-100 shadow-sm">
+                <span class="px-2.5 py-1 bg-white/95 backdrop-blur-md rounded-lg text-xs font-bold text-gray-900 border border-gray-50 shadow-sm">
                   ₦{{ item.price?.toLocaleString() }}
                 </span>
               </div>
@@ -80,7 +80,7 @@
 
     <!-- Empty/Initial States -->
     <div v-else-if="query && !searching && results.length === 0" class="bg-white border border-dashed border-gray-200 rounded-2xl text-center py-20 px-4 mt-6">
-      <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-50 rounded-full mb-4 border border-gray-100">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-50 rounded-full mb-4 border border-gray-50">
         <span class="text-3xl">🔭</span>
       </div>
       <h3 class="text-lg font-medium text-gray-900 mb-1 tracking-tight">No results found</h3>
@@ -88,7 +88,7 @@
     </div>
 
     <div v-if="!query" class="bg-white border border-dashed border-gray-200 rounded-2xl text-center py-20 px-4 mt-6">
-      <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-50 rounded-full mb-4 border border-gray-100">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-50 rounded-full mb-4 border border-gray-50">
         <span class="text-3xl">🔍</span>
       </div>
       <h3 class="text-lg font-medium text-gray-900 mb-1 tracking-tight">Start searching</h3>

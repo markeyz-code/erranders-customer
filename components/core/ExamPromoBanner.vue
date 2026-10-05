@@ -11,7 +11,7 @@
             <span>&amp;</span>
             <span class="bg-white/20 px-2 py-0.5 rounded text-white font-bold">₦500 OFF Chips by Motee</span>
             <span class="text-base">🍟</span>
-            <span class="italic font-bold">Limited offer available!</span>
+            <span class=" font-bold">Limited offer available!</span>
             <Sparkles class="w-4 h-4 text-yellow-300" />
           </span>
         </div>

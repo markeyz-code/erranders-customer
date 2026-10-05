@@ -27,7 +27,7 @@
             </p>
             <div class="flex items-center gap-4">
               <div class="flex -space-x-2">
-                <div v-for="i in 4" :key="i" class="w-7 h-7 rounded-full border-2 border-white bg-amber-100 flex items-center justify-center text-[10px] font-medium text-amber-700">?</div>
+                <div v-for="i in 4" :key="i" class="w-7 h-7 rounded-full border border-white bg-amber-100 flex items-center justify-center text-[10px] font-medium text-amber-700">?</div>
               </div>
               <p class="text-[10px] font-medium text-parentPrimary uppercase tracking-wider">4 Badges Remaining</p>
             </div>
@@ -38,11 +38,11 @@
       <!-- Sidebar Info -->
       <div class="space-y-6">
         <!-- How Quests Work -->
-        <div class="bg-white border-0 sm:border border-gray-100 shadow-none sm:shadow-sm rounded-none sm:rounded-2xl p-4 sm:p-4">
+        <div class="bg-white border-0 sm:border border-gray-50 shadow-none sm:shadow-sm rounded-none sm:rounded-2xl p-4 sm:p-4">
           <h4 class="text-[10px] font-medium text-gray-400 uppercase tracking-widest mb-5">How Quests Work</h4>
           <ul class="space-y-4">
              <li v-for="(step, i) in steps" :key="i" class="flex gap-3">
-                <div class="w-6 h-6 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center text-[10px] font-medium text-gray-900 shrink-0">{{ i + 1 }}</div>
+                <div class="w-6 h-6 rounded-lg bg-gray-50 border border-gray-50 flex items-center justify-center text-[10px] font-medium text-gray-900 shrink-0">{{ i + 1 }}</div>
                 <div>
                    <p class="text-xs font-medium text-gray-900 tracking-tight mb-0.5">{{ step.title }}</p>
                    <p class="text-[11px] font-bold text-gray-500 leading-relaxed">{{ step.desc }}</p>
@@ -52,14 +52,14 @@
         </div>
 
         <!-- Callout block -->
-        <div class="bg-white border-0 sm:border border-gray-100 shadow-none sm:shadow-sm rounded-none sm:rounded-2xl p-4 sm:p-4">
+        <div class="bg-white border-0 sm:border border-gray-50 shadow-none sm:shadow-sm rounded-none sm:rounded-2xl p-4 sm:p-4">
           <div class="w-8 h-8 rounded-xl bg-parentPrimary/10 flex items-center justify-center mb-4 text-parentPrimary">
             <Trophy class="w-4 h-4" />
           </div>
           <h4 class="text-base font-medium tracking-tight text-gray-900 mb-2 leading-tight">Climb the Hall of Fame</h4>
           <p class="text-xs font-medium text-gray-500 mb-5 leading-relaxed">Top erranders and customers get special perks every weekend.</p>
           
-          <NuxtLink to="/dashboard/leaderboard" class="inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-wider bg-gray-50 hover:bg-gray-100 text-gray-900 px-4 py-2 rounded-xl transition-colors active:scale-95 border border-gray-100">
+          <NuxtLink to="/dashboard/leaderboard" class="inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-wider bg-gray-50 hover:bg-gray-100 text-gray-900 px-4 py-2 rounded-xl transition-colors active:scale-95 border border-gray-50">
             View Rankings <ArrowRight class="w-3 h-3" />
           </NuxtLink>
         </div>

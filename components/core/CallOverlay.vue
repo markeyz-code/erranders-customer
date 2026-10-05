@@ -56,12 +56,12 @@
       </div>
 
       <!-- Local Video (Picture in Picture) -->
-      <div v-if="isVideoCall" class="absolute top-6 right-6 w-32 md:w-48 aspect-[3/4] bg-gray-900 rounded-xl overflow-hidden shadow-sm border border-gray-100 border-2 border-white/20 z-20 transition-all hover:scale-105">
+      <div v-if="isVideoCall" class="absolute top-6 right-6 w-32 md:w-48 aspect-[3/4] bg-gray-900 rounded-xl overflow-hidden shadow-sm border border-gray-50 border border-white/20 z-20 transition-all hover:scale-105">
         <video ref="localVideoEl" autoplay playsinline muted class="w-full h-full object-cover transform -scale-x-100"></video>
       </div>
 
       <!-- Controls -->
-      <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex items-center gap-6 bg-gray-900/80 backdrop-blur-md px-5 py-4 rounded-full z-30 border border-white/10 shadow-sm border border-gray-100">
+      <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex items-center gap-6 bg-gray-900/80 backdrop-blur-md px-5 py-4 rounded-full z-30 border border-white/10 shadow-sm border border-gray-50">
         <button @click="toggleMute" class="w-12 h-12 rounded-full flex items-center justify-center transition-colors" :class="isMuted ? 'bg-white text-black' : 'bg-white/10 text-white hover:bg-white/20'">
           <MicOff v-if="isMuted" class="w-6 h-6" />
           <Mic v-else class="w-6 h-6" />

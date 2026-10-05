@@ -67,7 +67,7 @@
               class="w-full py-3.5 sm:py-4 bg-parentPrimary text-white rounded-xl text-sm font-semibold hover:bg-[#17150F] active:scale-[0.99] transition-all disabled:opacity-60 flex items-center justify-center gap-2"
             >
               <Zap v-if="!loading" class="w-4 h-4 shrink-0" />
-              <div v-else class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin shrink-0" />
+              <div v-else class="w-4 h-4 border border-white/30 border-t-white rounded-full animate-spin shrink-0" />
               <span class="truncate">{{ loading ? 'drawing up your plan…' : 'optimize my plan' }}</span>
             </button>
           </div>

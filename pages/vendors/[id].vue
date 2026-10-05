@@ -12,12 +12,12 @@
         <button 
           @click="activeHybridView = 'products'" 
           class="px-4 py-2 rounded-full text-sm font-bold transition-all"
-          :class="activeHybridView === 'products' ? 'bg-parentPrimary text-white shadow-sm border border-gray-100' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+          :class="activeHybridView === 'products' ? 'bg-parentPrimary text-white shadow-sm border border-gray-50' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
         >Products</button>
         <button 
           @click="activeHybridView = 'services'" 
           class="px-4 py-2 rounded-full text-sm font-bold transition-all"
-          :class="activeHybridView === 'services' ? 'bg-parentPrimary text-white shadow-sm border border-gray-100' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+          :class="activeHybridView === 'services' ? 'bg-parentPrimary text-white shadow-sm border border-gray-50' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
         >Services</button>
       </div>
       <div class="pt-14">
@@ -40,13 +40,13 @@
         Oops! Looks like this spot is empty. Want to claim it and start selling to thousands of students on campus today?
       </p>
       <div class="flex flex-col gap-3 sm:flex-row sm:justify-center">
-        <a href="https://vendor.erranders.org/auth/register" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 bg-parentPrimary hover:bg-orange-600 text-white rounded-lg font-medium transition-all shadow-sm hover:shadow-sm border border-gray-100 flex items-center justify-center gap-2 text-sm">
+        <a href="https://vendor.erranders.org/auth/register" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 bg-parentPrimary hover:bg-orange-600 text-white rounded-lg font-medium transition-all shadow-sm hover:shadow-sm border border-gray-50 flex items-center justify-center gap-2 text-sm">
           <span>Sign Up as Vendor</span>
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
           </svg>
         </a>
-        <button @click="$router.push('/')" class="px-5 py-2.5 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg font-medium transition-colors text-sm border border-gray-200">
+        <button @click="$router.push('/')" class="px-5 py-2.5 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg font-medium transition-colors text-sm border border-gray-25">
           Go Home
         </button>
       </div>

@@ -5,9 +5,9 @@
  <div @click="$emit('close')" class="absolute inset-0 bg-black/20 backdrop-blur-[2px] transition-opacity" />
  
  <!-- Chat Panel -->
- <div class="relative w-full max-w-md bg-[#FDFBF7] h-full shadow-sm border border-gray-100 flex flex-col animate-slide-left overflow-hidden min-h-0">
+ <div class="relative w-full max-w-md bg-[#FDFBF7] h-full shadow-sm border border-gray-50 flex flex-col animate-slide-left overflow-hidden min-h-0">
  <!-- Branded Header -->
- <div class="px-4 py-3 bg-[#FF5C1A] text-white flex items-center gap-3 sticky top-0 z-20 shadow-sm border border-gray-100">
+ <div class="px-4 py-3 bg-[#FF5C1A] text-white flex items-center gap-3 sticky top-0 z-20 shadow-sm border border-gray-50">
  <button @click="$emit('close')" class="p-1 hover:bg-white/10 rounded-full transition-colors mr-1">
  <ArrowLeft class="w-5 h-5 text-white" />
  </button>
@@ -45,7 +45,7 @@
  </div>
 
  <div v-if="loading" class="flex flex-col items-center justify-center h-40 space-y-4">
- <div class="w-8 h-8 border-2 border-[#FF5C1A]/20 border-t-[#FF5C1A] rounded-full animate-spin" />
+ <div class="w-8 h-8 border border-[#FF5C1A]/20 border-t-[#FF5C1A] rounded-full animate-spin" />
  </div>
  
  <div v-else-if="messages.length === 0" class="flex flex-col items-center justify-center p-10 text-center space-y-3 mt-10">
@@ -65,7 +65,7 @@
  'relative max-w-[85%] px-3.5 py-2 rounded-[18px] text-[14.5px] transition-all',
  isMe(msg) 
  ? 'bg-[#FF5C1A] text-white ml-2' 
- : 'bg-white border border-gray-100 text-[#111B21] shadow-sm mr-2',
+ : 'bg-white border border-gray-50 text-[#111B21] shadow-sm mr-2',
  shouldShowTail(msg, idx) ? (isMe(msg) ? 'rounded-br-sm' : 'rounded-bl-sm') : ''
  ]">
  <!-- Speech Bubble Tail removed for cleaner modern look -->
@@ -120,7 +120,7 @@
  </div>
  
  <div v-if="isTyping" class="flex items-center ml-2 transition-all my-2">
- <div class="bg-white px-4 py-2 rounded-full border border-gray-100 shadow-sm text-[12px] text-[#FF5C1A] font-bold animate-pulse flex items-center gap-2">
+ <div class="bg-white px-4 py-2 rounded-full border border-gray-50 shadow-sm text-[12px] text-[#FF5C1A] font-bold animate-pulse flex items-center gap-2">
  <div class="flex gap-1">
    <div class="w-1.5 h-1.5 bg-[#FF5C1A]/60 rounded-full animate-bounce"></div>
    <div class="w-1.5 h-1.5 bg-[#FF5C1A]/60 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
@@ -131,7 +131,7 @@
 
  <!-- Media Preview if uploading -->
  <div v-if="uploadingMedia" class="flex flex-col items-center justify-center p-4 bg-white/50 backdrop-blur-sm rounded-2xl mx-10 animate-pulse border border-emerald-100">
- <div class="w-8 h-8 border-2 border-[#FF5C1A]/20 border-t-[#FF5C1A] rounded-full animate-spin mb-2" />
+ <div class="w-8 h-8 border border-[#FF5C1A]/20 border-t-[#FF5C1A] rounded-full animate-spin mb-2" />
  <p class="text-sm font-bold text-emerald-600 ">Sending media...</p>
  </div>
  </div>
@@ -191,7 +191,7 @@
  <button 
  @click="isRecording ? stopRecording() : (newMsgText.trim() ? handleSend() : startRecording())"
  :class="[
- 'w-12 h-12 text-white rounded-full flex items-center justify-center hover:brightness-110 active:scale-95 transition-all shadow-sm border border-gray-100 shrink-0',
+ 'w-12 h-12 text-white rounded-full flex items-center justify-center hover:brightness-110 active:scale-95 transition-all shadow-sm border border-gray-50 shrink-0',
  isRecording ? 'bg-red-500' : 'bg-[#FF5C1A]'
  ]"
  >

@@ -8,13 +8,13 @@
         <div class="flex items-center gap-2">
           <button 
             @click="scrollLeft" 
-            class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100 hover:bg-gray-100 transition-colors shadow-sm text-gray-600 disabled:opacity-50"
+            class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center border border-gray-50 hover:bg-gray-100 transition-colors shadow-sm text-gray-600 disabled:opacity-50"
           >
             <ChevronLeft class="w-4 h-4" />
           </button>
           <button 
             @click="scrollRight" 
-            class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100 hover:bg-gray-100 transition-colors shadow-sm text-gray-600 disabled:opacity-50"
+            class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center border border-gray-50 hover:bg-gray-100 transition-colors shadow-sm text-gray-600 disabled:opacity-50"
           >
             <ChevronRight class="w-4 h-4" />
           </button>
@@ -29,7 +29,7 @@
         <div 
           v-for="i in 4" 
           :key="`skeleton-${i}`"
-          class="relative bg-white border border-gray-100 rounded-2xl w-[260px] md:w-[300px] shrink-0 h-[280px] md:h-[320px] shadow-sm flex flex-col overflow-hidden"
+          class="relative bg-white border border-gray-50 rounded-2xl w-[260px] md:w-[300px] shrink-0 h-[280px] md:h-[320px] shadow-sm flex flex-col overflow-hidden"
         >
           <div class="h-40 md:h-48 w-full bg-gray-200 animate-pulse"></div>
           <div class="p-4 flex flex-col flex-1">
@@ -55,7 +55,7 @@
           v-for="promo in promos" 
           :key="promo._id"
           @click="goToVendor(promo)"
-          class="relative bg-white border-2 border-red-100 rounded-2xl w-[260px] md:w-[300px] shrink-0 cursor-pointer group shadow-sm hover:shadow-xl transition-all duration-300 snap-start overflow-hidden flex flex-col"
+          class="relative bg-white border border-red-100 rounded-2xl w-[260px] md:w-[300px] shrink-0 cursor-pointer group shadow-sm hover:shadow-xl transition-all duration-300 snap-start overflow-hidden flex flex-col"
         >
           <!-- Promo Badge -->
           <div v-if="promo.slotsLeft !== undefined" class="absolute top-0 left-0 right-0 z-20 py-1.5 bg-red-600 text-white shadow-md text-[11px] md:text-xs font-black uppercase tracking-[0.2em] flex items-center justify-center animate-pulse border-b-2 border-red-800">

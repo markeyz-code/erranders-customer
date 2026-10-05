@@ -11,13 +11,13 @@
 
     <div class="p-4 space-y-6" v-if="!loading">
       <!-- Amount to Pay -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center">
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-50 p-6 text-center">
         <p class="text-sm text-gray-500 font-medium mb-1">Total Amount Due</p>
         <h2 class="text-4xl font-black text-primary tracking-tight">₦{{ totalAmount.toLocaleString() }}</h2>
       </div>
 
       <!-- Payment Methods -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-50 overflow-hidden">
         <div class="bg-gray-50/50 px-5 py-4 border-b border-gray-100">
           <h3 class="font-bold text-gray-900 flex items-center gap-2">
             <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -30,7 +30,7 @@
           <button 
             @click="payViaPaystack"
             :disabled="isInitializingPayment || isPayingWithWallet"
-            class="w-full flex items-center justify-between p-4 rounded-xl border border-gray-200 hover:border-primary hover:bg-primary/5 transition-all group"
+            class="w-full flex items-center justify-between p-4 rounded-xl border border-gray-25 hover:border-primary hover:bg-primary/5 transition-all group"
           >
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
@@ -41,14 +41,14 @@
                 <p class="text-xs text-gray-500">Secured by Paystack</p>
               </div>
             </div>
-            <div v-if="isInitializingPayment" class="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <div v-if="isInitializingPayment" class="w-5 h-5 border border-primary border-t-transparent rounded-full animate-spin"></div>
             <svg v-else class="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
           </button>
           
           <button 
             @click="payWithWallet"
             :disabled="isInitializingPayment || isPayingWithWallet"
-            class="w-full flex items-center justify-between p-4 rounded-xl border border-gray-200 hover:border-primary hover:bg-primary/5 transition-all group"
+            class="w-full flex items-center justify-between p-4 rounded-xl border border-gray-25 hover:border-primary hover:bg-primary/5 transition-all group"
           >
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
@@ -59,7 +59,7 @@
                 <p class="text-xs text-gray-500">Use your Errander balance</p>
               </div>
             </div>
-            <div v-if="isPayingWithWallet" class="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <div v-if="isPayingWithWallet" class="w-5 h-5 border border-primary border-t-transparent rounded-full animate-spin"></div>
             <svg v-else class="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
           </button>
         </div>

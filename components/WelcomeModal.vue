@@ -24,7 +24,7 @@
             leave-from="opacity-100 scale-100 translate-y-0"
             leave-to="opacity-0 scale-95 translate-y-8"
           >
-            <DialogPanel class="w-full max-w-md transform overflow-hidden rounded-[3rem] bg-white p-5 md:p-12 text-center align-middle transition-all border border-gray-100">
+            <DialogPanel class="w-full max-w-md transform overflow-hidden rounded-[3rem] bg-white p-5 md:p-12 text-center align-middle transition-all border border-gray-50">
               <!-- Animated Icon -->
               <div class="mb-8 relative inline-block">
                 <div class="w-24 h-24 bg-parentPrimary/10 rounded-full flex items-center justify-center text-5xl animate-bounce-slow">

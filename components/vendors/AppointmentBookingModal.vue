@@ -23,7 +23,7 @@
             type="datetime-local" 
             v-model="bookingForm.scheduledDate" 
             :min="new Date().toISOString().split('T')[0]"
-            class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-base rounded-xl focus:ring-parentPrimary focus:border-parentPrimary block p-3 outline-none transition-all"
+            class="w-full bg-gray-50 border border-gray-25 text-gray-900 text-base rounded-xl focus:ring-parentPrimary focus:border-parentPrimary block p-3 outline-none transition-all"
           />
         </div>
         
@@ -32,7 +32,7 @@
           <input 
             type="time" 
             v-model="bookingForm.startTime" 
-            class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-base rounded-xl focus:ring-parentPrimary focus:border-parentPrimary block p-3 outline-none transition-all"
+            class="w-full bg-gray-50 border border-gray-25 text-gray-900 text-base rounded-xl focus:ring-parentPrimary focus:border-parentPrimary block p-3 outline-none transition-all"
           />
         </div>
 
@@ -42,7 +42,7 @@
             v-model="bookingForm.notes" 
             rows="3"
             placeholder="Any special requests?"
-            class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-base rounded-xl focus:ring-parentPrimary focus:border-parentPrimary block p-3 outline-none transition-all"
+            class="w-full bg-gray-50 border border-gray-25 text-gray-900 text-base rounded-xl focus:ring-parentPrimary focus:border-parentPrimary block p-3 outline-none transition-all"
           ></textarea>
         </div>
       </div>
@@ -50,9 +50,9 @@
       <button 
         @click="submitBooking"
         :disabled="!isValid || loading"
-        class="w-full py-3.5 bg-gray-900 text-white rounded-xl text-sm font-bold shadow-sm border border-gray-100 hover:bg-parentPrimary hover:shadow-sm border border-gray-100 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+        class="w-full py-3.5 bg-gray-900 text-white rounded-xl text-sm font-bold shadow-sm border border-gray-50 hover:bg-parentPrimary hover:shadow-sm border border-gray-50 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
       >
-        <span v-if="loading" class="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>
+        <span v-if="loading" class="w-4 h-4 border border-white/20 border-t-white rounded-full animate-spin"></span>
         <span v-else>Confirm Booking</span>
       </button>
     </div>

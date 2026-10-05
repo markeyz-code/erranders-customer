@@ -22,7 +22,7 @@
           <p class="text-[11px] text-gray-500 mt-0.5">They are away in Exam Mode and suggested delivery on: <span class="font-bold text-gray-900">{{ formatDate(req.suggestedDate) }}</span></p>
         </div>
         <div class="flex gap-2 shrink-0">
-          <button @click="resolveRequest(req._id, 'reject')" class="px-3 py-1.5 rounded-lg text-xs font-bold text-gray-500 hover:bg-gray-100 transition-colors border border-gray-200">
+          <button @click="resolveRequest(req._id, 'reject')" class="px-3 py-1.5 rounded-lg text-xs font-bold text-gray-500 hover:bg-gray-100 transition-colors border border-gray-25">
             Cancel Order
           </button>
           <button @click="resolveRequest(req._id, 'accept')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-white hover:bg-amber-600 transition-colors">
@@ -40,7 +40,7 @@
           :key="status.key" 
           @click="activeFilter = status.key"
           class="px-4 py-2 rounded-xl text-xs font-medium transition-all whitespace-nowrap active:scale-95"
-          :class="activeFilter === status.key ? 'bg-parentPrimary text-white shadow-sm border border-gray-100 shadow-parentPrimary/20' : 'text-gray-500 bg-white border border-gray-100 hover:border-parentPrimary/30'"
+          :class="activeFilter === status.key ? 'bg-parentPrimary text-white shadow-sm border border-gray-50 shadow-parentPrimary/20' : 'text-gray-500 bg-white border border-gray-50 hover:border-parentPrimary/30'"
         >
           {{ status.label }}
         </button>
@@ -52,23 +52,23 @@
           v-model="searchQuery"
           type="text" 
           placeholder="Search by vendor or ID..." 
-          class="w-full pl-10 pr-4 py-3 bg-white border border-gray-100 rounded-xl text-base font-bold text-gray-900 focus:ring-4 focus:ring-parentPrimary/10 focus:border-parentPrimary transition-all placeholder:text-gray-300 outline-none shadow-sm"
+          class="w-full pl-10 pr-4 py-3 bg-white border border-gray-50 rounded-xl text-base font-bold text-gray-900 focus:ring-4 focus:ring-parentPrimary/10 focus:border-parentPrimary transition-all placeholder:text-gray-300 outline-none shadow-sm"
         />
       </div>
     </div>
 
     <!-- Loading State -->
     <div v-if="loading" class="space-y-3">
-      <div v-for="i in 6" :key="i" class="h-20 bg-gray-50 rounded-2xl animate-pulse border border-gray-100" />
+      <div v-for="i in 6" :key="i" class="h-20 bg-gray-50 rounded-2xl animate-pulse border border-gray-50" />
     </div>
 
     <!-- Empty State -->
     <div v-else-if="filteredOrders.length === 0">
       <div class="bg-white rounded-[2rem] text-center py-20 px-4 border border-dashed border-gray-200">
-        <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 border border-gray-100">📋</div>
+        <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 border border-gray-50">📋</div>
         <h2 class="text-xl font-medium text-gray-900 mb-1 tracking-tight">No orders found</h2>
         <p class="text-xs font-medium text-gray-500 mb-8 max-w-xs mx-auto">You haven't placed any orders matching this criteria yet.</p>
-        <NuxtLink to="/vendors" class="inline-flex px-5 py-3.5 bg-gray-900 text-white rounded-xl font-medium text-xs uppercase tracking-wider hover:bg-parentPrimary transition-colors shadow-sm border border-gray-100 active:scale-95">
+        <NuxtLink to="/vendors" class="inline-flex px-5 py-3.5 bg-gray-900 text-white rounded-xl font-medium text-xs uppercase tracking-wider hover:bg-parentPrimary transition-colors shadow-sm border border-gray-50 active:scale-95">
           Start Shopping
         </NuxtLink>
       </div>
@@ -79,11 +79,11 @@
       <div 
         v-for="order in filteredOrders" 
         :key="order._id" 
-        class="group bg-white rounded-2xl p-4 border border-gray-100 hover:border-parentPrimary/30 hover:shadow-sm transition-all cursor-pointer flex items-center justify-between gap-4"
+        class="group bg-white rounded-2xl p-4 border border-gray-50 hover:border-parentPrimary/30 hover:shadow-sm transition-all cursor-pointer flex items-center justify-between gap-4"
         @click="selectedOrder = order"
       >
         <div class="flex items-center gap-4 flex-1 min-w-0">
-          <div class="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center text-xl shrink-0 group-hover:bg-parentPrimary/5 transition-colors border border-gray-100">
+          <div class="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center text-xl shrink-0 group-hover:bg-parentPrimary/5 transition-colors border border-gray-50">
             {{ statusEmoji(order.status) }}
           </div>
           <div class="min-w-0 flex-1">
@@ -124,7 +124,7 @@
         leave-to-class="opacity-0"
       >
         <div v-if="selectedOrder" class="fixed inset-0 z-[110] flex items-end md:items-center justify-center p-0 md:p-4 bg-black/50 backdrop-blur-sm" @click.self="selectedOrder = null">
-          <div class="bg-white w-full md:max-w-md rounded-t-[2rem] md:rounded-2xl overflow-hidden shadow-sm border border-gray-100 animate-slide-up-mobile md:animate-zoom-in">
+          <div class="bg-white w-full md:max-w-md rounded-t-[2rem] md:rounded-2xl overflow-hidden shadow-sm border border-gray-50 animate-slide-up-mobile md:animate-zoom-in">
             
             <!-- Premium Header -->
             <div class="relative bg-gray-900 px-4 py-4 md:py-5 text-center overflow-hidden">
@@ -150,9 +150,9 @@
 
             <!-- Body -->
             <div class="p-4 space-y-6 max-h-[60vh] md:max-h-none overflow-y-auto">
-              <div class="bg-gray-50 rounded-2xl p-5 space-y-4 border border-gray-100">
+              <div class="bg-gray-50 rounded-2xl p-5 space-y-4 border border-gray-50">
                 <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 rounded-xl bg-white border border-gray-100 flex items-center justify-center text-sm shrink-0">🏪</div>
+                  <div class="w-8 h-8 rounded-xl bg-white border border-gray-50 flex items-center justify-center text-sm shrink-0">🏪</div>
                   <div class="flex-1 min-w-0">
                     <p class="text-[9px] font-bold uppercase tracking-wider text-gray-400">Vendor</p>
                     <p class="text-sm font-medium text-gray-900 truncate">{{ selectedOrder.vendor?.storeName || 'Unknown Vendor' }}</p>
@@ -174,14 +174,14 @@
                 
                 <button 
                   @click="navigateTo(`/dashboard/orders/${selectedOrder._id}`)" 
-                  class="w-full py-3.5 bg-parentPrimary text-white rounded-xl text-xs font-medium uppercase tracking-wider hover:bg-parentPrimary/90 transition-all flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-parentPrimary/20 active:scale-95"
+                  class="w-full py-3.5 bg-parentPrimary text-white rounded-xl text-xs font-medium uppercase tracking-wider hover:bg-parentPrimary/90 transition-all flex items-center justify-center gap-2 shadow-sm border border-gray-50 shadow-parentPrimary/20 active:scale-95"
                 >
                   Track Errand <ArrowRight class="w-3.5 h-3.5" />
                 </button>
 
                 <!-- <button
                   @click="handleReorder(selectedOrder)"
-                  class="w-full py-3.5 bg-white text-gray-900 rounded-xl text-xs font-medium uppercase tracking-wider border border-gray-200 hover:bg-gray-50 transition-all flex items-center justify-center gap-2 active:scale-95"
+                  class="w-full py-3.5 bg-white text-gray-900 rounded-xl text-xs font-medium uppercase tracking-wider border border-gray-25 hover:bg-gray-50 transition-all flex items-center justify-center gap-2 active:scale-95"
                 >
                   Order Again
                 </button> -->

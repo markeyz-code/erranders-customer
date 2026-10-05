@@ -23,7 +23,7 @@
               v-model="searchQuery"
               type="text"
               placeholder="Search stores, food..."
-              class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-base font-bold text-gray-900 focus:bg-white focus:border-parentPrimary transition-all outline-none shadow-sm placeholder:text-gray-400"
+              class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-50 rounded-xl text-base font-bold text-gray-900 focus:bg-white focus:border-parentPrimary transition-all outline-none shadow-sm placeholder:text-gray-400"
             />
           </div>
 
@@ -31,7 +31,7 @@
           <div class="relative z-30" ref="categoryDropdownRef">
             <button 
               @click="showCategoryDropdown = !showCategoryDropdown"
-              class="flex items-center gap-2 px-4 py-2.5 border border-gray-100 rounded-xl text-xs font-medium transition-all shadow-sm shrink-0 active:scale-95 bg-white"
+              class="flex items-center gap-2 px-4 py-2.5 border border-gray-50 rounded-xl text-xs font-medium transition-all shadow-sm shrink-0 active:scale-95 bg-white"
               :class="globalFilter ? 'text-parentPrimary border-parentPrimary/30' : 'text-gray-700 hover:bg-gray-50'"
             >
               <span v-if="globalFilter">{{ globalFiltersList.find(f => f.keyword === globalFilter)?.icon || '📌' }}</span>
@@ -42,7 +42,7 @@
 
             <!-- Dropdown Menu -->
             <Transition name="fade-up">
-              <div v-if="showCategoryDropdown" class="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-100 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] overflow-hidden max-h-[300px] overflow-y-auto">
+              <div v-if="showCategoryDropdown" class="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-50 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] overflow-hidden max-h-[300px] overflow-y-auto">
                 <button 
                   @click="setFilter(''); showCategoryDropdown = false; selectedCategory = 'all'"
                   class="w-full text-left px-4 py-3 text-xs font-bold hover:bg-gray-50 transition-colors flex items-center gap-3"
@@ -67,7 +67,7 @@
           
           <button 
             @click="showMobileFilters = true" 
-            class="flex items-center gap-2 px-4 py-2.5 border border-gray-100 rounded-xl text-xs font-medium text-gray-700 hover:bg-gray-50 transition-colors bg-white shadow-sm shrink-0 active:scale-95"
+            class="flex items-center gap-2 px-4 py-2.5 border border-gray-50 rounded-xl text-xs font-medium text-gray-700 hover:bg-gray-50 transition-colors bg-white shadow-sm shrink-0 active:scale-95"
           >
             <SlidersHorizontal class="w-3.5 h-3.5" /> Filters
           </button>
@@ -76,14 +76,14 @@
           <div class="relative z-30" ref="sortDropdownRef">
             <button 
               @click="showSortDropdown = !showSortDropdown"
-              class="flex items-center gap-2 px-4 py-2.5 border border-gray-100 rounded-xl text-xs font-medium text-gray-700 hover:bg-gray-50 transition-colors bg-white shadow-sm shrink-0 active:scale-95"
+              class="flex items-center gap-2 px-4 py-2.5 border border-gray-50 rounded-xl text-xs font-medium text-gray-700 hover:bg-gray-50 transition-colors bg-white shadow-sm shrink-0 active:scale-95"
             >
               Sort By
               <ChevronDown class="w-3 h-3 ml-1 transition-transform" :class="{ 'rotate-180': showSortDropdown }" />
             </button>
             
             <Transition name="fade-up">
-              <div v-if="showSortDropdown" class="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-100 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] overflow-hidden">
+              <div v-if="showSortDropdown" class="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-50 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] overflow-hidden">
                 <button 
                   @click="sortBy = 'latest'; showSortDropdown = false"
                   class="w-full text-left px-4 py-3 text-xs font-bold hover:bg-gray-50 transition-colors"
@@ -139,7 +139,7 @@
           class="group cursor-pointer relative flex flex-col bg-white rounded-3xl hover:-translate-y-1 transition-all duration-300"
         >
             <!-- TOP IMAGE AREA -->
-            <div class="relative h-[200px] w-full overflow-hidden rounded-3xl border border-gray-100 shadow-sm">
+            <div class="relative h-[200px] w-full overflow-hidden rounded-3xl border border-gray-50 shadow-sm">
               <template v-if="!vendor.isOpen">
                 <video
                   v-if="(vendor.banner || vendor.image || vendor.logo) && (vendor.banner || vendor.image || vendor.logo).match(/\\.(mp4|webm|ogg|mov)$/i)"
@@ -176,16 +176,16 @@
 
               <!-- TOP LEFT BADGES -->
               <div class="absolute top-3 left-3 flex flex-col gap-2">
-                <span v-if="vendor.isFeatured" class="px-2.5 py-1 bg-white shadow-sm border border-gray-100 rounded-lg text-gray-900 text-[10px] font-extrabold tracking-wide uppercase">
+                <span v-if="vendor.isFeatured" class="px-2.5 py-1 bg-white shadow-sm border border-gray-50 rounded-lg text-gray-900 text-[10px] font-extrabold tracking-wide uppercase">
                   Featured
                 </span>
-                <span v-else-if="vendor.businessType === 'service_provider'" class="px-2.5 py-1 bg-white shadow-sm border border-gray-100 rounded-lg text-purple-700 text-[10px] font-extrabold tracking-wide uppercase">
+                <span v-else-if="vendor.businessType === 'service_provider'" class="px-2.5 py-1 bg-white shadow-sm border border-gray-50 rounded-lg text-purple-700 text-[10px] font-extrabold tracking-wide uppercase">
                   Service
                 </span>
-                <span v-else-if="vendor.businessType === 'hybrid'" class="px-2.5 py-1 bg-white shadow-sm border border-gray-100 rounded-lg text-indigo-700 text-[10px] font-extrabold tracking-wide uppercase">
+                <span v-else-if="vendor.businessType === 'hybrid'" class="px-2.5 py-1 bg-white shadow-sm border border-gray-50 rounded-lg text-indigo-700 text-[10px] font-extrabold tracking-wide uppercase">
                   Hybrid
                 </span>
-                <span v-if="vendor.preOrderOnly" class="px-2.5 py-1 bg-white shadow-sm border border-gray-100 rounded-lg text-rose-600 text-[10px] font-extrabold tracking-wide uppercase">
+                <span v-if="vendor.preOrderOnly" class="px-2.5 py-1 bg-white shadow-sm border border-gray-50 rounded-lg text-rose-600 text-[10px] font-extrabold tracking-wide uppercase">
                   Pre-order
                 </span>
               </div>
@@ -234,7 +234,7 @@
         <div class="absolute -top-12 left-1/2 -translate-x-1/2 w-64 h-64 bg-parentPrimary/5 rounded-full blur-[80px] pointer-events-none"></div>
 
         <!-- Emoji icon -->
-        <div class="relative z-10 w-16 h-16 bg-white rounded-2xl shadow-sm border border-gray-100 border border-gray-100 flex items-center justify-center text-3xl mx-auto mb-5" style="animation: float 3s ease-in-out infinite;">
+        <div class="relative z-10 w-16 h-16 bg-white rounded-2xl shadow-sm border border-gray-50 border border-gray-50 flex items-center justify-center text-3xl mx-auto mb-5" style="animation: float 3s ease-in-out infinite;">
           🔍
         </div>
 
@@ -266,7 +266,7 @@
         <div class="relative z-10 flex items-center justify-center gap-3">
           <button
             @click="resetAllFilters"
-            class="inline-flex items-center gap-2 px-4 py-2.5 bg-parentPrimary text-white rounded-xl text-xs font-medium hover:scale-105 transition-transform shadow-sm border border-gray-100 shadow-parentPrimary/20 active:scale-95"
+            class="inline-flex items-center gap-2 px-4 py-2.5 bg-parentPrimary text-white rounded-xl text-xs font-medium hover:scale-105 transition-transform shadow-sm border border-gray-50 shadow-parentPrimary/20 active:scale-95"
           >
             Reset Filters
           </button>
@@ -309,7 +309,7 @@
         leave-to-class="opacity-0"
       >
         <div v-if="showMobileFilters" class="fixed inset-0 z-[110] flex justify-end bg-black/50 backdrop-blur-sm" @click.self="showMobileFilters = false">
-          <div class="bg-white w-full max-w-sm h-full overflow-y-auto shadow-sm border border-gray-100 animate-slide-in-right p-4 space-y-6 flex flex-col">
+          <div class="bg-white w-full max-w-sm h-full overflow-y-auto shadow-sm border border-gray-50 animate-slide-in-right p-4 space-y-6 flex flex-col">
             
             <div class="flex items-center justify-between pb-2 border-b border-gray-100">
               <h3 class="text-lg font-medium text-gray-900 tracking-tight">Refine Options</h3>
@@ -325,7 +325,7 @@
                 <button
                   @click="showOnlyOffers = !showOnlyOffers"
                   class="flex items-center justify-center gap-2 px-3 py-3 rounded-xl border transition-all text-xs font-medium"
-                  :class="showOnlyOffers ? 'bg-parentPrimary text-white border-parentPrimary shadow-sm border border-gray-100' : 'bg-white text-gray-600 border-gray-100 hover:bg-gray-50'"
+                  :class="showOnlyOffers ? 'bg-parentPrimary text-white border-parentPrimary shadow-sm border border-gray-50' : 'bg-white text-gray-600 border-gray-100 hover:bg-gray-50'"
                 >
                   <Tag class="w-3.5 h-3.5" />
                   Special Offers
@@ -334,7 +334,7 @@
                 <button
                   @click="showQuickDelivery = !showQuickDelivery"
                   class="flex items-center justify-center gap-2 px-3 py-3 rounded-xl border transition-all text-xs font-medium"
-                  :class="showQuickDelivery ? 'bg-parentPrimary text-white border-parentPrimary shadow-sm border border-gray-100' : 'bg-white text-gray-600 border-gray-100 hover:bg-gray-50'"
+                  :class="showQuickDelivery ? 'bg-parentPrimary text-white border-parentPrimary shadow-sm border border-gray-50' : 'bg-white text-gray-600 border-gray-100 hover:bg-gray-50'"
                 >
                   <Clock class="w-3.5 h-3.5" />
                   Under 30 min
@@ -371,13 +371,13 @@
             <div class="pt-4 mt-auto border-t border-gray-100 flex gap-3">
               <button 
                 @click="resetAllFilters" 
-                class="flex-1 py-3.5 border border-gray-200 text-gray-700 rounded-xl text-xs font-medium uppercase tracking-wider hover:bg-gray-50 active:scale-95"
+                class="flex-1 py-3.5 border border-gray-25 text-gray-700 rounded-xl text-xs font-medium uppercase tracking-wider hover:bg-gray-50 active:scale-95"
               >
                 Reset All
               </button>
               <button 
                 @click="showMobileFilters = false" 
-                class="flex-1 py-3.5 bg-parentPrimary text-white rounded-xl text-xs font-medium uppercase tracking-wider hover:bg-parentPrimary/90 active:scale-95 shadow-sm border border-gray-100 shadow-parentPrimary/10"
+                class="flex-1 py-3.5 bg-parentPrimary text-white rounded-xl text-xs font-medium uppercase tracking-wider hover:bg-parentPrimary/90 active:scale-95 shadow-sm border border-gray-50 shadow-parentPrimary/10"
               >
                 Apply
               </button>

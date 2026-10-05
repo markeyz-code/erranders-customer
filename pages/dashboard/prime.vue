@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-3xl mx-auto py-5 px-4">
-    <div class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-3xl p-5 text-white shadow-sm border border-gray-100 relative overflow-hidden">
+    <div class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-3xl p-5 text-white shadow-sm border border-gray-50 relative overflow-hidden">
       <!-- Decor -->
       <div class="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
       <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-indigo-900/40 rounded-full blur-3xl"></div>
@@ -26,7 +26,7 @@
           </div>
         </div>
         
-        <div v-else class="bg-white rounded-2xl p-4 text-gray-900 shadow-sm border border-gray-100 max-w-md">
+        <div v-else class="bg-white rounded-2xl p-4 text-gray-900 shadow-sm border border-gray-50 max-w-md">
           <div class="flex items-end gap-2 mb-4">
             <span class="text-4xl font-black">₦1,500</span>
             <span class="text-gray-500 font-medium mb-1">/ month</span>

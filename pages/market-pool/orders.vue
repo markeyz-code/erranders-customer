@@ -22,7 +22,7 @@
 
     <!-- Orders List -->
     <div v-else-if="orders.length > 0" class="p-4 space-y-4 mt-2">
-      <div v-for="order in orders" :key="order._id" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div v-for="order in orders" :key="order._id" class="bg-white rounded-2xl shadow-sm border border-gray-50 overflow-hidden">
         
         <div class="p-4 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
           <div>
@@ -43,7 +43,7 @@
             
             <div v-for="(milestone, idx) in milestones" :key="milestone.value" class="relative z-10 flex flex-col items-center gap-2">
               <div class="w-6 h-6 rounded-full flex items-center justify-center transition-colors duration-300"
-                   :class="hasReachedMilestone(order.status, milestone.value) ? 'bg-primary text-white shadow-md shadow-primary/30' : 'bg-gray-200 text-gray-400 border-2 border-white'">
+                   :class="hasReachedMilestone(order.status, milestone.value) ? 'bg-primary text-white shadow-md shadow-primary/30' : 'bg-gray-200 text-gray-400 border border-white'">
                 <svg v-if="hasReachedMilestone(order.status, milestone.value)" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 <span v-else class="text-[10px] font-bold">{{ idx + 1 }}</span>
               </div>
@@ -91,7 +91,7 @@
     </div>
 
     <!-- Empty State -->
-    <div v-else class="p-8 flex flex-col items-center justify-center text-center space-y-3 mt-10 bg-white mx-4 rounded-3xl shadow-sm border border-gray-100 py-16">
+    <div v-else class="p-8 flex flex-col items-center justify-center text-center space-y-3 mt-10 bg-white mx-4 rounded-3xl shadow-sm border border-gray-50 py-16">
       <div class="w-20 h-20 bg-[#FF5C1A]/10 rounded-full flex items-center justify-center mb-2">
         <svg class="w-10 h-10 text-[#FF5C1A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
@@ -127,7 +127,7 @@
               <span class="text-sm font-semibold text-gray-700">Someone else will receive this (Proxy)</span>
             </label>
             
-            <div v-if="editForm.useProxy" class="space-y-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
+            <div v-if="editForm.useProxy" class="space-y-3 p-3 bg-gray-50 rounded-xl border border-gray-50">
               <div>
                 <label class="block text-xs font-semibold text-gray-600 mb-1">Receiver Name</label>
                 <input v-model="editForm.proxyName" type="text" placeholder="e.g. John Doe" class="w-full bg-white border-gray-200 text-gray-900 rounded-lg focus:ring-primary px-3 py-2 border outline-none text-sm">

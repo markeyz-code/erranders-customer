@@ -8,7 +8,7 @@
 
     <!-- Modal Content -->
     <div 
-      class="relative bg-white w-full sm:w-[500px] h-[90vh] sm:h-[80vh] sm:max-h-[800px] sm:rounded-3xl rounded-t-3xl shadow-sm border border-gray-100 flex flex-col overflow-hidden transition-transform animate-slide-up sm:animate-scale-in"
+      class="relative bg-white w-full sm:w-[500px] h-[90vh] sm:h-[80vh] sm:max-h-[800px] sm:rounded-3xl rounded-t-3xl shadow-sm border border-gray-50 flex flex-col overflow-hidden transition-transform animate-slide-up sm:animate-scale-in"
     >
       <!-- Header -->
       <div class="px-4 py-4 border-b border-gray-100 flex items-center justify-between bg-white shrink-0">
@@ -53,7 +53,7 @@
             v-else 
             v-for="review in reviews" 
             :key="review._id"
-            class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm"
+            class="bg-white p-4 rounded-2xl border border-gray-50 shadow-sm"
           >
             <div class="flex items-start justify-between mb-2">
               <div class="flex items-center gap-3">

@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex flex-col items-center justify-center p-5 bg-white rounded-[3rem] shadow-sm border border-gray-100 border border-gray-100 overflow-hidden group">
+  <div class="relative flex flex-col items-center justify-center p-5 bg-white rounded-[3rem] shadow-sm border border-gray-50 border border-gray-50 overflow-hidden group">
     <!-- Animated background -->
     <div class="absolute inset-0 bg-gradient-to-br from-parentPrimary/5 via-transparent to-secondary/5 opacity-50 group-hover:opacity-100 transition-opacity duration-1000"></div>
     
@@ -14,14 +14,14 @@
     <!-- The Wheel -->
     <div class="relative w-72 h-72 sm:w-80 sm:h-80 mb-10 perspective-1000">
       <!-- Pointer -->
-      <div class="absolute -top-4 left-1/2 -translate-x-1/2 z-30 drop-shadow-sm border border-gray-100">
+      <div class="absolute -top-4 left-1/2 -translate-x-1/2 z-30 drop-shadow-sm border border-gray-50">
         <div class="w-8 h-10 bg-gray-900 rounded-b-full flex items-center justify-center pt-2">
           <div class="w-2 h-2 rounded-full bg-parentPrimary animate-pulse"></div>
         </div>
       </div>
 
       <!-- Outer Ring -->
-      <div class="absolute inset-0 rounded-full border-[12px] border-gray-900 shadow-sm border border-gray-100 z-20 pointer-events-none">
+      <div class="absolute inset-0 rounded-full border-[12px] border-gray-25shadow-sm border border-gray-50 z-20 pointer-events-none">
         <div v-for="i in 12" :key="i" 
           class="absolute w-2 h-2 rounded-full bg-white/30"
           :style="{ 
@@ -60,7 +60,7 @@
         </div>
 
         <!-- Center Hub -->
-        <div class="absolute inset-0 m-auto w-16 h-16 bg-gray-900 rounded-full z-10 shadow-sm border border-gray-100 flex items-center justify-center border-4 border-white/10">
+        <div class="absolute inset-0 m-auto w-16 h-16 bg-gray-900 rounded-full z-10 shadow-sm border border-gray-50 flex items-center justify-center border-4 border-white/10">
           <div class="w-4 h-4 bg-parentPrimary rounded-full animate-ping opacity-40"></div>
           <Zap class="absolute w-6 h-6 text-parentPrimary fill-current" />
         </div>
@@ -72,7 +72,7 @@
       <button 
         @click="spinPlan"
         :disabled="isSpinning"
-        class="w-full py-5 bg-gray-900 text-white rounded-[2rem] font-medium text-sm tracking-[0.2em] uppercase hover:bg-parentPrimary hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:grayscale disabled:scale-100 shadow-sm border border-gray-100 shadow-black/20"
+        class="w-full py-5 bg-gray-900 text-white rounded-[2rem] font-medium text-sm tracking-[0.2em] uppercase hover:bg-parentPrimary hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:grayscale disabled:scale-100 shadow-sm border border-gray-50 shadow-black/20"
       >
         {{ isSpinning ? 'Spinning...' : 'Spin the Wheel' }}
       </button>
@@ -85,7 +85,7 @@
     <!-- Result Modal (Simplified) -->
     <Transition name="fade-scale">
       <div v-if="result" class="absolute inset-0 z-40 bg-gray-900/95 backdrop-blur-xl flex flex-col items-center justify-center p-5 text-center">
-        <div class="w-24 h-24 bg-parentPrimary/20 rounded-[2.5rem] flex items-center justify-center text-parentPrimary mb-6 shadow-sm border border-gray-100 border border-parentPrimary/30 animate-bounce-slow">
+        <div class="w-24 h-24 bg-parentPrimary/20 rounded-[2.5rem] flex items-center justify-center text-parentPrimary mb-6 shadow-sm border border-gray-50 border border-parentPrimary/30 animate-bounce-slow">
           <Gift class="w-12 h-12" />
         </div>
         <h3 class="text-3xl font-medium text-white tracking-tighter mb-2">{{ result.success ? 'Congratulations!' : 'Aww, Shoot!' }}</h3>

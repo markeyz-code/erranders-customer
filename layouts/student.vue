@@ -114,11 +114,11 @@
           <button
             v-if="isDashboard"
             @click="isMobileSidebarOpen = true"
-            class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100 hover:bg-gray-100 transition-colors active:scale-95"
+            class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center border border-gray-50 hover:bg-gray-100 transition-colors active:scale-95"
           >
             <Menu class="w-5 h-5 text-gray-700" />
           </button>
-          <div v-else @click="router.back()" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100 cursor-pointer active:scale-95 transition-colors">
+          <div v-else @click="router.back()" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center border border-gray-50 cursor-pointer active:scale-95 transition-colors">
             <ArrowLeft class="w-5 h-5 text-gray-700"></ArrowLeft>
           </div>
           
@@ -131,22 +131,22 @@
         <!-- Right: Actions -->
         <div class="flex items-center gap-2 sm:gap-3">
           <!-- Search Icon -->
-          <NuxtLink to="/dashboard/search" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100 hover:bg-gray-100 transition-all active:scale-95">
+          <NuxtLink to="/dashboard/search" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-50 flex items-center justify-center border border-gray-50 hover:bg-gray-100 transition-all active:scale-95">
             <Search class="w-4 h-4 sm:w-4.5 sm:h-4.5 text-gray-700" />
           </NuxtLink>
 
           <!-- Cart Icon -->
-          <NuxtLink to="/cart" class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100 hover:bg-gray-100 transition-all active:scale-95">
+          <NuxtLink to="/cart" class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-50 flex items-center justify-center border border-gray-50 hover:bg-gray-100 transition-all active:scale-95">
             <ShoppingBag class="w-4 h-4 sm:w-4.5 sm:h-4.5 text-gray-700"></ShoppingBag>
-            <div v-if="totalCartItems > 0" class="absolute top-0 right-0 w-3.5 h-3.5 sm:w-4 sm:h-4 bg-parentPrimary border-2 border-white rounded-full flex items-center justify-center shadow-sm">
+            <div v-if="totalCartItems > 0" class="absolute top-0 right-0 w-3.5 h-3.5 sm:w-4 sm:h-4 bg-parentPrimary border border-white rounded-full flex items-center justify-center shadow-sm">
               <span class="text-[7px] sm:text-[8px] font-bold text-white">{{ totalCartItems > 9 ? '9+' : totalCartItems }}</span>
             </div>
           </NuxtLink>
 
           <!-- Notifications Icon -->
-          <NuxtLink to="/notifications" class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100 hover:bg-gray-100 transition-all active:scale-95">
+          <NuxtLink to="/notifications" class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-50 flex items-center justify-center border border-gray-50 hover:bg-gray-100 transition-all active:scale-95">
             <Bell class="w-4 h-4 sm:w-4.5 sm:h-4.5 text-gray-700"></Bell>
-            <div v-if="unreadCount > 0" class="absolute top-0 right-0 w-3.5 h-3.5 sm:w-4 sm:h-4 bg-parentPrimary border-2 border-white rounded-full flex items-center justify-center shadow-sm">
+            <div v-if="unreadCount > 0" class="absolute top-0 right-0 w-3.5 h-3.5 sm:w-4 sm:h-4 bg-parentPrimary border border-white rounded-full flex items-center justify-center shadow-sm">
               <span class="text-[7px] sm:text-[8px] font-bold text-white">{{ unreadCount > 9 ? '9+' : unreadCount }}</span>
             </div>
           </NuxtLink>
@@ -174,7 +174,7 @@
         leave-from-class="translate-x-0"
         leave-to-class="-translate-x-full"
       >
-        <div v-if="isMobileSidebarOpen" class="lg:hidden fixed inset-y-0 left-0 w-[85%] max-w-sm z-[101] bg-[#FAF8F5] shadow-sm border border-gray-100 flex flex-col overflow-hidden">
+        <div v-if="isMobileSidebarOpen" class="lg:hidden fixed inset-y-0 left-0 w-[85%] max-w-sm z-[101] bg-[#FAF8F5] shadow-sm border border-gray-50 flex flex-col overflow-hidden">
 
           <!-- Brand row -->
           <div class="px-5 pt-5 pb-4 flex items-center justify-between">

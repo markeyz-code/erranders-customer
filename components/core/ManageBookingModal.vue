@@ -25,7 +25,7 @@
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-sm border border-gray-100 transition-all sm:my-8 w-full"
+              class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-sm border border-gray-50 transition-all sm:my-8 w-full"
               :class="appointment ? 'max-w-2xl' : 'max-w-4xl'"
             >
               <!-- Close Button -->
@@ -55,7 +55,7 @@
                             v-model="form.reference"
                             type="text"
                             required
-                            class="peer w-full border border-gray-200 rounded-xl px-4 py-3.5 text-base placeholder-transparent focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary outline-none transition-all"
+                            class="peer w-full border border-gray-25 rounded-xl px-4 py-3.5 text-base placeholder-transparent focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary outline-none transition-all"
                             placeholder="Booking reference"
                           />
                           <label
@@ -75,7 +75,7 @@
                             v-model="form.email"
                             type="email"
                             required
-                            class="peer w-full border border-gray-200 rounded-xl px-4 py-3.5 text-base placeholder-transparent focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary outline-none transition-all"
+                            class="peer w-full border border-gray-25 rounded-xl px-4 py-3.5 text-base placeholder-transparent focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary outline-none transition-all"
                             placeholder="Email address"
                           />
                           <label
@@ -90,7 +90,7 @@
                       <button
                         type="submit"
                         :disabled="loading"
-                        class="w-full mt-4 bg-parentPrimary hover:bg-parentPrimary/90 text-white py-3.5 rounded-xl font-medium transition-colors flex items-center justify-center shadow-sm border border-gray-100 shadow-parentPrimary/20"
+                        class="w-full mt-4 bg-parentPrimary hover:bg-parentPrimary/90 text-white py-3.5 rounded-xl font-medium transition-colors flex items-center justify-center shadow-sm border border-gray-50 shadow-parentPrimary/20"
                       >
                         <Loader2 v-if="loading" class="w-5 h-5 animate-spin" />
                         <span v-else>Login</span>
@@ -107,7 +107,7 @@
                   <div class="relative z-10 w-full max-w-sm text-center">
                     <p class="text-sm font-medium mb-6">Benefits of manage my booking</p>
 
-                    <div class="bg-white rounded-2xl p-5 text-left shadow-sm border border-gray-100 transform transition-transform hover:scale-105 duration-300">
+                    <div class="bg-white rounded-2xl p-5 text-left shadow-sm border border-gray-50 transform transition-transform hover:scale-105 duration-300">
                       <h3 class="text-xl font-bold text-gray-900 mb-2">Your invoice</h3>
                       <p class="text-sm text-gray-500">View, download and print your invoice</p>
                     </div>
@@ -126,7 +126,7 @@
               <!-- State 2: Booking Details -->
               <div v-else class="bg-white p-4 md:p-5">
                 <div class="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
-                  <div class="w-14 h-14 rounded-2xl bg-gray-50 border border-gray-100 overflow-hidden shrink-0">
+                  <div class="w-14 h-14 rounded-2xl bg-gray-50 border border-gray-50 overflow-hidden shrink-0">
                     <img :src="appointment.vendor?.logo || '/placeholder-store.jpg'" class="w-full h-full object-cover" />
                   </div>
                   <div class="flex-1">
@@ -140,7 +140,7 @@
 
                 <div class="space-y-6">
                   <!-- Status and Total -->
-                  <div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                  <div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl border border-gray-50">
                     <div>
                       <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Status</p>
                       <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium" :class="statusClass(appointment.status)">
@@ -155,7 +155,7 @@
 
                   <!-- Date & Time -->
                   <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-gray-50 rounded-2xl p-4 border border-gray-100 flex items-center gap-3">
+                    <div class="bg-gray-50 rounded-2xl p-4 border border-gray-50 flex items-center gap-3">
                       <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-gray-50 text-[#5b52e6]">
                         <CalendarIcon class="w-5 h-5" />
                       </div>
@@ -164,7 +164,7 @@
                         <p class="text-sm font-bold text-gray-900">{{ formatDate(appointment.scheduledDate) }}</p>
                       </div>
                     </div>
-                    <div class="bg-gray-50 rounded-2xl p-4 border border-gray-100 flex items-center gap-3">
+                    <div class="bg-gray-50 rounded-2xl p-4 border border-gray-50 flex items-center gap-3">
                       <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-gray-50 text-[#5b52e6]">
                         <ClockIcon class="w-5 h-5" />
                       </div>
@@ -179,7 +179,7 @@
                   <div>
                     <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Services Booked</h4>
                     <div class="space-y-3">
-                      <div v-for="(item, idx) in appointment.items" :key="idx" class="flex justify-between items-start bg-gray-50 p-4 rounded-xl border border-gray-100">
+                      <div v-for="(item, idx) in appointment.items" :key="idx" class="flex justify-between items-start bg-gray-50 p-4 rounded-xl border border-gray-50">
                         <div>
                           <p class="text-sm font-bold text-gray-900">{{ item.variantName || item.service?.name }}</p>
                           <p class="text-xs text-gray-500 mt-0.5">{{ item.durationInMinutes }} mins</p>
@@ -207,7 +207,7 @@
                         <span>Cancel Appointment</span>
                       </button>
                     </template>
-                    <div v-else class="text-center text-sm text-gray-500 bg-gray-50 rounded-xl py-3.5 border border-gray-100">
+                    <div v-else class="text-center text-sm text-gray-500 bg-gray-50 rounded-xl py-3.5 border border-gray-50">
                       This appointment cannot be cancelled because it is {{ appointment.status }}.
                     </div>
                     <p class="text-xs text-center text-gray-400 mt-3">To reschedule, please cancel this booking and create a new one.</p>

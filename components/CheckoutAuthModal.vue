@@ -53,7 +53,7 @@
 
           <!-- Initial Options View -->
           <div v-if="view === 'options'" class="space-y-3">
-            <button type="button" @click="handleGoogleAuth" :disabled="googleLoading || loading" class="w-full py-4 border border-gray-100 rounded-2xl flex items-center justify-center gap-3 font-bold text-gray-700 hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+            <button type="button" @click="handleGoogleAuth" :disabled="googleLoading || loading" class="w-full py-4 border border-gray-50 rounded-2xl flex items-center justify-center gap-3 font-bold text-gray-700 hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
               <Loader2 v-if="googleLoading" class="animate-spin w-5 h-5" />
               <svg v-else class="w-5 h-5" viewBox="0 0 24 24">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
@@ -75,7 +75,7 @@
             </button>
             <button 
               @click="view = 'register'" 
-              class="w-full py-3.5 bg-gray-50 text-gray-900 border border-gray-100 hover:border-gray-200 hover:bg-gray-100 rounded-xl text-sm font-bold transition-all"
+              class="w-full py-3.5 bg-gray-50 text-gray-900 border border-gray-50 hover:border-gray-200 hover:bg-gray-100 rounded-xl text-sm font-bold transition-all"
             >
               Create New Account
             </button>
@@ -85,7 +85,7 @@
             </div>
             <button 
               @click="view = 'guest'" 
-              class="w-full py-3 bg-white text-gray-600 border border-gray-200 hover:border-gray-300 rounded-xl text-sm font-bold transition-all"
+              class="w-full py-3 bg-white text-gray-600 border border-gray-25 hover:border-gray-300 rounded-xl text-sm font-bold transition-all"
             >
               Continue as Guest
             </button> -->
@@ -96,7 +96,7 @@
             <!-- Login View -->
             <template v-if="view === 'login'">
               <div class="space-y-3">
-                <button type="button" @click="handleGoogleAuth" :disabled="googleLoading || loading" class="w-full py-4 border border-gray-100 rounded-2xl flex items-center justify-center gap-3 font-bold text-gray-700 hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed mb-2">
+                <button type="button" @click="handleGoogleAuth" :disabled="googleLoading || loading" class="w-full py-4 border border-gray-50 rounded-2xl flex items-center justify-center gap-3 font-bold text-gray-700 hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed mb-2">
                   <Loader2 v-if="googleLoading" class="animate-spin w-5 h-5" />
                   <svg v-else class="w-5 h-5" viewBox="0 0 24 24">
                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
@@ -137,7 +137,7 @@
             <!-- Register View -->
             <template v-else-if="view === 'register'">
               <div class="space-y-3">
-                <button type="button" @click="handleGoogleAuth" :disabled="googleLoading || loading" class="w-full py-4 border border-gray-100 rounded-2xl flex items-center justify-center gap-3 font-bold text-gray-700 hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed mb-2">
+                <button type="button" @click="handleGoogleAuth" :disabled="googleLoading || loading" class="w-full py-4 border border-gray-50 rounded-2xl flex items-center justify-center gap-3 font-bold text-gray-700 hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed mb-2">
                   <Loader2 v-if="googleLoading" class="animate-spin w-5 h-5" />
                   <svg v-else class="w-5 h-5" viewBox="0 0 24 24">
                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
@@ -207,7 +207,7 @@
 
             <!-- Submit Button -->
             <div class="pt-2">
-              <button type="submit" :disabled="loading" class="w-full py-3.5 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-black transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+              <button type="submit" :disabled="loading" class="w-full py-3 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-black transition-all disabled:opacity-50 flex items-center justify-center gap-2">
                 <template v-if="loading">
                   <Loader2 class="w-4 h-4 animate-spin text-white" />
                   <span>Processing...</span>

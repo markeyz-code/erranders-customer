@@ -32,7 +32,7 @@
               <template v-if="currentItem.type === 'video'">
                 <video 
                   :src="currentItem.url" 
-                  class="max-w-full max-h-full object-contain rounded-lg shadow-sm border border-gray-100" 
+                  class="max-w-full max-h-full object-contain rounded-lg shadow-sm border border-gray-50" 
                   controls 
                   autoplay 
                   playsinline
@@ -41,7 +41,7 @@
               <template v-else>
                 <img 
                   :src="currentItem.url" 
-                  class="max-w-full max-h-full object-contain rounded-lg shadow-sm border border-gray-100" 
+                  class="max-w-full max-h-full object-contain rounded-lg shadow-sm border border-gray-50" 
                 />
               </template>
             </div>
@@ -72,7 +72,7 @@
             v-for="(item, idx) in mediaItems" 
             :key="idx"
             @click="currentIndex = idx"
-            class="w-16 h-16 shrink-0 rounded-lg overflow-hidden border-2 transition-all relative"
+            class="w-16 h-16 shrink-0 rounded-lg overflow-hidden border transition-all relative"
             :class="idx === currentIndex ? 'border-white opacity-100 scale-105' : 'border-transparent opacity-50 hover:opacity-80'"
           >
             <template v-if="item.type === 'video'">

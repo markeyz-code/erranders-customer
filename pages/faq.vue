@@ -10,7 +10,7 @@
       </div>
 
       <div class="max-w-7xl mx-auto px-4 sm:px-10 relative z-10 text-center">
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white border border-gray-100 text-sm font-medium tracking-[0.2em] uppercase text-gray-400 mb-8 shadow-sm">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white border border-gray-50 text-sm font-medium tracking-[0.2em] uppercase text-gray-400 mb-8 shadow-sm">
           <HelpCircle class="w-3.5 h-3.5 text-parentPrimary" />
           Common Inquiries
         </div>
@@ -29,7 +29,7 @@
       <div class="max-w-4xl mx-auto px-4 sm:px-10">
         <div class="space-y-4">
           <div v-for="(faq, i) in faqs" :key="i" 
-               class="group border border-gray-100 rounded-[2rem] overflow-hidden hover:border-parentPrimary/30 transition-all duration-500 shadow-sm hover:shadow-sm border border-gray-100"
+               class="group border border-gray-50 rounded-[2rem] overflow-hidden hover:border-parentPrimary/30 transition-all duration-500 shadow-sm hover:shadow-sm border border-gray-50"
                :class="{ 'bg-gray-50/50 border-parentPrimary/20': openIndex === i }">
             <button @click="openIndex = openIndex === i ? -1 : i" 
                     class="w-full flex items-center justify-between p-5 text-left group">
@@ -49,13 +49,13 @@
           </div>
         </div>
 
-        <div class="mt-20 bg-gray-900 overflow-hidden relative p-12 md:p-16 rounded-[4rem] text-center shadow-sm border border-gray-100 group">
+        <div class="mt-20 bg-gray-900 overflow-hidden relative p-12 md:p-16 rounded-[4rem] text-center shadow-sm border border-gray-50 group">
           <div class="absolute inset-0 bg-parentPrimary opacity-0 group-hover:opacity-10 transition-opacity duration-1000"></div>
           <div class="relative z-10 space-y-6">
             <h3 class="text-3xl font-medium text-white tracking-tight">Still seeking clarity?</h3>
             <p class="text-gray-400 font-bold max-w-md mx-auto">Our support team is active Mon–Sat, 8AM–9PM. We're always a message away.</p>
             <div class="pt-4">
-              <NuxtLink to="/contact" class="inline-flex items-center gap-4 px-10 py-5 bg-white text-gray-900 rounded-[2rem] font-medium text-sm uppercase  shadow-sm border border-gray-100 hover:bg-parentPrimary hover:text-white transition-all group">
+              <NuxtLink to="/contact" class="inline-flex items-center gap-4 px-10 py-5 bg-white text-gray-900 rounded-[2rem] font-medium text-sm uppercase  shadow-sm border border-gray-50 hover:bg-parentPrimary hover:text-white transition-all group">
                 Contact Support
                 <ArrowRight class="w-5 h-5 group-hover:translate-x-2 transition-transform" />
               </NuxtLink>

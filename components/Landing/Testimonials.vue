@@ -28,12 +28,12 @@
             class="transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
             :class="[
               activeIndex === i 
-                ? 'opacity-100 scale-100 translate-x-0 z-20 shadow-sm border border-gray-100 border-parentPrimary/20' 
+                ? 'opacity-100 scale-100 translate-x-0 z-20 shadow-sm border border-gray-50 border-parentPrimary/20' 
                 : 'opacity-40 scale-90 translate-x-12 z-10 grayscale blur-[2px] pointer-events-none'
             ]"
           >
             <div 
-              class="bg-white p-5 rounded-[2.5rem] border border-gray-100 flex items-start gap-6 relative"
+              class="bg-white p-5 rounded-[2.5rem] border border-gray-50 flex items-start gap-6 relative"
               :class="{ 'ring-1 ring-parentPrimary/5': activeIndex === i }"
             >
               <!-- Indicator Line (from image style) -->

@@ -6,7 +6,7 @@
     </div>
 
     <div class="px-0 md:px-0">
-      <div class="bg-white rounded-3xl text-center p-16 border border-gray-100 shadow-sm animate-fade-in">
+      <div class="bg-white rounded-3xl text-center p-16 border border-gray-50 shadow-sm animate-fade-in">
         <div class="w-20 h-20 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 mx-auto">
           <ClipboardList class="w-8 h-8 text-gray-300" />
         </div>

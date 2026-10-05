@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white rounded-none sm:rounded-2xl border-0 sm:border border-gray-100 p-4 sm:p-4 shadow-none sm:shadow-sm">
+  <div class="bg-white rounded-none sm:rounded-2xl border-0 sm:border border-gray-50 p-4 sm:p-4 shadow-none sm:shadow-sm">
     <div class="flex items-center justify-between mb-6">
       <div>
         <h3 class="text-lg font-medium text-gray-900 tracking-tight">Active Quests</h3>
@@ -17,7 +17,7 @@
 
     <!-- Empty state -->
     <div v-else-if="quests.length === 0" class="py-12 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-      <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl mx-auto mb-3 shadow-sm border border-gray-100">🏆</div>
+      <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl mx-auto mb-3 shadow-sm border border-gray-50">🏆</div>
       <p class="text-xs font-bold text-gray-400">No active quests right now. Check back later!</p>
     </div>
 
@@ -29,7 +29,7 @@
         class="group relative p-4 bg-gray-50 rounded-2xl border border-transparent hover:border-parentPrimary/20 hover:bg-white hover:shadow-sm transition-all duration-300"
       >
         <div class="flex items-start gap-4">
-          <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-xl shrink-0 group-hover:scale-105 transition-transform border border-gray-100">
+          <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-xl shrink-0 group-hover:scale-105 transition-transform border border-gray-50">
             {{ quest.icon || '🎯' }}
           </div>
           
@@ -62,7 +62,7 @@
 
         <!-- Completion Overlay -->
         <div v-if="quest.isCompleted" class="absolute inset-0 bg-white/70 backdrop-blur-[1px] rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-          <div class="px-4 py-1.5 bg-emerald-500 text-white text-[10px] font-medium uppercase tracking-wider rounded-lg shadow-sm border border-gray-100">
+          <div class="px-4 py-1.5 bg-emerald-500 text-white text-[10px] font-medium uppercase tracking-wider rounded-lg shadow-sm border border-gray-50">
             ✓ Accomplished
           </div>
         </div>

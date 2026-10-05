@@ -6,7 +6,7 @@
         <div class="absolute inset-0 bg-[#FF5C1A] rounded-3xl blur-2xl opacity-20 animate-pulse"></div>
         
         <!-- Logo Container -->
-        <div class="relative bg-white w-24 h-24 rounded-[2rem] shadow-sm border border-gray-100 flex items-center justify-center border border-gray-50 overflow-hidden group">
+        <div class="relative bg-white w-24 h-24 rounded-[2rem] shadow-sm border border-gray-50 flex items-center justify-center border border-gray-50 overflow-hidden group">
           <ShoppingBag class="w-10 h-10 text-[#FF5C1A] animate-bounce-slow" />
           
           <!-- Glossy overlay -->

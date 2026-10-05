@@ -4,7 +4,7 @@
     class="fixed w-[95%] left-1/2 -translate-x-1/2 z-[60] transition-all duration-500 rounded-[2rem] mt-4"
     :class="[
       scrolled 
-        ? 'bg-white border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.08)] py-3' 
+        ? 'bg-white border border-gray-50 shadow-[0_8px_30px_rgb(0,0,0,0.08)] py-3' 
         : 'bg-transparent py-5'
     ]"
   >
@@ -21,7 +21,7 @@
           <div class="hidden md:flex items-center gap-3">
             <template v-if="!user">
               <!-- Manage Buttons for Guests -->
-              <NuxtLink to="/errands/custom" class="px-5 py-2 text-sm font-bold text-white bg-parentPrimary hover:bg-orange-600 transition-colors rounded-full shadow-sm border border-gray-100 hover:shadow-sm whitespace-nowrap">
+              <NuxtLink to="/errands/custom" class="px-5 py-2 text-sm font-bold text-white bg-parentPrimary hover:bg-orange-600 transition-colors rounded-full shadow-sm border border-gray-50 hover:shadow-sm whitespace-nowrap">
                 Request Custom Errand
               </NuxtLink>
               <NuxtLink to="/dashboard/recurring-orders" class="px-5 py-2 text-sm font-bold text-parentPrimary bg-orange-50 hover:bg-orange-100 transition-colors rounded-full shadow-sm border border-orange-200 hover:shadow-sm whitespace-nowrap flex items-center gap-1.5">
@@ -37,7 +37,7 @@
               </NuxtLink>
             </template>
             <template v-else>
-              <NuxtLink to="/errands/custom" class="px-5 py-2 text-sm font-bold text-white bg-parentPrimary hover:bg-orange-600 transition-colors rounded-full shadow-sm border border-gray-100 hover:shadow-sm whitespace-nowrap">
+              <NuxtLink to="/errands/custom" class="px-5 py-2 text-sm font-bold text-white bg-parentPrimary hover:bg-orange-600 transition-colors rounded-full shadow-sm border border-gray-50 hover:shadow-sm whitespace-nowrap">
                 Request Custom Errand
               </NuxtLink>
               <NuxtLink to="/dashboard/recurring-orders" class="px-5 py-2 text-sm font-bold text-parentPrimary bg-orange-50 hover:bg-orange-100 transition-colors rounded-full shadow-sm border border-orange-200 hover:shadow-sm whitespace-nowrap flex items-center gap-1.5">
@@ -62,7 +62,7 @@
           </div>
 
           <!-- Cart Icon -->
-          <NuxtLink to="/cart" class="relative p-2.5 rounded-full bg-white border border-gray-200 hover:shadow-sm hover:border-gray-300 transition-all flex items-center justify-center ml-2">
+          <NuxtLink to="/cart" class="relative p-2.5 rounded-full bg-white border border-gray-25 hover:shadow-sm hover:border-gray-300 transition-all flex items-center justify-center ml-2">
             <ShoppingCart class="w-5 h-5 text-gray-900" />
             <span v-if="cartItemCount > 0" class="absolute top-0 right-0 bg-parentPrimary text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center translate-x-1/4 -translate-y-1/4 shadow-sm">
               {{ cartItemCount }}
@@ -71,7 +71,7 @@
 
           <!-- Fresha-style Menu Dropdown -->
           <Menu as="div" class="relative">
-            <MenuButton class="flex items-center gap-2 rounded-full bg-white border border-gray-200 hover:shadow-sm border border-gray-100 hover:border-gray-300 transition-all px-4 py-2 focus:outline-none focus:ring-2 focus:ring-parentPrimary/20 ml-2">
+            <MenuButton class="flex items-center gap-2 rounded-full bg-white border border-gray-25 hover:shadow-sm border border-gray-50 hover:border-gray-300 transition-all px-4 py-2 focus:outline-none focus:ring-2 focus:ring-parentPrimary/20 ml-2">
               <span class="text-sm font-medium text-gray-900 hidden sm:block">Menu</span>
               <MenuIcon class="w-5 h-5 text-gray-900" />
             </MenuButton>
@@ -169,7 +169,7 @@
                   <MenuItem v-slot="{ active }">
                     <a href="https://dispatch.erranders.org/auth/register" :class="[active ? 'bg-gray-900 text-white scale-95' : 'bg-gray-800 text-white hover:bg-gray-900', 'group flex items-center justify-center gap-2 rounded-2xl p-3 transition-all shadow-sm']">
                       <Bike class="w-4 h-4" />
-                      <span class="text-xs font-bold">Rider</span>
+                      <span class="text-xs font-bold">Errand Ninja</span>
                     </a>
                   </MenuItem>
                 </div>

@@ -24,7 +24,7 @@
             leave-from="opacity-100 scale-100 translate-y-0"
             leave-to="opacity-0 scale-95 translate-y-4"
           >
-            <DialogPanel class="w-full max-w-md transform overflow-hidden rounded-[2rem] bg-white p-6 text-left align-middle shadow-xl transition-all border border-gray-100 relative">
+            <DialogPanel class="w-full max-w-md transform overflow-hidden rounded-[2rem] bg-white p-6 text-left align-middle shadow-xl transition-all border border-gray-50 relative">
               <button @click="closeModal" class="absolute top-4 right-4 p-2 bg-gray-50 hover:bg-gray-100 text-gray-500 rounded-full transition-colors z-10">
                 <X class="w-5 h-5" />
               </button>
@@ -67,7 +67,7 @@
                     v-model="review" 
                     rows="3" 
                     placeholder="Tell us what you liked (or didn't like)..." 
-                    class="w-full p-4 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-gray-900 focus:ring-0 text-sm transition-all resize-none"
+                    class="w-full p-4 rounded-xl border border-gray-25 bg-gray-50 focus:bg-white focus:border-gray-25focus:ring-0 text-sm transition-all resize-none"
                   ></textarea>
                 </div>
 

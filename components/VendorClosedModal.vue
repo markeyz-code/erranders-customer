@@ -24,7 +24,7 @@
  leave-from="opacity-100 translate-y-0 sm:scale-100"
  leave-to="opacity-0 translate-y-full sm:translate-y-0 sm:scale-95"
  >
- <DialogPanel class="w-full h-[100dvh] sm:h-auto sm:max-w-[22rem] transform overflow-hidden bg-white sm:rounded-[2rem] p-0 text-left align-middle shadow-2xl transition-all border-0 sm:border border-gray-100 flex flex-col">
+ <DialogPanel class="w-full h-[100dvh] sm:h-auto sm:max-w-[22rem] transform overflow-hidden bg-white sm:rounded-[2rem] p-0 text-left align-middle shadow-2xl transition-all border-0 sm:border border-gray-50 flex flex-col">
     <!-- Header Illustration Area -->
     <div class="relative bg-gradient-to-br from-indigo-50/50 via-purple-50/30 to-pink-50/50 pt-20 sm:pt-10 pb-8 sm:pb-6 px-6 flex flex-col items-center border-b border-gray-50 overflow-hidden flex-shrink-0">
       <!-- Decorative background blur -->
@@ -61,7 +61,7 @@
       <div>
         <h4 class="text-xs sm:text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4 sm:mb-3 pl-1">Weekly Schedule</h4>
         
-        <div class="bg-gray-50/50 rounded-2xl border border-gray-100 overflow-hidden">
+        <div class="bg-gray-50/50 rounded-2xl border border-gray-50 overflow-hidden">
           <div v-for="(hour, index) in sortedBusinessHours" :key="hour.day" 
             class="flex items-center justify-between px-5 sm:px-4 py-4 sm:py-3 text-sm sm:text-xs font-bold border-b border-gray-100/50 last:border-0 transition-colors"
             :class="isToday(hour.day) ? 'bg-indigo-50/50 relative overflow-hidden' : ''">
@@ -95,7 +95,7 @@
         </button>
         <button
           type="button"
-          class="w-full py-4 sm:py-3.5 bg-white text-gray-950 border-2 border-gray-100 rounded-[1.25rem] sm:rounded-xl font-bold text-sm sm:text-xs hover:bg-gray-50 hover:border-gray-200 transition-all focus:outline-none"
+          class="w-full py-4 sm:py-3.5 bg-white text-gray-950 border border-gray-25 rounded-[1.25rem] sm:rounded-xl font-bold text-sm sm:text-xs hover:bg-gray-50 hover:border-gray-200 transition-all focus:outline-none"
           @click="$emit('schedule', vendor)"
         >
           Schedule for Later

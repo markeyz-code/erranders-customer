@@ -24,7 +24,7 @@
             leave-from="opacity-100 scale-100 translate-y-0"
             leave-to="opacity-0 scale-95 translate-y-4"
           >
-            <DialogPanel class="w-full max-w-md transform overflow-hidden rounded-[2rem] bg-white p-6 text-left align-middle shadow-xl transition-all border border-gray-100 relative">
+            <DialogPanel class="w-full max-w-md transform overflow-hidden rounded-[2rem] bg-white p-6 text-left align-middle shadow-xl transition-all border border-gray-50 relative">
               <button @click="closeModal" class="absolute top-4 right-4 p-2 bg-gray-50 hover:bg-gray-100 text-gray-500 rounded-full transition-colors z-10">
                 <X class="w-5 h-5" />
               </button>
@@ -41,7 +41,7 @@
                   It looks like you started an order but didn't complete the payment.
                 </p>
 
-                <div v-if="order" class="w-full bg-gray-50 rounded-2xl p-4 mt-6 border border-gray-100 text-left">
+                <div v-if="order" class="w-full bg-gray-50 rounded-2xl p-4 mt-6 border border-gray-50 text-left">
                   <div class="flex items-center justify-between mb-2">
                     <span class="text-xs font-bold text-gray-400 tracking-wider uppercase">Order Total</span>
                     <span class="text-sm font-bold text-gray-900">₦{{ order.total?.toLocaleString() }}</span>
@@ -54,7 +54,7 @@
                   <div v-if="order.items && order.items.length" class="mt-3 pt-3 border-t border-gray-200/50 max-h-32 overflow-y-auto space-y-2">
                     <div v-for="(item, idx) in order.items" :key="idx" class="flex justify-between items-start text-sm">
                       <div class="flex items-start gap-2">
-                        <span class="font-bold text-gray-800 bg-white px-1.5 py-0.5 rounded text-xs border border-gray-100 shadow-sm">{{ item.quantity }}x</span>
+                        <span class="font-bold text-gray-800 bg-white px-1.5 py-0.5 rounded text-xs border border-gray-50 shadow-sm">{{ item.quantity }}x</span>
                         <div class="flex flex-col">
                           <span class="text-gray-700 font-medium">{{ item.name }}</span>
                           <span v-if="item.customizations && item.customizations.length" class="text-[10px] text-gray-400 leading-tight">
@@ -92,7 +92,7 @@
                     v-model="feedback" 
                     rows="3" 
                     placeholder="Tell us what went wrong..." 
-                    class="w-full p-4 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-gray-900 focus:ring-0 text-sm transition-all resize-none mb-3"
+                    class="w-full p-4 rounded-xl border border-gray-25 bg-gray-50 focus:bg-white focus:border-gray-25focus:ring-0 text-sm transition-all resize-none mb-3"
                   ></textarea>
                   <button @click="submitFeedback" :disabled="submitting || !feedback.trim()" class="w-full py-3 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white rounded-xl text-sm font-bold tracking-wide transition-colors">
                     {{ submitting ? 'Submitting...' : 'Submit Feedback' }}

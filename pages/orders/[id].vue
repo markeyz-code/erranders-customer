@@ -6,7 +6,7 @@
  <div class="flex items-center gap-3">
  <button 
  @click="router.push('/')" 
- class="w-9 h-9 bg-white rounded-xl flex items-center justify-center border border-gray-100 hover: hover:border-gray-200 transition-all group active:scale-95 shrink-0"
+ class="w-9 h-9 bg-white rounded-xl flex items-center justify-center border border-gray-50 hover: hover:border-gray-200 transition-all group active:scale-95 shrink-0"
  >
  <ArrowLeft class="w-4 h-4 text-gray-900 group-hover:-translate-x-1 transition-transform" />
  </button>
@@ -43,7 +43,7 @@
  </div>
  <main class="max-w-7xl w-full mx-auto px-4 py-4 md:py-5">
  <div v-if="loading" class="flex flex-col items-center justify-center py-32 space-y-4">
- <div class="w-10 h-10 border-2 border-gray-100 border-t-parentPrimary rounded-full animate-spin" />
+ <div class="w-10 h-10 border border-gray-25 border-t-parentPrimary rounded-full animate-spin" />
  <p class="text-sm font-bold text-gray-400 animate-pulse">Retrieving order details...</p>
  </div>
 
@@ -99,7 +99,7 @@
  <div class="md:col-span-12 lg:col-span-8 space-y-5 md:space-y-8">
  
  <!-- Timeline Card -->
- <div class="bg-white rounded-2xl border border-gray-100 p-4 md:p-4 space-y-4 md:space-y-6">
+ <div class="bg-white rounded-2xl border border-gray-50 p-4 md:p-4 space-y-4 md:space-y-6">
  <div class="flex items-center justify-between border-b border-gray-50 pb-4">
  <h3 class="text-sm font-medium text-gray-900 r">Journey Progress</h3>
  <Clock class="w-4 h-4 text-gray-300" />
@@ -111,7 +111,7 @@
 
  <div v-for="(step, idx) in trackSteps" :key="step.label" class="flex gap-3 md:gap-6 items-start relative z-10">
  <div 
- class="w-8 h-8 rounded-xl flex items-center justify-center border-2 border-white transition-all duration-500"
+ class="w-8 h-8 rounded-xl flex items-center justify-center border border-white transition-all duration-500"
  :class="step.active ? 'bg-parentPrimary text-white scale-110' : 'bg-gray-100 text-gray-400'"
  >
  <component :is="step.icon" class="w-3.5 h-3.5" />
@@ -132,7 +132,7 @@
  </div>
 
  <!-- Items Breakdown -->
- <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+ <div class="bg-white rounded-2xl border border-gray-50 overflow-hidden">
  <div class="px-4 md:px-4 py-4 border-b border-gray-50 flex items-center justify-between">
  <div>
  <h3 class="text-sm font-medium text-gray-900 r">{{ order.type === 'custom_errand' ? 'Errand Summary' : 'Order Breakdown' }}</h3>
@@ -161,11 +161,11 @@
 
  <!-- Proof of Items Photo -->
  <div v-if="order.itemsPhoto" class="mt-4 pt-4 border-t border-gray-200">
-   <div class="p-4 rounded-xl border border-gray-100 flex flex-col items-center">
+   <div class="p-4 rounded-xl border border-gray-50 flex flex-col items-center">
      <h4 class="text-[11px] font-bold text-gray-400 mb-4 tracking-widest uppercase flex items-center gap-1.5 w-full">
        <Camera, PartyPopper class="w-3.5 h-3.5" /> Proof of Purchased Items
      </h4>
-     <div class="w-full h-48 rounded-xl overflow-hidden bg-gray-50 border border-gray-100 mb-3 cursor-pointer" @click="window.open(order.itemsPhoto, '_blank')">
+     <div class="w-full h-48 rounded-xl overflow-hidden bg-gray-50 border border-gray-50 mb-3 cursor-pointer" @click="window.open(order.itemsPhoto, '_blank')">
        <img :src="order.itemsPhoto" class="w-full h-full object-cover hover:scale-105 transition-transform" />
      </div>
      <p class="text-xs text-gray-500 text-center">Your rider has uploaded a photo of the items purchased from the vendor.</p>
@@ -247,7 +247,7 @@
 
  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
  <div v-for="item in pack.items" :key="item.product" class="flex items-start gap-3 p-3 rounded-xl border border-gray-50 hover:bg-gray-50/50 transition-colors">
- <div class="w-12 h-12 rounded-lg overflow-hidden bg-gray-50 border border-gray-100 shrink-0">
+ <div class="w-12 h-12 rounded-lg overflow-hidden bg-gray-50 border border-gray-50 shrink-0">
  <img :src="item.image || '/placeholder-food.jpg'" class="w-full h-full object-cover" />
  </div>
  <div class="flex-1 min-w-0">
@@ -277,7 +277,7 @@
 
  <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-3">
  <div v-for="item in order.items" :key="item.product" class="flex items-start gap-3 p-3 rounded-xl border border-gray-50 hover:bg-gray-50/50 transition-colors">
- <div class="w-12 h-12 rounded-lg overflow-hidden bg-gray-50 border border-gray-100 shrink-0">
+ <div class="w-12 h-12 rounded-lg overflow-hidden bg-gray-50 border border-gray-50 shrink-0">
  <img :src="item.image || '/placeholder-food.jpg'" class="w-full h-full object-cover" />
  </div>
  <div class="flex-1 min-w-0">
@@ -341,7 +341,7 @@
  <div class="md:col-span-12 lg:col-span-4 space-y-5 md:space-y-8">
  
  <!-- Status Overview Card (Compact) -->
- <div class="bg-white rounded-2xl p-4 md:p-4 border border-gray-100 overflow-hidden relative group">
+ <div class="bg-white rounded-2xl p-4 md:p-4 border border-gray-50 overflow-hidden relative group">
  <div class="absolute top-0 right-0 w-24 h-24 bg-parentPrimary/5 rounded-full -translate-y-12 translate-x-12 blur-xl group-hover:bg-parentPrimary/10 transition-all duration-700" />
  
  <div class="flex flex-col items-start gap-4 relative z-10">
@@ -378,12 +378,12 @@
  </div>
 
  <!-- Service Provider Info -->
- <div v-if="order.type !== 'custom_errand' || order.errander?._id" class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+ <div v-if="order.type !== 'custom_errand' || order.errander?._id" class="bg-white rounded-2xl border border-gray-50 overflow-hidden">
  <div class="p-4 md:p-4">
  <h3 class="text-sm font-medium text-gray-400 r mb-4">{{ order.type === 'custom_errand' ? 'Assigned Errander' : 'Service Provider' }}</h3>
  
  <div class="flex items-center gap-4 mb-8">
- <div class="w-16 h-16 rounded-2xl border border-gray-100 overflow-hidden flex items-center justify-center bg-gray-50 flex-shrink-0">
+ <div class="w-16 h-16 rounded-2xl border border-gray-50 overflow-hidden flex items-center justify-center bg-gray-50 flex-shrink-0">
  <template v-if="order.type !== 'custom_errand'">
  <video v-if="order.vendor?.logo && order.vendor.logo.match(/\.(mp4|webm|ogg|mov)$/i)" :src="order.vendor.logo" class="w-full h-full object-cover" autoplay loop muted playsinline></video>
  <img v-else-if="order.vendor?.logo" :src="order.vendor.logo" class="w-full h-full object-cover" />
@@ -409,7 +409,7 @@
  <button 
  v-if="order.type !== 'custom_errand'"
  @click="openChat((order.vendor?.owner?._id || order.vendor?.owner || '') + ',' + (order.vendor?._id || ''), order.vendor?.storeName || 'Vendor', order.vendor?.logo)"
- class="w-full py-4 bg-gray-50 hover:bg-gray-100 text-gray-900 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 border border-gray-100"
+ class="w-full py-4 bg-gray-50 hover:bg-gray-100 text-gray-900 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 border border-gray-50"
  >
  <MessageSquare class="w-3.5 h-3.5" /> Message Store (In-App)
  </button>
@@ -458,7 +458,7 @@
  </div>
 
  <!-- Payment Summary -->
- <div class="bg-gray-50/50 border border-gray-100 rounded-2xl p-4 md:p-4">
+ <div class="bg-gray-50/50 border border-gray-50 rounded-2xl p-4 md:p-4">
  <h3 class="text-sm font-medium text-gray-900 r mb-4">Payment Summary</h3>
  <div class="space-y-2.5">
  <div class="flex justify-between items-center text-sm font-bold text-gray-500 r">
@@ -517,7 +517,7 @@
                         <Star v-for="i in 5" :key="i" class="w-5 h-5 transition-colors" :class="i <= order.erranderRating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200 fill-gray-200'" />
                       </div>
                       <p class="text-[11px] font-bold text-emerald-600 uppercase tracking-wider">Thanks for rating!</p>
-                      <p v-if="order.erranderReview" class="text-sm font-medium text-gray-600 mt-2 italic">"{{ order.erranderReview }}"</p>
+                      <p v-if="order.erranderReview" class="text-sm font-medium text-gray-600 mt-2 ">"{{ order.erranderReview }}"</p>
                     </div>
                   </div>
                   
@@ -583,7 +583,7 @@
 
  <!-- Not Found State -->
  <div v-else class="text-center py-40 animate-fade-in">
- <div class="w-24 h-24 bg-gray-50 rounded-[2.5rem] flex items-center justify-center mx-auto mb-8 border border-gray-100 ">
+ <div class="w-24 h-24 bg-gray-50 rounded-[2.5rem] flex items-center justify-center mx-auto mb-8 border border-gray-50 ">
  <Inbox class="w-10 h-10 text-gray-300" />
  </div>
  <h2 class="text-4xl font-medium text-gray-900 tracking-tighter mb-4">Order Lost in Space</h2>
@@ -616,9 +616,9 @@
  <button 
  v-if="order?.vendor"
  @click="triggerSupportChat(order.vendor.owner || order.vendor._id, order.vendor.storeName || 'Vendor', order.vendor.logo)"
- class="w-full p-4 rounded-xl border border-gray-100 hover:border-parentPrimary hover:bg-parentPrimary/5 flex items-center gap-4 transition-all bg-white"
+ class="w-full p-4 rounded-xl border border-gray-50 hover:border-parentPrimary hover:bg-parentPrimary/5 flex items-center gap-4 transition-all bg-white"
  >
- <div class="w-10 h-10 rounded-full border border-gray-100 bg-gray-50 flex items-center justify-center overflow-hidden shrink-0">
+ <div class="w-10 h-10 rounded-full border border-gray-50 bg-gray-50 flex items-center justify-center overflow-hidden shrink-0">
  <video v-if="order.vendor.logo && order.vendor.logo.match(/\.(mp4|webm|ogg|mov)$/i)" :src="order.vendor.logo" class="w-full h-full object-cover" autoplay loop muted playsinline></video>
  <img v-else-if="order.vendor.logo" :src="order.vendor.logo" class="w-full h-full object-cover" />
  <Store v-else class="w-5 h-5 text-gray-400" />
@@ -633,9 +633,9 @@
  <button 
  v-if="order?.errander"
  @click="triggerSupportChat(order.errander._id, order.errander.firstName + ' (Rider)', order.errander.avatar)"
- class="w-full p-4 rounded-xl border border-gray-100 hover:border-parentPrimary hover:bg-parentPrimary/5 flex items-center gap-4 transition-all bg-white"
+ class="w-full p-4 rounded-xl border border-gray-50 hover:border-parentPrimary hover:bg-parentPrimary/5 flex items-center gap-4 transition-all bg-white"
  >
- <div class="w-10 h-10 rounded-full border border-gray-100 bg-indigo-50 flex items-center justify-center overflow-hidden shrink-0">
+ <div class="w-10 h-10 rounded-full border border-gray-50 bg-indigo-50 flex items-center justify-center overflow-hidden shrink-0">
  <img v-if="order.errander.avatar" :src="order.errander.avatar" class="w-full h-full object-cover" />
  <Truck v-else class="w-5 h-5 text-indigo-400" />
  </div>
@@ -648,7 +648,7 @@
 
  <button 
  @click="triggerSupportChat('admin_support_channel', 'Errandr Support', '')"
- class="w-full p-4 rounded-xl border border-gray-100 hover:border-rose-500 hover:bg-rose-50 flex items-center gap-4 transition-all group bg-white"
+ class="w-full p-4 rounded-xl border border-gray-50 hover:border-rose-500 hover:bg-rose-50 flex items-center gap-4 transition-all group bg-white"
  >
  <div class="w-10 h-10 rounded-full border border-rose-100 bg-rose-50 flex items-center justify-center overflow-hidden text-rose-500 group-hover:bg-rose-500 group-hover:text-white transition-colors shrink-0">
  <LifeBuoy class="w-5 h-5" />
@@ -752,7 +752,7 @@
  v-model="reviewText"
  rows="3"
  placeholder="Tell us what you loved (or what needs improvement)..."
- class="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 text-sm font-medium focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary transition-all outline-none resize-none placeholder:text-gray-400 "
+ class="w-full bg-gray-50 border border-gray-50 rounded-2xl p-4 text-sm font-medium focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary transition-all outline-none resize-none placeholder:text-gray-400 "
  ></textarea>
 
  <button 

@@ -25,7 +25,7 @@
       </div>
 
       <!-- Stepper -->
-      <div class="border border-gray-100 rounded-2xl p-4 mb-6">
+      <div class="border border-gray-50 rounded-2xl p-4 mb-6">
         <div class="flex items-center justify-between min-w-full gap-2 overflow-x-auto hide-scrollbar">
            <template v-for="(step, idx) in orderSteps" :key="idx">
              <div class="flex flex-col items-center gap-2 relative z-10 flex-1 min-w-[86px]">
@@ -126,7 +126,7 @@
 
 
              <!-- RESUME NEGOTIATION -->
-             <div v-if="order.status === 'negotiating'" class="p-4 rounded-2xl border border-gray-100 flex flex-col items-center text-center">
+             <div v-if="order.status === 'negotiating'" class="p-4 rounded-2xl border border-gray-50 flex flex-col items-center text-center">
                 <div class="w-12 h-12 rounded-xl bg-gray-900 flex items-center justify-center mb-4">
                    <Zap class="w-6 h-6 text-[#FF5C1A]" />
                 </div>
@@ -139,7 +139,7 @@
              </div>
 
              <!-- PENDING NEGOTIATION -->
-             <div v-if="order.type === 'custom_errand' && order.status === 'pending'" class="p-4 rounded-2xl border border-gray-100 flex flex-col items-center text-center">
+             <div v-if="order.type === 'custom_errand' && order.status === 'pending'" class="p-4 rounded-2xl border border-gray-50 flex flex-col items-center text-center">
                 <div class="w-12 h-12 rounded-xl bg-gray-900 flex items-center justify-center mb-4">
                    <Bike class="w-6 h-6 text-white" />
                 </div>
@@ -149,7 +149,7 @@
                 <div class="w-full max-w-sm flex gap-2">
                    <div class="relative flex-1">
                      <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">₦</span>
-                     <input v-model="formattedNewFee" type="text" @input="handleFeeInput" class="w-full pl-7 pr-3 py-2.5 rounded-lg border border-gray-200 outline-none font-bold text-gray-900 text-sm focus:border-[#FF5C1A] transition-colors" placeholder="New fee amount" />
+                     <input v-model="formattedNewFee" type="text" @input="handleFeeInput" class="w-full pl-7 pr-3 py-2.5 rounded-lg border border-gray-25 outline-none font-bold text-gray-900 text-sm focus:border-[#FF5C1A] transition-colors" placeholder="New fee amount" />
                    </div>
                    <button @click="increaseFee" :disabled="isIncreasingFee || newFee <= order.deliveryFee" class="bg-[#FF5C1A] text-white font-bold px-5 py-2.5 rounded-lg hover:bg-[#e6511a] transition-colors disabled:opacity-40 shrink-0 text-xs">
                       {{ isIncreasingFee ? 'Updating...' : 'Boost Fee' }}
@@ -162,7 +162,7 @@
                      {{ order.viewers.length }} Rider{{ order.viewers.length > 1 ? 's' : '' }} viewing right now
                    </h4>
                    <div class="flex flex-wrap gap-2">
-                      <div v-for="viewer in order.viewers" :key="viewer._id" class="flex items-center gap-2 border border-gray-100 px-2.5 py-1.5 rounded-lg">
+                      <div v-for="viewer in order.viewers" :key="viewer._id" class="flex items-center gap-2 border border-gray-50 px-2.5 py-1.5 rounded-lg">
                          <div class="w-7 h-7 rounded-full bg-gray-100 overflow-hidden flex items-center justify-center text-gray-500 font-bold text-[10px] uppercase shrink-0">
                             <img v-if="viewer.errander?.avatar" :src="viewer.errander.avatar" class="w-full h-full object-cover" />
                             <span v-else>{{ viewer.errander?.firstName?.[0] || 'R' }}{{ viewer.errander?.lastName?.[0] || '' }}</span>
@@ -178,7 +178,7 @@
                      <Zap class="w-3.5 h-3.5 text-[#FF5C1A]" /> Received Offers
                    </h4>
                    <div class="space-y-2">
-                      <div v-for="bid in pendingBids" :key="bid._id" class="p-3 rounded-xl border border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+                      <div v-for="bid in pendingBids" :key="bid._id" class="p-3 rounded-xl border border-gray-50 flex flex-col sm:flex-row items-center justify-between gap-3">
                          <div class="flex items-center gap-3 w-full sm:w-auto">
                             <div class="w-9 h-9 rounded-full bg-gray-100 overflow-hidden shrink-0 flex items-center justify-center">
                                <img v-if="bid.errander?.avatar" :src="bid.errander.avatar" class="w-full h-full object-cover" />
@@ -213,7 +213,7 @@
                     <button 
                       @click="payForErrandWithWallet" 
                       :disabled="isInitializingPayment || isPayingWithWallet"
-                      class="w-full sm:flex-1 h-12 bg-white text-gray-900 border border-gray-200 font-bold px-4 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 flex items-center justify-between text-xs relative group shadow-sm shrink-0"
+                      class="w-full sm:flex-1 h-12 bg-white text-gray-900 border border-gray-25 font-bold px-4 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 flex items-center justify-between text-xs relative group shadow-sm shrink-0"
                     >
                       <div class="flex flex-col items-start text-left">
                          <span class="font-bold flex items-center gap-1.5 leading-none mt-1">Wallet</span>
@@ -252,7 +252,7 @@
                 </div>
 
                 <!-- Errandr Tracking (Live Location) -->
-                <div v-if="order.status !== 'pending' && order.status !== 'awaiting_payment'" class="bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden relative group h-[300px]">
+                <div v-if="order.status !== 'pending' && order.status !== 'awaiting_payment'" class="bg-gray-50 rounded-2xl border border-gray-50 overflow-hidden relative group h-[300px]">
                    <MapboxMap 
                       v-if="mapboxToken" 
                       :order="order"
@@ -266,7 +266,7 @@
                 </div>
 
                 <!-- Verification Code -->
-                <div v-if="order.status !== 'pending' && order.status !== 'awaiting_payment'" class="p-5 rounded-2xl border border-gray-100 flex flex-col">
+                <div v-if="order.status !== 'pending' && order.status !== 'awaiting_payment'" class="p-5 rounded-2xl border border-gray-50 flex flex-col">
                    <div class="flex items-center justify-between mb-5">
                       <div class="flex items-center gap-2">
                          <ShieldCheck class="w-4 h-4 text-emerald-600" />
@@ -285,7 +285,7 @@
                 </div>
 
                 <!-- Rider -->
-                <div v-if="order.status !== 'pending' && order.status !== 'awaiting_payment' && order.errander" class="p-5 rounded-2xl border border-gray-100 flex flex-col justify-between">
+                <div v-if="order.status !== 'pending' && order.status !== 'awaiting_payment' && order.errander" class="p-5 rounded-2xl border border-gray-50 flex flex-col justify-between">
                    <div class="flex items-center justify-between mb-4">
                       <h4 class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Your Rider</h4>
                       <div class="inline-flex items-center gap-1 text-blue-600 text-[10px] font-bold">
@@ -301,7 +301,7 @@
                    </div>
                    <div class="flex flex-col gap-2">
                       <div class="flex gap-2">
-                        <a :href="`tel:${order.errander.phone}`" class="flex-1 py-2.5 rounded-lg border border-gray-200 text-gray-700 text-xs font-bold text-center hover:bg-gray-50 transition-colors">
+                        <a :href="`tel:${order.errander.phone}`" class="flex-1 py-2.5 rounded-lg border border-gray-25 text-gray-700 text-xs font-bold text-center hover:bg-gray-50 transition-colors">
                           Call
                         </a>
                         <a v-if="order.errander.phone" :href="getWhatsAppLink(order.errander.phone, 'rider')" target="_blank" class="flex-1 py-2.5 rounded-lg bg-[#25D366]/10 text-[#25D366] text-xs font-bold text-center hover:bg-[#25D366]/20 transition-colors flex justify-center items-center gap-1.5">
@@ -318,7 +318,7 @@
                 </div>
 
                 <!-- Second Rider (Interception) -->
-                <div v-if="order.interception?.secondErrander && (order.status === 'interception_in_progress' || order.interception?.status === 'accepted' || order.interception?.status === 'completed')" class="p-5 rounded-2xl border-2 border-purple-200 bg-purple-50/30 flex flex-col justify-between">
+                <div v-if="order.interception?.secondErrander && (order.status === 'interception_in_progress' || order.interception?.status === 'accepted' || order.interception?.status === 'completed')" class="p-5 rounded-2xl border border-purple-200 bg-purple-50/30 flex flex-col justify-between">
                    <div class="flex items-center justify-between mb-4">
                       <h4 class="text-[11px] font-bold text-purple-500 uppercase tracking-widest">Second Rider (Hand-off)</h4>
                       <div class="inline-flex items-center gap-1 text-purple-600 text-[10px] font-bold">
@@ -348,7 +348,7 @@
                    </div>
                 </div>
                 <!-- Vendor -->
-                <div v-if="order.status !== 'pending' && order.status !== 'awaiting_payment' && order.type !== 'custom_errand' && order.vendor" class="p-5 rounded-2xl border border-gray-100 flex flex-col justify-between">
+                <div v-if="order.status !== 'pending' && order.status !== 'awaiting_payment' && order.type !== 'custom_errand' && order.vendor" class="p-5 rounded-2xl border border-gray-50 flex flex-col justify-between">
                    <div class="flex items-center justify-between mb-4">
                       <h4 class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">The Vendor</h4>
                       <div class="inline-flex items-center gap-1 text-[#FF5C1A] text-[10px] font-bold">
@@ -365,7 +365,7 @@
                    </div>
                    <div class="flex flex-col gap-2">
                      <div v-if="vendorPhone" class="flex gap-2">
-                       <a :href="`tel:${vendorPhone}`" class="flex-1 py-2.5 rounded-lg border border-gray-200 text-gray-700 text-xs font-bold text-center hover:bg-gray-50 transition-colors">
+                       <a :href="`tel:${vendorPhone}`" class="flex-1 py-2.5 rounded-lg border border-gray-25 text-gray-700 text-xs font-bold text-center hover:bg-gray-50 transition-colors">
                          Call
                        </a>
                        <a :href="getWhatsAppLink(vendorPhone, 'vendor')" target="_blank" class="flex-1 py-2.5 rounded-lg bg-[#25D366]/10 text-[#25D366] text-xs font-bold text-center hover:bg-[#25D366]/20 transition-colors flex justify-center items-center gap-1.5">
@@ -382,7 +382,7 @@
                 </div>
 
                 <!-- Receipt Summary -->
-                <div v-if="order.type !== 'custom_errand'" class="p-5 rounded-2xl border border-gray-100">
+                <div v-if="order.type !== 'custom_errand'" class="p-5 rounded-2xl border border-gray-50">
                    <h4 class="text-[11px] font-bold text-gray-400 mb-4 tracking-widest uppercase flex items-center gap-1.5">
                      <Utensils class="w-3.5 h-3.5" /> Receipt Summary
                    </h4>
@@ -390,7 +390,7 @@
                    <div class="space-y-3">
                      <div v-for="item in order.items" :key="item._id" class="flex items-center justify-between gap-3">
                        <div class="flex items-center gap-2.5">
-                         <div class="w-9 h-9 rounded-lg bg-gray-50 border border-gray-100 overflow-hidden shrink-0 relative">
+                         <div class="w-9 h-9 rounded-lg bg-gray-50 border border-gray-50 overflow-hidden shrink-0 relative">
                            <img v-if="item.image" :src="item.image" class="w-full h-full object-cover" />
                            <div v-else class="w-full h-full bg-gray-100 flex items-center justify-center"><Utensils class="w-4 h-4 text-gray-300" /></div>
                          </div>
@@ -414,7 +414,7 @@
                             </button>
                             
                             <div v-if="item.status === 'substituted' && item.substitutedWith?.note" class="mt-1.5 bg-amber-50 rounded p-1.5 border border-amber-100">
-                              <p class="text-[10px] text-amber-700 italic">"{{ item.substitutedWith.note }}"</p>
+                              <p class="text-[10px] text-amber-700 ">"{{ item.substitutedWith.note }}"</p>
                             </div>
                          </div>
                        </div>
@@ -460,7 +460,7 @@
                 </div>
 
                 <!-- Errand Details -->
-                <div v-if="order.type === 'custom_errand'" class="p-5 rounded-2xl border border-gray-100">
+                <div v-if="order.type === 'custom_errand'" class="p-5 rounded-2xl border border-gray-50">
                    <h4 class="text-[11px] font-bold text-gray-400 mb-4 tracking-widest uppercase flex items-center gap-1.5">
                      <ClipboardList class="w-3.5 h-3.5" /> Errand Details
                    </h4>
@@ -471,7 +471,7 @@
 
                      <div class="flex justify-between items-center pt-1">
                        <span class="text-gray-400 text-xs">Urgency</span>
-                       <span class="px-2 py-0.5 rounded border border-gray-200 text-gray-700 font-bold capitalize text-[11px]">{{ order.urgency || 'standard' }}</span>
+                       <span class="px-2 py-0.5 rounded border border-gray-25 text-gray-700 font-bold capitalize text-[11px]">{{ order.urgency || 'standard' }}</span>
                      </div>
                      <div v-if="order.estimatedItemCost" class="flex justify-between items-center">
                        <span class="text-gray-400 text-xs">Est. Item Cost</span>
@@ -504,18 +504,18 @@
                 <!-- Rider Account Details removed -->
 
                 <!-- Proof of Items Photo -->
-                <div v-if="order.type === 'custom_errand' && order.itemsPhoto" class="p-5 rounded-2xl border border-gray-100 flex flex-col items-center">
+                <div v-if="order.type === 'custom_errand' && order.itemsPhoto" class="p-5 rounded-2xl border border-gray-50 flex flex-col items-center">
                    <h4 class="text-[11px] font-bold text-gray-400 mb-4 tracking-widest uppercase flex items-center gap-1.5 w-full">
                      <Camera class="w-3.5 h-3.5" /> Proof of Purchased Items
                    </h4>
-                   <div class="w-full h-48 rounded-xl overflow-hidden bg-gray-50 border border-gray-100 mb-3 cursor-pointer" @click="window.open(order.itemsPhoto, '_blank')">
+                   <div class="w-full h-48 rounded-xl overflow-hidden bg-gray-50 border border-gray-50 mb-3 cursor-pointer" @click="window.open(order.itemsPhoto, '_blank')">
                      <img :src="order.itemsPhoto" class="w-full h-full object-cover hover:scale-105 transition-transform" />
                    </div>
                    <p class="text-xs text-gray-500 text-center">Your rider has uploaded a photo of the items purchased from the vendor.</p>
                 </div>
 
                 <!-- Support -->
-                <NuxtLink to="/support" class="flex items-center justify-between p-4 rounded-2xl border border-gray-100 hover:border-gray-200 transition-colors group">
+                <NuxtLink to="/support" class="flex items-center justify-between p-4 rounded-2xl border border-gray-50 hover:border-gray-200 transition-colors group">
                    <div class="flex items-center gap-3">
                       <LifeBuoy class="w-4 h-4 text-gray-400 group-hover:text-[#FF5C1A] transition-colors" />
                       <div>
@@ -539,7 +539,7 @@
                    </div>
 
                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div v-if="order.type !== 'custom_errand' && !order.hasRatedVendor" class="p-5 rounded-2xl border border-gray-100 flex flex-col items-center">
+                      <div v-if="order.type !== 'custom_errand' && !order.hasRatedVendor" class="p-5 rounded-2xl border border-gray-50 flex flex-col items-center">
                          <Utensils class="w-4 h-4 text-gray-300 mb-3" />
                          <h4 class="font-bold text-sm text-gray-900 mb-0.5">The Meal</h4>
                          <p class="text-[11px] text-gray-400 mb-4">Rate the vendor</p>
@@ -549,10 +549,10 @@
                                <Star :class="['w-6 h-6 transition-colors', ratingForm.vendorRating >= i ? 'text-[#FF5C1A] fill-[#FF5C1A]' : 'text-gray-200']" />
                             </button>
                          </div>
-                         <textarea v-model="ratingForm.vendorReview" placeholder="Feedback on the food..." class="w-full p-3 rounded-lg border border-gray-100 text-xs focus:outline-none focus:border-[#FF5C1A] resize-none h-20 transition-colors"></textarea>
+                         <textarea v-model="ratingForm.vendorReview" placeholder="Feedback on the food..." class="w-full p-3 rounded-lg border border-gray-50 text-xs focus:outline-none focus:border-[#FF5C1A] resize-none h-20 transition-colors"></textarea>
                       </div>
 
-                      <div v-if="!order.hasRatedErrander" class="p-5 rounded-2xl border border-gray-100 flex flex-col items-center" :class="{ 'md:col-span-2 max-w-sm mx-auto w-full': order.type === 'custom_errand' || order.hasRatedVendor }">
+                      <div v-if="!order.hasRatedErrander" class="p-5 rounded-2xl border border-gray-50 flex flex-col items-center" :class="{ 'md:col-span-2 max-w-sm mx-auto w-full': order.type === 'custom_errand' || order.hasRatedVendor }">
                          <Bike class="w-4 h-4 text-gray-300 mb-3" />
                          <h4 class="font-bold text-sm text-gray-900 mb-0.5">The Delivery</h4>
                          <p class="text-[11px] text-gray-400 mb-4">Rate your rider</p>
@@ -562,7 +562,7 @@
                                <Star :class="['w-6 h-6 transition-colors', ratingForm.erranderRating >= i ? 'text-[#FF5C1A] fill-[#FF5C1A]' : 'text-gray-200']" />
                             </button>
                          </div>
-                         <textarea v-model="ratingForm.erranderReview" placeholder="How was the service?" class="w-full p-3 rounded-lg border border-gray-100 text-xs focus:outline-none focus:border-[#FF5C1A] resize-none h-20 transition-colors"></textarea>
+                         <textarea v-model="ratingForm.erranderReview" placeholder="How was the service?" class="w-full p-3 rounded-lg border border-gray-50 text-xs focus:outline-none focus:border-[#FF5C1A] resize-none h-20 transition-colors"></textarea>
                       </div>
                    </div>
 
@@ -757,7 +757,7 @@
           v-model="substituteNote" 
           rows="2" 
           placeholder="E.g. Please ask the vendor to slice it" 
-          class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none"
+          class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-25 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none"
         ></textarea>
       </div>
 

@@ -13,7 +13,7 @@
                 'bg-emerald-500 border-emerald-600 text-white': toast.type === 'success',
                 'bg-amber-500 border-amber-600 text-white': toast.type === 'warning',
                 'bg-blue-500 border-blue-600 text-white': toast.type === 'info',
-                'bg-white border-gray-200 shadow-sm border border-gray-100 text-gray-900': toast.type === 'notification'
+                'bg-white border-gray-200 shadow-sm border border-gray-50 text-gray-900': toast.type === 'notification'
               }
             ]"
             class="w-full rounded-2xl border p-[12px] flex items-center gap-3 cursor-pointer pointer-events-auto"

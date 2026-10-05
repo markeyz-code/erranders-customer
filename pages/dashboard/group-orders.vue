@@ -9,12 +9,12 @@
 
     <!-- Loading State -->
     <div v-if="loading" class="flex flex-col items-center justify-center py-20 gap-4">
-      <div class="w-8 h-8 border-2 border-gray-100 border-t-parentPrimary rounded-full animate-spin"></div>
+      <div class="w-8 h-8 border border-gray-25 border-t-parentPrimary rounded-full animate-spin"></div>
       <p class="text-xs font-bold text-gray-400">Loading your history...</p>
     </div>
 
     <!-- Empty State -->
-    <div v-else-if="!history.length" class="bg-white rounded-3xl border border-gray-100 shadow-sm p-12 text-center">
+    <div v-else-if="!history.length" class="bg-white rounded-3xl border border-gray-50 shadow-sm p-12 text-center">
       <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
         <Users class="w-10 h-10 text-gray-300" />
       </div>
@@ -22,19 +22,19 @@
       <p class="text-sm text-gray-500 max-w-sm mx-auto mb-8">
         You haven't hosted or joined any group orders yet. Start one from a vendor's page to shop together with friends!
       </p>
-      <NuxtLink to="/dashboard/search" class="inline-flex items-center justify-center px-4 py-3 bg-parentPrimary text-white text-sm font-bold rounded-xl shadow-sm border border-gray-100 hover:bg-parentPrimary/90 transition-all">
+      <NuxtLink to="/dashboard/search" class="inline-flex items-center justify-center px-4 py-3 bg-parentPrimary text-white text-sm font-bold rounded-xl shadow-sm border border-gray-50 hover:bg-parentPrimary/90 transition-all">
         Find a Vendor
       </NuxtLink>
     </div>
 
     <!-- History List -->
     <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div v-for="order in history" :key="order._id" class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-sm border border-gray-100 transition-all flex flex-col">
+      <div v-for="order in history" :key="order._id" class="bg-white rounded-2xl border border-gray-50 shadow-sm overflow-hidden hover:shadow-sm border border-gray-50 transition-all flex flex-col">
         
         <div class="p-5 flex-1">
           <div class="flex justify-between items-start mb-4">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl overflow-hidden bg-gray-50 border border-gray-100">
+              <div class="w-10 h-10 rounded-xl overflow-hidden bg-gray-50 border border-gray-50">
                 <video v-if="order.vendor?.logo && order.vendor.logo.match(/\\.(mp4|webm|ogg|mov)$/i)" :src="order.vendor.logo" class="w-full h-full object-cover" autoplay loop muted playsinline></video>
                 <img v-else-if="order.vendor?.logo" :src="order.vendor.logo" class="w-full h-full object-cover" />
                 <span v-else class="w-full h-full flex items-center justify-center text-xs font-bold text-gray-400">{{ order.vendor?.storeName?.[0] }}</span>
@@ -89,7 +89,7 @@
         <div class="px-5 py-4 bg-gray-50/50 border-t border-gray-100 flex items-center gap-3">
           <button 
             @click="handleReuse(order)"
-            class="flex-1 py-2.5 bg-gray-900 text-white rounded-xl text-xs font-bold shadow-sm border border-gray-100 hover:bg-parentPrimary hover:shadow-sm border border-gray-100 transition-all flex items-center justify-center gap-2"
+            class="flex-1 py-2.5 bg-gray-900 text-white rounded-xl text-xs font-bold shadow-sm border border-gray-50 hover:bg-parentPrimary hover:shadow-sm border border-gray-50 transition-all flex items-center justify-center gap-2"
           >
             <RefreshCw class="w-3.5 h-3.5" /> Re-use Order
           </button>
@@ -97,7 +97,7 @@
           <NuxtLink
             v-if="order.status === 'open'"
             :to="`/vendors/${order.vendor?._id}?group=${order.inviteCode}`"
-            class="flex-1 py-2.5 bg-white border border-gray-200 text-gray-900 rounded-xl text-xs font-bold shadow-sm hover:border-parentPrimary hover:text-parentPrimary transition-all flex items-center justify-center gap-2"
+            class="flex-1 py-2.5 bg-white border border-gray-25 text-gray-900 rounded-xl text-xs font-bold shadow-sm hover:border-parentPrimary hover:text-parentPrimary transition-all flex items-center justify-center gap-2"
           >
             Go to Cart
           </NuxtLink>

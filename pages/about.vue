@@ -11,7 +11,7 @@
       </div>
 
       <div class="max-w-7xl mx-auto px-4 sm:px-10 relative z-10 text-center">
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-gray-50 border border-gray-100 text-sm font-medium tracking-[0.2em] uppercase text-gray-400 mb-8">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-gray-50 border border-gray-50 text-sm font-medium tracking-[0.2em] uppercase text-gray-400 mb-8">
           <span class="w-2 h-2 rounded-full bg-parentPrimary animate-pulse"></span>
           Our Mission & Vision
         </div>
@@ -30,7 +30,7 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-10">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <!-- For Students -->
-          <div class="bg-white p-10 rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-sm border border-gray-100 hover:-translate-y-2 transition-all duration-500 group">
+          <div class="bg-white p-10 rounded-[3rem] border border-gray-50 shadow-sm hover:shadow-sm border border-gray-50 hover:-translate-y-2 transition-all duration-500 group">
             <div class="w-16 h-16 bg-blue-50 rounded-[1.5rem] flex items-center justify-center text-parentPrimary mb-8 group-hover:scale-110 transition-transform">
               <GraduationCap class="w-8 h-8" />
             </div>
@@ -43,7 +43,7 @@
           </div>
 
           <!-- For Entrepreneurs -->
-          <div class="bg-white p-10 rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-sm border border-gray-100 hover:-translate-y-2 transition-all duration-500 group">
+          <div class="bg-white p-10 rounded-[3rem] border border-gray-50 shadow-sm hover:shadow-sm border border-gray-50 hover:-translate-y-2 transition-all duration-500 group">
             <div class="w-16 h-16 bg-emerald-50 rounded-[1.5rem] flex items-center justify-center text-emerald-600 mb-8 group-hover:scale-110 transition-transform">
               <Store class="w-8 h-8" />
             </div>
@@ -56,7 +56,7 @@
           </div>
 
           <!-- For Erranders -->
-          <div class="bg-white p-10 rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-sm border border-gray-100 hover:-translate-y-2 transition-all duration-500 group">
+          <div class="bg-white p-10 rounded-[3rem] border border-gray-50 shadow-sm hover:shadow-sm border border-gray-50 hover:-translate-y-2 transition-all duration-500 group">
             <div class="w-16 h-16 bg-indigo-50 rounded-[1.5rem] flex items-center justify-center text-indigo-600 mb-8 group-hover:scale-110 transition-transform">
               <Zap class="w-8 h-8" />
             </div>
@@ -84,7 +84,7 @@
               From the halls of CMUL to every corner of the university environs, we bridge the gap. Our hyper-local network ensures that distance is never a barrier to quality nutrition and essential services.
             </p>
             <div class="pt-6">
-              <NuxtLink to="/auth/register" class="inline-flex items-center gap-4 px-10 py-5 bg-gray-900 text-white rounded-[2rem] font-medium text-sm uppercase  shadow-sm border border-gray-100 hover:bg-parentPrimary transition-all group">
+              <NuxtLink to="/auth/register" class="inline-flex items-center gap-4 px-10 py-5 bg-gray-900 text-white rounded-[2rem] font-medium text-sm uppercase  shadow-sm border border-gray-50 hover:bg-parentPrimary transition-all group">
                 Join our community
                 <ArrowRight class="w-5 h-5 group-hover:translate-x-2 transition-transform" />
               </NuxtLink>

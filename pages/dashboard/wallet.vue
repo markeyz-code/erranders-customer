@@ -4,7 +4,7 @@
       
       <!-- Header -->
       <div class="flex items-center gap-3">
-        <button @click="goBack" class="w-9 h-9 bg-white rounded-xl border border-gray-100 flex items-center justify-center hover:bg-gray-50 transition-all active:scale-95">
+        <button @click="goBack" class="w-9 h-9 bg-white rounded-xl border border-gray-50 flex items-center justify-center hover:bg-gray-50 transition-all active:scale-95">
           <ArrowLeft class="w-4 h-4 text-gray-900" />
         </button>
         <div>
@@ -30,7 +30,7 @@
           </div>
           <button 
             @click="showTopup = true"
-            class="px-4 py-3.5 bg-parentPrimary text-white rounded-xl text-xs font-medium tracking-wider hover:bg-parentPrimary/90 active:scale-95 transition-all shadow-sm border border-gray-100 shadow-parentPrimary/30 flex items-center gap-2 self-start md:self-center"
+            class="px-4 py-3.5 bg-parentPrimary text-white rounded-xl text-xs font-medium tracking-wider hover:bg-parentPrimary/90 active:scale-95 transition-all shadow-sm border border-gray-50 shadow-parentPrimary/30 flex items-center gap-2 self-start md:self-center"
           >
             <Plus class="w-4 h-4" />
             Add Money
@@ -78,7 +78,7 @@
           <div v-for="i in 3" :key="i" class="h-16 bg-gray-50 rounded-xl animate-pulse"></div>
         </div>
 
-        <div v-else-if="transactions.length" class="bg-white rounded-2xl border border-gray-100 overflow-hidden divide-y divide-gray-50">
+        <div v-else-if="transactions.length" class="bg-white rounded-2xl border border-gray-50 overflow-hidden divide-y divide-gray-50">
           <div 
             v-for="tx in transactions" 
             :key="tx._id"
@@ -143,7 +143,7 @@
         leave-to-class="translate-y-full md:translate-y-0 md:scale-95 md:opacity-0"
       >
         <div v-if="showTopup" class="fixed inset-x-0 bottom-0 md:inset-0 md:flex md:items-center md:justify-center md:p-4 z-[111]">
-          <div class="bg-white w-full md:max-w-md rounded-t-[2rem] md:rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+          <div class="bg-white w-full md:max-w-md rounded-t-[2rem] md:rounded-2xl overflow-hidden shadow-sm border border-gray-50">
             <!-- Header with gradient accent -->
             <div class="relative bg-gray-900 px-4 py-4 md:py-5 text-center overflow-hidden">
               <div class="absolute top-0 right-0 w-40 h-40 bg-parentPrimary/20 rounded-full blur-[60px] -mr-16 -mt-16"></div>
@@ -176,7 +176,7 @@
                     v-model="formattedAmount"
                     type="text"
                     placeholder="0"
-                    class="w-full bg-gray-50 border-2 border-transparent focus:border-parentPrimary/20 rounded-xl py-5 pl-11 pr-5 text-2xl font-medium text-gray-900 placeholder:text-gray-200 transition-all outline-none"
+                    class="w-full bg-gray-50 border border-transparent focus:border-parentPrimary/20 rounded-xl py-5 pl-11 pr-5 text-2xl font-medium text-gray-900 placeholder:text-gray-200 transition-all outline-none"
                   />
                 </div>
               </div>
@@ -187,7 +187,7 @@
                   v-for="a in [500, 1000, 2000, 5000]" 
                   :key="a"
                   @click="amount = a"
-                  :class="amount === a ? 'bg-parentPrimary text-white border-parentPrimary shadow-sm border border-gray-100 shadow-parentPrimary/20' : 'bg-white text-gray-600 border-gray-100 hover:border-parentPrimary/30'"
+                  :class="amount === a ? 'bg-parentPrimary text-white border-parentPrimary shadow-sm border border-gray-50 shadow-parentPrimary/20' : 'bg-white text-gray-600 border-gray-100 hover:border-parentPrimary/30'"
                   class="flex-1 py-2.5 rounded-xl text-xs font-medium transition-all border active:scale-95"
                 >
                   ₦{{ a >= 1000 ? (a / 1000) + 'k' : a }}
@@ -208,7 +208,7 @@
               <button 
                 @click="initiateTopup"
                 :disabled="loadingPayment || amount < 50"
-                class="w-full py-4 bg-parentPrimary text-white rounded-xl text-xs font-medium tracking-wider hover:bg-parentPrimary/90 disabled:opacity-40 transition-all shadow-sm border border-gray-100 shadow-parentPrimary/20 flex items-center justify-center gap-2 active:scale-[0.98]"
+                class="w-full py-4 bg-parentPrimary text-white rounded-xl text-xs font-medium tracking-wider hover:bg-parentPrimary/90 disabled:opacity-40 transition-all shadow-sm border border-gray-50 shadow-parentPrimary/20 flex items-center justify-center gap-2 active:scale-[0.98]"
               >
                 <Loader2 v-if="loadingPayment" class="w-4 h-4 animate-spin" />
                 <span v-else>Continue with Paystack</span>
@@ -238,7 +238,7 @@
         leave-to-class="opacity-0"
       >
         <div v-if="selectedTx" class="fixed inset-0 z-[110] flex items-end md:items-center justify-center p-0 md:p-4 bg-black/50 backdrop-blur-sm" @click.self="selectedTx = null">
-          <div class="bg-white w-full md:max-w-md rounded-t-[2rem] md:rounded-2xl overflow-hidden shadow-sm border border-gray-100 animate-slide-up-mobile md:animate-zoom-in receipt-content" id="receipt-print">
+          <div class="bg-white w-full md:max-w-md rounded-t-[2rem] md:rounded-2xl overflow-hidden shadow-sm border border-gray-50 animate-slide-up-mobile md:animate-zoom-in receipt-content" id="receipt-print">
             <!-- Header -->
             <div class="bg-gray-900 p-4 md:p-5 text-center relative overflow-hidden">
               <div class="absolute inset-0 bg-emerald-500/5 blur-3xl rounded-full translate-y-12"></div>
@@ -252,7 +252,7 @@
               
               <div 
                 :class="selectedTx.type === 'credit' ? 'bg-emerald-500 shadow-emerald-500/20' : 'bg-parentPrimary shadow-parentPrimary/20'"
-                class="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center text-white shadow-sm border border-gray-100 mb-4 relative z-10"
+                class="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center text-white shadow-sm border border-gray-50 mb-4 relative z-10"
               >
                 <WalletIcon v-if="selectedTx.type === 'credit'" class="w-8 h-8" />
                 <ShoppingBag v-else class="w-8 h-8" />
@@ -266,7 +266,7 @@
 
             <!-- Body -->
             <div class="p-5 md:p-4 space-y-5 max-h-[50vh] md:max-h-none overflow-y-auto">
-              <div class="space-y-4 bg-gray-50 rounded-xl p-4 border border-gray-100">
+              <div class="space-y-4 bg-gray-50 rounded-xl p-4 border border-gray-50">
                 <div class="flex justify-between items-center">
                   <span class="text-sm font-bold text-gray-400 tracking-wider">Status</span>
                   <span :class="selectedTx.status === 'completed' ? 'text-emerald-500 bg-emerald-50 border-emerald-100' : 'text-amber-500 bg-amber-50 border-amber-100'" class="text-sm font-medium px-2.5 py-1 rounded-lg border">
@@ -279,7 +279,7 @@
                 </div>
                 <div class="flex justify-between items-center">
                   <span class="text-sm font-bold text-gray-400 tracking-wider">Reference</span>
-                  <span class="text-sm font-mono font-bold text-gray-900 bg-white px-2 py-1 rounded-md border border-gray-100">{{ selectedTx.reference || 'N/A' }}</span>
+                  <span class="text-sm font-mono font-bold text-gray-900 bg-white px-2 py-1 rounded-md border border-gray-50">{{ selectedTx.reference || 'N/A' }}</span>
                 </div>
                 <div class="flex justify-between items-center">
                   <span class="text-sm font-bold text-gray-400 tracking-wider">Date</span>

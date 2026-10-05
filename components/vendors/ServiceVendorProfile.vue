@@ -222,7 +222,7 @@
                       </div>
                       <div v-if="!day.isClosed && day.breaks && day.breaks.length > 0" class="flex flex-col gap-1 pl-4 mt-1 border-l-2 border-orange-200">
                         <div v-for="(b, i) in day.breaks" :key="i" class="flex justify-between items-center text-[10px]">
-                          <span class="text-orange-600/80 italic font-medium truncate max-w-[80px]">{{ b.title || 'Break' }}</span>
+                          <span class="text-orange-600/80  font-medium truncate max-w-[80px]">{{ b.title || 'Break' }}</span>
                           <span class="text-orange-500 font-mono font-medium opacity-80">{{ b.start }} - {{ b.end }}</span>
                         </div>
                       </div>
@@ -360,7 +360,7 @@
                 </div>
                 <div v-if="!day.isClosed && day.breaks && day.breaks.length > 0" class="flex flex-col gap-1 pl-4 mt-1 border-l-2 border-orange-200">
                   <div v-for="(b, i) in day.breaks" :key="i" class="flex justify-between items-center text-[10px]">
-                    <span class="text-orange-600/80 italic font-medium truncate max-w-[80px]">{{ b.title || 'Break' }}</span>
+                    <span class="text-orange-600/80  font-medium truncate max-w-[80px]">{{ b.title || 'Break' }}</span>
                     <span class="text-orange-500 font-mono font-medium opacity-80">{{ b.start }} - {{ b.end }}</span>
                   </div>
                 </div>

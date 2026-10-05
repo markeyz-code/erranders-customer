@@ -5,7 +5,7 @@
       <div class="absolute inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity" @click="closeModal"></div>
       
       <!-- Modal Content -->
-      <div class="relative bg-white w-full max-w-sm rounded-3xl shadow-sm border border-gray-100 border border-gray-100 flex flex-col overflow-hidden animate-zoom-in">
+      <div class="relative bg-white w-full max-w-sm rounded-3xl shadow-sm border border-gray-50 border border-gray-50 flex flex-col overflow-hidden animate-zoom-in">
         <!-- Close Button -->
         <button 
           @click="closeModal"
@@ -41,7 +41,7 @@
               <textarea 
                 v-model="reason" 
                 placeholder="Tell us what went wrong..."
-                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all resize-none min-h-[100px]"
+                class="w-full px-4 py-3 bg-gray-50 border border-gray-25 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all resize-none min-h-[100px]"
                 :disabled="loading"
               ></textarea>
             </div>
@@ -65,7 +65,7 @@
               type="button" 
               @click="closeModal"
               :disabled="loading"
-              class="w-full py-3 bg-white text-gray-700 rounded-xl text-sm font-bold hover:bg-gray-50 transition-all border border-gray-200"
+              class="w-full py-3 bg-white text-gray-700 rounded-xl text-sm font-bold hover:bg-gray-50 transition-all border border-gray-25"
             >
               Cancel
             </button>

@@ -11,10 +11,10 @@
         <div class="flex items-center gap-4">
           <NuxtLink to="/vendors" class="text-sm font-bold text-parentPrimary hover:underline underline-offset-4 hidden sm:block">View All Vendors &rarr;</NuxtLink>
           <div class="flex gap-2">
-            <button @click="scrollCarousel('left')" class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 hover:text-parentPrimary hover:border-parentPrimary transition-colors shadow-sm bg-white z-10">
+            <button @click="scrollCarousel('left')" class="w-10 h-10 rounded-full border border-gray-25 flex items-center justify-center text-gray-600 hover:bg-gray-50 hover:text-parentPrimary hover:border-parentPrimary transition-colors shadow-sm bg-white z-10">
               <ChevronLeft class="w-5 h-5" />
             </button>
-            <button @click="scrollCarousel('right')" class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 hover:text-parentPrimary hover:border-parentPrimary transition-colors shadow-sm bg-white z-10">
+            <button @click="scrollCarousel('right')" class="w-10 h-10 rounded-full border border-gray-25 flex items-center justify-center text-gray-600 hover:bg-gray-50 hover:text-parentPrimary hover:border-parentPrimary transition-colors shadow-sm bg-white z-10">
               <ChevronRight class="w-5 h-5" />
             </button>
           </div>
@@ -28,7 +28,7 @@
         
         <!-- Skeleton loaders -->
         <template v-if="loading">
-          <div v-for="i in 4" :key="i" class="min-w-[280px] sm:min-w-[320px] h-[280px] bg-gray-50 rounded-3xl animate-pulse shadow-sm border border-gray-100 snap-start shrink-0" />
+          <div v-for="i in 4" :key="i" class="min-w-[280px] sm:min-w-[320px] h-[280px] bg-gray-50 rounded-3xl animate-pulse shadow-sm border border-gray-50 snap-start shrink-0" />
         </template>
 
         <!-- NO VENDORS (Only for all vendors block, else hide section?) We just show empty text -->
@@ -44,7 +44,7 @@
             class="min-w-[280px] sm:min-w-[320px] w-[280px] sm:w-[320px] snap-start shrink-0 group cursor-pointer relative flex flex-col bg-white rounded-3xl hover:-translate-y-1 transition-all duration-300"
           >
             <!-- TOP IMAGE AREA -->
-            <div class="relative h-[200px] w-full overflow-hidden rounded-3xl border border-gray-100 shadow-sm">
+            <div class="relative h-[200px] w-full overflow-hidden rounded-3xl border border-gray-50 shadow-sm">
               <!-- Closed State Overlay -->
               <template v-if="!vendor.isOpen">
                 <video
@@ -84,16 +84,16 @@
 
               <!-- TOP LEFT BADGES -->
               <div class="absolute top-3 left-3 flex flex-col gap-2">
-                <span v-if="vendor.isFeatured" class="px-2.5 py-1 bg-white shadow-sm border border-gray-100 rounded-lg text-gray-900 text-[10px] font-extrabold tracking-wide uppercase">
+                <span v-if="vendor.isFeatured" class="px-2.5 py-1 bg-white shadow-sm border border-gray-50 rounded-lg text-gray-900 text-[10px] font-extrabold tracking-wide uppercase">
                   Featured
                 </span>
-                <span v-else-if="vendor.businessType === 'service_provider'" class="px-2.5 py-1 bg-white shadow-sm border border-gray-100 rounded-lg text-purple-700 text-[10px] font-extrabold tracking-wide uppercase">
+                <span v-else-if="vendor.businessType === 'service_provider'" class="px-2.5 py-1 bg-white shadow-sm border border-gray-50 rounded-lg text-purple-700 text-[10px] font-extrabold tracking-wide uppercase">
                   Service
                 </span>
-                <span v-else-if="vendor.businessType === 'hybrid'" class="px-2.5 py-1 bg-white shadow-sm border border-gray-100 rounded-lg text-indigo-700 text-[10px] font-extrabold tracking-wide uppercase">
+                <span v-else-if="vendor.businessType === 'hybrid'" class="px-2.5 py-1 bg-white shadow-sm border border-gray-50 rounded-lg text-indigo-700 text-[10px] font-extrabold tracking-wide uppercase">
                   Hybrid
                 </span>
-                <span v-if="vendor.preOrderOnly" class="px-2.5 py-1 bg-white shadow-sm border border-gray-100 rounded-lg text-rose-600 text-[10px] font-extrabold tracking-wide uppercase">
+                <span v-if="vendor.preOrderOnly" class="px-2.5 py-1 bg-white shadow-sm border border-gray-50 rounded-lg text-rose-600 text-[10px] font-extrabold tracking-wide uppercase">
                   Pre-order
                 </span>
               </div>

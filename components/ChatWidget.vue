@@ -5,7 +5,7 @@
         <div
           v-if="isOpen"
           :class="[
-            'bg-white shadow-sm border border-gray-100 overflow-hidden flex flex-col transition-all duration-300',
+            'bg-white shadow-sm border border-gray-50 overflow-hidden flex flex-col transition-all duration-300',
             // Mobile (default)
             'fixed inset-0 w-full h-[100dvh] rounded-none z-[999999]',
             // Desktop (sm and up)
@@ -68,7 +68,7 @@
                         :disabled="isLoggedIn"
                         type="text" 
                         placeholder="Enter your name here"
-                        class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-parentPrimary/50 focus:border-parentPrimary transition disabled:opacity-70 disabled:cursor-not-allowed"
+                        class="w-full bg-gray-50 border border-gray-25 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-parentPrimary/50 focus:border-parentPrimary transition disabled:opacity-70 disabled:cursor-not-allowed"
                       />
                       <Lock v-if="isLoggedIn" class="w-4 h-4 absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" />
                     </div>
@@ -81,7 +81,7 @@
                         :disabled="isLoggedIn"
                         type="email" 
                         placeholder="Enter your email here"
-                        class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-parentPrimary/50 focus:border-parentPrimary transition disabled:opacity-70 disabled:cursor-not-allowed"
+                        class="w-full bg-gray-50 border border-gray-25 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-parentPrimary/50 focus:border-parentPrimary transition disabled:opacity-70 disabled:cursor-not-allowed"
                       />
                       <Lock v-if="isLoggedIn" class="w-4 h-4 absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" />
                     </div>
@@ -94,7 +94,7 @@
                         :disabled="isLoggedIn && !!(user as any)?.phone && (user as any)?.phone.trim() !== ''"
                         type="tel" 
                         placeholder="Enter your phone number here"
-                        class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-parentPrimary/50 focus:border-parentPrimary transition disabled:opacity-70 disabled:cursor-not-allowed"
+                        class="w-full bg-gray-50 border border-gray-25 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-parentPrimary/50 focus:border-parentPrimary transition disabled:opacity-70 disabled:cursor-not-allowed"
                         @blur="handlePhoneUpdate"
                       />
                       <Lock v-if="isLoggedIn && !!(user as any)?.phone && (user as any)?.phone.trim() !== ''" class="w-4 h-4 absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -119,7 +119,7 @@
                 }"
               >
                 <div
-                  class="max-w-[85%] rounded-[1.5rem] px-5 py-3.5 shadow-sm border border-gray-100 backdrop-blur-md"
+                  class="max-w-[85%] rounded-[1.5rem] px-5 py-3.5 shadow-sm border border-gray-50 backdrop-blur-md"
                   :class="getBubbleStyle(message)"
                 >
                   <p class="text-[11px] font-bold uppercase tracking-wider mb-1" :class="getBubbleLabelStyle(message)" v-if="showSenderLabel(message)">
@@ -162,7 +162,7 @@
                   v-for="faq in faqs.slice(0, 8)"
                   :key="faq._id"
                   @click="handleFaqClick(faq)"
-                  class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full text-[13px] font-semibold transition-colors border border-gray-200/50 whitespace-nowrap"
+                  class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full text-[13px] font-semibold transition-colors border border-gray-25/50 whitespace-nowrap"
                 >
                   {{ faq.question }}
                 </button>
@@ -189,14 +189,14 @@
                 class="text-gray-400 hover:text-gray-600 transition-colors p-2 disabled:opacity-50" 
                 title="Attach file"
               >
-                <div v-if="uploadingMedia" class="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+                <div v-if="uploadingMedia" class="w-5 h-5 border border-gray-400 border-t-transparent rounded-full animate-spin"></div>
                 <Paperclip v-else class="w-5 h-5" />
               </button>
               <button
                 v-if="newMessage.trim()"
                 @click="handleSend"
                 :disabled="sending || !newMessage.trim() || (isGuest && needsGuestInfo)"
-                class="w-10 h-10 rounded-full bg-[#FF5C1A] hover:bg-[#E54D12] text-white flex items-center justify-center disabled:opacity-50 transition-all shadow-sm border border-gray-100 shadow-orange-500/20 animate-in zoom-in"
+                class="w-10 h-10 rounded-full bg-[#FF5C1A] hover:bg-[#E54D12] text-white flex items-center justify-center disabled:opacity-50 transition-all shadow-sm border border-gray-50 shadow-orange-500/20 animate-in zoom-in"
               >
                 <ArrowRight class="w-5 h-5" />
               </button>
@@ -208,14 +208,14 @@
       <!-- Floating Button with Unread Badge / Tooltip -->
       <div class="relative flex flex-col items-end">
         <Transition name="fade-slide">
-          <div v-if="unreadCount > 0 && !isOpen" class="absolute bottom-full mb-3 right-0 bg-white shadow-lg rounded-2xl px-4 py-3 flex flex-col items-center shadow-black/10 border border-gray-100 whitespace-nowrap animate-bounce">
+          <div v-if="unreadCount > 0 && !isOpen" class="absolute bottom-full mb-3 right-0 bg-white shadow-lg rounded-2xl px-4 py-3 flex flex-col items-center shadow-black/10 border border-gray-50 whitespace-nowrap animate-bounce">
             <span class="text-[13px] font-semibold text-gray-800">You have {{ unreadCount }} new message{{ unreadCount > 1 ? 's' : '' }}!</span>
             <div class="absolute -bottom-2 right-6 w-4 h-4 bg-white transform rotate-45 border-b border-r border-gray-100"></div>
           </div>
         </Transition>
         <button
           @click="toggleChat"
-          class="group relative w-14 h-14 rounded-full bg-gradient-to-tr from-[#FF6B35] to-[#FF5C1A] text-white shadow-sm border border-gray-100 shadow-[#FF5C1A]/40 flex items-center justify-center hover:scale-105 hover:-translate-y-1 transition-all duration-300"
+          class="group relative w-14 h-14 rounded-full bg-gradient-to-tr from-[#FF6B35] to-[#FF5C1A] text-white shadow-sm border border-gray-50 shadow-[#FF5C1A]/40 flex items-center justify-center hover:scale-105 hover:-translate-y-1 transition-all duration-300"
           aria-label="Open chat"
         >
           <div v-if="unreadCount > 0 && !isOpen" class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full shadow-sm animate-pulse"></div>
@@ -369,7 +369,7 @@ function getBubbleStyle(message: ChatMessage) {
   if (isMine(message)) {
     return 'bg-parentPrimary text-white rounded-br-sm shadow-sm border border-parentPrimary shadow-[#FF5C1A]/20';
   }
-  return 'bg-gray-100 text-gray-900 rounded-bl-sm border border-gray-100';
+  return 'bg-gray-100 text-gray-900 rounded-bl-sm border border-gray-50';
 }
 
 function getBubbleLabelStyle(message: ChatMessage) {

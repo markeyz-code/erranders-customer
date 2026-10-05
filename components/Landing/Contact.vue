@@ -21,7 +21,7 @@
               type="text" 
               placeholder="First Name" 
               required
-              class="w-full px-5 py-5 bg-gray-50 border border-gray-100 rounded-[1.5rem] text-base font-bold text-gray-900 focus:bg-white focus:border-parentPrimary transition-all outline-none"
+              class="w-full px-5 py-5 bg-gray-50 border border-gray-50 rounded-[1.5rem] text-base font-bold text-gray-900 focus:bg-white focus:border-parentPrimary transition-all outline-none"
             />
           </div>
           <div class="space-y-2">
@@ -30,7 +30,7 @@
               type="text" 
               placeholder="Last Name" 
               required
-              class="w-full px-5 py-5 bg-gray-50 border border-gray-100 rounded-[1.5rem] text-base font-bold text-gray-900 focus:bg-white focus:border-parentPrimary transition-all outline-none"
+              class="w-full px-5 py-5 bg-gray-50 border border-gray-50 rounded-[1.5rem] text-base font-bold text-gray-900 focus:bg-white focus:border-parentPrimary transition-all outline-none"
             />
           </div>
         </div>
@@ -39,7 +39,7 @@
           <select 
             v-model="form.inquiryType"
             required
-            class="w-full px-5 py-5 bg-gray-50 border border-gray-100 rounded-[1.5rem] text-base font-bold text-gray-900 focus:bg-white focus:border-parentPrimary transition-all outline-none appearance-none cursor-pointer"
+            class="w-full px-5 py-5 bg-gray-50 border border-gray-50 rounded-[1.5rem] text-base font-bold text-gray-900 focus:bg-white focus:border-parentPrimary transition-all outline-none appearance-none cursor-pointer"
           >
             <option value="" disabled selected>Select Inquiry Type</option>
             <option value="vendor">Become a Vendor</option>
@@ -57,7 +57,7 @@
           <select 
             v-model="form.contactMethod"
             required
-            class="w-full px-5 py-5 bg-gray-50 border border-gray-100 rounded-[1.5rem] text-base font-bold text-gray-900 focus:bg-white focus:border-parentPrimary transition-all outline-none appearance-none cursor-pointer"
+            class="w-full px-5 py-5 bg-gray-50 border border-gray-50 rounded-[1.5rem] text-base font-bold text-gray-900 focus:bg-white focus:border-parentPrimary transition-all outline-none appearance-none cursor-pointer"
           >
             <option value="" disabled selected>Choose Preferred Contact Method</option>
             <option value="email">Email</option>
@@ -75,7 +75,7 @@
             placeholder="Add a Note (How can we help?)" 
             rows="5"
             required
-            class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-[2rem] text-base font-bold text-gray-900 focus:bg-white focus:border-parentPrimary transition-all outline-none resize-none"
+            class="w-full px-5 py-4 bg-gray-50 border border-gray-50 rounded-[2rem] text-base font-bold text-gray-900 focus:bg-white focus:border-parentPrimary transition-all outline-none resize-none"
           ></textarea>
         </div>
 
@@ -83,7 +83,7 @@
           <button 
             type="submit"
             :disabled="loading"
-            class="px-10 py-5 bg-gray-900 text-white rounded-[2rem] font-medium text-sm uppercase tracking-[0.2em] shadow-sm border border-gray-100 hover:bg-parentPrimary hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 flex items-center gap-3 mx-auto lg:mx-0"
+            class="px-10 py-5 bg-gray-900 text-white rounded-[2rem] font-medium text-sm uppercase tracking-[0.2em] shadow-sm border border-gray-50 hover:bg-parentPrimary hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 flex items-center gap-3 mx-auto lg:mx-0"
           >
             <span v-if="loading">Sending...</span>
             <span v-else>Send Request</span>

@@ -4,9 +4,9 @@
       
       <!-- Report Header -->
       <div class="px-4 sm:px-0">
-        <div class="bg-white border border-gray-100 shadow-sm p-4 sm:p-5 rounded-2xl flex flex-col gap-4">
+        <div class="bg-white border border-gray-50 shadow-sm p-4 sm:p-5 rounded-2xl flex flex-col gap-4">
           <div class="flex items-center gap-3">
-            <button @click="$router.back()" class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center border border-gray-100 hover:bg-gray-100">
+            <button @click="$router.back()" class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center border border-gray-50 hover:bg-gray-100">
               <ArrowLeft class="w-4 h-4 text-gray-900" />
             </button>
             <div class="flex-1 min-w-0">
@@ -22,14 +22,14 @@
               {{ report?.status }}
             </span>
           </div>
-          <p class="text-sm text-gray-600 bg-gray-50 p-4 rounded-xl border border-gray-100 leading-relaxed font-medium">
+          <p class="text-sm text-gray-600 bg-gray-50 p-4 rounded-xl border border-gray-50 leading-relaxed font-medium">
             {{ report?.description }}
           </p>
         </div>
       </div>
 
       <!-- Chat Thread with Admin -->
-      <div class="flex-1 min-h-[300px] flex flex-col bg-white border-0 sm:border border-gray-100 rounded-none sm:rounded-[2rem] overflow-hidden shadow-none sm:shadow-sm">
+      <div class="flex-1 min-h-[300px] flex flex-col bg-white border-0 sm:border border-gray-50 rounded-none sm:rounded-[2rem] overflow-hidden shadow-none sm:shadow-sm">
         <div ref="threadContainer" class="flex-1 overflow-y-auto p-4 sm:p-4 space-y-4">
           <div 
             v-for="msg in report?.thread" 
@@ -41,7 +41,7 @@
               <div 
                 class="rounded-2xl px-4 py-2.5 text-sm font-medium leading-relaxed" 
                 :class="msg.isAdmin 
-                  ? 'bg-gray-50 border border-gray-100 text-gray-900 rounded-bl-sm' 
+                  ? 'bg-gray-50 border border-gray-50 text-gray-900 rounded-bl-sm' 
                   : 'bg-parentPrimary text-white shadow-sm rounded-br-sm'"
               >
                 <div v-if="msg.isAdmin" class="flex items-center gap-1 mb-1">
@@ -59,7 +59,7 @@
           </div>
           
           <div v-if="!report?.thread?.length" class="text-center py-16 space-y-3">
-            <div class="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto text-gray-400 border border-gray-100">
+            <div class="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto text-gray-400 border border-gray-50">
               <MessageSquare class="w-5 h-5" />
             </div>
             <div>
@@ -75,7 +75,7 @@
             v-model="newMessage"
             type="text"
             placeholder="Type your message to support..."
-            class="flex-1 bg-white rounded-xl border border-gray-100 px-4 py-3 text-base font-medium focus:outline-none focus:border-parentPrimary transition-colors"
+            class="flex-1 bg-white rounded-xl border border-gray-50 px-4 py-3 text-base font-medium focus:outline-none focus:border-parentPrimary transition-colors"
             @keyup.enter="sendMessage"
           />
           <button 

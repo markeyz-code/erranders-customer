@@ -18,7 +18,7 @@
         <div 
           v-for="(leader, idx) in podium" 
           :key="idx" 
-          class="relative bg-white border border-gray-100 p-5 rounded-2xl flex flex-col items-center text-center group hover:-translate-y-0.5 transition-all duration-300"
+          class="relative bg-white border border-gray-50 p-5 rounded-2xl flex flex-col items-center text-center group hover:-translate-y-0.5 transition-all duration-300"
           :class="idx === 0 ? 'bg-gradient-to-b from-amber-50/30 to-white border-amber-200/50 shadow-sm' : ''"
         >
           <!-- Ranking Badge -->
@@ -26,7 +26,7 @@
             #{{ idx + 1 }}
           </div>
           
-          <div class="w-14 h-14 rounded-2xl bg-gray-50 mb-3 overflow-hidden border-2 border-white shadow-sm relative">
+          <div class="w-14 h-14 rounded-2xl bg-gray-50 mb-3 overflow-hidden border border-white shadow-sm relative">
              <img v-if="leader.avatar" :src="leader.avatar" class="w-full h-full object-cover" />
              <div v-else class="w-full h-full flex items-center justify-center text-base font-medium bg-parentPrimary/10 text-parentPrimary uppercase">
                 {{ leader.firstName?.[0] }}{{ leader.lastName?.[0] }}
@@ -36,7 +36,7 @@
           <h3 class="text-xs font-medium text-gray-900 tracking-tight mb-0.5">{{ leader.firstName }} {{ leader.lastName }}</h3>
           <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-3">{{ leader.faculty || 'Campus' }}</p>
           
-          <div class="px-2.5 py-1 bg-gray-50 border border-gray-100 rounded-lg text-[10px] font-medium text-parentPrimary tracking-tight">
+          <div class="px-2.5 py-1 bg-gray-50 border border-gray-50 rounded-lg text-[10px] font-medium text-parentPrimary tracking-tight">
              {{ leader.points }} PTS
           </div>
         </div>
@@ -49,14 +49,14 @@
 
       <!-- Rewards Info Side -->
       <div class="lg:col-span-4 space-y-6">
-        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm relative overflow-hidden group">
+        <div class="bg-white rounded-2xl p-4 border border-gray-50 shadow-sm relative overflow-hidden group">
           <div class="absolute -right-10 -top-10 w-40 h-40 bg-parentPrimary/5 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-700"></div>
           
           <div class="relative z-10">
             <h4 class="text-xs font-medium uppercase tracking-widest text-gray-400 mb-5">Hall of Fame Perks</h4>
             <div class="space-y-4">
                <div v-for="perk in perks" :key="perk.title" class="flex items-start gap-3">
-                  <div class="w-7 h-7 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center text-xs shrink-0">{{ perk.icon }}</div>
+                  <div class="w-7 h-7 rounded-lg bg-gray-50 border border-gray-50 flex items-center justify-center text-xs shrink-0">{{ perk.icon }}</div>
                   <div>
                      <p class="text-xs font-medium tracking-tight text-gray-900 mb-0.5">{{ perk.title }}</p>
                      <p class="text-[11px] font-bold text-gray-500 leading-relaxed">{{ perk.desc }}</p>
@@ -110,7 +110,7 @@ const perks = [
 
 const getPodiumBadge = (idx: number) => {
   if (idx === 0) return 'bg-amber-100 text-amber-800 border border-amber-200/50';
-  if (idx === 1) return 'bg-gray-100 text-gray-800 border border-gray-200/50';
+  if (idx === 1) return 'bg-gray-100 text-gray-800 border border-gray-25/50';
   return 'bg-amber-50 text-amber-700 border border-amber-100/50';
 };
 

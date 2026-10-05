@@ -4,7 +4,7 @@
       
       <!-- Header -->
       <div class="flex items-center gap-3 px-4 sm:px-0">
-        <button @click="router.back()" class="w-9 h-9 bg-white rounded-xl border border-gray-100 flex items-center justify-center hover:bg-gray-50 transition-all active:scale-95">
+        <button @click="router.back()" class="w-9 h-9 bg-white rounded-xl border border-gray-50 flex items-center justify-center hover:bg-gray-50 transition-all active:scale-95">
           <ArrowLeft class="w-4 h-4 text-gray-900" />
         </button>
         <div>
@@ -22,7 +22,7 @@
             v-for="report in reports"
             :key="report._id"
             :to="`/support/${report._id}`"
-            class="block bg-white border border-gray-100 hover:border-parentPrimary/30 p-5 rounded-2xl shadow-sm hover:shadow-sm border border-gray-100 transition-all group relative overflow-hidden"
+            class="block bg-white border border-gray-50 hover:border-parentPrimary/30 p-5 rounded-2xl shadow-sm hover:shadow-sm border border-gray-50 transition-all group relative overflow-hidden"
           >
             <div class="flex justify-between items-start gap-4 mb-3">
               <div class="space-y-2">
@@ -59,7 +59,7 @@
 
       <!-- New Report Form Card -->
       <div class="px-0 sm:px-4">
-        <div class="bg-white p-4 sm:p-5 rounded-none sm:rounded-[2.5rem] border-0 sm:border border-gray-100 shadow-none sm:shadow-sm relative overflow-hidden group">
+        <div class="bg-white p-4 sm:p-5 rounded-none sm:rounded-[2.5rem] border-0 sm:border border-gray-50 shadow-none sm:shadow-sm relative overflow-hidden group">
           <div class="absolute -right-6 -top-6 p-5 opacity-5 text-gray-900 pointer-events-none">
             <MessageSquare class="w-24 h-24" />
           </div>
@@ -92,7 +92,7 @@
                 v-model="form.title" 
                 type="text" 
                 placeholder="Brief summary of the issue" 
-                class="w-full bg-white rounded-xl border border-gray-100 p-3.5 text-base font-medium focus:outline-none focus:border-parentPrimary transition-colors" 
+                class="w-full bg-white rounded-xl border border-gray-50 p-3.5 text-base font-medium focus:outline-none focus:border-parentPrimary transition-colors" 
                 required 
               />
             </div>
@@ -104,7 +104,7 @@
                 v-model="form.description" 
                 rows="5" 
                 placeholder="Describe your issue in detail..." 
-                class="w-full bg-white rounded-xl border border-gray-100 p-4 text-base font-medium focus:outline-none focus:border-parentPrimary transition-colors resize-none" 
+                class="w-full bg-white rounded-xl border border-gray-50 p-4 text-base font-medium focus:outline-none focus:border-parentPrimary transition-colors resize-none" 
                 required 
               />
             </div>
@@ -113,7 +113,7 @@
             <button 
               type="submit" 
               :disabled="submitting || !form.category || !form.title || !form.description" 
-              class="w-full py-4 bg-parentPrimary text-white rounded-xl text-xs font-medium hover:bg-parentPrimary/90 active:scale-[0.98] transition-all shadow-sm border border-gray-100 shadow-parentPrimary/20 disabled:opacity-50 flex items-center justify-center gap-2"
+              class="w-full py-4 bg-parentPrimary text-white rounded-xl text-xs font-medium hover:bg-parentPrimary/90 active:scale-[0.98] transition-all shadow-sm border border-gray-50 shadow-parentPrimary/20 disabled:opacity-50 flex items-center justify-center gap-2"
             >
               <Send class="w-3.5 h-3.5" />
               {{ submitting ? 'submitting ticket...' : 'submit support ticket' }}

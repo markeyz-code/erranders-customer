@@ -3,7 +3,7 @@
     <!-- Header -->
     <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 px-4 md:px-5 py-3 flex items-center justify-between">
       <div class="flex items-center gap-4">
-        <button @click="$router.back()" class="w-9 h-9 rounded-full bg-white flex items-center justify-center hover:bg-gray-50 transition-colors border border-gray-200">
+        <button @click="$router.back()" class="w-9 h-9 rounded-full bg-white flex items-center justify-center hover:bg-gray-50 transition-colors border border-gray-25">
           <ArrowLeft class="w-4 h-4 text-gray-700" />
         </button>
         <h1 class="font-bold text-lg">All Services</h1>
@@ -41,7 +41,7 @@
           <div 
             v-for="service in filteredServices" 
             :key="service._id"
-            class="flex items-center justify-between p-4 rounded-xl bg-white border border-gray-100 hover:border-parentPrimary/30 transition-all group"
+            class="flex items-center justify-between p-4 rounded-xl bg-white border border-gray-50 hover:border-parentPrimary/30 transition-all group"
           >
             <div class="pr-4">
               <div class="flex items-center gap-2 mb-1">
@@ -59,13 +59,13 @@
             <div class="flex items-center gap-2">
               <button 
                 @click="messageVendor(service)"
-                class="px-5 py-2 rounded-full bg-white text-gray-700 font-bold text-xs hover:bg-gray-100 transition-colors shrink-0 border border-gray-200"
+                class="px-5 py-2 rounded-full bg-white text-gray-700 font-bold text-xs hover:bg-gray-100 transition-colors shrink-0 border border-gray-25"
               >
                 Message
               </button>
               <button 
                 @click="handleBookService(service)"
-                class="px-5 py-2 rounded-full bg-gray-50 text-parentPrimary font-bold text-xs hover:bg-parentPrimary hover:text-white transition-colors shrink-0 border border-gray-200 hover:border-parentPrimary"
+                class="px-5 py-2 rounded-full bg-gray-50 text-parentPrimary font-bold text-xs hover:bg-parentPrimary hover:text-white transition-colors shrink-0 border border-gray-25 hover:border-parentPrimary"
               >
                 Book
               </button>

@@ -7,14 +7,14 @@
       <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-gray-50">
         <div class="max-w-5xl mx-auto flex items-center justify-between px-4 md:px-4 py-4">
           <NuxtLink to="/" class="flex items-center gap-2.5 group">
-            <!-- <div class="w-9 h-9 bg-gray-900 rounded-xl flex items-center justify-center text-white shadow-sm border border-gray-100 group-hover:bg-parentPrimary transition-all">
+            <!-- <div class="w-9 h-9 bg-gray-900 rounded-xl flex items-center justify-center text-white shadow-sm border border-gray-50 group-hover:bg-parentPrimary transition-all">
               <ShoppingBag class="w-4 h-4" />
             </div>
             <span class="text-lg font-bold text-gray-900 tracking-tighter">Errandr</span> -->
             <img src="@/assets/img/logo-light.png" class="w-32" />
           </NuxtLink>
           
-          <NuxtLink to="/dashboard/search" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100 hover:bg-gray-100 transition-all active:scale-95 text-gray-900">
+          <NuxtLink to="/dashboard/search" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center border border-gray-50 hover:bg-gray-100 transition-all active:scale-95 text-gray-900">
             <Search class="w-4.5 h-4.5" />
           </NuxtLink>
         </div>
@@ -24,7 +24,7 @@
         <div class="w-24 h-24 bg-gray-50 rounded-[2rem] flex items-center justify-center text-5xl mb-8 animate-float">🛒</div>
         <h2 class="text-3xl font-medium text-gray-900 mb-3 tracking-tight">Your cart is empty</h2>
         <p class="text-sm font-medium text-gray-400 mb-8 leading-relaxed">Discover your favorite campus meals and start building your order.</p>
-        <NuxtLink to="/vendors" class="px-5 py-4 bg-gray-900 text-white rounded-2xl font-medium text-xs tracking-wider hover:bg-parentPrimary transition-all active:scale-95 flex items-center gap-2 shadow-sm border border-gray-100">
+        <NuxtLink to="/vendors" class="px-5 py-4 bg-gray-900 text-white rounded-2xl font-medium text-xs tracking-wider hover:bg-parentPrimary transition-all active:scale-95 flex items-center gap-2 shadow-sm border border-gray-50">
           <ShoppingBag class="w-4 h-4" /> Browse Vendors
         </NuxtLink>
       </div>
@@ -43,7 +43,7 @@
             v-for="vendor in popularVendors.slice(0, 6)"
             :key="vendor._id"
             :to="`/vendors/${vendor._id}`"
-            class="bg-white rounded-2xl border border-gray-100 overflow-hidden transition-all group hover:-translate-y-0.5 hover:shadow-sm border border-gray-100 block"
+            class="bg-white rounded-2xl border border-gray-50 overflow-hidden transition-all group hover:-translate-y-0.5 hover:shadow-sm border border-gray-50 block"
           >
             <div class="h-28 w-full bg-gray-50 relative overflow-hidden">
               <video v-if="(vendor.banner || vendor.logo) && (vendor.banner || vendor.logo).match(/\\.(mp4|webm|ogg|mov)/i)" :src="vendor.banner || vendor.logo" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" autoplay loop muted playsinline></video>
@@ -80,7 +80,7 @@
       <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-gray-50">
         <div class="max-w-[1200px] mx-auto flex items-center justify-between px-4 md:px-4 py-3">
           <div class="flex items-center gap-3">
-            <button @click="checkoutStep === 'checkout' ? checkoutStep = 'cart' : goBack()" class="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-100 hover:bg-gray-100 transition-all active:scale-95">
+            <button @click="checkoutStep === 'checkout' ? checkoutStep = 'cart' : goBack()" class="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-50 hover:bg-gray-100 transition-all active:scale-95">
               <ArrowLeft class="w-4 h-4 text-gray-900" />
             </button>
             <div>
@@ -89,14 +89,14 @@
             </div>
           </div>
           <div class="flex items-center gap-2">
-            <NuxtLink to="/dashboard/search" class="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-100 hover:bg-gray-100 transition-all active:scale-95 text-gray-900">
+            <NuxtLink to="/dashboard/search" class="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-50 hover:bg-gray-100 transition-all active:scale-95 text-gray-900">
               <Search class="w-4 h-4" />
             </NuxtLink>
             
             <button 
               v-if="checkoutStep === 'checkout'"
               @click="showOrderBreakdown = true"
-              class="flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-100 rounded-xl text-xs font-medium text-gray-900 hover:bg-gray-100 transition-all lg:hidden active:scale-95"
+              class="flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-50 rounded-xl text-xs font-medium text-gray-900 hover:bg-gray-100 transition-all lg:hidden active:scale-95"
             >
               <ShoppingCart class="w-3.5 h-3.5" />
               Review
@@ -170,14 +170,14 @@
                   <div class="grid grid-cols-2 gap-3">
                     <button 
                       @click="deliveryMode = 'room_delivery'"
-                      class="flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all"
+                      class="flex flex-col items-center justify-center p-3 rounded-xl border transition-all"
                       :class="deliveryMode === 'room_delivery' ? 'border-parentPrimary bg-parentPrimary/5 text-parentPrimary' : 'border-gray-100 bg-white hover:border-gray-200'"
                     >
                       <span class="text-xs font-bold" :class="deliveryMode === 'room_delivery' ? 'text-parentPrimary' : 'text-gray-900'">Room Delivery</span>
                     </button>
                     <button 
                       @click="deliveryMode = 'dropoff_service'"
-                      class="flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all"
+                      class="flex flex-col items-center justify-center p-3 rounded-xl border transition-all"
                       :class="deliveryMode === 'dropoff_service' ? 'border-parentPrimary bg-parentPrimary/5 text-parentPrimary' : 'border-gray-100 bg-white hover:border-gray-200'"
                     >
                       <span class="text-xs font-bold" :class="deliveryMode === 'dropoff_service' ? 'text-parentPrimary' : 'text-gray-900'">Drop-off Service</span>
@@ -198,14 +198,14 @@
                     <div class="grid grid-cols-2 gap-3">
                       <button 
                         @click="isWithinLuth = true"
-                        class="flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all"
+                        class="flex flex-col items-center justify-center p-3 rounded-xl border transition-all"
                         :class="isWithinLuth ? 'border-parentPrimary bg-parentPrimary/5 text-parentPrimary' : 'border-gray-100 bg-white hover:border-gray-200'"
                       >
                         <span class="text-xs font-bold" :class="isWithinLuth ? 'text-parentPrimary' : 'text-gray-900'">Inside Campus</span>
                       </button>
                       <button 
                         @click="isWithinLuth = false"
-                        class="flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all"
+                        class="flex flex-col items-center justify-center p-3 rounded-xl border transition-all"
                         :class="!isWithinLuth ? 'border-parentPrimary bg-parentPrimary/5 text-parentPrimary' : 'border-gray-100 bg-white hover:border-gray-200'"
                       >
                         <span class="text-xs font-bold" :class="!isWithinLuth ? 'text-parentPrimary' : 'text-gray-900'">Outside Campus</span>
@@ -219,7 +219,7 @@
                       v-model="specificAddress"
                       type="text"
                       placeholder="e.g. Block 4 Common Room"
-                      class="w-full bg-white border border-gray-100 focus:border-parentPrimary/50 rounded-xl px-4 py-3 text-sm font-medium text-gray-900 outline-none transition-all shadow-sm"
+                      class="w-full bg-white border border-gray-50 focus:border-parentPrimary/50 rounded-xl px-4 py-3 text-sm font-medium text-gray-900 outline-none transition-all shadow-sm"
                     />
                   </div>
                   
@@ -229,7 +229,7 @@
                       <div class="grid grid-cols-2 gap-3">
                         <button 
                           @click="outsideCampusLocation = 'campus_environs'"
-                          class="flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all"
+                          class="flex flex-col items-center justify-center p-3 rounded-xl border transition-all"
                           :class="outsideCampusLocation === 'campus_environs' ? 'border-parentPrimary bg-parentPrimary/5 text-parentPrimary' : 'border-gray-100 bg-white hover:border-gray-200'"
                         >
                           <span class="text-[11px] font-bold" :class="outsideCampusLocation === 'campus_environs' ? 'text-parentPrimary' : 'text-gray-900'">Campus Environs</span>
@@ -237,7 +237,7 @@
                         </button>
                         <button 
                           @click="outsideCampusLocation = 'outside_campus'"
-                          class="flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all"
+                          class="flex flex-col items-center justify-center p-3 rounded-xl border transition-all"
                           :class="outsideCampusLocation === 'outside_campus' ? 'border-parentPrimary bg-parentPrimary/5 text-parentPrimary' : 'border-gray-100 bg-white hover:border-gray-200'"
                         >
                           <span class="text-[11px] font-bold" :class="outsideCampusLocation === 'outside_campus' ? 'text-parentPrimary' : 'text-gray-900'">Far Off-Campus</span>
@@ -256,7 +256,7 @@
                         v-model="specificAddress"
                         type="text"
                         placeholder="e.g. 123 Main Street, Phase 2, Yaba, Lagos"
-                        class="w-full bg-white border border-gray-100 focus:border-parentPrimary/50 rounded-xl px-4 py-3 text-sm font-medium text-gray-900 outline-none transition-all shadow-sm"
+                        class="w-full bg-white border border-gray-50 focus:border-parentPrimary/50 rounded-xl px-4 py-3 text-sm font-medium text-gray-900 outline-none transition-all shadow-sm"
                       />
                     </div>
                     <div>
@@ -270,7 +270,7 @@
                         :min="activeMinOutsideFee"
                         @blur="() => { if (!proposedDeliveryFee || proposedDeliveryFee < activeMinOutsideFee) proposedDeliveryFee = activeMinOutsideFee }"
                         placeholder="Enter your offer"
-                        class="w-full bg-white border border-gray-100 focus:border-parentPrimary/50 rounded-xl px-4 py-3 text-sm font-medium text-gray-900 outline-none transition-all shadow-sm"
+                        class="w-full bg-white border border-gray-50 focus:border-parentPrimary/50 rounded-xl px-4 py-3 text-sm font-medium text-gray-900 outline-none transition-all shadow-sm"
                       />
                       <p class="text-[10px] text-gray-500 mt-1 pl-1">Enter a fair amount. Riders will bid based on this offer.</p>
                     </div>
@@ -296,7 +296,7 @@
                   v-model="scheduledDate"
                   type="datetime-local"
                   :min="minPreOrderDate"
-                  class="w-full bg-gray-50 border-2 border-transparent focus:border-parentPrimary/20 rounded-xl px-4 py-3 text-base font-bold text-gray-900 outline-none transition-all"
+                  class="w-full bg-gray-50 border border-transparent focus:border-parentPrimary/20 rounded-xl px-4 py-3 text-base font-bold text-gray-900 outline-none transition-all"
                 />
                 <div class="mt-3 text-xs font-bold text-gray-400 space-y-1">
                   <p>• Requires a minimum of {{ maxLeadTime }} hours notice.</p>
@@ -313,7 +313,7 @@
                   <label class="flex items-center gap-2 cursor-pointer group">
                     <div class="relative flex items-center justify-center">
                       <input type="checkbox" v-model="wantsNotification" class="w-4 h-4 rounded border-gray-300 text-parentPrimary focus:ring-parentPrimary/20 transition-all cursor-pointer z-10 opacity-0 peer" />
-                      <div class="absolute inset-0 bg-white border-2 border-gray-200 rounded peer-checked:bg-parentPrimary peer-checked:border-parentPrimary peer-focus:ring-2 peer-focus:ring-parentPrimary/20 transition-all flex items-center justify-center">
+                      <div class="absolute inset-0 bg-white border border-gray-200 rounded peer-checked:bg-parentPrimary peer-checked:border-parentPrimary peer-focus:ring-2 peer-focus:ring-parentPrimary/20 transition-all flex items-center justify-center">
                         <Check class="w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity" />
                       </div>
                     </div>
@@ -333,7 +333,7 @@
                         v-model="notifyEmail"
                         type="email"
                         placeholder="Enter your email address"
-                        class="w-full bg-white border border-gray-200 focus:border-parentPrimary/50 rounded-xl px-4 py-3 text-sm font-medium text-gray-900 outline-none transition-all shadow-sm"
+                        class="w-full bg-white border border-gray-25 focus:border-parentPrimary/50 rounded-xl px-4 py-3 text-sm font-medium text-gray-900 outline-none transition-all shadow-sm"
                       />
                     </div>
                   </Transition>
@@ -360,7 +360,7 @@
                     class="p-3 rounded-xl border transition-all text-left flex items-center justify-between w-full active:scale-[0.98]"
                   >
                     <div class="flex items-center gap-3">
-                      <div class="w-9 h-7 flex items-center justify-center bg-white rounded border border-gray-100">
+                      <div class="w-9 h-7 flex items-center justify-center bg-white rounded border border-gray-50">
                         <img src="~/assets/img/paystack.png" class="h-4 object-contain" alt="Paystack" />
                       </div>
                       <div>
@@ -368,7 +368,7 @@
                         <p class="text-xs font-medium text-gray-400">Instant & Secure</p>
                       </div>
                     </div>
-                    <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center" :class="paymentMethod === 'card' ? 'border-parentPrimary bg-parentPrimary text-white' : 'border-gray-300'">
+                    <div class="w-5 h-5 rounded-full border flex items-center justify-center" :class="paymentMethod === 'card' ? 'border-parentPrimary bg-parentPrimary text-white' : 'border-gray-300'">
                       <div v-if="paymentMethod === 'card'" class="w-2 h-2 rounded-full bg-white"></div>
                     </div>
                   </button>
@@ -379,7 +379,7 @@
                     class="p-3 rounded-xl border transition-all text-left flex items-center justify-between w-full active:scale-[0.98]"
                   >
                     <div class="flex items-center gap-3">
-                      <div class="w-9 h-9 bg-white rounded-lg flex items-center justify-center border border-gray-100">
+                      <div class="w-9 h-9 bg-white rounded-lg flex items-center justify-center border border-gray-50">
                         <Wallet :class="paymentMethod === 'wallet' ? 'text-emerald-500' : 'text-gray-300'" class="w-5 h-5 transition-colors" />
                       </div>
                       <div>
@@ -392,7 +392,7 @@
                         </p>
                       </div>
                     </div>
-                    <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center" :class="paymentMethod === 'wallet' ? 'border-emerald-500 bg-emerald-500 text-white' : 'border-gray-300'">
+                    <div class="w-5 h-5 rounded-full border flex items-center justify-center" :class="paymentMethod === 'wallet' ? 'border-emerald-500 bg-emerald-500 text-white' : 'border-gray-300'">
                       <div v-if="paymentMethod === 'wallet'" class="w-2 h-2 rounded-full bg-white"></div>
                     </div>
                   </button>
@@ -438,7 +438,7 @@
             <!-- MOBILE: Order Summary -->
             <div class="lg:hidden bg-white rounded-none sm:rounded-2xl border-y sm:border-x border-gray-100 overflow-hidden shadow-xl shadow-black/5">
               <div class="px-4 sm:px-5 py-4 bg-gray-50/50 border-b border-gray-100 flex items-center gap-3">
-                <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center border border-gray-200">
+                <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center border border-gray-25">
                   <Receipt class="w-4 h-4 text-gray-700" />
                 </div>
                 <h3 class="text-sm font-bold text-gray-900 tracking-tight">Order Summary</h3>
@@ -496,7 +496,7 @@
                     @input="handlePromoInput"
                     type="text"
                     placeholder="Enter Promo Code"
-                    class="flex-1 px-4 py-3 bg-white border border-gray-200 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 rounded-xl text-xs font-bold text-gray-900 placeholder-gray-400 outline-none uppercase transition-all shadow-sm"
+                    class="flex-1 px-4 py-3 bg-white border border-gray-25 focus:border-gray-25focus:ring-1 focus:ring-gray-900 rounded-xl text-xs font-bold text-gray-900 placeholder-gray-400 outline-none uppercase transition-all shadow-sm"
                   />
                   <button 
                     @click="validatePromo"
@@ -563,14 +563,14 @@
                     <p class="text-xs text-gray-500 font-medium">Review your items before checkout</p>
                   </div>
                 </div>
-                <button @click="goBack" class="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-xl text-xs font-bold transition-all shadow-sm border border-gray-100 active:scale-95">Edit Selection</button>
+                <button @click="goBack" class="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-xl text-xs font-bold transition-all shadow-sm border border-gray-50 active:scale-95">Edit Selection</button>
               </div>
               <div class="space-y-6">
                 <div v-for="vendorId in cartStore.allVendorIds.value" :key="vendorId" class="relative group bg-white/70 backdrop-blur-xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2rem] p-6 transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
                   <!-- Vendor Header -->
                   <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100/50">
                     <div class="flex items-center gap-4">
-                      <div class="w-12 h-12 bg-gradient-to-br from-gray-50 to-gray-100 rounded-[1rem] flex items-center justify-center border border-gray-200/50 shadow-inner">
+                      <div class="w-12 h-12 bg-gradient-to-br from-gray-50 to-gray-100 rounded-[1rem] flex items-center justify-center border border-gray-25/50 shadow-inner">
                         <Store class="w-5 h-5 text-gray-700" />
                       </div>
                       <div>
@@ -591,8 +591,8 @@
                     </div>
                     
                     <div class="space-y-3">
-                      <div v-for="(item, iIndex) in pack.items" :key="item.productId + iIndex" class="group/item flex items-start gap-4 p-3 bg-gray-50/50 rounded-2xl hover:bg-gray-50 transition-colors border border-gray-100 hover:border-gray-200">
-                        <div class="w-14 h-14 rounded-[1rem] overflow-hidden shrink-0 border border-gray-200/60 bg-white shadow-sm relative group-hover/item:shadow-md transition-shadow">
+                      <div v-for="(item, iIndex) in pack.items" :key="item.productId + iIndex" class="group/item flex items-start gap-4 p-3 bg-gray-50/50 rounded-2xl hover:bg-gray-50 transition-colors border border-gray-50 hover:border-gray-200">
+                        <div class="w-14 h-14 rounded-[1rem] overflow-hidden shrink-0 border border-gray-25/60 bg-white shadow-sm relative group-hover/item:shadow-md transition-shadow">
                           <video v-if="item.image && item.image.match(/\.(mp4|webm|ogg|mov)/i)" :src="item.image" class="w-full h-full object-cover" autoplay loop muted playsinline></video>
                           <img v-else :src="item.image || '/placeholder-store.jpg'" @error="$event.target.src = '/placeholder-store.jpg'" class="w-full h-full object-cover transform group-hover/item:scale-105 transition-transform duration-500" />
                           <div class="absolute top-0 right-0 bg-gray-900/80 backdrop-blur-sm text-white text-[9px] font-black px-1.5 py-0.5 rounded-bl-lg">x{{ item.quantity }}</div>
@@ -615,7 +615,7 @@
                                 <div class="w-1 h-1 rounded-full bg-gray-300 group-hover/cust:bg-parentPrimary transition-colors"></div>
                                 {{ c.quantity > 1 ? c.quantity + 'x ' : '' }}{{ c.name }}
                               </span>
-                              <span v-if="c.price > 0" class="text-gray-900 font-bold bg-white px-1.5 rounded shadow-sm border border-gray-100 text-xs shrink-0">+₦{{ c.price.toLocaleString() }}</span>
+                              <span v-if="c.price > 0" class="text-gray-900 font-bold bg-white px-1.5 rounded shadow-sm border border-gray-50 text-xs shrink-0">+₦{{ c.price.toLocaleString() }}</span>
                             </p>
                           </div>
                           
@@ -660,7 +660,7 @@
               </div>
 
               <!-- Premium Order Summary -->
-              <div class="bg-white rounded-[2rem] border border-gray-100 shadow-xl shadow-black/5 overflow-hidden relative">
+              <div class="bg-white rounded-[2rem] border border-gray-50 shadow-xl shadow-black/5 overflow-hidden relative">
 
                 <div class="px-6 py-5 border-b border-gray-100 relative z-10 flex items-center gap-3 bg-gray-50/50">
                   <div class="w-8 h-8 rounded-full bg-gray-200/50 flex items-center justify-center backdrop-blur-sm">
@@ -728,7 +728,7 @@
                       @input="handlePromoInput"
                       type="text"
                       placeholder="Enter Promo Code"
-                      class="relative flex-1 px-4 py-3.5 bg-white border border-gray-200 focus:border-parentPrimary/50 focus:ring-2 focus:ring-parentPrimary/20 rounded-xl text-sm font-bold text-gray-900 outline-none uppercase placeholder:text-gray-400 placeholder:normal-case transition-all shadow-sm"
+                      class="relative flex-1 px-4 py-3.5 bg-white border border-gray-25 focus:border-parentPrimary/50 focus:ring-2 focus:ring-parentPrimary/20 rounded-xl text-sm font-bold text-gray-900 outline-none uppercase placeholder:text-gray-400 placeholder:normal-case transition-all shadow-sm"
                     />
                     <button 
                       @click="validatePromo"
@@ -795,7 +795,7 @@
                     v-if="canCheckout"
                     @click="checkoutStep === 'cart' ? checkoutStep = 'checkout' : startPayment()"
                     :disabled="placing || (checkoutStep === 'checkout' && paymentMethod === 'wallet' && balance < finalTotal)"
-                    class="w-full py-4 bg-parentPrimary text-white rounded-2xl text-xs font-medium tracking-wider hover:bg-parentPrimary/90 transition-all disabled:opacity-40 flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-parentPrimary/20 active:scale-[0.98]"
+                    class="w-full py-4 bg-parentPrimary text-white rounded-2xl text-xs font-medium tracking-wider hover:bg-parentPrimary/90 transition-all disabled:opacity-40 flex items-center justify-center gap-2 shadow-sm border border-gray-50 shadow-parentPrimary/20 active:scale-[0.98]"
                   >
                     <Loader2 v-if="placing" class="w-4 h-4 animate-spin" />
                     <span>{{ placing ? 'Processing...' : (checkoutStep === 'cart' ? 'Proceed to Checkout' : 'Complete Checkout') }}</span>
@@ -813,7 +813,7 @@
 
       <!-- ===== MOBILE FLOATING CHECKOUT BAR ===== -->
       <div v-if="!cartStore.isEmpty.value" class="fixed bottom-[85px] left-4 right-4 z-40 lg:hidden">
-        <div class="bg-gray-900 rounded-2xl px-5 py-4 text-white flex items-center justify-between shadow-sm border border-gray-100 shadow-black/30">
+        <div class="bg-gray-900 rounded-2xl px-5 py-4 text-white flex items-center justify-between shadow-sm border border-gray-50 shadow-black/30">
           <div>
             <p class="text-[9px] font-bold text-white/40 tracking-wider mb-0.5">Total</p>
             <h3 class="text-xl font-medium text-white tracking-tighter leading-none">₦{{ finalTotal.toLocaleString() }}</h3>
@@ -822,9 +822,9 @@
             v-if="canCheckout"
             @click="checkoutStep === 'cart' ? checkoutStep = 'checkout' : startPayment()"
             :disabled="placing || (checkoutStep === 'checkout' && paymentMethod === 'wallet' && balance < finalTotal)"
-            class="px-4 py-3.5 bg-parentPrimary text-white rounded-xl text-xs font-medium tracking-wider hover:scale-105 active:scale-95 transition-all disabled:opacity-30 flex items-center gap-2 shadow-sm border border-gray-100 shadow-parentPrimary/30"
+            class="px-4 py-3.5 bg-parentPrimary text-white rounded-xl text-xs font-medium tracking-wider hover:scale-105 active:scale-95 transition-all disabled:opacity-30 flex items-center gap-2 shadow-sm border border-gray-50 shadow-parentPrimary/30"
           >
-            <div v-if="placing" class="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+            <div v-if="placing" class="w-4 h-4 border border-white/20 border-t-white rounded-full animate-spin"></div>
             <span v-else>{{ checkoutStep === 'cart' ? 'Checkout' : 'Pay Now' }}</span>
             <ArrowRight v-if="!placing" class="w-3.5 h-3.5" />
           </button>
@@ -855,7 +855,7 @@
         leave-from-class="translate-y-0"
         leave-to-class="translate-y-full"
       >
-        <div v-if="showOrderBreakdown" class="fixed inset-x-0 bottom-0 z-[101] bg-white rounded-t-[2rem] max-h-[85vh] overflow-hidden flex flex-col lg:hidden shadow-sm border border-gray-100">
+        <div v-if="showOrderBreakdown" class="fixed inset-x-0 bottom-0 z-[101] bg-white rounded-t-[2rem] max-h-[85vh] overflow-hidden flex flex-col lg:hidden shadow-sm border border-gray-50">
           <div class="sticky top-0 bg-white pt-3 pb-2 px-5 border-b border-gray-50 z-10 rounded-t-[2rem]">
             <div class="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-3"></div>
             <div class="flex items-center justify-between">
@@ -880,7 +880,7 @@
               
               <div v-if="vendorsMetadata[vendorId]?.packs?.length > 0 && !cartStore.getVendorStats(vendorId).packs.flatMap(p => p.items).every(i => i.isPackagingFeeIncluded)" class="pl-3 border-l-2 border-gray-50 space-y-1">
                 <label class="block text-xs font-bold text-gray-400">Packaging Type</label>
-                <select v-model="selectedPacks[vendorId]" class="w-full bg-white text-xs p-2 rounded-lg border border-gray-200 focus:outline-none focus:border-parentPrimary text-gray-700 font-medium">
+                <select v-model="selectedPacks[vendorId]" class="w-full bg-white text-xs p-2 rounded-lg border border-gray-25 focus:outline-none focus:border-parentPrimary text-gray-700 font-medium">
                   <option v-for="(packOption, idx) in vendorsMetadata[vendorId].packs" :key="idx" :value="packOption">
                     {{ packOption.name }} (₦{{ packOption.price }})
                   </option>
@@ -892,7 +892,7 @@
                   <button @click="cartStore.removePack(vendorId, pack.id)" class="text-xs font-medium text-rose-400 hover:text-rose-500">Remove</button>
                 </div>
                 <div v-for="(item, iIndex) in pack.items" :key="'mb-item-'+iIndex" class="flex items-start gap-3">
-                  <div class="w-11 h-11 bg-gray-50 rounded-lg overflow-hidden border border-gray-100 shrink-0 mt-1">
+                  <div class="w-11 h-11 bg-gray-50 rounded-lg overflow-hidden border border-gray-50 shrink-0 mt-1">
                     <video v-if="item.image && item.image.match(/\.(mp4|webm|ogg|mov)/i)" :src="item.image" class="w-full h-full object-cover" autoplay loop muted playsinline></video>
                     <img v-else :src="item.image || '/placeholder-store.jpg'" @error="$event.target.src = '/placeholder-store.jpg'" class="w-full h-full object-cover" />
                   </div>
@@ -914,7 +914,7 @@
 
                     <div class="flex items-center justify-between mt-2">
                       <p class="text-xs font-bold text-parentPrimary">Total: ₦{{ (item.subtotal || (item.price * item.quantity)).toLocaleString() }}</p>
-                      <div class="flex items-center gap-1 bg-gray-50 rounded-lg p-1 border border-gray-100 shrink-0">
+                      <div class="flex items-center gap-1 bg-gray-50 rounded-lg p-1 border border-gray-50 shrink-0">
                         <button @click="cartStore.updateItemQuantity(vendorId, pack.id, iIndex, item.quantity - 1)" class="w-6 h-6 rounded-md bg-white text-gray-500 flex items-center justify-center text-sm font-bold shadow-sm hover:text-rose-500">−</button>
                         <span class="text-xs font-medium min-w-[16px] text-center">{{ item.quantity }}</span>
                         <button @click="cartStore.updateItemQuantity(vendorId, pack.id, iIndex, item.quantity + 1)" class="w-6 h-6 rounded-md bg-white text-gray-500 flex items-center justify-center text-sm font-bold shadow-sm hover:text-parentPrimary">+</button>
@@ -959,7 +959,7 @@
                   v-model="formattedTopupAmount" 
                   type="text"
                   placeholder="e.g. 5,000"
-                  class="w-full px-5 py-4 bg-gray-50 border-2 border-transparent focus:border-emerald-500/20 rounded-xl text-xl font-bold text-gray-900 outline-none transition-all"
+                  class="w-full px-5 py-4 bg-gray-50 border border-transparent focus:border-emerald-500/20 rounded-xl text-xl font-bold text-gray-900 outline-none transition-all"
                 />
               </div>
               <button 
@@ -993,7 +993,7 @@
             <p class="text-xs font-medium text-gray-400 mb-6 text-center">Decide who is paying for the group order.</p>
             <div class="space-y-4">
               <label 
-                class="flex items-center p-4 rounded-2xl border-2 transition-all cursor-pointer"
+                class="flex items-center p-4 rounded-2xl border transition-all cursor-pointer"
                 :class="splitGroupType === 'split_bill' ? 'border-parentPrimary bg-parentPrimary/5' : 'border-gray-100 hover:border-gray-200'"
               >
                 <input type="radio" v-model="splitGroupType" value="split_bill" class="hidden" />
@@ -1001,13 +1001,13 @@
                   <h4 class="text-sm font-bold text-gray-900 mb-1">Split the Bill</h4>
                   <p class="text-xs text-gray-500 font-medium">Everyone pays for their own items. The order completes when all participants pay.</p>
                 </div>
-                <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 ml-4" :class="splitGroupType === 'split_bill' ? 'border-parentPrimary' : 'border-gray-200'">
+                <div class="w-6 h-6 rounded-full border flex items-center justify-center shrink-0 ml-4" :class="splitGroupType === 'split_bill' ? 'border-parentPrimary' : 'border-gray-200'">
                   <div v-if="splitGroupType === 'split_bill'" class="w-3 h-3 bg-parentPrimary rounded-full"></div>
                 </div>
               </label>
 
               <label 
-                class="flex items-center p-4 rounded-2xl border-2 transition-all cursor-pointer"
+                class="flex items-center p-4 rounded-2xl border transition-all cursor-pointer"
                 :class="splitGroupType === 'sponsor' ? 'border-parentPrimary bg-parentPrimary/5' : 'border-gray-100 hover:border-gray-200'"
               >
                 <input type="radio" v-model="splitGroupType" value="sponsor" class="hidden" />
@@ -1015,7 +1015,7 @@
                   <h4 class="text-sm font-bold text-gray-900 mb-1">I'm Sponsoring</h4>
                   <p class="text-xs text-gray-500 font-medium">You will pay the full amount for everyone in the group order.</p>
                 </div>
-                <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 ml-4" :class="splitGroupType === 'sponsor' ? 'border-parentPrimary' : 'border-gray-200'">
+                <div class="w-6 h-6 rounded-full border flex items-center justify-center shrink-0 ml-4" :class="splitGroupType === 'sponsor' ? 'border-parentPrimary' : 'border-gray-200'">
                   <div v-if="splitGroupType === 'sponsor'" class="w-3 h-3 bg-parentPrimary rounded-full"></div>
                 </div>
               </label>

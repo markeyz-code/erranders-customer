@@ -8,7 +8,7 @@
       
       <div v-else class="space-y-4">
         <!-- List vendors currently in cart -->
-        <div v-for="vendorId in cart.allVendorIds.value" :key="vendorId" class="bg-gray-50 rounded-2xl p-4 border border-gray-100">
+        <div v-for="vendorId in cart.allVendorIds.value" :key="vendorId" class="bg-gray-50 rounded-2xl p-4 border border-gray-50">
           <div class="flex items-center justify-between mb-3 border-b border-gray-200/50 pb-2">
             <h4 class="text-sm font-bold text-gray-900">{{ getVendorName(vendorId) }}</h4>
             <button @click="clearVendorCart(vendorId)" class="text-[10px] font-bold text-rose-500 bg-rose-50 px-2.5 py-1.5 rounded-lg hover:bg-rose-100 transition-colors">
@@ -26,7 +26,7 @@
                 </div>
                 <div class="flex items-center gap-3">
                   <span class="text-xs font-bold text-gray-900">₦{{ item.subtotal.toLocaleString() }}</span>
-                  <button @click="removeItem(vendorId, pack.id, idx)" class="w-6 h-6 rounded-full bg-white border border-gray-200 flex items-center justify-center text-rose-500 hover:bg-rose-50 active:scale-95 transition-all">
+                  <button @click="removeItem(vendorId, pack.id, idx)" class="w-6 h-6 rounded-full bg-white border border-gray-25 flex items-center justify-center text-rose-500 hover:bg-rose-50 active:scale-95 transition-all">
                     <X class="w-3 h-3" />
                   </button>
                 </div>
@@ -36,7 +36,7 @@
         </div>
         
         <div class="pt-2 flex flex-col gap-2 sticky bottom-0 bg-white">
-          <NuxtLink to="/cart" class="w-full py-3.5 bg-gray-900 text-white rounded-xl text-sm font-bold text-center hover:bg-parentPrimary shadow-sm border border-gray-100 transition-all active:scale-[0.98]" @click="$emit('close')">
+          <NuxtLink to="/cart" class="w-full py-3.5 bg-gray-900 text-white rounded-xl text-sm font-bold text-center hover:bg-parentPrimary shadow-sm border border-gray-50 transition-all active:scale-[0.98]" @click="$emit('close')">
             Go to Checkout
           </NuxtLink>
         </div>

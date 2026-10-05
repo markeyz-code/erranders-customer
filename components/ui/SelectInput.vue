@@ -53,7 +53,7 @@
           >
             <div
               v-if="showDropdown"
-              class="fixed z-[9999] mt-1 bg-white shadow-sm border border-gray-100 rounded-2xl overflow-hidden border border-gray-100 animate-fade-in"
+              class="fixed z-[9999] mt-1 bg-white shadow-sm border border-gray-50 rounded-2xl overflow-hidden border border-gray-50 animate-fade-in"
               :style="{
                 top: `${y + height + 4}px`,
                 left: `${x}px`,

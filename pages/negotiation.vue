@@ -37,7 +37,7 @@
                 :disabled="cancelling"
                 class="w-full py-3 bg-red-500 text-white font-bold rounded-xl hover:bg-red-600 active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                <span v-if="cancelling" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                <span v-if="cancelling" class="w-4 h-4 border border-white/30 border-t-white rounded-full animate-spin"></span>
                 <span>Yes, Cancel Order</span>
               </button>
               <button 
@@ -53,7 +53,7 @@
       </div>
 
       <!-- Main Card -->
-      <div class="bg-white rounded-[24px] shadow-sm border border-gray-100 overflow-hidden">
+      <div class="bg-white rounded-[24px] shadow-sm border border-gray-50 overflow-hidden">
         
         <!-- Header Section -->
         <div class="p-8 text-center border-b border-gray-50 bg-gradient-to-b from-gray-50 to-white relative">
@@ -96,7 +96,7 @@
             <div 
               v-for="bid in bids" 
               :key="bid._id"
-              class="group relative overflow-hidden bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-md hover:border-parentPrimary/40 transition-all duration-300 flex flex-col gap-3"
+              class="group relative overflow-hidden bg-white border border-gray-50 rounded-2xl p-4 shadow-sm hover:shadow-md hover:border-parentPrimary/40 transition-all duration-300 flex flex-col gap-3"
             >
               <div class="absolute inset-0 bg-gradient-to-r from-parentPrimary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
               
@@ -134,7 +134,7 @@
                   <button 
                     @click="openCounterModal(bid)"
                     :disabled="accepting"
-                    class="flex-1 py-2.5 bg-gray-50 text-gray-700 text-sm font-bold rounded-xl hover:bg-gray-100 active:scale-95 transition-all disabled:opacity-50 border border-gray-200"
+                    class="flex-1 py-2.5 bg-gray-50 text-gray-700 text-sm font-bold rounded-xl hover:bg-gray-100 active:scale-95 transition-all disabled:opacity-50 border border-gray-25"
                   >
                     Counter
                   </button>
@@ -162,7 +162,7 @@
             <input 
               v-model.number="counterAmount"
               type="number" 
-              class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-xl font-black text-center text-gray-900 mb-6 focus:ring-2 focus:ring-parentPrimary/50 outline-none"
+              class="w-full bg-gray-50 border border-gray-25 rounded-xl px-4 py-3 text-xl font-black text-center text-gray-900 mb-6 focus:ring-2 focus:ring-parentPrimary/50 outline-none"
               placeholder="₦ 0.00"
             />
             <div class="flex flex-col gap-3">
@@ -171,7 +171,7 @@
                 :disabled="!counterAmount || counterAmount <= 0 || countering"
                 class="w-full py-3 bg-parentPrimary text-white font-bold rounded-xl hover:bg-parentPrimary/90 active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                <span v-if="countering" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                <span v-if="countering" class="w-4 h-4 border border-white/30 border-t-white rounded-full animate-spin"></span>
                 <span>Send Counter Offer</span>
               </button>
               <button 

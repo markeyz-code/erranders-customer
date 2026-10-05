@@ -7,7 +7,7 @@
   <ActivePoolOrdersWidget />
  
  <!-- Birthday Banner -->
- <div v-if="isBirthday" class="bg-gradient-to-r from-[#FF5C1A] to-[#E54D12] text-white py-3 px-4 text-center shadow-sm border border-gray-100 relative z-[51]">
+ <div v-if="isBirthday" class="bg-gradient-to-r from-[#FF5C1A] to-[#E54D12] text-white py-3 px-4 text-center shadow-sm border border-gray-50 relative z-[51]">
    <div class="max-w-7xl mx-auto flex items-center justify-center gap-2 animate-bounce">
      <span class="text-xl">🎂</span>
      <p class="text-sm md:text-base font-bold tracking-wide">
@@ -52,7 +52,7 @@
                 class="absolute inset-0 flex flex-col items-center justify-center text-3xl md:text-5xl lg:text-6xl font-extrabold -tighter leading-[1.1] text-gray-900 px-4 font-onest"
               >
                 <div class="max-w-max mx-auto text-center" v-html="heroHeadings[currentHeadingIndex].text"></div>
-                <!-- <div class="inline-flex items-center gap-2 mt-3 px-3 py-1 rounded-full bg-gray-50 border border-gray-100 shadow-sm transition-all duration-500">
+                <!-- <div class="inline-flex items-center gap-2 mt-3 px-3 py-1 rounded-full bg-gray-50 border border-gray-50 shadow-sm transition-all duration-500">
                   <span class="w-1.5 h-1.5 rounded-full bg-parentPrimary animate-pulse"></span>
                   <span class="text-sm md:text-sm font-medium -[0.2em]  text-gray-400">
                     {{ heroHeadings[currentHeadingIndex].lang }}
@@ -77,7 +77,7 @@
             <!-- Search Input Wrapper -->
             <div class="relative z-[70]">
               <!-- Main Search Input -->
-            <div class="relative bg-white border border-gray-200 focus-within:border-parentPrimary/50 p-2 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)] focus-within:shadow-[0_20px_50px_rgb(0,0,0,0.12)] transition-all duration-500 flex items-center group-hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)]">
+            <div class="relative bg-white border border-gray-25 focus-within:border-parentPrimary/50 p-2 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)] focus-within:shadow-[0_20px_50px_rgb(0,0,0,0.12)] transition-all duration-500 flex items-center group-hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)]">
               <div class="absolute -inset-1 bg-parentPrimary opacity-0 group-focus-within:opacity-10 blur-xl transition-opacity duration-500 rounded-full"></div>
               <div class="w-12 h-12 flex items-center justify-center text-gray-500 shrink-0 ml-2 relative z-10">
                 <Search class="w-5 h-5 text-gray-400 group-focus-within:text-parentPrimary transition-colors" />
@@ -93,7 +93,7 @@
               />
               <button 
                 @click="handleHeroSearch"
-                class="h-12 md:h-14 px-4 md:px-5 bg-gray-900 text-white rounded-full text-sm md:text-base font-semibold hover:bg-parentPrimary hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 shrink-0 relative z-10 shadow-sm border border-gray-100"
+                class="h-12 md:h-14 px-4 md:px-5 bg-gray-900 text-white rounded-full text-sm md:text-base font-semibold hover:bg-parentPrimary hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 shrink-0 relative z-10 shadow-sm border border-gray-50"
               >
                 <span>Search</span>
               </button>
@@ -102,13 +102,13 @@
            <Transition name="fade-up">
   <div
     v-if="showSuggestions && (heroSearchSuggestions.length > 0 || isSearching || hasSearched || timeOfDaySuggestions.length > 0)"
-    class="absolute top-full left-0 right-0 mt-4 bg-white border border-gray-200 rounded-[2rem] shadow-[0_20px_60px_rgba(0,0,0,0.08)] overflow-hidden z-[75] p-2"
+    class="absolute top-full left-0 right-0 mt-4 bg-white border border-gray-25 rounded-[2rem] shadow-[0_20px_60px_rgba(0,0,0,0.08)] overflow-hidden z-[75] p-2"
   >
     <div class="px-4 py-4 border-b border-gray-50 flex justify-between items-center">
       <span class="text-sm font-medium text-gray-400 tracking-tight">
         {{ heroSearchQuery ? 'Matching Results' : `Suggested for ${suggestionTimeText}` }}
       </span>
-      <div v-if="isSearching" class="w-4 h-4 border-2 border-parentPrimary border-t-transparent rounded-full animate-spin"></div>
+      <div v-if="isSearching" class="w-4 h-4 border border-parentPrimary border-t-transparent rounded-full animate-spin"></div>
     </div>
 
     <div class="max-h-[350px] overflow-y-auto hide-scrollbar space-y-1 mt-1">
@@ -120,7 +120,7 @@
         @click="router.push(`/vendors/${product.itemType === 'vendor' ? product._id : (product.vendor._id || product.vendor)}`)"
         class="flex items-center gap-4 p-4 hover:bg-gray-50 rounded-2xl cursor-pointer transition-all group"
       >
-        <div class="w-12 h-12 rounded-xl bg-gray-100 overflow-hidden relative border border-gray-100 flex-shrink-0">
+        <div class="w-12 h-12 rounded-xl bg-gray-100 overflow-hidden relative border border-gray-50 flex-shrink-0">
           <img v-if="product.image || product.imageUrl || product.logo" :src="product.image || product.imageUrl || product.logo" class="w-full h-full object-cover group-hover:scale-110 transition-transform" />
           <div v-else class="w-full h-full flex items-center justify-center bg-parentPrimary/10 text-parentPrimary">
             <Store class="w-5 h-5" />
@@ -143,7 +143,7 @@
       >
         <div class="flex items-center gap-4 px-5 py-5 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
           <!-- Empty State Icon -->
-          <div class="relative flex-shrink-0 w-12 h-12 rounded-2xl bg-white border border-gray-100 flex items-center justify-center shadow-sm text-gray-400">
+          <div class="relative flex-shrink-0 w-12 h-12 rounded-2xl bg-white border border-gray-50 flex items-center justify-center shadow-sm text-gray-400">
             <SearchX class="w-5 h-5" />
           </div>
 
@@ -160,7 +160,7 @@
                 v-for="tag in ['Rice & Stew', 'Sharwama', 'Pepper Soup', 'Amala', 'Fried Rice']"
                 :key="tag"
                 @click="heroSearchQuery = tag; fetchSuggestions()"
-                class="px-3 py-1 text-[11px] font-bold bg-white border border-gray-100 rounded-full text-gray-500 hover:border-parentPrimary/30 hover:text-parentPrimary hover:bg-parentPrimary/5 transition-all active:scale-95"
+                class="px-3 py-1 text-[11px] font-bold bg-white border border-gray-50 rounded-full text-gray-500 hover:border-parentPrimary/30 hover:text-parentPrimary hover:bg-parentPrimary/5 transition-all active:scale-95"
               >
                 {{ tag }}
               </button>
@@ -177,7 +177,7 @@
             @click="router.push(`/vendors/${typeof product.vendor === 'string' ? product.vendor : product.vendor?._id}`)"
             class="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-xl cursor-pointer transition-all group"
           >
-            <div class="w-9 h-9 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0 border border-gray-100 flex items-center justify-center">
+            <div class="w-9 h-9 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0 border border-gray-50 flex items-center justify-center">
               <img v-if="product.image" :src="product.image" class="w-full h-full object-cover" />
               <Store v-else class="w-4 h-4 text-parentPrimary/30" />
             </div>
@@ -198,7 +198,7 @@
           @click="router.push(`/vendors/${typeof product.vendor === 'string' ? product.vendor : product.vendor?._id}`)"
           class="flex items-center gap-4 p-4 hover:bg-gray-50 rounded-2xl cursor-pointer transition-all group"
         >
-          <div class="w-12 h-12 rounded-xl bg-gray-100 overflow-hidden relative border border-gray-100 flex-shrink-0">
+          <div class="w-12 h-12 rounded-xl bg-gray-100 overflow-hidden relative border border-gray-50 flex-shrink-0">
             <img v-if="product.image" :src="product.image" class="w-full h-full object-cover group-hover:scale-110 transition-transform" />
             <div v-else class="w-full h-full flex items-center justify-center bg-parentPrimary/10 text-parentPrimary">
               <Store class="w-5 h-5" />
@@ -225,7 +225,7 @@
               <div class="relative" ref="categoryDropdownRef">
                 <div 
                   @click="showCategoryDropdown = !showCategoryDropdown"
-                  class="bg-white/80 backdrop-blur-sm border border-gray-100 rounded-full px-4 py-2 shadow-sm flex items-center gap-2 hover:border-parentPrimary/50 hover:bg-white cursor-pointer transition-all h-10"
+                  class="bg-white/80 backdrop-blur-sm border border-gray-50 rounded-full px-4 py-2 shadow-sm flex items-center gap-2 hover:border-parentPrimary/50 hover:bg-white cursor-pointer transition-all h-10"
                 >
                   <Filter class="w-4 h-4" :class="globalFilter ? 'text-parentPrimary' : 'text-gray-400'" />
                   <span class="text-xs md:text-sm font-medium" :class="globalFilter ? 'text-gray-900' : 'text-gray-600'">
@@ -236,7 +236,7 @@
                 
                 <!-- Category Dropdown -->
                 <Transition name="fade-up">
-                  <div v-if="showCategoryDropdown" class="absolute top-full left-0 sm:left-1/2 sm:-translate-x-1/2 mt-2 bg-white border border-gray-100 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] z-[80] overflow-hidden max-h-[300px] overflow-y-auto w-56">
+                  <div v-if="showCategoryDropdown" class="absolute top-full left-0 sm:left-1/2 sm:-translate-x-1/2 mt-2 bg-white border border-gray-50 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] z-[80] overflow-hidden max-h-[300px] overflow-y-auto w-56">
                     <button 
                       @click="setFilter(''); showCategoryDropdown = false; showSuggestions = true"
                       class="w-full text-left px-4 py-3 text-sm font-medium hover:bg-gray-50 transition-colors flex items-center gap-3"
@@ -262,7 +262,7 @@
               <!-- Location Pill (Commented out as per request) -->
               <!--
               <div class="relative" ref="locationDropdownRef">
-                <div class="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-full px-4 py-2 shadow-sm flex items-center gap-2 hover:border-parentPrimary/50 hover:bg-white transition-all h-10 group/loc cursor-pointer" @click="showLocationDropdown = !showLocationDropdown">
+                <div class="bg-white/80 backdrop-blur-sm border border-gray-25 rounded-full px-4 py-2 shadow-sm flex items-center gap-2 hover:border-parentPrimary/50 hover:bg-white transition-all h-10 group/loc cursor-pointer" @click="showLocationDropdown = !showLocationDropdown">
                   <MapPin class="w-4 h-4 text-gray-400" />
                   <input 
                     type="text" 
@@ -277,7 +277,7 @@
                 </div>
                 
                 <Transition name="fade-up">
-                  <div v-if="showLocationDropdown" class="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white border border-gray-100 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] z-[80] overflow-hidden py-2 w-56">
+                  <div v-if="showLocationDropdown" class="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white border border-gray-50 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] z-[80] overflow-hidden py-2 w-56">
                     <div class="px-4 py-2 text-xs font-bold text-gray-400 uppercase tracking-wider">Popular Locations</div>
                     <button 
                       @click="searchLocation = 'UNILAG'; showLocationDropdown = false; fetchSuggestions()"
@@ -310,7 +310,7 @@
               <div class="relative" ref="timeDropdownRef">
                 <div 
                   @click="showTimeDropdown = !showTimeDropdown"
-                  class="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-full px-4 py-2 shadow-sm flex items-center gap-2 hover:border-parentPrimary/50 hover:bg-white cursor-pointer transition-all h-10"
+                  class="bg-white/80 backdrop-blur-sm border border-gray-25 rounded-full px-4 py-2 shadow-sm flex items-center gap-2 hover:border-parentPrimary/50 hover:bg-white cursor-pointer transition-all h-10"
                 >
                   <Calendar class="w-4 h-4 text-gray-400" />
                   <span class="text-xs md:text-sm font-medium text-gray-600 whitespace-nowrap">
@@ -320,7 +320,7 @@
                 </div>
                 
                 <Transition name="fade-up">
-                  <div v-if="showTimeDropdown" class="absolute top-full right-0 sm:left-1/2 sm:-translate-x-1/2 mt-2 bg-white border border-gray-100 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] z-[80] overflow-hidden w-48">
+                  <div v-if="showTimeDropdown" class="absolute top-full right-0 sm:left-1/2 sm:-translate-x-1/2 mt-2 bg-white border border-gray-50 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] z-[80] overflow-hidden w-48">
                     <button 
                       @click="searchTime = 'any'; showTimeDropdown = false; showSuggestions = true"
                       class="w-full text-left px-4 py-3 text-sm font-medium hover:bg-gray-50 transition-colors"
@@ -535,7 +535,7 @@
           Don't just order food. Send an Errander to pick up your laundry, deliver documents to class, or buy groceries. Set the fee you want to pay, let riders accept, and chat with them instantly!
         </p>
         <div class="pt-4 flex flex-col sm:flex-row gap-4">
-          <NuxtLink to="/errands/custom" class="inline-flex items-center justify-center gap-2 px-5 py-4 bg-slate-900 text-white rounded-2xl font-bold text-sm -wide hover:bg-parentPrimary transition-colors shadow-sm border border-gray-100 shadow-slate-900/10 active:scale-95">
+          <NuxtLink to="/errands/custom" class="inline-flex items-center justify-center gap-2 px-5 py-4 bg-slate-900 text-white rounded-2xl font-bold text-sm -wide hover:bg-parentPrimary transition-colors shadow-sm border border-gray-50 shadow-slate-900/10 active:scale-95">
             Request an Errand <ArrowRight class="w-4 h-4" />
           </NuxtLink>
         </div>
@@ -548,7 +548,7 @@
           { title: 'Student Riders', desc: 'Dispatchers who know every corner of your campus.', icon: 'Target', color: 'text-parentPrimary bg-parentPrimary/10' },
           { title: 'Escrow Protected', desc: 'We hold the fee safely until a rider accepts your errand.', icon: 'ShieldCheck', color: 'text-blue-500 bg-blue-50' },
           { title: 'Real-time Chat', desc: 'Directly chat with your dispatcher to arrange details.', icon: 'MessageCircle', color: 'text-purple-500 bg-purple-50' }
-        ]" :key="feat.title" class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-sm border border-gray-100 hover:-translate-y-1 transition-all group">
+        ]" :key="feat.title" class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-sm border border-gray-50 hover:-translate-y-1 transition-all group">
           <div :class="`w-10 h-10 mb-4 rounded-xl flex items-center justify-center ${feat.color}`">
             <component :is="feat.icon === 'CircleDollarSign' ? CircleDollarSign : feat.icon === 'Target' ? Target : feat.icon === 'ShieldCheck' ? ShieldCheck : MessageCircle" class="w-5 h-5 group-hover:scale-110 transition-transform" />
           </div>
@@ -570,7 +570,7 @@
         Join thousands of students who trust Errander for their daily meals and hostel runs. Zero stress, 100% vibes.
       </p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-        <NuxtLink to="/auth/register" class="px-5 py-4 bg-parentPrimary text-white rounded-2xl font-medium text-sm  -wide shadow-sm border border-gray-100 shadow-parentPrimary/20 hover:scale-105 active:scale-95 transition-all">
+        <NuxtLink to="/auth/register" class="px-5 py-4 bg-parentPrimary text-white rounded-2xl font-medium text-sm  -wide shadow-sm border border-gray-50 shadow-parentPrimary/20 hover:scale-105 active:scale-95 transition-all">
           Join Errander Now
         </NuxtLink>
         <NuxtLink to="/auth/login" class="px-5 py-4 bg-white text-slate-600 rounded-2xl font-medium text-sm  -wide border border-slate-200 hover:border-parentPrimary hover:text-parentPrimary transition-all">

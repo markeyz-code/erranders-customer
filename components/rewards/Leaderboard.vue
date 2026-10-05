@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm relative overflow-hidden">
+  <div class="bg-white rounded-2xl border border-gray-50 p-4 shadow-sm relative overflow-hidden">
     <!-- Background Accents -->
     <div class="absolute -right-24 -top-24 w-64 h-64 bg-parentPrimary/5 rounded-full blur-[100px]"></div>
 
@@ -11,7 +11,7 @@
         </div>
         
         <!-- Toggle Types -->
-        <div class="flex bg-gray-50 p-1 rounded-xl border border-gray-100 shrink-0">
+        <div class="flex bg-gray-50 p-1 rounded-xl border border-gray-50 shrink-0">
           <button 
             v-for="t in types" 
             :key="t.key"
@@ -31,7 +31,7 @@
 
       <!-- Empty state -->
       <div v-else-if="leaders.length === 0" class="flex-1 flex flex-col items-center justify-center py-12 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-        <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl mb-3 shadow-sm border border-gray-100">🏆</div>
+        <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl mb-3 shadow-sm border border-gray-50">🏆</div>
         <p class="text-xs font-bold text-gray-400">Leaderboard is being updated...</p>
       </div>
 
@@ -46,7 +46,7 @@
             #{{ index + 1 }}
           </div>
           
-          <div class="w-9 h-9 rounded-xl bg-gray-50 flex-shrink-0 overflow-hidden border border-gray-100 relative">
+          <div class="w-9 h-9 rounded-xl bg-gray-50 flex-shrink-0 overflow-hidden border border-gray-50 relative">
             <img v-if="user.avatar" :src="user.avatar" class="w-full h-full object-cover" />
             <div v-else class="w-full h-full flex items-center justify-center uppercase text-xs font-medium text-parentPrimary bg-parentPrimary/10">
               {{ user.firstName?.[0] }}{{ user.lastName?.[0] }}

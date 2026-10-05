@@ -38,14 +38,14 @@
     <button 
       v-if="showArrows && mediaItems.length > 1 && currentIndex > 0"
       @click.stop="scrollTo(currentIndex - 1)"
-      class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/70 backdrop-blur-md flex items-center justify-center shadow-sm border border-gray-100 text-gray-800 opacity-0 group-hover:opacity-100 transition-all hover:bg-white active:scale-95"
+      class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/70 backdrop-blur-md flex items-center justify-center shadow-sm border border-gray-50 text-gray-800 opacity-0 group-hover:opacity-100 transition-all hover:bg-white active:scale-95"
     >
       <ChevronLeft class="w-4 h-4" />
     </button>
     <button 
       v-if="showArrows && mediaItems.length > 1 && currentIndex < mediaItems.length - 1"
       @click.stop="scrollTo(currentIndex + 1)"
-      class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/70 backdrop-blur-md flex items-center justify-center shadow-sm border border-gray-100 text-gray-800 opacity-0 group-hover:opacity-100 transition-all hover:bg-white active:scale-95"
+      class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/70 backdrop-blur-md flex items-center justify-center shadow-sm border border-gray-50 text-gray-800 opacity-0 group-hover:opacity-100 transition-all hover:bg-white active:scale-95"
     >
       <ChevronRight class="w-4 h-4" />
     </button>

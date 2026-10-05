@@ -68,7 +68,7 @@
               :key="apt._id"
               @click="selectAppointment(apt)"
               class="w-full text-left p-4 rounded-2xl border-[0.5px] transition-all duration-150 active:scale-[0.97] active:bg-gray-100"
-              :class="selectedAppointment?._id === apt._id ? 'border-gray-900 bg-gray-50' : 'border-transparent hover:bg-gray-50'"
+              :class="selectedAppointment?._id === apt._id ? 'border-gray-25bg-gray-50' : 'border-transparent hover:bg-gray-50'"
             >
               <div class="flex justify-between items-start mb-2">
                 <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">{{ formatDate(apt.scheduledDate) }}</span>
@@ -139,15 +139,15 @@
 
             <!-- Quick Actions -->
             <div class="grid grid-cols-4 gap-3 mb-8">
-              <button v-if="['pending', 'confirmed'].includes(selectedAppointment.status)" @click="openReschedule" class="flex flex-col items-center gap-2 p-4 bg-white rounded-2xl border-[0.5px] border-gray-100 hover:border-gray-900 hover:bg-gray-50 transition-all group active:scale-95">
+              <button v-if="['pending', 'confirmed'].includes(selectedAppointment.status)" @click="openReschedule" class="flex flex-col items-center gap-2 p-4 bg-white rounded-2xl border-[0.5px] border-gray-100 hover:border-gray-25hover:bg-gray-50 transition-all group active:scale-95">
                 <CalendarPlus class="w-6 h-6 text-gray-400 group-hover:text-gray-900 transition-colors" />
                 <span class="text-xs font-bold text-gray-600 group-hover:text-gray-900 transition-colors">Reschedule</span>
               </button>
-              <button class="flex flex-col items-center gap-2 p-4 bg-white rounded-2xl border-[0.5px] border-gray-100 hover:border-gray-900 hover:bg-gray-50 transition-all group active:scale-95">
+              <button class="flex flex-col items-center gap-2 p-4 bg-white rounded-2xl border-[0.5px] border-gray-100 hover:border-gray-25hover:bg-gray-50 transition-all group active:scale-95">
                 <MapPin class="w-6 h-6 text-gray-400 group-hover:text-gray-900 transition-colors" />
                 <span class="text-xs font-bold text-gray-600 group-hover:text-gray-900 transition-colors">Directions</span>
               </button>
-              <button @click="openChat" class="flex flex-col items-center gap-2 p-4 bg-white rounded-2xl border-[0.5px] border-gray-100 hover:border-gray-900 hover:bg-gray-50 transition-all group active:scale-95">
+              <button @click="openChat" class="flex flex-col items-center gap-2 p-4 bg-white rounded-2xl border-[0.5px] border-gray-100 hover:border-gray-25hover:bg-gray-50 transition-all group active:scale-95">
                 <MessageSquare class="w-6 h-6 text-gray-400 group-hover:text-gray-900 transition-colors" />
                 <span class="text-xs font-bold text-gray-600 group-hover:text-gray-900 transition-colors">Message</span>
               </button>
@@ -155,7 +155,7 @@
                 <XCircle class="w-6 h-6 text-red-400 group-hover:text-red-500 transition-colors" />
                 <span class="text-xs font-bold text-red-500 group-hover:text-red-600 transition-colors">Cancel</span>
               </button>
-              <NuxtLink v-else :to="`/vendors/${typeof selectedAppointment.vendor === 'string' ? selectedAppointment.vendor : selectedAppointment.vendor?._id}`" class="flex flex-col items-center justify-center gap-2 p-4 bg-white rounded-2xl border-[0.5px] border-gray-100 hover:border-gray-900 hover:bg-gray-50 transition-all group text-center active:scale-95">
+              <NuxtLink v-else :to="`/vendors/${typeof selectedAppointment.vendor === 'string' ? selectedAppointment.vendor : selectedAppointment.vendor?._id}`" class="flex flex-col items-center justify-center gap-2 p-4 bg-white rounded-2xl border-[0.5px] border-gray-100 hover:border-gray-25hover:bg-gray-50 transition-all group text-center active:scale-95">
                 <Store class="w-6 h-6 text-gray-400 group-hover:text-gray-900 transition-colors" />
                 <span class="text-xs font-bold text-gray-600 group-hover:text-gray-900 transition-colors">Venue</span>
               </NuxtLink>
@@ -271,7 +271,7 @@
               :key="time"
               @click="selectedTime = time"
               class="text-center px-3 py-2.5 rounded-xl border-[0.5px] transition-all text-sm font-semibold"
-              :class="selectedTime === time ? 'bg-gray-900 border-gray-900 text-white' : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50'"
+              :class="selectedTime === time ? 'bg-gray-900 border-gray-25text-white' : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50'"
             >
               {{ time }}
             </button>

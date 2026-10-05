@@ -11,7 +11,7 @@
 
     <!-- Core Steps -->
     <section class="grid grid-cols-1 md:grid-cols-3 gap-8">
-       <div v-for="(step, i) in mainSteps" :key="i" class="bg-white border border-gray-100 p-5 rounded-[3rem]  hover: transition-all group relative overflow-hidden">
+       <div v-for="(step, i) in mainSteps" :key="i" class="bg-white border border-gray-50 p-5 rounded-[3rem]  hover: transition-all group relative overflow-hidden">
           <div class="absolute -right-10 -top-10 w-32 h-32 bg-gray-50 rounded-full blur-2xl group-hover:scale-150 transition-transform"></div>
           <div class="relative z-10">
              <div class="w-14 h-14 rounded-2xl bg-gray-900 text-white flex items-center justify-center text-3xl mb-8  group-hover:rotate-12 group-hover:bg-parentPrimary transition-all">
@@ -26,7 +26,7 @@
     <!-- Detailed Modules -->
     <section class="space-y-6">
        <div v-for="(module, i) in modules" :key="i" 
-          class="flex flex-col lg:flex-row gap-8 p-10 rounded-[3rem] border border-gray-100  transition-all"
+          class="flex flex-col lg:flex-row gap-8 p-10 rounded-[3rem] border border-gray-50  transition-all"
           :class="i % 2 === 0 ? 'bg-white' : 'bg-gray-900 text-white lg:flex-row-reverse border-gray-800 '"
        >
           <div class="flex-1 space-y-6">

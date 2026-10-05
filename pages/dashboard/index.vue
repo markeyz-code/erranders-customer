@@ -218,7 +218,7 @@
     <Lock class="w-5 h-5 text-white mb-1" />
     <span class="text-white font-bold text-[8px] tracking-wide px-1 text-center leading-tight">STORE<br/>CLOSED</span>
   </div>
-  <div v-else class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white" title="Active" />
+  <div v-else class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-emerald-500 rounded-full border border-white" title="Active" />
  </div>
  <div class="flex-1 min-w-0 py-1">
  <h3 class="text-sm font-bold text-[#171310] group-hover:text-[#FF5C1A] truncate tracking-tight mb-1 transition-colors">{{ vendor.storeName }}</h3>

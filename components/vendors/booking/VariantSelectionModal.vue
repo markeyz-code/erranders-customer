@@ -1,7 +1,7 @@
 <template>
   <Teleport to="body">
     <div class="fixed inset-0 z-[110] bg-black/40 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4 animate-fade-in" @click.self="$emit('close')">
-      <div class="bg-white w-full md:w-[480px] rounded-t-3xl md:rounded-3xl shadow-sm border border-gray-100 overflow-hidden flex flex-col max-h-[85vh] animate-slide-up-modal">
+      <div class="bg-white w-full md:w-[480px] rounded-t-3xl md:rounded-3xl shadow-sm border border-gray-50 overflow-hidden flex flex-col max-h-[85vh] animate-slide-up-modal">
         
         <!-- Header -->
         <div class="p-4 border-b border-gray-50 flex items-center justify-between shrink-0">
@@ -41,7 +41,7 @@
           <button 
             @click="handleContinue"
             :disabled="!selectedVariant"
-            class="w-full py-3 bg-parentPrimary text-white rounded-xl font-bold text-sm shadow-sm border border-gray-100 hover:brightness-110 transition-all disabled:opacity-50"
+            class="w-full py-3 bg-parentPrimary text-white rounded-xl font-bold text-sm shadow-sm border border-gray-50 hover:brightness-110 transition-all disabled:opacity-50"
           >
             Continue
           </button>

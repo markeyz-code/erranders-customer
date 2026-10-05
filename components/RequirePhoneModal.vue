@@ -54,7 +54,7 @@
                   leave-from-class="transform opacity-100 scale-100"
                   leave-to-class="transform opacity-0 scale-95"
                 >
-                  <div v-if="dropdownOpen" class="absolute left-0 top-full mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50 max-h-[240px] overflow-y-auto hide-scrollbar">
+                  <div v-if="dropdownOpen" class="absolute left-0 top-full mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-50 overflow-hidden z-50 max-h-[240px] overflow-y-auto hide-scrollbar">
                     <button
                       v-for="country in countries"
                       :key="country.code"
@@ -89,7 +89,7 @@
             :disabled="isSubmitting || !isValidPhone"
             class="w-full py-4 bg-gray-900 text-white rounded-xl text-sm font-bold tracking-wider hover:bg-parentPrimary transition-all flex items-center justify-center gap-2 shadow-xl shadow-gray-900/10 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-900 mt-2"
           >
-            <span v-if="isSubmitting" class="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>
+            <span v-if="isSubmitting" class="w-5 h-5 border border-white/20 border-t-white rounded-full animate-spin"></span>
             <span v-else>Save My Number</span>
           </button>
         </form>
@@ -118,7 +118,7 @@
           </button>
           <button 
             @click="forceClose" 
-            class="w-full py-3.5 bg-white text-gray-500 rounded-xl text-sm font-bold hover:bg-gray-50 border border-gray-200 transition-colors"
+            class="w-full py-3.5 bg-white text-gray-500 rounded-xl text-sm font-bold hover:bg-gray-50 border border-gray-25 transition-colors"
           >
             I'll add it later
           </button>

@@ -6,18 +6,18 @@
     </div>
 
     <!-- Main Profile Card -->
-    <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden mb-8">
+    <div class="bg-white rounded-3xl border border-gray-50 shadow-sm overflow-hidden mb-8">
       <!-- Header / Avatar Area -->
       <div class="p-5 border-b border-gray-50 flex flex-col md:flex-row items-center gap-8">
         <div class="relative group cursor-pointer" @click="triggerFileInput">
-          <img v-if="formData.avatar" :src="formData.avatar" class="w-24 h-24 rounded-full object-cover shadow-sm border border-gray-100" alt="Avatar" />
-          <div v-else class="w-24 h-24 rounded-full bg-gray-900 text-white flex items-center justify-center text-3xl font-bold uppercase shadow-sm border border-gray-100">
+          <img v-if="formData.avatar" :src="formData.avatar" class="w-24 h-24 rounded-full object-cover shadow-sm border border-gray-50" alt="Avatar" />
+          <div v-else class="w-24 h-24 rounded-full bg-gray-900 text-white flex items-center justify-center text-3xl font-bold uppercase shadow-sm border border-gray-50">
             {{ userInitials }}
           </div>
           <div class="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
             <Camera class="w-6 h-6 text-white" />
           </div>
-          <button type="button" class="absolute bottom-0 right-0 w-8 h-8 bg-white rounded-full border border-gray-200 shadow-sm flex items-center justify-center text-gray-600 hover:text-parentPrimary transition-colors z-10">
+          <button type="button" class="absolute bottom-0 right-0 w-8 h-8 bg-white rounded-full border border-gray-25 shadow-sm flex items-center justify-center text-gray-600 hover:text-parentPrimary transition-colors z-10">
             <Loader2 v-if="uploading" class="w-4 h-4 animate-spin" />
             <Camera v-else class="w-4 h-4" />
           </button>
@@ -53,7 +53,7 @@
             <input 
               type="text" 
               v-model="formData.firstName"
-              class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-parentPrimary focus:ring-4 focus:ring-parentPrimary/10 transition-all text-base outline-none"
+              class="w-full px-4 py-3 bg-gray-50 border border-gray-25 rounded-xl focus:bg-white focus:border-parentPrimary focus:ring-4 focus:ring-parentPrimary/10 transition-all text-base outline-none"
             >
           </div>
           
@@ -62,7 +62,7 @@
             <input 
               type="text" 
               v-model="formData.lastName"
-              class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-parentPrimary focus:ring-4 focus:ring-parentPrimary/10 transition-all text-base outline-none"
+              class="w-full px-4 py-3 bg-gray-50 border border-gray-25 rounded-xl focus:bg-white focus:border-parentPrimary focus:ring-4 focus:ring-parentPrimary/10 transition-all text-base outline-none"
             >
           </div>
 
@@ -72,7 +72,7 @@
               type="tel" 
               v-model="formData.phone"
               placeholder="+234"
-              class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-parentPrimary focus:ring-4 focus:ring-parentPrimary/10 transition-all text-base outline-none"
+              class="w-full px-4 py-3 bg-gray-50 border border-gray-25 rounded-xl focus:bg-white focus:border-parentPrimary focus:ring-4 focus:ring-parentPrimary/10 transition-all text-base outline-none"
             >
           </div>
 
@@ -82,7 +82,7 @@
               type="email" 
               :value="user?.email"
               readonly
-              class="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-gray-500 text-base outline-none cursor-not-allowed"
+              class="w-full px-4 py-3 bg-gray-100 border border-gray-25 rounded-xl text-gray-500 text-base outline-none cursor-not-allowed"
             >
           </div>
 
@@ -91,7 +91,7 @@
             <input 
               type="date" 
               v-model="formData.dateOfBirth"
-              class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-parentPrimary focus:ring-4 focus:ring-parentPrimary/10 transition-all text-base outline-none"
+              class="w-full px-4 py-3 bg-gray-50 border border-gray-25 rounded-xl focus:bg-white focus:border-parentPrimary focus:ring-4 focus:ring-parentPrimary/10 transition-all text-base outline-none"
             >
           </div>
 
@@ -99,7 +99,7 @@
             <label class="text-sm font-bold text-gray-700">Gender</label>
             <select 
               v-model="formData.gender"
-              class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-parentPrimary focus:ring-4 focus:ring-parentPrimary/10 transition-all text-base outline-none appearance-none"
+              class="w-full px-4 py-3 bg-gray-50 border border-gray-25 rounded-xl focus:bg-white focus:border-parentPrimary focus:ring-4 focus:ring-parentPrimary/10 transition-all text-base outline-none appearance-none"
             >
               <option value="" disabled>Select gender</option>
               <option value="male">Male</option>
@@ -112,13 +112,13 @@
     </div>
 
     <!-- Addresses Section -->
-    <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden mb-8">
+    <div class="bg-white rounded-3xl border border-gray-50 shadow-sm overflow-hidden mb-8">
       <div class="p-4 border-b border-gray-50 flex items-center justify-between">
         <div>
           <h2 class="text-lg font-bold text-gray-900">My addresses</h2>
           <p class="text-sm text-gray-500 mt-0.5">Manage your saved locations</p>
         </div>
-        <button class="w-10 h-10 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-900 hover:bg-gray-100 transition-colors">
+        <button class="w-10 h-10 rounded-xl bg-gray-50 border border-gray-50 flex items-center justify-center text-gray-900 hover:bg-gray-100 transition-colors">
           <Plus class="w-5 h-5" />
         </button>
       </div>
@@ -126,7 +126,7 @@
       <div class="p-4">
         <div class="flex flex-col gap-3">
           <label class="text-sm font-bold text-gray-700">Home Address</label>
-          <div class="flex items-center gap-4 p-4 border border-gray-100 rounded-2xl hover:border-parentPrimary/30 transition-colors group relative bg-white">
+          <div class="flex items-center gap-4 p-4 border border-gray-50 rounded-2xl hover:border-parentPrimary/30 transition-colors group relative bg-white">
             <div class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 group-hover:text-parentPrimary transition-colors shrink-0">
               <Home class="w-5 h-5" />
             </div>
@@ -143,7 +143,7 @@
 
         <div class="flex flex-col gap-3 mt-6">
           <label class="text-sm font-bold text-gray-700">Work Address</label>
-          <div class="flex items-center gap-4 p-4 border border-gray-100 rounded-2xl hover:border-parentPrimary/30 transition-colors group relative bg-white">
+          <div class="flex items-center gap-4 p-4 border border-gray-50 rounded-2xl hover:border-parentPrimary/30 transition-colors group relative bg-white">
             <div class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 group-hover:text-parentPrimary transition-colors shrink-0">
               <Briefcase class="w-5 h-5" />
             </div>

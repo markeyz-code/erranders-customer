@@ -18,7 +18,7 @@
           <h3 class="text-base font-bold truncate leading-tight">{{ vendorName }}</h3>
           <p class="text-[11px] text-white/70 font-medium truncate">
             <span v-if="serviceName" class="text-emerald-100">Enquiry: {{ serviceName }}</span>
-            <span v-else-if="isTyping" class="text-emerald-300 italic">typing...</span>
+            <span v-else-if="isTyping" class="text-emerald-300 ">typing...</span>
             <span v-else>Vendor • Tap here for info</span>
           </p>
         </div>

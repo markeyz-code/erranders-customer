@@ -21,7 +21,7 @@
         <p v-if="error" class="text-red-500 text-sm font-medium">{{ error }}</p>
 
         <button type="submit" :disabled="loading || !otp"
-          class="w-full py-2 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-[1.2rem] font-medium text-sm  transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/20 active:scale-95">
+          class="w-full py-2 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-[1.2rem] font-medium text-sm  transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-50 shadow-[#FF5C1A]/20 active:scale-95">
           <Loader2 v-if="loading" class="animate-spin w-4 h-4" />
           {{ loading ? 'Verifying...' : 'Verify email' }}
         </button>

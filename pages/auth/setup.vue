@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen w-full flex flex-col items-center justify-center bg-white overflow-hidden py-8 px-4 sm:px-4 lg:px-5">
-    <div class="w-full max-w-xl flex flex-col justify-center px-4 sm:px-8 py-8 bg-white sm:rounded-[2rem] relative z-10 my-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
+    <div class="w-full max-w-xl flex flex-col justify-center px-4 sm:px-8 py-8 bg-white sm:rounded-[2rem] relative z-10 my-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50">
       
       <div class="mb-6 text-center flex flex-col items-center">
         <NuxtLink to="/" class="flex items-center gap-2 mb-6 inline-block group">
@@ -35,15 +35,15 @@
           <h2 class="text-lg font-bold text-gray-900 mb-4">Personal Information</h2>
           <div class="space-y-2">
             <label class="text-sm font-bold text-gray-700">Phone Number *</label>
-            <input v-model="form.phone" type="tel" required placeholder="+234..." class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-[#FF5C1A] focus:ring-4 focus:ring-[#FF5C1A]/10 transition-all text-sm outline-none" />
+            <input v-model="form.phone" type="tel" required placeholder="+234..." class="w-full px-4 py-2 bg-gray-50 border border-gray-25 rounded-xl focus:bg-white focus:border-[#FF5C1A] focus:ring-4 focus:ring-[#FF5C1A]/10 transition-all text-sm outline-none" />
           </div>
           <div class="space-y-2">
             <label class="text-sm font-bold text-gray-700">Date of Birth</label>
-            <input v-model="form.dateOfBirth" type="date" class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-[#FF5C1A] focus:ring-4 focus:ring-[#FF5C1A]/10 transition-all text-sm outline-none" />
+            <input v-model="form.dateOfBirth" type="date" class="w-full px-4 py-2 bg-gray-50 border border-gray-25 rounded-xl focus:bg-white focus:border-[#FF5C1A] focus:ring-4 focus:ring-[#FF5C1A]/10 transition-all text-sm outline-none" />
           </div>
           <div class="space-y-2">
             <label class="text-sm font-bold text-gray-700">Gender</label>
-            <select v-model="form.gender" class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-[#FF5C1A] focus:ring-4 focus:ring-[#FF5C1A]/10 transition-all text-sm outline-none appearance-none">
+            <select v-model="form.gender" class="w-full px-4 py-2 bg-gray-50 border border-gray-25 rounded-xl focus:bg-white focus:border-[#FF5C1A] focus:ring-4 focus:ring-[#FF5C1A]/10 transition-all text-sm outline-none appearance-none">
               <option value="" disabled>Select gender</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
@@ -56,7 +56,7 @@
         <div v-if="currentStep === 2" class="space-y-4 animate-fade-in">
           <h2 class="text-lg font-bold text-gray-900 mb-4">Notification Preferences</h2>
           
-          <label class="flex items-center gap-4 p-4 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors">
+          <label class="flex items-center gap-4 p-4 border border-gray-50 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors">
             <input type="checkbox" v-model="form.preferences.emailNotifications" class="w-5 h-5 accent-[#FF5C1A] rounded border-gray-300" />
             <div class="flex-1">
               <p class="font-bold text-gray-900">Email Notifications</p>
@@ -64,7 +64,7 @@
             </div>
           </label>
           
-          <label class="flex items-center gap-4 p-4 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors">
+          <label class="flex items-center gap-4 p-4 border border-gray-50 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors">
             <input type="checkbox" v-model="form.preferences.smsNotifications" class="w-5 h-5 accent-[#FF5C1A] rounded border-gray-300" />
             <div class="flex-1">
               <p class="font-bold text-gray-900">SMS Notifications</p>
@@ -72,7 +72,7 @@
             </div>
           </label>
 
-          <label class="flex items-center gap-4 p-4 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors">
+          <label class="flex items-center gap-4 p-4 border border-gray-50 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors">
             <input type="checkbox" v-model="form.preferences.marketingPromos" class="w-5 h-5 accent-[#FF5C1A] rounded border-gray-300" />
             <div class="flex-1">
               <p class="font-bold text-gray-900">Promotions & Offers</p>
@@ -84,7 +84,7 @@
         <!-- Step 3: Review -->
         <div v-if="currentStep === 3" class="space-y-4 animate-fade-in">
           <h2 class="text-lg font-bold text-gray-900 mb-4">Review Your Info</h2>
-          <div class="bg-gray-50 p-5 rounded-xl border border-gray-100 space-y-3">
+          <div class="bg-gray-50 p-5 rounded-xl border border-gray-50 space-y-3">
             <div class="flex justify-between border-b border-gray-200 pb-2">
               <span class="text-gray-500 text-sm">Phone</span>
               <span class="font-bold text-gray-900">{{ form.phone || 'Not provided' }}</span>

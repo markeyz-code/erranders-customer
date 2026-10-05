@@ -22,13 +22,13 @@
         <UiAnimatedInput v-model="form.matricNumber" type="text" label="matric number" placeholder="" />
         <UiAnimatedInput v-model="form.password" type="password" label="password" required minlength="6" placeholder="" />
         <UiAnimatedInput v-model="form.dateOfBirth" type="date" label="birthday" placeholder="" />
-        <UiSelectInput v-model="form.gender" label="gender" :options="['Male', 'Female', 'Other']" placeholder="Select your gender" />
+        <UiSelectInput v-model="form.gender" label="gender" :options="['Male', 'Female', 'Other']"  />
         <UiAnimatedInput v-model="form.referredBy" type="text" label="referral code (optional)" @input="formatReferralCode" />
 
         <p v-if="error" class="text-red-500 text-sm font-medium">{{ error }}</p>
 
         <button type="submit" :disabled="loading || validatingReferral"
-          class="w-full py-2 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-bold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/20 mt-4">
+          class="w-full py-3 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-bold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-50 shadow-[#FF5C1A]/20 mt-4">
           <Loader2 v-if="loading || validatingReferral" class="animate-spin w-5 h-5" />
           {{ loading || validatingReferral ? 'validating...' : 'create account' }}
         </button>
@@ -41,7 +41,7 @@
       </div>
 
       <div class="max-w-sm w-full mt-2">
-        <button type="button" @click="firebaseLogin()" :disabled="firebaseLoading" class="w-full py-2 border border-gray-100 rounded-xl flex items-center justify-center gap-3 font-bold text-gray-700 hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+        <button type="button" @click="firebaseLogin()" :disabled="firebaseLoading" class="w-full py-2 border border-gray-50 rounded-xl flex items-center justify-center gap-3 font-bold text-gray-700 hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
           <Loader2 v-if="firebaseLoading" class="animate-spin w-4 h-4" />
           <svg v-else class="w-4 h-4" viewBox="0 0 24 24">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
@@ -57,11 +57,11 @@
         </p>
       </div>
 
-      <div class="mt-12 pt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-400 font-medium border-t border-gray-50">
+      <!-- <div class="mt-12 pt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-400 font-medium border-t border-gray-50">
         <p>&copy; {{ new Date().getFullYear() }} Errandr</p>
         <NuxtLink to="/terms" class="hover:text-gray-600">Terms</NuxtLink>
         <NuxtLink to="/terms" class="hover:text-gray-600">Privacy</NuxtLink>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

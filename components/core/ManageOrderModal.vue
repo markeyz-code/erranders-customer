@@ -25,7 +25,7 @@
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-sm border border-gray-100 transition-all sm:my-8 w-full"
+              class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-sm border border-gray-50 transition-all sm:my-8 w-full"
               :class="order ? 'max-w-2xl' : 'max-w-4xl'"
             >
               <!-- Close Button -->
@@ -55,7 +55,7 @@
                             v-model="form.orderNumber"
                             type="text"
                             required
-                            class="peer w-full border border-gray-200 rounded-xl px-4 py-3.5 text-base placeholder-transparent focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary outline-none transition-all"
+                            class="peer w-full border border-gray-25 rounded-xl px-4 py-3.5 text-base placeholder-transparent focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary outline-none transition-all"
                             placeholder="Order reference"
                           />
                           <label
@@ -75,7 +75,7 @@
                             v-model="form.email"
                             type="email"
                             required
-                            class="peer w-full border border-gray-200 rounded-xl px-4 py-3.5 text-base placeholder-transparent focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary outline-none transition-all"
+                            class="peer w-full border border-gray-25 rounded-xl px-4 py-3.5 text-base placeholder-transparent focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary outline-none transition-all"
                             placeholder="Email address"
                           />
                           <label
@@ -90,7 +90,7 @@
                       <button
                         type="submit"
                         :disabled="loading"
-                        class="w-full mt-4 bg-parentPrimary hover:bg-orange-600 text-white py-3.5 rounded-xl font-medium transition-colors flex items-center justify-center shadow-sm border border-gray-100 shadow-orange-200"
+                        class="w-full mt-4 bg-parentPrimary hover:bg-orange-600 text-white py-3.5 rounded-xl font-medium transition-colors flex items-center justify-center shadow-sm border border-gray-50 shadow-orange-200"
                       >
                         <Loader2 v-if="loading" class="w-5 h-5 animate-spin" />
                         <span v-else>Login</span>
@@ -116,7 +116,7 @@
                         leave-from-class="transform translate-x-0 opacity-100"
                         leave-to-class="transform -translate-x-12 opacity-0"
                       >
-                        <div :key="currentSlide" class="bg-white rounded-2xl p-5 text-left shadow-sm border border-gray-100 hover:scale-[1.02] duration-300 w-full h-full flex flex-col justify-center">
+                        <div :key="currentSlide" class="bg-white rounded-2xl p-5 text-left shadow-sm border border-gray-50 hover:scale-[1.02] duration-300 w-full h-full flex flex-col justify-center">
                           <h3 class="text-xl font-bold text-gray-900 mb-2">{{ slides[currentSlide].title }}</h3>
                           <p class="text-sm text-gray-500">{{ slides[currentSlide].desc }}</p>
                         </div>
@@ -142,7 +142,7 @@
                 <!-- Vendor Info Header -->
                 <div class="flex items-center justify-between mb-6 pb-6 border-b border-gray-100">
                   <div class="flex items-center gap-4">
-                    <div class="w-14 h-14 rounded-2xl bg-gray-50 border border-gray-100 overflow-hidden flex items-center justify-center shrink-0">
+                    <div class="w-14 h-14 rounded-2xl bg-gray-50 border border-gray-50 overflow-hidden flex items-center justify-center shrink-0">
                       <video v-if="order.vendor?.logo && order.vendor.logo.match(/\\.(mp4|webm|ogg|mov)$/i)" :src="order.vendor.logo" class="w-full h-full object-cover" autoplay loop muted playsinline></video>
                       <img v-else-if="order.vendor?.logo" :src="order.vendor.logo" class="w-full h-full object-cover" />
                       <PackageIcon v-else class="w-6 h-6 text-gray-400" />
@@ -159,7 +159,7 @@
 
                 <div class="space-y-6">
                   <!-- Status and Total -->
-                  <div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                  <div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl border border-gray-50">
                     <div>
                       <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Status</p>
                       <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium" :class="statusClass(order.status)">
@@ -174,7 +174,7 @@
 
                   <!-- Date & Location -->
                   <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-gray-50 rounded-2xl p-4 border border-gray-100 flex items-center gap-3">
+                    <div class="bg-gray-50 rounded-2xl p-4 border border-gray-50 flex items-center gap-3">
                       <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-gray-50 text-parentPrimary">
                         <CalendarIcon class="w-5 h-5" />
                       </div>
@@ -183,7 +183,7 @@
                         <p class="text-sm font-bold text-gray-900">{{ formatDate(order.createdAt) }}</p>
                       </div>
                     </div>
-                    <div class="bg-gray-50 rounded-2xl p-4 border border-gray-100 flex items-center gap-3">
+                    <div class="bg-gray-50 rounded-2xl p-4 border border-gray-50 flex items-center gap-3">
                       <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-gray-50 text-parentPrimary">
                         <MapPinIcon class="w-5 h-5" />
                       </div>
@@ -199,13 +199,13 @@
                   <!-- Items List -->
                   <div>
                     <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Order Items</h4>
-                    <div v-if="order.type === 'custom_errand'" class="text-sm text-gray-900 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                    <div v-if="order.type === 'custom_errand'" class="text-sm text-gray-900 bg-gray-50 p-4 rounded-xl border border-gray-50">
                       <p><span class="font-bold">Pickup:</span> {{ order.customDetails?.pickupLocation }}</p>
                       <p class="mt-2"><span class="font-bold">Details:</span> {{ order.customDetails?.description }}</p>
                     </div>
                     
                     <div v-else class="space-y-3">
-                      <div v-for="(item, idx) in order.items" :key="idx" class="flex justify-between items-start bg-gray-50 p-4 rounded-xl border border-gray-100">
+                      <div v-for="(item, idx) in order.items" :key="idx" class="flex justify-between items-start bg-gray-50 p-4 rounded-xl border border-gray-50">
                         <div>
                           <p class="text-sm font-bold text-gray-900">{{ item.name }} x{{ item.quantity }}</p>
                           <div v-if="item.customizations?.length" class="mt-2 space-y-1">
@@ -217,7 +217,7 @@
                         </div>
                         <p class="text-sm font-bold text-gray-900">NGN {{ item.subtotal?.toLocaleString() }}</p>
                       </div>
-                      <div v-for="(pack, pIdx) in order.packs" :key="'pack'+pIdx" class="flex justify-between items-start bg-gray-50 p-4 rounded-xl border border-gray-100">
+                      <div v-for="(pack, pIdx) in order.packs" :key="'pack'+pIdx" class="flex justify-between items-start bg-gray-50 p-4 rounded-xl border border-gray-50">
                         <div>
                           <p class="text-sm font-bold text-gray-900">Pack: {{ pack.name || 'Custom Pack' }}</p>
                           <div class="mt-2 space-y-1">
@@ -243,7 +243,7 @@
                         <span>Cancel Order</span>
                       </button>
                     </template>
-                    <div v-else class="text-center text-sm text-gray-500 bg-gray-50 rounded-xl py-3.5 border border-gray-100">
+                    <div v-else class="text-center text-sm text-gray-500 bg-gray-50 rounded-xl py-3.5 border border-gray-50">
                       This order cannot be cancelled because it is {{ order.status.replace(/_/g, ' ') }}.
                     </div>
                   </div>

@@ -3,9 +3,9 @@
     <button
       ref="triggerRef"
       @click="isOpen = !isOpen"
-      class="flex items-center gap-2 px-4 py-3 rounded-full border border-gray-100 transition-all hover:bg-gray-50 active:scale-95 whitespace-nowrap"
+      class="flex items-center gap-2 px-4 py-3 rounded-full border border-gray-50 transition-all hover:bg-gray-50 active:scale-95 whitespace-nowrap"
       :class="[
-        isOpen ? 'bg-gray-900 text-white border-gray-900 shadow-sm border border-gray-100' : 'bg-white text-gray-600',
+        isOpen ? 'bg-gray-900 text-white border-gray-25shadow-sm border border-gray-50' : 'bg-white text-gray-600',
         active ? 'bg-parentPrimary/10 text-parentPrimary border-parentPrimary/20' : ''
       ]"
     >
@@ -24,7 +24,7 @@
       >
         <div 
           v-if="isOpen" 
-          class="fixed z-[9999] w-80 bg-white rounded-[2rem] shadow-sm border border-gray-100 border border-gray-100 p-5"
+          class="fixed z-[9999] w-80 bg-white rounded-[2rem] shadow-sm border border-gray-50 border border-gray-50 p-5"
           :style="{
             top: `${y + height + 12}px`,
             left: `${x}px`
@@ -50,7 +50,7 @@
             </button>
             <button
               @click="apply"
-              class="px-10 py-4 bg-gray-900 text-white rounded-2xl text-sm font-bold shadow-sm border border-gray-100 hover:bg-parentPrimary transition-all active:scale-95"
+              class="px-10 py-4 bg-gray-900 text-white rounded-2xl text-sm font-bold shadow-sm border border-gray-50 hover:bg-parentPrimary transition-all active:scale-95"
             >
               Apply
             </button>

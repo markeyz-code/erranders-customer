@@ -1,5 +1,5 @@
 <template>
-  <div class="h-[calc(100vh-12rem)] flex bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden animate-fade-in">
+  <div class="h-[calc(100vh-12rem)] flex bg-white rounded-3xl border border-gray-50 shadow-sm overflow-hidden animate-fade-in">
     
     <!-- Left Panel: Conversations List -->
     <div class="w-full md:w-[350px] lg:w-[400px] border-r border-gray-50 flex flex-col bg-white shrink-0">
@@ -11,7 +11,7 @@
           <input 
             type="text" 
             placeholder="Search messages..." 
-            class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl focus:bg-white focus:border-parentPrimary focus:ring-4 focus:ring-parentPrimary/10 transition-all text-base outline-none font-medium"
+            class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-50 rounded-xl focus:bg-white focus:border-parentPrimary focus:ring-4 focus:ring-parentPrimary/10 transition-all text-base outline-none font-medium"
           >
           <Search class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
         </div>
@@ -40,8 +40,8 @@
             :class="activeConversation?.user?._id === conv.user?._id ? 'bg-gray-50' : ''"
           >
             <div class="relative shrink-0">
-              <img :src="conv.user?.avatar || '/placeholder-store.jpg'" class="w-12 h-12 rounded-full object-cover bg-gray-100 border border-gray-200" />
-              <div v-if="conv.unreadCount > 0" class="absolute -top-1 -right-1 w-4 h-4 bg-parentPrimary border-2 border-white rounded-full flex items-center justify-center"></div>
+              <img :src="conv.user?.avatar || '/placeholder-store.jpg'" class="w-12 h-12 rounded-full object-cover bg-gray-100 border border-gray-25" />
+              <div v-if="conv.unreadCount > 0" class="absolute -top-1 -right-1 w-4 h-4 bg-parentPrimary border border-white rounded-full flex items-center justify-center"></div>
             </div>
             <div class="flex-1 min-w-0">
               <div class="flex items-center justify-between mb-0.5">
@@ -64,7 +64,7 @@
     <!-- Right Panel: Active Conversation -->
     <div class="flex-1 bg-white hidden md:flex flex-col relative">
       <div v-if="!activeConversation" class="absolute inset-0 flex flex-col items-center justify-center text-center p-5 bg-gray-50/50">
-        <div class="w-20 h-20 bg-white rounded-3xl shadow-sm border border-gray-100 flex items-center justify-center mb-6">
+        <div class="w-20 h-20 bg-white rounded-3xl shadow-sm border border-gray-50 flex items-center justify-center mb-6">
           <MessageCircle class="w-10 h-10 text-gray-300" />
         </div>
         <h3 class="text-xl font-bold text-gray-900 mb-2">Your Messages</h3>
@@ -75,7 +75,7 @@
         <!-- Chat Header -->
         <div class="p-4 border-b border-gray-50 flex items-center justify-between bg-white shrink-0">
           <div class="flex items-center gap-3">
-            <img :src="activeConversation.user.avatar || '/placeholder-store.jpg'" class="w-10 h-10 rounded-full object-cover border border-gray-200" />
+            <img :src="activeConversation.user.avatar || '/placeholder-store.jpg'" class="w-10 h-10 rounded-full object-cover border border-gray-25" />
             <div>
               <h2 class="text-sm font-bold text-gray-900">
                 {{ activeConversation.user.storeName || `${activeConversation.user.firstName} ${activeConversation.user.lastName}`.trim() || 'Vendor' }}
@@ -90,7 +90,7 @@
         <!-- Chat Area -->
         <div class="flex-1 overflow-y-auto hide-scrollbar p-4 bg-gray-50/30" ref="chatAreaRef">
           <div v-if="isMessagesLoading" class="flex justify-center my-4">
-            <div class="w-6 h-6 border-2 border-parentPrimary border-t-transparent rounded-full animate-spin"></div>
+            <div class="w-6 h-6 border border-parentPrimary border-t-transparent rounded-full animate-spin"></div>
           </div>
           <div class="space-y-6" v-else>
             <div v-for="msg in messages" :key="msg._id" :class="['flex', isMe(msg.senderId) ? 'justify-end' : 'justify-start']">
@@ -98,7 +98,7 @@
                 'max-w-[75%] px-5 py-3 shadow-sm rounded-2xl',
                 isMe(msg.senderId) 
                   ? 'bg-gray-900 text-white rounded-tr-sm' 
-                  : 'bg-white border border-gray-100 text-gray-900 rounded-tl-sm'
+                  : 'bg-white border border-gray-50 text-gray-900 rounded-tl-sm'
               ]">
                 <p class="text-sm font-medium">{{ msg.message || msg.content }}</p>
                 <p :class="[
@@ -114,7 +114,7 @@
 
         <!-- Message Input -->
         <div class="p-4 bg-white border-t border-gray-50 shrink-0">
-          <div class="flex items-end gap-2 bg-gray-50 border border-gray-200 rounded-2xl p-2 focus-within:border-parentPrimary focus-within:bg-white focus-within:ring-4 focus-within:ring-parentPrimary/10 transition-all">
+          <div class="flex items-end gap-2 bg-gray-50 border border-gray-25 rounded-2xl p-2 focus-within:border-parentPrimary focus-within:bg-white focus-within:ring-4 focus-within:ring-parentPrimary/10 transition-all">
             <button class="p-2.5 text-gray-400 hover:text-gray-600 transition-colors shrink-0">
               <Paperclip class="w-5 h-5" />
             </button>

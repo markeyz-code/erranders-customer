@@ -6,11 +6,11 @@
     </div>
 
     <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-2 md:px-0">
-      <div v-for="i in 6" :key="i" class="h-80 bg-white border border-gray-100 rounded-3xl animate-pulse" />
+      <div v-for="i in 6" :key="i" class="h-80 bg-white border border-gray-50 rounded-3xl animate-pulse" />
     </div>
 
     <div v-else-if="favorites.length === 0" class="px-2 md:px-0">
-      <div class="bg-white rounded-3xl text-center p-16 border border-gray-100 shadow-sm animate-fade-in">
+      <div class="bg-white rounded-3xl text-center p-16 border border-gray-50 shadow-sm animate-fade-in">
         <div class="w-20 h-20 bg-gray-50 rounded-2xl flex items-center justify-center text-4xl mx-auto mb-6">❤️</div>
         <h2 class="text-xl font-bold text-gray-900 mb-2">No favorites yet</h2>
         <p class="text-sm text-gray-500 mb-8 max-w-sm mx-auto">Tap the heart icon on any venue or service to save it here for quick access.</p>
@@ -22,12 +22,12 @@
       <div 
         v-for="fav in favorites" 
         :key="fav._id" 
-        class="group bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-sm border border-gray-100 hover:border-gray-200 transition-all cursor-pointer overflow-hidden flex flex-col relative"
+        class="group bg-white rounded-3xl border border-gray-50 shadow-sm hover:shadow-sm border border-gray-50 hover:border-gray-200 transition-all cursor-pointer overflow-hidden flex flex-col relative"
         @click="router.push(`/vendors/${fav.vendor?._id}`)"
       >
         <button
           @click.stop="removeFavorite(fav)"
-          class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/80 backdrop-blur-md text-rose-500 flex items-center justify-center shadow-sm hover:bg-rose-500 hover:text-white transition-all border border-gray-100"
+          class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/80 backdrop-blur-md text-rose-500 flex items-center justify-center shadow-sm hover:bg-rose-500 hover:text-white transition-all border border-gray-50"
         >
           <Heart class="w-5 h-5 fill-current" />
         </button>

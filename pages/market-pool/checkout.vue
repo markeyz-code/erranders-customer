@@ -14,7 +14,7 @@
 
     <div class="p-4" v-if="marketStore.cart.length > 0">
       <!-- Order Summary -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-4">
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-50 overflow-hidden mb-4">
         <div class="p-4 border-b border-gray-100">
           <h2 class="font-bold text-gray-900">Your Pool Order</h2>
         </div>
@@ -45,7 +45,7 @@
       </div>
 
       <!-- Payment Breakdown -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-50 overflow-hidden mb-6">
         <div class="p-4 space-y-3">
           <div class="flex justify-between text-sm">
             <span class="text-gray-500">Items Total</span>
@@ -63,7 +63,7 @@
       </div>
 
       <!-- Delivery Preferences -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6 p-5">
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-50 overflow-hidden mb-6 p-5">
         <h3 class="font-bold text-gray-900 mb-4">Delivery Preferences</h3>
         
         <div class="space-y-4">
@@ -86,7 +86,7 @@
               <span class="text-sm font-semibold text-gray-700">Someone else will receive this (Proxy)</span>
             </label>
             
-            <div v-if="useProxy" class="space-y-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
+            <div v-if="useProxy" class="space-y-3 p-3 bg-gray-50 rounded-xl border border-gray-50">
               <div>
                 <label class="block text-xs font-semibold text-gray-600 mb-1">Receiver Name</label>
                 <input v-model="deliveryDetails.proxyName" type="text" placeholder="e.g. John Doe (Roommate)" class="w-full bg-white border-gray-200 text-gray-900 rounded-lg focus:ring-primary px-3 py-2 border outline-none text-sm">
@@ -106,7 +106,7 @@
         :disabled="loading"
         class="w-full bg-primary text-white font-bold rounded-xl py-4 flex items-center justify-center gap-2 shadow-lg shadow-primary/30 disabled:opacity-70"
       >
-        <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+        <div v-if="loading" class="w-5 h-5 border border-white/30 border-t-white rounded-full animate-spin"></div>
         <span v-else>Confirm Order & Proceed to Payment</span>
       </button>
       <p class="text-center text-[10px] text-gray-400 mt-3 px-4">

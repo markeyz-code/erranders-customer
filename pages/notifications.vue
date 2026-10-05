@@ -16,11 +16,11 @@
 
     <!-- Loading State -->
     <div v-if="loading" class="space-y-4">
-      <div v-for="i in 5" :key="i" class="h-24 bg-white rounded-2xl border border-gray-100 animate-pulse" />
+      <div v-for="i in 5" :key="i" class="h-24 bg-white rounded-2xl border border-gray-50 animate-pulse" />
     </div>
 
     <!-- Empty State -->
-    <div v-else-if="notifications.length === 0" class="bg-white rounded-3xl p-12 text-center border border-gray-100 shadow-sm">
+    <div v-else-if="notifications.length === 0" class="bg-white rounded-3xl p-12 text-center border border-gray-50 shadow-sm">
       <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">🔔</div>
       <h3 class="text-lg font-bold text-gray-900 mb-2">No notifications yet</h3>
       <p class="text-gray-500 max-w-xs mx-auto">We'll let you know when there's an update on your orders or errands.</p>

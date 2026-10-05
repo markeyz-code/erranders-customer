@@ -24,16 +24,16 @@
           Track My Order Status
         </button>
         
-        <button @click="$router.push('/market-pool')" class="w-full py-3.5 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold transition-all border border-gray-200">
+        <button @click="$router.push('/market-pool')" class="w-full py-3.5 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold transition-all border border-gray-25">
           Back to Market Pool
         </button>
       </div>
 
       <!-- Support Section -->
-      <div class="mt-12 p-5 bg-white rounded-2xl shadow-sm border border-gray-100 w-full max-w-sm">
+      <div class="mt-12 p-5 bg-white rounded-2xl shadow-sm border border-gray-50 w-full max-w-sm">
         <h3 class="text-sm font-bold text-gray-800 mb-1">Need Support?</h3>
         <p class="text-xs text-gray-500 mb-4">Got questions about your order? We're here to help.</p>
-        <button @click="showSupportModal = true" class="flex items-center justify-center gap-2 py-2.5 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-xl text-sm font-semibold transition-colors border border-gray-200 w-full">
+        <button @click="showSupportModal = true" class="flex items-center justify-center gap-2 py-2.5 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-xl text-sm font-semibold transition-colors border border-gray-25 w-full">
           <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
           Contact Support
         </button>
@@ -64,7 +64,7 @@
             </div>
           </a>
 
-          <button @click="copyEmail" class="w-full flex items-center gap-4 p-4 bg-gray-50 hover:bg-gray-100 rounded-2xl transition-colors border border-gray-200">
+          <button @click="copyEmail" class="w-full flex items-center gap-4 p-4 bg-gray-50 hover:bg-gray-100 rounded-2xl transition-colors border border-gray-25">
             <div class="w-10 h-10 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center shrink-0">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
             </div>

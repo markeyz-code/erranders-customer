@@ -213,11 +213,11 @@
                 <div class="space-y-3">
                   <input 
                     v-model="recipientName" type="text" placeholder="Full Name"
-                    class="w-full bg-gray-50 border border-gray-100 focus:border-parentPrimary/50 rounded-xl px-4 py-4 text-sm font-medium text-gray-900 outline-none transition-all"
+                    class="w-full bg-gray-50 border border-gray-50 focus:border-parentPrimary/50 rounded-xl px-4 py-4 text-sm font-medium text-gray-900 outline-none transition-all"
                   />
                   <input 
                     v-model="recipientPhone" type="tel" placeholder="Phone Number"
-                    class="w-full bg-gray-50 border border-gray-100 focus:border-parentPrimary/50 rounded-xl px-4 py-4 text-sm font-medium text-gray-900 outline-none transition-all"
+                    class="w-full bg-gray-50 border border-gray-50 focus:border-parentPrimary/50 rounded-xl px-4 py-4 text-sm font-medium text-gray-900 outline-none transition-all"
                   />
                 </div>
               </div>
@@ -227,7 +227,7 @@
                 <div class="grid grid-cols-2 gap-3">
                   <button 
                     @click="deliveryMode = 'room_delivery'"
-                    class="flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all"
+                    class="flex flex-col items-center justify-center p-3 rounded-xl border transition-all"
                     :class="deliveryMode === 'room_delivery' ? 'border-parentPrimary bg-parentPrimary/5' : 'border-gray-100 bg-white hover:border-gray-200'"
                   >
                     <MapPin class="w-4 h-4 mb-1" :class="deliveryMode === 'room_delivery' ? 'text-parentPrimary' : 'text-gray-400'" />
@@ -235,7 +235,7 @@
                   </button>
                   <button 
                     @click="deliveryMode = 'dropoff_service'"
-                    class="flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all"
+                    class="flex flex-col items-center justify-center p-3 rounded-xl border transition-all"
                     :class="deliveryMode === 'dropoff_service' ? 'border-parentPrimary bg-parentPrimary/5' : 'border-gray-100 bg-white hover:border-gray-200'"
                   >
                     <Building class="w-4 h-4 mb-1" :class="deliveryMode === 'dropoff_service' ? 'text-parentPrimary' : 'text-gray-400'" />
@@ -255,14 +255,14 @@
                 <div class="grid grid-cols-2 gap-3 mb-4">
                   <button 
                     @click="locationType = 'inside_campus'"
-                    class="flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all"
+                    class="flex flex-col items-center justify-center p-3 rounded-xl border transition-all"
                     :class="locationType === 'inside_campus' ? 'border-parentPrimary bg-parentPrimary/5' : 'border-gray-100 bg-white hover:border-gray-200'"
                   >
                     <span class="text-xs font-bold" :class="locationType === 'inside_campus' ? 'text-parentPrimary' : 'text-gray-900'">Inside Campus</span>
                   </button>
                   <button 
                     @click="locationType = 'outside_campus'"
-                    class="flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all"
+                    class="flex flex-col items-center justify-center p-3 rounded-xl border transition-all"
                     :class="locationType !== 'inside_campus' ? 'border-parentPrimary bg-parentPrimary/5' : 'border-gray-100 bg-white hover:border-gray-200'"
                   >
                     <span class="text-xs font-bold" :class="locationType !== 'inside_campus' ? 'text-parentPrimary' : 'text-gray-900'">Outside Campus</span>
@@ -271,7 +271,7 @@
                 <input 
                   v-model="specificAddress" type="text"
                   :placeholder="locationType === 'inside_campus' ? 'e.g. Block 4 Common Room' : 'e.g. 123 Main Street, Yaba, Lagos'"
-                  class="w-full bg-gray-50 border border-gray-100 focus:border-parentPrimary/50 rounded-xl px-4 py-3 text-sm font-medium text-gray-900 outline-none transition-all"
+                  class="w-full bg-gray-50 border border-gray-50 focus:border-parentPrimary/50 rounded-xl px-4 py-3 text-sm font-medium text-gray-900 outline-none transition-all"
                 />
               </div>
 
@@ -279,7 +279,7 @@
                 <label class="text-sm font-bold text-gray-900 block mb-3">Note for Vendor (Optional)</label>
                 <textarea 
                   v-model="vendorNote" rows="2" placeholder="e.g. Extra spicy, no onions..."
-                  class="w-full bg-gray-50 border border-gray-100 focus:border-parentPrimary/50 rounded-xl px-4 py-3 text-sm font-medium text-gray-900 outline-none transition-all resize-none"
+                  class="w-full bg-gray-50 border border-gray-50 focus:border-parentPrimary/50 rounded-xl px-4 py-3 text-sm font-medium text-gray-900 outline-none transition-all resize-none"
                 ></textarea>
               </div>
 
@@ -340,7 +340,7 @@
                     <ChevronDown class="w-4 h-4 text-gray-400" />
                   </div>
                   <!-- Dropdown Modal -->
-                  <div v-if="isPackagingDropdownOpen" class="absolute top-full left-0 w-full mt-2 bg-white/95 backdrop-blur-xl rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100/50 py-2 max-h-48 overflow-y-auto z-50">
+                  <div v-if="isPackagingDropdownOpen" class="absolute top-full left-0 w-full mt-2 bg-white/95 backdrop-blur-xl rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-50/50 py-2 max-h-48 overflow-y-auto z-50">
                     <div v-for="vp in vendorPackagingPacks" :key="vp.name" @click="selectPackaging(vp)" class="px-4 py-3 text-sm font-bold cursor-pointer transition-colors flex justify-between items-center" :class="selectedPackagingPackName === vp.name ? 'text-parentPrimary bg-parentPrimary/5' : 'text-gray-700 hover:bg-gray-50'">
                       <div class="flex items-center gap-2">
                         <span>{{ vp.name }}</span>
@@ -373,7 +373,7 @@
                       <ChevronDown class="w-4 h-4 text-gray-400" />
                     </div>
                     <!-- Custom Hour Dropdown -->
-                    <div v-if="showHourDropdown" class="absolute top-full left-0 w-full mt-2 bg-white/95 backdrop-blur-xl rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100/50 py-2 max-h-48 overflow-y-auto z-50">
+                    <div v-if="showHourDropdown" class="absolute top-full left-0 w-full mt-2 bg-white/95 backdrop-blur-xl rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-50/50 py-2 max-h-48 overflow-y-auto z-50">
                       <div v-for="h in availableHours" :key="h" @click="selectedHour = h; showHourDropdown = false" class="px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors flex justify-between items-center" :class="selectedHour === h ? 'text-parentPrimary bg-parentPrimary/5' : 'text-gray-700 hover:bg-gray-50'">
                         <span>{{ h }}</span>
                         <Check v-if="selectedHour === h" class="w-4 h-4 text-parentPrimary"/>
@@ -389,7 +389,7 @@
                       <ChevronDown class="w-4 h-4 text-gray-400" />
                     </div>
                     <!-- Custom Minute Dropdown -->
-                    <div v-if="showMinuteDropdown" class="absolute top-full left-0 w-full mt-2 bg-white/95 backdrop-blur-xl rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100/50 py-2 max-h-48 overflow-y-auto z-50">
+                    <div v-if="showMinuteDropdown" class="absolute top-full left-0 w-full mt-2 bg-white/95 backdrop-blur-xl rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-50/50 py-2 max-h-48 overflow-y-auto z-50">
                       <div v-for="m in availableMinutes" :key="m" @click="selectedMinute = m; showMinuteDropdown = false" class="px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors flex justify-between items-center" :class="selectedMinute === m ? 'text-parentPrimary bg-parentPrimary/5' : 'text-gray-700 hover:bg-gray-50'">
                         <span>{{ m }}</span>
                         <Check v-if="selectedMinute === m" class="w-4 h-4 text-parentPrimary"/>

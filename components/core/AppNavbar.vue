@@ -3,7 +3,7 @@
     <div class="max-w-[1400px] mx-auto flex items-center justify-between px-4 sm:px-4 py-2.5 sm:py-3">
       <!-- Left Side -->
       <div class="flex items-center gap-3">
-        <button v-if="showBack" @click="router.back()" class="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-100 hover:bg-gray-100 transition-all">
+        <button v-if="showBack" @click="router.back()" class="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-50 hover:bg-gray-100 transition-all">
           <ArrowLeft class="w-4 h-4 text-gray-900" />
         </button>
         <NuxtLink to="/" class="flex items-center -ml-12 gap-2 group">
@@ -19,30 +19,30 @@
         <!-- Static Links for Visitors -->
         <div v-if="!user" class="hidden sm:flex items-center gap-4 mr-2">
           <NuxtLink to="/auth/login" class="text-sm font-medium text-gray-400 uppercase  hover:text-gray-900 transition-colors">Log in</NuxtLink>
-          <NuxtLink to="/auth/register" class="px-5 py-2.5 bg-gray-900 text-white text-sm font-medium uppercase  rounded-xl shadow-sm border border-gray-100 shadow-black/5 hover:bg-parentPrimary transition-all">Join</NuxtLink>
+          <NuxtLink to="/auth/register" class="px-5 py-2.5 bg-gray-900 text-white text-sm font-medium uppercase  rounded-xl shadow-sm border border-gray-50 shadow-black/5 hover:bg-parentPrimary transition-all">Join</NuxtLink>
         </div>
 
         <!-- Notification Bell -->
         <button 
           v-if="user" 
           @click="openNotificationsDrawer" 
-          class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-100 text-gray-400 hover:bg-gray-100 hover:text-gray-900 transition-all relative active:scale-95"
+          class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-50 text-gray-400 hover:bg-gray-100 hover:text-gray-900 transition-all relative active:scale-95"
         >
           <Bell class="w-4 h-4 sm:w-4.5 sm:h-4.5 text-gray-950" />
-          <div v-if="unreadCount > 0" class="absolute top-2 right-2 w-2 h-2 bg-parentPrimary rounded-full border-2 border-white shadow-sm"></div>
+          <div v-if="unreadCount > 0" class="absolute top-2 right-2 w-2 h-2 bg-parentPrimary rounded-full border border-white shadow-sm"></div>
         </button>
 
         <!-- Cart (Always visible if relevant) -->
-        <NuxtLink v-if="showCart" to="/cart" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-100 hover:bg-gray-100 transition-all relative">
+        <NuxtLink v-if="showCart" to="/cart" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-50 hover:bg-gray-100 transition-all relative">
           <ShoppingCart class="w-4 h-4 sm:w-4.5 sm:h-4.5 text-gray-900" />
-          <div v-if="totalCartItems > 0" class="absolute -top-1 -right-1 w-4 h-4 bg-gray-900 text-white border-2 border-white rounded-full flex items-center justify-center">
+          <div v-if="totalCartItems > 0" class="absolute -top-1 -right-1 w-4 h-4 bg-gray-900 text-white border border-white rounded-full flex items-center justify-center">
              <span class="text-[8px] font-bold">{{ totalCartItems }}</span>
           </div>
         </NuxtLink>
 
         <!-- Profile Dropdown -->
         <Menu v-if="user" as="div" class="relative">
-          <MenuButton class="flex items-center gap-2.5 p-1 sm:p-1.5 rounded-xl bg-gray-50 border border-gray-100 hover:bg-gray-100 transition-all focus:outline-none">
+          <MenuButton class="flex items-center gap-2.5 p-1 sm:p-1.5 rounded-xl bg-gray-50 border border-gray-50 hover:bg-gray-100 transition-all focus:outline-none">
             <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gray-900 text-white flex items-center justify-center font-bold text-xs sm:text-sm uppercase shadow-sm">
               {{ user.firstName?.[0] || user.email?.[0] }}
             </div>
@@ -56,7 +56,7 @@
             leave-from-class="transform scale-100 opacity-100"
             leave-to-class="transform scale-95 opacity-0"
           >
-            <MenuItems class="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-50 rounded-2xl bg-white shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-gray-100 focus:outline-none z-[75] overflow-hidden">
+            <MenuItems class="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-50 rounded-2xl bg-white shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-gray-50 focus:outline-none z-[75] overflow-hidden">
               <div class="px-5 py-4">
                 <p class="text-sm font-medium text-gray-400 uppercase  mb-1">Signed in as</p>
                 <p class="text-sm font-medium text-gray-900 truncate tracking-tight">{{ user.firstName }} {{ user.lastName }}</p>
@@ -105,7 +105,7 @@
       leave-to-class="opacity-0"
     >
       <div v-if="showNotificationsDrawer" class="fixed inset-0 z-[110] flex justify-end bg-black/55 backdrop-blur-sm" @click.self="showNotificationsDrawer = false">
-        <div class="bg-white w-full max-w-md h-full overflow-hidden shadow-sm border border-gray-100 animate-slide-in-right p-4 flex flex-col justify-between">
+        <div class="bg-white w-full max-w-md h-full overflow-hidden shadow-sm border border-gray-50 animate-slide-in-right p-4 flex flex-col justify-between">
           <!-- Header -->
           <div class="flex items-center justify-between pb-4 border-b border-gray-100 shrink-0">
             <div>
@@ -137,7 +137,7 @@
 
             <!-- Empty State -->
             <div v-else-if="notifications.length === 0" class="flex flex-col items-center justify-center text-center py-20 space-y-4">
-              <div class="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center shadow-sm border border-gray-100">
+              <div class="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center shadow-sm border border-gray-50">
                 <BellOff class="w-6 h-6 text-gray-300" />
               </div>
               <div class="space-y-1">
@@ -189,7 +189,7 @@
             <NuxtLink 
               to="/notifications" 
               @click="showNotificationsDrawer = false"
-              class="flex items-center justify-center w-full py-3 bg-gray-950 text-white rounded-xl text-xs font-bold hover:bg-gray-900 transition-colors uppercase tracking-wider shadow-sm border border-gray-100 active:scale-98"
+              class="flex items-center justify-center w-full py-3 bg-gray-950 text-white rounded-xl text-xs font-bold hover:bg-gray-900 transition-colors uppercase tracking-wider shadow-sm border border-gray-50 active:scale-98"
             >
               go to notification center
             </NuxtLink>

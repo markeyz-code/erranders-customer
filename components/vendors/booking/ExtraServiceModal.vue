@@ -1,7 +1,7 @@
 <template>
   <Teleport to="body">
     <div class="fixed inset-0 z-[110] bg-black/40 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4 animate-fade-in" @click.self="$emit('close')">
-      <div class="bg-white w-full md:w-[480px] rounded-t-3xl md:rounded-3xl shadow-sm border border-gray-100 overflow-hidden flex flex-col max-h-[85vh] animate-slide-up-modal">
+      <div class="bg-white w-full md:w-[480px] rounded-t-3xl md:rounded-3xl shadow-sm border border-gray-50 overflow-hidden flex flex-col max-h-[85vh] animate-slide-up-modal">
         
         <!-- Header -->
         <div class="p-4 border-b border-gray-100 flex items-center justify-between shrink-0">

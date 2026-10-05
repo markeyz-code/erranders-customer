@@ -1,7 +1,7 @@
 <template>
   <Teleport to="body">
     <div class="fixed inset-0 z-[200] bg-black/40 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4 animate-fade-in" @click.self="$emit('close')">
-      <div class="bg-white w-full md:w-[480px] rounded-t-3xl md:rounded-3xl shadow-sm border border-gray-100 overflow-hidden flex flex-col animate-slide-up-modal">
+      <div class="bg-white w-full md:w-[480px] rounded-t-3xl md:rounded-3xl shadow-sm border border-gray-50 overflow-hidden flex flex-col animate-slide-up-modal">
         
         <div class="p-4 border-b border-gray-100 flex items-center justify-between">
           <h2 class="text-lg font-bold text-gray-900">Join Waitlist</h2>
@@ -21,9 +21,9 @@
 
           <div v-else class="space-y-3">
             <h3 class="font-bold text-sm">Your Details</h3>
-            <input v-model="form.name" type="text" placeholder="Full Name" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-all text-sm" />
-            <input v-model="form.email" type="email" placeholder="Email Address" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-all text-sm" />
-            <input v-model="form.phone" type="tel" placeholder="Phone Number (Optional)" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-all text-sm" />
+            <input v-model="form.name" type="text" placeholder="Full Name" class="w-full px-4 py-3 rounded-xl border border-gray-25 focus:outline-none focus:border-gray-25focus:ring-1 focus:ring-gray-900 transition-all text-sm" />
+            <input v-model="form.email" type="email" placeholder="Email Address" class="w-full px-4 py-3 rounded-xl border border-gray-25 focus:outline-none focus:border-gray-25focus:ring-1 focus:ring-gray-900 transition-all text-sm" />
+            <input v-model="form.phone" type="tel" placeholder="Phone Number (Optional)" class="w-full px-4 py-3 rounded-xl border border-gray-25 focus:outline-none focus:border-gray-25focus:ring-1 focus:ring-gray-900 transition-all text-sm" />
           </div>
         </div>
 

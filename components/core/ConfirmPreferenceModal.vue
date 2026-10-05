@@ -5,7 +5,7 @@
       <div class="absolute inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity" @click="close"></div>
       
       <!-- Modal -->
-      <div class="relative bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-sm border border-gray-100 transform transition-all">
+      <div class="relative bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-sm border border-gray-50 transform transition-all">
         <!-- Close button -->
         <button 
           @click="close"
@@ -39,7 +39,7 @@
             <button 
               @click="close"
               :disabled="loading"
-              class="w-full py-3.5 bg-white text-gray-900 font-bold rounded-xl hover:bg-gray-50 transition-colors border border-gray-200"
+              class="w-full py-3.5 bg-white text-gray-900 font-bold rounded-xl hover:bg-gray-50 transition-colors border border-gray-25"
             >
               Cancel
             </button>
