@@ -888,28 +888,47 @@ const chatReceiverId = ref<string>('');
 const chatReceiverName = ref('');
 const chatReceiverAvatar = ref('');
 const isDelayed = ref(false);
+const DELAY_THRESHOLD_MS = 5 * 60 * 1000; // 5 minutes
+const activeStatuses = ['pending', 'accepted', 'confirmed', 'preparing', 'ready_for_pickup'];
 
 let supportTimer: any;
 const setupSupportTimer = () => {
  clearTimeout(supportTimer);
- if (order.value && (order.value.status === 'pending' || order.value.status === 'accepted')) {
-   const timeSinceCreation = Date.now() - new Date(order.value.createdAt).getTime();
-   const waitTime = Math.max(0, 5 * 60 * 1000 - timeSinceCreation);
-   
-   supportTimer = setTimeout(() => {
-     if (order.value && (order.value.status === 'pending' || order.value.status === 'accepted')) {
-       isDelayed.value = true;
+ if (!order.value) return;
+ 
+ const status = order.value.status;
+ if (!activeStatuses.includes(status)) {
+   isDelayed.value = false;
+   return;
+ }
+ 
+ const timeSinceCreation = Date.now() - new Date(order.value.createdAt).getTime();
+ 
+ if (timeSinceCreation >= DELAY_THRESHOLD_MS) {
+   isDelayed.value = true;
+   if (!isChatOpen.value) {
+     openChat('admin_support_channel', 'Errandr Support', '');
+   }
+   return;
+ }
+ 
+ const waitTime = DELAY_THRESHOLD_MS - timeSinceCreation;
+ supportTimer = setTimeout(() => {
+   if (order.value && activeStatuses.includes(order.value.status)) {
+     isDelayed.value = true;
+     if (!isChatOpen.value) {
        openChat('admin_support_channel', 'Errandr Support', '');
      }
-   }, waitTime);
- }
+   }
+ }, waitTime);
 };
 
 watch(() => order.value?.status, (newStatus) => {
- if (newStatus === 'pending' || newStatus === 'accepted') {
+ if (newStatus && activeStatuses.includes(newStatus)) {
    setupSupportTimer();
  } else {
    clearTimeout(supportTimer);
+   isDelayed.value = false;
  }
 });
 
@@ -1043,6 +1062,8 @@ onMounted(async () => {
   fetchWallet();
   try {
     await fetchOrder();
+    
+    setupSupportTimer();
     
     if (order.value?.erranderLocation?.coordinates) {
       erranderLocation.value = order.value.erranderLocation.coordinates;

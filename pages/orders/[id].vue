@@ -1043,27 +1043,51 @@ const fetchOrder = async () => {
 };
 
 const isDelayed = ref(false);
+const DELAY_THRESHOLD_MS = 5 * 60 * 1000; // 5 minutes
+const activeStatuses = ['pending', 'accepted', 'confirmed', 'preparing', 'ready_for_pickup'];
+
 let supportTimer: any;
 const setupSupportTimer = () => {
  clearTimeout(supportTimer);
- if (order.value && (order.value.status === 'pending' || order.value.status === 'accepted')) {
- const timeSinceCreation = Date.now() - new Date(order.value.createdAt).getTime();
- const waitTime = Math.max(0, 5 * 60 * 1000 - timeSinceCreation);
+ if (!order.value) return;
  
+ const status = order.value.status;
+ if (!activeStatuses.includes(status)) {
+   // Order is beyond active statuses (picked_up, in_transit, delivered, etc) — no timer needed
+   isDelayed.value = false;
+   return;
+ }
+ 
+ const timeSinceCreation = Date.now() - new Date(order.value.createdAt).getTime();
+ 
+ // If already past the threshold, show immediately
+ if (timeSinceCreation >= DELAY_THRESHOLD_MS) {
+   isDelayed.value = true;
+   // Auto-open the chat so the customer sees the support prompt
+   if (!isChatOpen.value) {
+     openChat('admin_support_channel', 'Errandr Support', '');
+   }
+   return;
+ }
+ 
+ // Otherwise, set a timer for when the threshold will be reached
+ const waitTime = DELAY_THRESHOLD_MS - timeSinceCreation;
  supportTimer = setTimeout(() => {
- if (order.value && (order.value.status === 'pending' || order.value.status === 'accepted')) {
- isDelayed.value = true;
- openChat('admin_support_channel', 'Errandr Support', '');
- }
+   if (order.value && activeStatuses.includes(order.value.status)) {
+     isDelayed.value = true;
+     if (!isChatOpen.value) {
+       openChat('admin_support_channel', 'Errandr Support', '');
+     }
+   }
  }, waitTime);
- }
 };
 
 watch(() => order.value?.status, (newStatus) => {
- if (newStatus === 'pending' || newStatus === 'accepted') {
- setupSupportTimer();
+ if (newStatus && activeStatuses.includes(newStatus)) {
+   setupSupportTimer();
  } else {
- clearTimeout(supportTimer);
+   clearTimeout(supportTimer);
+   isDelayed.value = false;
  }
 });
 
