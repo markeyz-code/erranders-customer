@@ -56,6 +56,23 @@
  </div>
  </div>
 
+ <!-- Delayed Prompt Banner inside the messages area -->
+ <div v-if="showDelayedPrompt" class="mb-4 p-4 bg-[#FFF0EA] border border-[#FF5C1A]/20 rounded-2xl shadow-sm text-center animate-fade-in relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-16 h-16 bg-[#FF5C1A]/10 rounded-full blur-xl -translate-y-8 translate-x-8"></div>
+    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
+        <Headset class="w-6 h-6 text-[#FF5C1A]" />
+    </div>
+    <h4 class="text-[14px] font-bold text-[#FF5C1A] mb-1">Is your order delaying?</h4>
+    <p class="text-[12px] text-[#FF5C1A]/80 font-medium leading-relaxed mb-4">
+        Please reach out to our customer service team via the contacts below for immediate assistance.
+    </p>
+    <div class="flex flex-col gap-2 relative z-10">
+        <a v-for="agent in supportAgents" :key="agent.name" :href="getWhatsAppLink(agent.number, agent.name)" target="_blank" class="w-full flex items-center justify-center gap-2 py-2.5 bg-[#25D366] text-white rounded-xl text-xs font-bold hover:bg-[#20bd5a] transition-colors shadow-sm">
+            <MessageCircle class="w-4 h-4" /> Message {{ agent.name }}
+        </a>
+    </div>
+ </div>
+
  <div v-for="(msg, idx) in messages" :key="msg._id || idx" 
  class="flex flex-col w-full animate-message-in" 
  :class="isMe(msg) ? 'items-end' : 'items-start'">
@@ -209,7 +226,7 @@
 <script setup lang="ts">
 import { 
  ArrowLeft, User, Phone, Video, MoreVertical, 
- Smile, Paperclip, Send, Mic, Check, CheckCheck, Square 
+ Smile, Paperclip, Send, Mic, Check, CheckCheck, Square, Headset, MessageCircle 
 } from 'lucide-vue-next';
 import { ref, onMounted, nextTick, watch } from 'vue';
 import { useOrderChat } from '@/composables/useOrderChat';
@@ -247,6 +264,7 @@ const props = defineProps<{
  receiverName?: string;
  receiverAvatar?: string;
  isOnline?: boolean;
+ showDelayedPrompt?: boolean;
 }>();
 
 const emit = defineEmits(['close']);
@@ -257,6 +275,18 @@ const showEmojiPicker = ref(false);
 
 const onSelectEmoji = (emoji: any) => {
   newMsgText.value += emoji.i;
+};
+
+const supportAgents = [
+  { name: 'Ruth', initial: 'R', number: '2348106600919' },
+  { name: 'Ife', initial: 'I', number: '2348179495795' },
+  { name: 'Kim', initial: 'K', number: '2348052854256' },
+  { name: 'Brandy', initial: 'B', number: '2348139908262' },
+];
+
+const getWhatsAppLink = (phone: string, name: string) => {
+  const text = `Hi ${name}, I need urgent help with my order ${props.orderId ? '#' + props.orderId.slice(-6).toUpperCase() : ''}. Can you please assist me?`;
+  return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
 };
 
 const { initiateCall } = useWebRTC();

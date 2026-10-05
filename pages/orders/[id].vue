@@ -605,6 +605,7 @@
  :receiver-id="chatReceiverId"
  :receiver-name="chatReceiverName"
  :receiver-avatar="chatReceiverAvatar"
+ :show-delayed-prompt="isDelayed"
  @close="isChatOpen = false"
  />
 
@@ -1041,6 +1042,7 @@ const fetchOrder = async () => {
  }
 };
 
+const isDelayed = ref(false);
 let supportTimer: any;
 const setupSupportTimer = () => {
  clearTimeout(supportTimer);
@@ -1050,8 +1052,8 @@ const setupSupportTimer = () => {
  
  supportTimer = setTimeout(() => {
  if (order.value && (order.value.status === 'pending' || order.value.status === 'accepted')) {
- supportInterventionMode.value = 'delayed-proactive';
- showSupportInterventionModal.value = true;
+ isDelayed.value = true;
+ openChat('admin_support_channel', 'Errandr Support', '');
  }
  }, waitTime);
  }

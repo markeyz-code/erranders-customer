@@ -598,6 +598,7 @@
     :receiver-id="chatReceiverId"
     :receiver-name="chatReceiverName"
     :receiver-avatar="chatReceiverAvatar"
+    :show-delayed-prompt="isDelayed"
     @close="isChatOpen = false"
     :current-user-id="user?._id || ''"
     :order-id="order._id"
@@ -886,6 +887,31 @@ const isChatOpen = ref(false);
 const chatReceiverId = ref<string>('');
 const chatReceiverName = ref('');
 const chatReceiverAvatar = ref('');
+const isDelayed = ref(false);
+
+let supportTimer: any;
+const setupSupportTimer = () => {
+ clearTimeout(supportTimer);
+ if (order.value && (order.value.status === 'pending' || order.value.status === 'accepted')) {
+   const timeSinceCreation = Date.now() - new Date(order.value.createdAt).getTime();
+   const waitTime = Math.max(0, 5 * 60 * 1000 - timeSinceCreation);
+   
+   supportTimer = setTimeout(() => {
+     if (order.value && (order.value.status === 'pending' || order.value.status === 'accepted')) {
+       isDelayed.value = true;
+       openChat('admin_support_channel', 'Errandr Support', '');
+     }
+   }, waitTime);
+ }
+};
+
+watch(() => order.value?.status, (newStatus) => {
+ if (newStatus === 'pending' || newStatus === 'accepted') {
+   setupSupportTimer();
+ } else {
+   clearTimeout(supportTimer);
+ }
+});
 
 const openChat = (receiverId: string | undefined, name: string, avatar?: string) => {
    if (!receiverId) return;
