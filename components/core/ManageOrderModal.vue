@@ -60,7 +60,7 @@
                           />
                           <label
                             for="orderNumber"
-                            class="absolute left-4 -top-2.5 bg-white px-1 text-xs text-gray-400 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-parentPrimary"
+                            class="absolute left-4 -top-2.5 bg-white px-1 text-sm text-gray-400 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-parentPrimary"
                           >
                             Order reference
                           </label>
@@ -80,7 +80,7 @@
                           />
                           <label
                             for="email"
-                            class="absolute left-4 -top-2.5 bg-white px-1 text-xs text-gray-400 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-parentPrimary"
+                            class="absolute left-4 -top-2.5 bg-white px-1 text-sm text-gray-400 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-parentPrimary"
                           >
                             Email address
                           </label>
@@ -152,7 +152,7 @@
                       <p class="text-sm text-gray-500">{{ order.type === 'custom_errand' ? 'Erranders Delivery' : order.vendor?.address }}</p>
                     </div>
                   </div>
-                  <button @click="order = null" class="text-xs font-bold text-gray-400 hover:text-gray-900 transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-50">
+                  <button @click="order = null" class="text-sm font-bold text-gray-400 hover:text-gray-900 transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-50">
                     Back
                   </button>
                 </div>
@@ -161,13 +161,13 @@
                   <!-- Status and Total -->
                   <div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl border border-gray-50">
                     <div>
-                      <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Status</p>
-                      <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium" :class="statusClass(order.status)">
+                      <p class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-1">Status</p>
+                      <span class="inline-flex items-center px-2.5 py-1 rounded-full text-sm font-medium" :class="statusClass(order.status)">
                         {{ order.status.replace(/_/g, ' ') }}
                       </span>
                     </div>
                     <div class="text-right">
-                      <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Total</p>
+                      <p class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-1">Total</p>
                       <p class="text-xl font-extrabold text-parentPrimary">NGN {{ order.total?.toLocaleString() }}</p>
                     </div>
                   </div>
@@ -179,7 +179,7 @@
                         <CalendarIcon class="w-5 h-5" />
                       </div>
                       <div>
-                        <p class="text-xs font-bold text-gray-500 mb-0.5">Order Date</p>
+                        <p class="text-sm font-bold text-gray-500 mb-0.5">Order Date</p>
                         <p class="text-sm font-bold text-gray-900">{{ formatDate(order.createdAt) }}</p>
                       </div>
                     </div>
@@ -188,7 +188,7 @@
                         <MapPinIcon class="w-5 h-5" />
                       </div>
                       <div class="flex-1 min-w-0">
-                        <p class="text-xs font-bold text-gray-500 mb-0.5">Delivery Address</p>
+                        <p class="text-sm font-bold text-gray-500 mb-0.5">Delivery Address</p>
                         <p class="text-sm font-bold text-gray-900 line-clamp-2" :title="order.deliveryAddress || order.customDetails?.dropoffLocation || 'Not provided'">
                           {{ order.deliveryAddress || order.customDetails?.dropoffLocation || 'Not provided' }}
                         </p>
@@ -198,7 +198,7 @@
 
                   <!-- Items List -->
                   <div>
-                    <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Order Items</h4>
+                    <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Order Items</h4>
                     <div v-if="order.type === 'custom_errand'" class="text-sm text-gray-900 bg-gray-50 p-4 rounded-xl border border-gray-50">
                       <p><span class="font-bold">Pickup:</span> {{ order.customDetails?.pickupLocation }}</p>
                       <p class="mt-2"><span class="font-bold">Details:</span> {{ order.customDetails?.description }}</p>
@@ -209,7 +209,7 @@
                         <div>
                           <p class="text-sm font-bold text-gray-900">{{ item.name }} x{{ item.quantity }}</p>
                           <div v-if="item.customizations?.length" class="mt-2 space-y-1">
-                            <p v-for="ext in item.customizations" :key="ext.name" class="text-xs text-gray-500 flex items-center gap-1">
+                            <p v-for="ext in item.customizations" :key="ext.name" class="text-sm text-gray-500 flex items-center gap-1">
                               <span class="w-1 h-1 rounded-full bg-gray-300"></span>
                               {{ ext.name }}: {{ ext.selected }} (+NGN {{ ext.price }})
                             </p>
@@ -221,7 +221,7 @@
                         <div>
                           <p class="text-sm font-bold text-gray-900">Pack: {{ pack.name || 'Custom Pack' }}</p>
                           <div class="mt-2 space-y-1">
-                            <p v-for="item in pack.items" :key="item.name" class="text-xs text-gray-500 flex items-center gap-1">
+                            <p v-for="item in pack.items" :key="item.name" class="text-sm text-gray-500 flex items-center gap-1">
                               <span class="w-1 h-1 rounded-full bg-gray-300"></span>
                               {{ item.name }} x{{ item.quantity }}
                             </p>

@@ -10,7 +10,7 @@
     <!-- Loading State -->
     <div v-if="loading" class="flex flex-col items-center justify-center py-20 gap-4">
       <div class="w-8 h-8 border border-gray-25 border-t-parentPrimary rounded-full animate-spin"></div>
-      <p class="text-xs font-bold text-gray-400">Loading your history...</p>
+      <p class="text-sm font-bold text-gray-400">Loading your history...</p>
     </div>
 
     <!-- Empty State -->
@@ -37,11 +37,11 @@
               <div class="w-10 h-10 rounded-xl overflow-hidden bg-gray-50 border border-gray-50">
                 <video v-if="order.vendor?.logo && order.vendor.logo.match(/\\.(mp4|webm|ogg|mov)$/i)" :src="order.vendor.logo" class="w-full h-full object-cover" autoplay loop muted playsinline></video>
                 <img v-else-if="order.vendor?.logo" :src="order.vendor.logo" class="w-full h-full object-cover" />
-                <span v-else class="w-full h-full flex items-center justify-center text-xs font-bold text-gray-400">{{ order.vendor?.storeName?.[0] }}</span>
+                <span v-else class="w-full h-full flex items-center justify-center text-sm font-bold text-gray-400">{{ order.vendor?.storeName?.[0] }}</span>
               </div>
               <div>
                 <h3 class="text-sm font-bold text-gray-900 line-clamp-1">{{ order.name }}</h3>
-                <p class="text-xs text-gray-500">{{ order.vendor?.storeName }}</p>
+                <p class="text-sm text-gray-500">{{ order.vendor?.storeName }}</p>
               </div>
             </div>
             
@@ -65,20 +65,20 @@
 
           <div class="grid grid-cols-2 gap-4 py-4 border-y border-gray-50">
             <div>
-              <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Participants</p>
+              <p class="text-[10px] font-bold text-gray-400 uppercase  mb-1">Participants</p>
               <div class="flex items-center gap-2">
                 <Users class="w-3.5 h-3.5 text-gray-600" />
                 <span class="text-sm font-bold text-gray-900">{{ order.participants?.length || 0 }}</span>
               </div>
             </div>
             <div>
-              <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Host</p>
+              <p class="text-[10px] font-bold text-gray-400 uppercase  mb-1">Host</p>
               <div class="flex items-center gap-1.5">
                 <img v-if="order.host?.avatar" :src="order.host.avatar" class="w-4 h-4 rounded-full" />
                 <div v-else class="w-4 h-4 rounded-full bg-gray-200 flex items-center justify-center text-[8px] font-bold text-gray-500">
                   {{ order.host?.firstName?.[0] || 'G' }}
                 </div>
-                <span class="text-xs font-medium text-gray-700 truncate max-w-[100px]">
+                <span class="text-sm font-medium text-gray-700 truncate max-w-[100px]">
                   {{ order.host?.firstName || 'Guest' }}
                 </span>
               </div>
@@ -89,7 +89,7 @@
         <div class="px-5 py-4 bg-gray-50/50 border-t border-gray-100 flex items-center gap-3">
           <button 
             @click="handleReuse(order)"
-            class="flex-1 py-2.5 bg-gray-900 text-white rounded-xl text-xs font-bold shadow-sm border border-gray-50 hover:bg-parentPrimary hover:shadow-sm border border-gray-50 transition-all flex items-center justify-center gap-2"
+            class="flex-1 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-bold shadow-sm border border-gray-50 hover:bg-parentPrimary hover:shadow-sm border border-gray-50 transition-all flex items-center justify-center gap-2"
           >
             <RefreshCw class="w-3.5 h-3.5" /> Re-use Order
           </button>
@@ -97,7 +97,7 @@
           <NuxtLink
             v-if="order.status === 'open'"
             :to="`/vendors/${order.vendor?._id}?group=${order.inviteCode}`"
-            class="flex-1 py-2.5 bg-white border border-gray-25 text-gray-900 rounded-xl text-xs font-bold shadow-sm hover:border-parentPrimary hover:text-parentPrimary transition-all flex items-center justify-center gap-2"
+            class="flex-1 py-2.5 bg-white border border-gray-25 text-gray-900 rounded-xl text-sm font-bold shadow-sm hover:border-parentPrimary hover:text-parentPrimary transition-all flex items-center justify-center gap-2"
           >
             Go to Cart
           </NuxtLink>

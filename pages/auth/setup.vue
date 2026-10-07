@@ -60,7 +60,7 @@
             <input type="checkbox" v-model="form.preferences.emailNotifications" class="w-5 h-5 accent-[#FF5C1A] rounded border-gray-300" />
             <div class="flex-1">
               <p class="font-bold text-gray-900">Email Notifications</p>
-              <p class="text-xs text-gray-500">Receive order updates and receipts via email</p>
+              <p class="text-sm text-gray-500">Receive order updates and receipts via email</p>
             </div>
           </label>
           
@@ -68,7 +68,7 @@
             <input type="checkbox" v-model="form.preferences.smsNotifications" class="w-5 h-5 accent-[#FF5C1A] rounded border-gray-300" />
             <div class="flex-1">
               <p class="font-bold text-gray-900">SMS Notifications</p>
-              <p class="text-xs text-gray-500">Get text messages when your order arrives</p>
+              <p class="text-sm text-gray-500">Get text messages when your order arrives</p>
             </div>
           </label>
 
@@ -76,7 +76,7 @@
             <input type="checkbox" v-model="form.preferences.marketingPromos" class="w-5 h-5 accent-[#FF5C1A] rounded border-gray-300" />
             <div class="flex-1">
               <p class="font-bold text-gray-900">Promotions & Offers</p>
-              <p class="text-xs text-gray-500">Receive special discounts and campus deals</p>
+              <p class="text-sm text-gray-500">Receive special discounts and campus deals</p>
             </div>
           </label>
         </div>
@@ -100,10 +100,10 @@
             <div class="pt-2">
               <span class="text-gray-500 text-sm block mb-1">Active Notifications</span>
               <div class="flex gap-2 flex-wrap">
-                <span v-if="form.preferences.emailNotifications" class="px-2 py-1 bg-[#FF5C1A]/10 text-[#FF5C1A] text-xs font-bold rounded-md">Email</span>
-                <span v-if="form.preferences.smsNotifications" class="px-2 py-1 bg-[#FF5C1A]/10 text-[#FF5C1A] text-xs font-bold rounded-md">SMS</span>
-                <span v-if="form.preferences.marketingPromos" class="px-2 py-1 bg-[#FF5C1A]/10 text-[#FF5C1A] text-xs font-bold rounded-md">Promos</span>
-                <span v-if="!form.preferences.emailNotifications && !form.preferences.smsNotifications && !form.preferences.marketingPromos" class="text-gray-400 text-xs font-medium">None selected</span>
+                <span v-if="form.preferences.emailNotifications" class="px-2 py-1 bg-[#FF5C1A]/10 text-[#FF5C1A] text-sm font-bold rounded-md">Email</span>
+                <span v-if="form.preferences.smsNotifications" class="px-2 py-1 bg-[#FF5C1A]/10 text-[#FF5C1A] text-sm font-bold rounded-md">SMS</span>
+                <span v-if="form.preferences.marketingPromos" class="px-2 py-1 bg-[#FF5C1A]/10 text-[#FF5C1A] text-sm font-bold rounded-md">Promos</span>
+                <span v-if="!form.preferences.emailNotifications && !form.preferences.smsNotifications && !form.preferences.marketingPromos" class="text-gray-400 text-sm font-medium">None selected</span>
               </div>
             </div>
           </div>

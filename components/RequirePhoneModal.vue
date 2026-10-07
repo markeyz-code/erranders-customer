@@ -29,7 +29,7 @@
 
         <form @submit.prevent="submitPhoneNumber" class="space-y-5">
           <div>
-            <label class="block text-xs font-bold text-gray-700 mb-2 tracking-wide uppercase">Your Phone Number (Whatsapp)</label>
+            <label class="block text-sm font-bold text-gray-700 mb-2 tracking-wide uppercase">Your Phone Number (Whatsapp)</label>
             <div class="flex relative rounded-xl bg-white border border-gray-300 focus-within:border-parentPrimary focus-within:ring-4 focus-within:ring-parentPrimary/10 transition-all">
               
               <!-- Custom Dropdown -->
@@ -65,7 +65,7 @@
                     >
                       <span class="text-lg">{{ country.flag }}</span>
                       <span class="text-sm font-bold text-gray-900">{{ country.code }}</span>
-                      <span class="text-xs font-medium text-gray-500 ml-auto">{{ country.name }}</span>
+                      <span class="text-sm font-medium text-gray-500 ml-auto">{{ country.name }}</span>
                     </button>
                   </div>
                 </Transition>

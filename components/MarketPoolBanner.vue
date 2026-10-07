@@ -17,7 +17,7 @@
               <Info class="w-3 h-3 text-white" />
             </button>
           </div>
-          <p class="text-[9px] sm:text-[10px] font-bold text-white/90 mt-0.5 uppercase tracking-widest">
+          <p class="text-[9px] sm:text-[10px] font-bold text-white/90 mt-0.5 uppercase ">
             Don't buy retail. Buy Bulk & Save 40%
           </p>
         </div>
@@ -36,7 +36,7 @@
               {{ getEmoji(item.name) }}
             </div>
             <div class="flex flex-col pr-1">
-              <span class="text-xs font-bold truncate max-w-[100px] leading-tight">{{ item.name }}</span>
+              <span class="text-sm font-bold truncate max-w-[100px] leading-tight">{{ item.name }}</span>
               <div class="flex items-center gap-1.5">
                 <span class="text-[10px] font-black text-[#FFE066]">₦{{ item.appPrice.toLocaleString() }}</span>
                 <span class="text-[9px] text-white/60 line-through">₦{{ (item.appPrice * 1.3).toLocaleString() }}</span>

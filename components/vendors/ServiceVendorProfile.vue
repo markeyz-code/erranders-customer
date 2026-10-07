@@ -49,10 +49,10 @@
           <button @click="showReviewsModal = true" class="flex items-center gap-1.5 bg-white/10 hover:bg-white/15 px-3 py-1.5 rounded-lg backdrop-blur-sm border border-white/15 transition-colors active:scale-95">
             <Star class="w-3.5 h-3.5 text-amber-400" :class="vendor.rating ? 'fill-amber-400' : 'fill-transparent'" />
             <template v-if="vendor.rating">
-              <span class="font-bold text-xs text-white font-mono tabular-nums">{{ vendor.rating?.toFixed(1) }}</span>
-              <span class="text-white/60 text-xs font-mono">({{ vendor.totalRatings || 0 }})</span>
+              <span class="font-bold text-sm text-white font-mono tabular-nums">{{ vendor.rating?.toFixed(1) }}</span>
+              <span class="text-white/60 text-sm font-mono">({{ vendor.totalRatings || 0 }})</span>
             </template>
-            <span v-else class="font-bold text-xs text-white">See reviews</span>
+            <span v-else class="font-bold text-sm text-white">See reviews</span>
             <ChevronRight class="w-3 h-3 text-white/50" />
           </button>
           <div v-if="vendor.category" class="flex items-center gap-1.5 text-[11px] font-semibold text-white/85 bg-white/10 px-3 py-1.5 rounded-lg backdrop-blur-sm border border-white/15 capitalize">
@@ -84,7 +84,7 @@
             <h2 class="text-base md:text-lg font-black text-[#14110F] truncate">{{ vendor.storeName }}</h2>
             <CheckCircle2 v-if="vendor.verified" class="w-4 h-4 text-blue-500 fill-blue-500/15 shrink-0" />
           </div>
-          <p class="text-xs text-[#6B6558] font-semibold mt-0.5">On Errandr since {{ memberSince }}</p>
+          <p class="text-sm text-[#6B6558] font-semibold mt-0.5">On Errandr since {{ memberSince }}</p>
         </div> -->
       </div>
 
@@ -137,24 +137,24 @@
 
                   <div class="min-w-0">
                     <h3 class="font-bold text-sm text-[#14110F] leading-snug">{{ service.name }}</h3>
-                    <p class="text-xs font-medium text-[#9A9284] mt-1 flex items-center gap-1.5 font-mono">
+                    <p class="text-sm font-medium text-[#9A9284] mt-1 flex items-center gap-1.5 font-mono">
                       <Clock class="w-3.5 h-3.5 text-[#B8AF9F]" />
                       {{ service.variants?.length ? `${service.durationInMinutes}\u2013${Math.max(...service.variants.map((v:any)=>v.durationInMinutes))} mins` : `${service.durationInMinutes} mins` }}
                     </p>
                     <p class="text-sm font-bold text-[#14110F] mt-2 font-mono tabular-nums">
-                      <span v-if="service.variants?.length" class="font-sans font-semibold text-[#9A9284] text-xs mr-1">from</span>₦{{ service.price.toLocaleString() }}
+                      <span v-if="service.variants?.length" class="font-sans font-semibold text-[#9A9284] text-sm mr-1">from</span>₦{{ service.price.toLocaleString() }}
                     </p>
                   </div>
                   <div class="flex items-center gap-2 shrink-0">
                     <button 
                       @click="messageVendor(service)"
-                      class="px-4 py-2 rounded-full bg-white text-[#3A352E] font-bold text-xs transition-colors border border-[#E2DCD1] hover:border-[#14110F]"
+                      class="px-4 py-2 rounded-full bg-white text-[#3A352E] font-bold text-sm transition-colors border border-[#E2DCD1] hover:border-[#14110F]"
                     >
                       Message
                     </button>
                     <button 
                       @click="openBookingFlow(service)"
-                      class="px-4 py-2 rounded-full bg-[#14110F] text-white font-bold text-xs transition-all hover:bg-black active:scale-95"
+                      class="px-4 py-2 rounded-full bg-[#14110F] text-white font-bold text-sm transition-all hover:bg-black active:scale-95"
                     >
                       Book
                     </button>
@@ -178,7 +178,7 @@
                 <Sparkles class="w-5 h-5 text-parentPrimary" />
               </div>
               <p class="font-bold text-[#14110F] text-sm">No services yet</p>
-              <p class="mt-1 text-xs">This vendor hasn't listed anything to book.</p>
+              <p class="mt-1 text-sm">This vendor hasn't listed anything to book.</p>
             </div>
           </section>
         </div>
@@ -210,12 +210,12 @@
                 </div>
                 <div class="w-full">
                   <h4 class="text-[10px] font-bold text-[#9A9284] uppercase tracking-wider mb-0.5">Availability</h4>
-                  <p v-if="vendor.isOnline" class="text-xs font-bold text-emerald-600 mb-3">Currently open</p>
-                  <p v-else class="text-xs font-bold text-rose-600 mb-3">Closed right now</p>
+                  <p v-if="vendor.isOnline" class="text-sm font-bold text-emerald-600 mb-3">Currently open</p>
+                  <p v-else class="text-sm font-bold text-rose-600 mb-3">Closed right now</p>
 
                   <div v-if="vendor.businessHours && vendor.businessHours.length > 0" class="mt-2 space-y-2 border-t border-[#ECE6DC] pt-3 pr-2">
                     <div v-for="day in vendor.businessHours" :key="day.day" class="flex flex-col gap-1 border-b border-[#ECE6DC]/50 pb-2 last:border-0 last:pb-0">
-                      <div class="flex justify-between items-center text-xs">
+                      <div class="flex justify-between items-center text-sm">
                         <span class="text-[#3A352E] capitalize font-medium">{{ day.day.slice(0,3) }}</span>
                         <span v-if="day.isClosed" class="text-rose-500 font-bold">Closed</span>
                         <span v-else class="text-[#6B6558] font-mono tabular-nums">{{ day.open || '09:00' }} - {{ day.close || '17:00' }}</span>
@@ -237,7 +237,7 @@
                 </div>
                 <div>
                   <h4 class="text-[10px] font-bold text-[#9A9284] uppercase tracking-wider mb-0.5">Location</h4>
-                  <p class="text-xs font-bold text-[#14110F] leading-relaxed">
+                  <p class="text-sm font-bold text-[#14110F] leading-relaxed">
                     {{ vendor.address }}
                   </p>
                 </div>
@@ -249,7 +249,7 @@
                 </div>
                 <div>
                   <h4 class="text-[10px] font-bold text-[#9A9284] uppercase tracking-wider mb-0.5">Service type</h4>
-                  <p class="text-xs font-bold text-[#14110F] capitalize">
+                  <p class="text-sm font-bold text-[#14110F] capitalize">
                     {{ vendor.serviceLocation === 'mobile_operator' ? 'Mobile \u2013 comes to you' : vendor.serviceLocation.replace(/_/g, ' ') }}
                   </p>
                 </div>
@@ -348,12 +348,12 @@
           </div>
           <div class="w-full">
             <h4 class="text-[10px] font-bold text-[#9A9284] uppercase tracking-wider mb-0.5">Availability</h4>
-            <p v-if="vendor.isOnline" class="text-xs font-bold text-emerald-600 mb-3">Currently open</p>
-            <p v-else class="text-xs font-bold text-rose-600 mb-3">Closed right now</p>
+            <p v-if="vendor.isOnline" class="text-sm font-bold text-emerald-600 mb-3">Currently open</p>
+            <p v-else class="text-sm font-bold text-rose-600 mb-3">Closed right now</p>
             
             <div v-if="vendor.businessHours && vendor.businessHours.length > 0" class="mt-2 space-y-2 border-t border-[#ECE6DC] pt-3">
               <div v-for="day in vendor.businessHours" :key="day.day" class="flex flex-col gap-1 border-b border-[#ECE6DC]/50 pb-2 last:border-0 last:pb-0">
-                <div class="flex justify-between items-center text-xs">
+                <div class="flex justify-between items-center text-sm">
                   <span class="text-[#3A352E] capitalize font-medium">{{ day.day.slice(0,3) }}</span>
                   <span v-if="day.isClosed" class="text-rose-500 font-bold">Closed</span>
                   <span v-else class="text-[#6B6558] font-mono tabular-nums">{{ day.open || '09:00' }} - {{ day.close || '17:00' }}</span>
@@ -375,7 +375,7 @@
           </div>
           <div>
             <h4 class="text-[10px] font-bold text-[#9A9284] uppercase tracking-wider mb-0.5">Location</h4>
-            <p class="text-xs font-bold text-[#14110F] leading-relaxed">{{ vendor.address }}</p>
+            <p class="text-sm font-bold text-[#14110F] leading-relaxed">{{ vendor.address }}</p>
           </div>
         </div>
 
@@ -385,14 +385,14 @@
           </div>
           <div>
             <h4 class="text-[10px] font-bold text-[#9A9284] uppercase tracking-wider mb-0.5">Service type</h4>
-            <p class="text-xs font-bold text-[#14110F] capitalize">
+            <p class="text-sm font-bold text-[#14110F] capitalize">
               {{ vendor.serviceLocation === 'mobile_operator' ? 'Mobile \u2013 comes to you' : vendor.serviceLocation.replace(/_/g, ' ') }}
             </p>
           </div>
         </div>
         
         <div class="pt-6 border-t border-[#ECE6DC]">
-          <p class="text-xs text-center text-[#9A9284] font-medium">Joined Errandr {{ memberSince }}</p>
+          <p class="text-sm text-center text-[#9A9284] font-medium">Joined Errandr {{ memberSince }}</p>
         </div>
       </div>
     </UiSideDrawer>

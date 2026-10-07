@@ -5,7 +5,7 @@
       <h1 class="text-2xl md:text-3xl font-medium text-gray-900 tracking-tight leading-none mb-1">
         My Errands
       </h1>
-      <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+      <p class="text-[10px] font-bold text-gray-400 uppercase ">
         Track and manage your orders
       </p>
     </header>
@@ -18,14 +18,14 @@
       </div>
       <div v-for="req in rescheduleRequests" :key="req._id" class="bg-white rounded-xl p-3 border border-amber-100 flex flex-col sm:flex-row gap-3 justify-between sm:items-center">
         <div>
-          <p class="text-xs text-gray-900 font-medium">Order #{{ req.orderId?.orderNumber || '...' }} from <span class="font-bold">{{ req.orderId?.vendor?.storeName || 'Vendor' }}</span></p>
+          <p class="text-sm text-gray-900 font-medium">Order #{{ req.orderId?.orderNumber || '...' }} from <span class="font-bold">{{ req.orderId?.vendor?.storeName || 'Vendor' }}</span></p>
           <p class="text-[11px] text-gray-500 mt-0.5">They are away in Exam Mode and suggested delivery on: <span class="font-bold text-gray-900">{{ formatDate(req.suggestedDate) }}</span></p>
         </div>
         <div class="flex gap-2 shrink-0">
-          <button @click="resolveRequest(req._id, 'reject')" class="px-3 py-1.5 rounded-lg text-xs font-bold text-gray-500 hover:bg-gray-100 transition-colors border border-gray-25">
+          <button @click="resolveRequest(req._id, 'reject')" class="px-3 py-1.5 rounded-lg text-sm font-bold text-gray-500 hover:bg-gray-100 transition-colors border border-gray-25">
             Cancel Order
           </button>
-          <button @click="resolveRequest(req._id, 'accept')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-white hover:bg-amber-600 transition-colors">
+          <button @click="resolveRequest(req._id, 'accept')" class="px-3 py-1.5 rounded-lg text-sm font-bold bg-amber-500 text-white hover:bg-amber-600 transition-colors">
             Accept Date
           </button>
         </div>
@@ -39,7 +39,7 @@
           v-for="status in filters" 
           :key="status.key" 
           @click="activeFilter = status.key"
-          class="px-4 py-2 rounded-xl text-xs font-medium transition-all whitespace-nowrap active:scale-95"
+          class="px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap active:scale-95"
           :class="activeFilter === status.key ? 'bg-parentPrimary text-white shadow-sm border border-gray-50 shadow-parentPrimary/20' : 'text-gray-500 bg-white border border-gray-50 hover:border-parentPrimary/30'"
         >
           {{ status.label }}
@@ -67,8 +67,8 @@
       <div class="bg-white rounded-[2rem] text-center py-20 px-4 border border-dashed border-gray-200">
         <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 border border-gray-50">📋</div>
         <h2 class="text-xl font-medium text-gray-900 mb-1 tracking-tight">No orders found</h2>
-        <p class="text-xs font-medium text-gray-500 mb-8 max-w-xs mx-auto">You haven't placed any orders matching this criteria yet.</p>
-        <NuxtLink to="/vendors" class="inline-flex px-5 py-3.5 bg-gray-900 text-white rounded-xl font-medium text-xs uppercase tracking-wider hover:bg-parentPrimary transition-colors shadow-sm border border-gray-50 active:scale-95">
+        <p class="text-sm font-medium text-gray-500 mb-8 max-w-xs mx-auto">You haven't placed any orders matching this criteria yet.</p>
+        <NuxtLink to="/vendors" class="inline-flex px-5 py-3.5 bg-gray-900 text-white rounded-xl font-medium text-sm uppercase tracking-wider hover:bg-parentPrimary transition-colors shadow-sm border border-gray-50 active:scale-95">
           Start Shopping
         </NuxtLink>
       </div>
@@ -170,18 +170,18 @@
 
               <!-- Actions -->
               <div class="space-y-2.5">
-                <p class="text-[10px] font-medium uppercase tracking-widest text-gray-400 pl-1 mb-2">Actions</p>
+                <p class="text-[10px] font-medium uppercase  text-gray-400 pl-1 mb-2">Actions</p>
                 
                 <button 
                   @click="navigateTo(`/dashboard/orders/${selectedOrder._id}`)" 
-                  class="w-full py-3.5 bg-parentPrimary text-white rounded-xl text-xs font-medium uppercase tracking-wider hover:bg-parentPrimary/90 transition-all flex items-center justify-center gap-2 shadow-sm border border-gray-50 shadow-parentPrimary/20 active:scale-95"
+                  class="w-full py-3.5 bg-parentPrimary text-white rounded-xl text-sm font-medium uppercase tracking-wider hover:bg-parentPrimary/90 transition-all flex items-center justify-center gap-2 shadow-sm border border-gray-50 shadow-parentPrimary/20 active:scale-95"
                 >
                   Track Errand <ArrowRight class="w-3.5 h-3.5" />
                 </button>
 
                 <!-- <button
                   @click="handleReorder(selectedOrder)"
-                  class="w-full py-3.5 bg-white text-gray-900 rounded-xl text-xs font-medium uppercase tracking-wider border border-gray-25 hover:bg-gray-50 transition-all flex items-center justify-center gap-2 active:scale-95"
+                  class="w-full py-3.5 bg-white text-gray-900 rounded-xl text-sm font-medium uppercase tracking-wider border border-gray-25 hover:bg-gray-50 transition-all flex items-center justify-center gap-2 active:scale-95"
                 >
                   Order Again
                 </button> -->
@@ -189,7 +189,7 @@
                 <button
                   v-if="['pending', 'confirmed'].includes(selectedOrder.status)"
                   @click="cancelOrder(selectedOrder._id); selectedOrder = null;"
-                  class="w-full py-3.5 bg-rose-50 text-rose-500 rounded-xl text-xs font-medium uppercase tracking-wider hover:bg-rose-100 hover:text-rose-600 border border-rose-100 transition-all active:scale-95"
+                  class="w-full py-3.5 bg-rose-50 text-rose-500 rounded-xl text-sm font-medium uppercase tracking-wider hover:bg-rose-100 hover:text-rose-600 border border-rose-100 transition-all active:scale-95"
                 >
                   Cancel Errand
                 </button>

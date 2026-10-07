@@ -58,10 +58,10 @@
           class="relative bg-white border border-red-100 rounded-2xl w-[260px] md:w-[300px] shrink-0 cursor-pointer group shadow-sm hover:shadow-xl transition-all duration-300 snap-start overflow-hidden flex flex-col"
         >
           <!-- Promo Badge -->
-          <div v-if="promo.slotsLeft !== undefined" class="absolute top-0 left-0 right-0 z-20 py-1.5 bg-red-600 text-white shadow-md text-[11px] md:text-xs font-black uppercase tracking-[0.2em] flex items-center justify-center animate-pulse border-b-2 border-red-800">
+          <div v-if="promo.slotsLeft !== undefined" class="absolute top-0 left-0 right-0 z-20 py-1.5 bg-red-600 text-white shadow-md text-[11px] md:text-sm font-black uppercase tracking-[0.2em] flex items-center justify-center animate-pulse border-b-2 border-red-800">
             🚨 HURRY! ONLY {{ promo.slotsLeft }} LEFT!
           </div>
-          <div v-else class="absolute top-3 right-3 z-20 px-2.5 py-1 bg-gradient-to-r from-red-500 to-rose-600 text-white rounded-full shadow-md text-[10px] font-extrabold uppercase tracking-widest flex items-center gap-1">
+          <div v-else class="absolute top-3 right-3 z-20 px-2.5 py-1 bg-gradient-to-r from-red-500 to-rose-600 text-white rounded-full shadow-md text-[10px] font-extrabold uppercase  flex items-center gap-1">
             <Tag class="w-3 h-3" />
             Promo
           </div>
@@ -83,22 +83,22 @@
               <div class="w-6 h-6 rounded-md overflow-hidden bg-gray-100 shrink-0">
                 <img :src="(promo.vendorId || promo.vendor)?.logo || '/placeholder-store.jpg'" class="w-full h-full object-cover" />
               </div>
-              <span class="text-xs font-bold text-gray-900 truncate max-w-[120px]">{{ (promo.vendorId || promo.vendor)?.storeName || 'Vendor' }}</span>
+              <span class="text-sm font-bold text-gray-900 truncate max-w-[120px]">{{ (promo.vendorId || promo.vendor)?.storeName || 'Vendor' }}</span>
             </div>
           </div>
 
           <!-- Content -->
           <div class="p-4 flex flex-col flex-1 bg-gradient-to-b from-white to-red-50/30">
             <h3 class="font-bold text-gray-900 text-base md:text-lg mb-1 line-clamp-1 group-hover:text-red-600 transition-colors">{{ promo.name }}</h3>
-            <p class="text-xs text-gray-600 mb-3 line-clamp-2 min-h-[32px] font-medium">{{ promo.description || 'Special combo deal!' }}</p>
+            <p class="text-sm text-gray-600 mb-3 line-clamp-2 min-h-[32px] font-medium">{{ promo.description || 'Special combo deal!' }}</p>
             
             <div class="mt-auto flex items-end justify-between">
               <div class="flex flex-col" v-if="!promo.isVendorPromo">
-                <span class="text-xs text-gray-400 line-through font-medium mb-0.5" v-if="promo.originalPrice">₦{{ promo.originalPrice.toLocaleString() }}</span>
+                <span class="text-sm text-gray-400 line-through font-medium mb-0.5" v-if="promo.originalPrice">₦{{ promo.originalPrice.toLocaleString() }}</span>
                 <span class="text-lg md:text-xl font-extrabold text-gray-900 tracking-tight">₦{{ (promo.price || promo.bundlePrice || promo.discountPrice || 0).toLocaleString() }}</span>
               </div>
               <div class="flex flex-col" v-else>
-                 <span class="text-xs md:text-sm font-black text-red-600 bg-red-100 px-2 py-1 rounded-md border border-red-200">Applied at Checkout ✨</span>
+                 <span class="text-sm md:text-sm font-black text-red-600 bg-red-100 px-2 py-1 rounded-md border border-red-200">Applied at Checkout ✨</span>
               </div>
               
               <button class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center group-hover:bg-red-600 group-hover:text-white transition-all shadow-sm">

@@ -26,11 +26,11 @@
         
         <div class="p-4 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
           <div>
-            <p class="text-xs text-gray-500 mb-0.5">Order ID</p>
+            <p class="text-sm text-gray-500 mb-0.5">Order ID</p>
             <p class="font-bold text-gray-900 text-sm uppercase">#{{ order._id.slice(-6) }}</p>
           </div>
           <div class="text-right">
-            <p class="text-xs text-gray-500 mb-0.5">Total</p>
+            <p class="text-sm text-gray-500 mb-0.5">Total</p>
             <p class="font-bold text-primary">₦{{ (order.totalItemCost + order.deliveryFee).toLocaleString() }}</p>
           </div>
         </div>
@@ -62,7 +62,7 @@
             </div>
             <div class="flex-1">
               <h4 class="text-sm font-bold text-gray-900 leading-tight">{{ item.itemDetails?.name || 'Unknown Item' }}</h4>
-              <p class="text-xs text-gray-500">{{ item.quantity }} x {{ item.itemDetails?.studentQuantity || 'Qty' }}</p>
+              <p class="text-sm text-gray-500">{{ item.quantity }} x {{ item.itemDetails?.studentQuantity || 'Qty' }}</p>
             </div>
             <div class="text-right">
               <p class="text-sm font-bold text-gray-900">₦{{ (item.priceAtPurchase * item.quantity).toLocaleString() }}</p>
@@ -72,7 +72,7 @@
 
         <!-- Delivery Details -->
         <div class="p-4 bg-gray-50/50 border-t border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-end gap-3">
-          <div class="text-xs text-gray-600">
+          <div class="text-sm text-gray-600">
             <p><span class="font-medium">Delivery Slot:</span> {{ order.deliverySlot }}</p>
             <p v-if="order.proxyName"><span class="font-medium">Receiver:</span> {{ order.proxyName }} ({{ order.proxyPhone }})</p>
             <p v-else><span class="font-medium">Receiver:</span> You</p>
@@ -81,7 +81,7 @@
           <button 
             v-if="['pending_payment', 'paid', 'procuring', 'repackaging'].includes(order.status)"
             @click="openEditModal(order)" 
-            class="text-xs font-bold text-primary hover:underline"
+            class="text-sm font-bold text-primary hover:underline"
           >
             Edit Preferences
           </button>
@@ -129,11 +129,11 @@
             
             <div v-if="editForm.useProxy" class="space-y-3 p-3 bg-gray-50 rounded-xl border border-gray-50">
               <div>
-                <label class="block text-xs font-semibold text-gray-600 mb-1">Receiver Name</label>
+                <label class="block text-sm font-semibold text-gray-600 mb-1">Receiver Name</label>
                 <input v-model="editForm.proxyName" type="text" placeholder="e.g. John Doe" class="w-full bg-white border-gray-200 text-gray-900 rounded-lg focus:ring-primary px-3 py-2 border outline-none text-sm">
               </div>
               <div>
-                <label class="block text-xs font-semibold text-gray-600 mb-1">Receiver Phone</label>
+                <label class="block text-sm font-semibold text-gray-600 mb-1">Receiver Phone</label>
                 <input v-model="editForm.proxyPhone" type="tel" placeholder="080..." class="w-full bg-white border-gray-200 text-gray-900 rounded-lg focus:ring-primary px-3 py-2 border outline-none text-sm">
               </div>
             </div>

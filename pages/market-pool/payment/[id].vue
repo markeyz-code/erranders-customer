@@ -38,7 +38,7 @@
               </div>
               <div class="text-left">
                 <p class="font-bold text-gray-900">Pay with Paystack / Bank</p>
-                <p class="text-xs text-gray-500">Secured by Paystack</p>
+                <p class="text-sm text-gray-500">Secured by Paystack</p>
               </div>
             </div>
             <div v-if="isInitializingPayment" class="w-5 h-5 border border-primary border-t-transparent rounded-full animate-spin"></div>
@@ -56,7 +56,7 @@
               </div>
               <div class="text-left">
                 <p class="font-bold text-gray-900">Pay with Wallet</p>
-                <p class="text-xs text-gray-500">Use your Errander balance</p>
+                <p class="text-sm text-gray-500">Use your Errander balance</p>
               </div>
             </div>
             <div v-if="isPayingWithWallet" class="w-5 h-5 border border-primary border-t-transparent rounded-full animate-spin"></div>

@@ -26,7 +26,7 @@
           <!-- Points Balance -->
           <div class="bg-[#FAF8F5] border border-[#E7E2DA] rounded-xl p-4 flex items-center justify-between mb-6">
             <div>
-              <p class="ff-mono text-[9px] font-bold text-[#9C968E] uppercase tracking-widest mb-1">Available Points</p>
+              <p class="ff-mono text-[9px] font-bold text-[#9C968E] uppercase  mb-1">Available Points</p>
               <p class="ff-display text-2xl font-bold text-[#171310] leading-none">{{ currentPoints.toLocaleString() }} <span class="text-sm text-[#FF5C1A]">pts</span></p>
             </div>
             <div class="w-10 h-10 bg-white border border-[#E7E2DA] rounded-lg flex items-center justify-center">
@@ -36,7 +36,7 @@
 
           <div v-if="currentPoints < 500" class="flex items-start gap-3 p-3 bg-rose-50 border border-rose-100 rounded-xl mb-6">
             <AlertCircle class="w-4 h-4 text-rose-500 mt-0.5 shrink-0" />
-            <p class="text-xs font-medium text-rose-700 leading-relaxed">
+            <p class="text-sm font-medium text-rose-700 leading-relaxed">
               You need a minimum of 500 points to redeem cash into your wallet. Complete more errands to earn points!
             </p>
           </div>
@@ -44,7 +44,7 @@
           <!-- Redemption Input -->
           <div v-else class="space-y-4 mb-6">
             <div>
-              <label class="block text-xs font-bold text-[#171310] mb-2">Points to Convert</label>
+              <label class="block text-sm font-bold text-[#171310] mb-2">Points to Convert</label>
               <div class="relative">
                 <input 
                   type="number" 

@@ -23,14 +23,14 @@
         class="flex items-center justify-between bg-white  rounded-2xl p-2 pl-4  relative cursor-pointer hover:border-parentPrimary/30 transition-colors"
       >
         <div class="flex flex-col">
-          <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Viewing Schedule For</span>
+          <span class="text-[10px] font-bold text-gray-400 uppercase  mb-0.5">Viewing Schedule For</span>
           <div class="flex items-center gap-2">
             <h2 class="text-lg md:text-xl font-black text-gray-900 capitalize">{{ selectedDay }}</h2>
             <ChevronDown class="w-4 h-4 text-parentPrimary transition-transform" :class="isDropdownOpen ? 'rotate-180' : ''" />
           </div>
         </div>
         <div class="flex items-center gap-3">
-          <div class="hidden md:flex items-center gap-1 bg-gray-50 px-3 py-1.5 rounded-full text-xs font-bold text-gray-500">
+          <div class="hidden md:flex items-center gap-1 bg-gray-50 px-3 py-1.5 rounded-full text-sm font-bold text-gray-500">
             <div class="w-1.5 h-1.5 rounded-full bg-parentPrimary"></div>
             {{ activeDayMealsCount }} Scheduled
           </div>
@@ -65,7 +65,7 @@
     <div class="space-y-4">
       <div class="flex items-center justify-between mb-2 px-1">
         <h3 class="text-base font-bold text-gray-900 capitalize">{{ selectedDay }}'s Schedule</h3>
-        <span class="text-xs font-semibold text-parentPrimary bg-parentPrimary/10 px-2.5 py-1 rounded-full">{{ activeDayMealsCount }} Scheduled</span>
+        <span class="text-sm font-semibold text-parentPrimary bg-parentPrimary/10 px-2.5 py-1 rounded-full">{{ activeDayMealsCount }} Scheduled</span>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <TimeSlotCard 
@@ -100,7 +100,7 @@
                 <span v-else-if="modalView === 'delivery'">Delivery Details</span>
                 <span v-else>Review & Confirm</span>
               </h3>
-              <p class="text-xs font-medium text-parentPrimary mt-1">For {{ activeModalContext?.day }} • {{ activeModalContext?.time }}</p>
+              <p class="text-sm font-medium text-parentPrimary mt-1">For {{ activeModalContext?.day }} • {{ activeModalContext?.time }}</p>
             </div>
             <button @click="closeModal" class="w-8 h-8 flex items-center justify-center bg-white rounded-full text-gray-400 hover:text-gray-900   transition-colors">
               <X class="w-4 h-4"/>
@@ -127,7 +127,7 @@
                 <img :src="vendor.logo || vendor.banner || 'https://via.placeholder.com/150'" class="w-12 h-12 rounded-xl object-cover" />
                 <div class="flex-1">
                   <h4 class="font-bold text-gray-900 group-hover:text-parentPrimary transition-colors">{{ vendor.storeName || vendor.businessName || 'Vendor' }}</h4>
-                  <p class="text-xs text-gray-500 line-clamp-1">{{ vendor.description || 'Quality meals' }}</p>
+                  <p class="text-sm text-gray-500 line-clamp-1">{{ vendor.description || 'Quality meals' }}</p>
                 </div>
                 <ChevronRight class="w-5 h-5 text-gray-300 group-hover:text-parentPrimary transition-colors"/>
               </div>
@@ -152,12 +152,12 @@
                     </div>
                     <div class="flex-1 min-w-0">
                       <h4 class="font-bold text-gray-900 text-sm line-clamp-1">{{ pack.name }}</h4>
-                      <p class="text-xs text-gray-500 line-clamp-1">{{ pack.description || 'Curated meal pack' }}</p>
+                      <p class="text-sm text-gray-500 line-clamp-1">{{ pack.description || 'Curated meal pack' }}</p>
                       <p class="font-black text-gray-900 mt-1 text-sm">₦{{ pack.price?.toLocaleString() || 0 }}</p>
                     </div>
                     <div class="flex items-center gap-2 bg-gray-50 rounded-lg p-1   shrink-0" v-if="getPackQty(pack) > 0">
                       <button @click.stop="updatePackQty(pack, -1)" class="w-7 h-7 flex items-center justify-center bg-white rounded  text-gray-600 hover:text-parentPrimary font-bold">-</button>
-                      <span class="w-4 text-center text-xs font-bold">{{ getPackQty(pack) }}</span>
+                      <span class="w-4 text-center text-sm font-bold">{{ getPackQty(pack) }}</span>
                       <button @click.stop="updatePackQty(pack, 1)" class="w-7 h-7 flex items-center justify-center bg-white rounded  text-gray-600 hover:text-parentPrimary font-bold">+</button>
                     </div>
                     <div v-else class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400  shrink-0">
@@ -192,7 +192,7 @@
                     </div>
                     <div class="flex items-center gap-2 bg-gray-50 rounded-lg p-1   shrink-0" v-if="getItemQty(item) > 0">
                       <button @click.stop="updateItemQty(item, -1)" class="w-7 h-7 flex items-center justify-center bg-white rounded  text-gray-600 hover:text-parentPrimary font-bold">-</button>
-                      <span class="w-4 text-center text-xs font-bold">{{ getItemQty(item) }}</span>
+                      <span class="w-4 text-center text-sm font-bold">{{ getItemQty(item) }}</span>
                       <button @click.stop="updateItemQty(item, 1)" class="w-7 h-7 flex items-center justify-center bg-white rounded  text-gray-600 hover:text-parentPrimary font-bold">+</button>
                     </div>
                     <div v-else @click="updateItemQty(item, 1)" class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400  cursor-pointer hover:bg-parentPrimary/10 hover:text-parentPrimary transition-colors shrink-0">
@@ -231,7 +231,7 @@
                     :class="deliveryMode === 'room_delivery' ? 'border-parentPrimary bg-parentPrimary/5' : 'border-gray-100 bg-white hover:border-gray-200'"
                   >
                     <MapPin class="w-4 h-4 mb-1" :class="deliveryMode === 'room_delivery' ? 'text-parentPrimary' : 'text-gray-400'" />
-                    <span class="text-xs font-bold" :class="deliveryMode === 'room_delivery' ? 'text-parentPrimary' : 'text-gray-900'">Room Delivery</span>
+                    <span class="text-sm font-bold" :class="deliveryMode === 'room_delivery' ? 'text-parentPrimary' : 'text-gray-900'">Room Delivery</span>
                   </button>
                   <button 
                     @click="deliveryMode = 'dropoff_service'"
@@ -239,7 +239,7 @@
                     :class="deliveryMode === 'dropoff_service' ? 'border-parentPrimary bg-parentPrimary/5' : 'border-gray-100 bg-white hover:border-gray-200'"
                   >
                     <Building class="w-4 h-4 mb-1" :class="deliveryMode === 'dropoff_service' ? 'text-parentPrimary' : 'text-gray-400'" />
-                    <span class="text-xs font-bold" :class="deliveryMode === 'dropoff_service' ? 'text-parentPrimary' : 'text-gray-900'">Drop-off</span>
+                    <span class="text-sm font-bold" :class="deliveryMode === 'dropoff_service' ? 'text-parentPrimary' : 'text-gray-900'">Drop-off</span>
                   </button>
                 </div>
                 <div class="bg-gray-50 p-3 rounded-xl mt-3">
@@ -258,14 +258,14 @@
                     class="flex flex-col items-center justify-center p-3 rounded-xl border transition-all"
                     :class="locationType === 'inside_campus' ? 'border-parentPrimary bg-parentPrimary/5' : 'border-gray-100 bg-white hover:border-gray-200'"
                   >
-                    <span class="text-xs font-bold" :class="locationType === 'inside_campus' ? 'text-parentPrimary' : 'text-gray-900'">Inside Campus</span>
+                    <span class="text-sm font-bold" :class="locationType === 'inside_campus' ? 'text-parentPrimary' : 'text-gray-900'">Inside Campus</span>
                   </button>
                   <button 
                     @click="locationType = 'outside_campus'"
                     class="flex flex-col items-center justify-center p-3 rounded-xl border transition-all"
                     :class="locationType !== 'inside_campus' ? 'border-parentPrimary bg-parentPrimary/5' : 'border-gray-100 bg-white hover:border-gray-200'"
                   >
-                    <span class="text-xs font-bold" :class="locationType !== 'inside_campus' ? 'text-parentPrimary' : 'text-gray-900'">Outside Campus</span>
+                    <span class="text-sm font-bold" :class="locationType !== 'inside_campus' ? 'text-parentPrimary' : 'text-gray-900'">Outside Campus</span>
                   </button>
                 </div>
                 <input 
@@ -311,7 +311,7 @@
                     </div>
                     <div class="flex items-center gap-2 bg-gray-50 rounded-lg p-1   shrink-0">
                       <button @click.stop="updatePackQty(pack, -1)" class="w-7 h-7 flex items-center justify-center bg-white rounded  text-gray-600 hover:text-parentPrimary font-bold">-</button>
-                      <span class="w-4 text-center text-xs font-bold">{{ pack.cartQty }}</span>
+                      <span class="w-4 text-center text-sm font-bold">{{ pack.cartQty }}</span>
                       <button @click.stop="updatePackQty(pack, 1)" class="w-7 h-7 flex items-center justify-center bg-white rounded  text-gray-600 hover:text-parentPrimary font-bold">+</button>
                     </div>
                     <span class="font-bold text-gray-900 text-sm ml-3 w-16 text-right shrink-0">₦{{ ((pack.price || 0) * pack.cartQty).toLocaleString() }}</span>
@@ -323,7 +323,7 @@
                     </div>
                     <div class="flex items-center gap-2 bg-gray-50 rounded-lg p-1   shrink-0">
                       <button @click.stop="updateItemQty(item, -1)" class="w-7 h-7 flex items-center justify-center bg-white rounded  text-gray-600 hover:text-parentPrimary font-bold">-</button>
-                      <span class="w-4 text-center text-xs font-bold">{{ item.cartQty }}</span>
+                      <span class="w-4 text-center text-sm font-bold">{{ item.cartQty }}</span>
                       <button @click.stop="updateItemQty(item, 1)" class="w-7 h-7 flex items-center justify-center bg-white rounded  text-gray-600 hover:text-parentPrimary font-bold">+</button>
                     </div>
                     <span class="font-bold text-gray-900 text-sm ml-3 w-16 text-right shrink-0">₦{{ ((item.pricePerPortion || item.price || 0) * item.cartQty).toLocaleString() }}</span>
@@ -358,7 +358,7 @@
                 <div class="flex items-center justify-between mb-2">
                   <div>
                     <h4 class="text-sm font-bold text-gray-900">Meal Delivery Time</h4>
-                    <p class="text-xs text-gray-500 mt-0.5">Pick the exact time we should process this order.</p>
+                    <p class="text-sm text-gray-500 mt-0.5">Pick the exact time we should process this order.</p>
                   </div>
                   <Clock class="w-4 h-4 text-gray-400" />
                 </div>
@@ -492,9 +492,9 @@
             <p v-if="previewItem.description" class="text-sm text-gray-500 mb-3 leading-relaxed">{{ previewItem.description }}</p>
             <div class="flex items-center gap-3 mb-4">
               <span class="text-xl font-black text-parentPrimary">₦{{ (previewItem.pricePerPortion || previewItem.price || 0).toLocaleString() }}</span>
-              <span v-if="previewItem.portionUnit" class="text-xs font-bold text-gray-400 bg-gray-50 px-2 py-1 rounded-full ">per {{ previewItem.portionUnit }}</span>
+              <span v-if="previewItem.portionUnit" class="text-sm font-bold text-gray-400 bg-gray-50 px-2 py-1 rounded-full ">per {{ previewItem.portionUnit }}</span>
             </div>
-            <div v-if="previewItem.prepTimeMinutes" class="text-xs text-gray-500 mb-4 flex items-center gap-1">
+            <div v-if="previewItem.prepTimeMinutes" class="text-sm text-gray-500 mb-4 flex items-center gap-1">
               <Clock class="w-3 h-3"/>
               <span>~{{ previewItem.prepTimeMinutes }} min prep time</span>
             </div>

@@ -33,13 +33,13 @@ ui_replace = """<div v-if="showSubstituteReviewModal" class="fixed inset-0 z-[10
             </div>
           </div>
           <div class="mt-2 flex items-center gap-2">
-            <span v-if="getSubstitutePriceDiff(opt.price) > 0" class="text-xs font-bold text-red-600 bg-red-100 px-2 py-1 rounded">
+            <span v-if="getSubstitutePriceDiff(opt.price) > 0" class="text-sm font-bold text-red-600 bg-red-100 px-2 py-1 rounded">
               Pay ₦{{ getSubstitutePriceDiff(opt.price).toLocaleString() }} Extra
             </span>
-            <span v-else-if="getSubstitutePriceDiff(opt.price) < 0" class="text-xs font-bold text-green-600 bg-green-100 px-2 py-1 rounded">
+            <span v-else-if="getSubstitutePriceDiff(opt.price) < 0" class="text-sm font-bold text-green-600 bg-green-100 px-2 py-1 rounded">
               Refund ₦{{ Math.abs(getSubstitutePriceDiff(opt.price)).toLocaleString() }}
             </span>
-            <span v-else class="text-xs font-bold text-gray-600 bg-gray-100 px-2 py-1 rounded">
+            <span v-else class="text-sm font-bold text-gray-600 bg-gray-100 px-2 py-1 rounded">
               Same Price
             </span>
           </div>

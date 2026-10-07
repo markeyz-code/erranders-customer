@@ -66,7 +66,7 @@
           <div class="bg-white/60 p-4 rounded-xl shadow-sm backdrop-blur-sm text-center">
             <MessageSquare class="w-8 h-8 text-gray-400 mx-auto mb-2" />
             <p class="text-sm font-medium">Send a message to {{ vendorName }}</p>
-            <p class="text-xs text-gray-400 mt-1">They'll receive it instantly.</p>
+            <p class="text-sm text-gray-400 mt-1">They'll receive it instantly.</p>
           </div>
         </div>
       </div>

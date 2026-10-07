@@ -22,7 +22,7 @@
           <div class="flex items-center justify-between">
             <div>
               <h3 class="text-sm font-bold text-gray-900">Push Notifications</h3>
-              <p class="text-xs text-gray-500 mt-0.5">Receive real-time push alerts on your device</p>
+              <p class="text-sm text-gray-500 mt-0.5">Receive real-time push alerts on your device</p>
             </div>
             <label class="relative inline-flex items-center cursor-pointer" @click.prevent="handleToggle('pushNotifications', 'Push Notifications')">
               <input type="checkbox" class="sr-only peer" :checked="preferences.pushNotifications">
@@ -33,7 +33,7 @@
           <div class="flex items-center justify-between">
             <div>
               <h3 class="text-sm font-bold text-gray-900">Email Notifications</h3>
-              <p class="text-xs text-gray-500 mt-0.5">Receive booking confirmations and updates</p>
+              <p class="text-sm text-gray-500 mt-0.5">Receive booking confirmations and updates</p>
             </div>
             <label class="relative inline-flex items-center cursor-pointer" @click.prevent="handleToggle('emailNotifications', 'Email Notifications')">
               <input type="checkbox" class="sr-only peer" :checked="preferences.emailNotifications">
@@ -44,7 +44,7 @@
           <div class="flex items-center justify-between">
             <div>
               <h3 class="text-sm font-bold text-gray-900">SMS Notifications</h3>
-              <p class="text-xs text-gray-500 mt-0.5">Receive reminders via text message</p>
+              <p class="text-sm text-gray-500 mt-0.5">Receive reminders via text message</p>
             </div>
             <label class="relative inline-flex items-center cursor-pointer" @click.prevent="handleToggle('smsNotifications', 'SMS Notifications')">
               <input type="checkbox" class="sr-only peer" :checked="preferences.smsNotifications">
@@ -55,7 +55,7 @@
           <div class="flex items-center justify-between">
             <div>
               <h3 class="text-sm font-bold text-gray-900">Marketing & Promos</h3>
-              <p class="text-xs text-gray-500 mt-0.5">Special offers and venue updates</p>
+              <p class="text-sm text-gray-500 mt-0.5">Special offers and venue updates</p>
             </div>
             <label class="relative inline-flex items-center cursor-pointer" @click.prevent="handleToggle('marketingPromos', 'Marketing & Promos')">
               <input type="checkbox" class="sr-only peer" :checked="preferences.marketingPromos">
@@ -87,7 +87,7 @@
             <Lock class="w-5 h-5 text-gray-400 group-hover:text-gray-900 transition-colors" />
             <div class="text-left">
               <h3 class="text-sm font-bold text-gray-900">Change Password</h3>
-              <p class="text-xs text-gray-500 mt-0.5">Update your password to keep your account secure</p>
+              <p class="text-sm text-gray-500 mt-0.5">Update your password to keep your account secure</p>
             </div>
           </div>
           <ChevronRight class="w-4 h-4 text-gray-400 group-hover:text-gray-900 transition-colors" />

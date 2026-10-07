@@ -60,7 +60,7 @@
                           />
                           <label
                             for="reference"
-                            class="absolute left-4 -top-2.5 bg-white px-1 text-xs text-gray-400 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-parentPrimary"
+                            class="absolute left-4 -top-2.5 bg-white px-1 text-sm text-gray-400 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-parentPrimary"
                           >
                             Booking reference
                           </label>
@@ -80,7 +80,7 @@
                           />
                           <label
                             for="email"
-                            class="absolute left-4 -top-2.5 bg-white px-1 text-xs text-gray-400 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-parentPrimary"
+                            class="absolute left-4 -top-2.5 bg-white px-1 text-sm text-gray-400 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-parentPrimary"
                           >
                             Email address
                           </label>
@@ -133,7 +133,7 @@
                     <h3 class="font-bold text-gray-900 text-lg">{{ appointment.vendor?.storeName }}</h3>
                     <p class="text-sm text-gray-500">{{ appointment.vendor?.address }}</p>
                   </div>
-                  <button @click="appointment = null" class="text-xs font-bold text-gray-400 hover:text-gray-900 transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-50">
+                  <button @click="appointment = null" class="text-sm font-bold text-gray-400 hover:text-gray-900 transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-50">
                     Back
                   </button>
                 </div>
@@ -142,13 +142,13 @@
                   <!-- Status and Total -->
                   <div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl border border-gray-50">
                     <div>
-                      <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Status</p>
-                      <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium" :class="statusClass(appointment.status)">
+                      <p class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-1">Status</p>
+                      <span class="inline-flex items-center px-2.5 py-1 rounded-full text-sm font-medium" :class="statusClass(appointment.status)">
                         {{ appointment.status }}
                       </span>
                     </div>
                     <div class="text-right">
-                      <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Total</p>
+                      <p class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-1">Total</p>
                       <p class="text-xl font-extrabold text-[#5b52e6]">NGN {{ appointment.price?.toLocaleString() }}</p>
                     </div>
                   </div>
@@ -160,7 +160,7 @@
                         <CalendarIcon class="w-5 h-5" />
                       </div>
                       <div>
-                        <p class="text-xs font-bold text-gray-500 mb-0.5">Date</p>
+                        <p class="text-sm font-bold text-gray-500 mb-0.5">Date</p>
                         <p class="text-sm font-bold text-gray-900">{{ formatDate(appointment.scheduledDate) }}</p>
                       </div>
                     </div>
@@ -169,7 +169,7 @@
                         <ClockIcon class="w-5 h-5" />
                       </div>
                       <div>
-                        <p class="text-xs font-bold text-gray-500 mb-0.5">Time</p>
+                        <p class="text-sm font-bold text-gray-500 mb-0.5">Time</p>
                         <p class="text-sm font-bold text-gray-900">{{ appointment.startTime }} - {{ appointment.endTime }}</p>
                       </div>
                     </div>
@@ -177,14 +177,14 @@
 
                   <!-- Services -->
                   <div>
-                    <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Services Booked</h4>
+                    <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Services Booked</h4>
                     <div class="space-y-3">
                       <div v-for="(item, idx) in appointment.items" :key="idx" class="flex justify-between items-start bg-gray-50 p-4 rounded-xl border border-gray-50">
                         <div>
                           <p class="text-sm font-bold text-gray-900">{{ item.variantName || item.service?.name }}</p>
-                          <p class="text-xs text-gray-500 mt-0.5">{{ item.durationInMinutes }} mins</p>
+                          <p class="text-sm text-gray-500 mt-0.5">{{ item.durationInMinutes }} mins</p>
                           <div v-if="item.extras?.length" class="mt-2 space-y-1">
-                            <p v-for="ext in item.extras" :key="ext.name" class="text-xs text-gray-500 flex items-center gap-1">
+                            <p v-for="ext in item.extras" :key="ext.name" class="text-sm text-gray-500 flex items-center gap-1">
                               <span class="w-1 h-1 rounded-full bg-gray-300"></span>
                               {{ ext.name }}
                             </p>
@@ -210,7 +210,7 @@
                     <div v-else class="text-center text-sm text-gray-500 bg-gray-50 rounded-xl py-3.5 border border-gray-50">
                       This appointment cannot be cancelled because it is {{ appointment.status }}.
                     </div>
-                    <p class="text-xs text-center text-gray-400 mt-3">To reschedule, please cancel this booking and create a new one.</p>
+                    <p class="text-sm text-center text-gray-400 mt-3">To reschedule, please cancel this booking and create a new one.</p>
                   </div>
                 </div>
               </div>

@@ -49,13 +49,13 @@
             <h4 class="font-bold text-gray-900 text-lg truncate">{{ fav.vendor?.storeName || 'Venue Name' }}</h4>
             <div class="flex items-center gap-1 bg-gray-50 px-2 py-1 rounded-lg shrink-0">
               <Star class="w-3.5 h-3.5 text-amber-500 fill-current" />
-              <span class="text-xs font-bold text-gray-900">{{ fav.vendor?.rating?.toFixed(1) || '5.0' }}</span>
+              <span class="text-sm font-bold text-gray-900">{{ fav.vendor?.rating?.toFixed(1) || '5.0' }}</span>
             </div>
           </div>
           <p class="text-sm text-gray-500 mb-4 line-clamp-2 flex-1">{{ fav.vendor?.description || 'Great service provider in your area.' }}</p>
           
           <div class="flex items-center justify-between border-t border-gray-50 pt-4 mt-auto">
-            <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">{{ fav.vendor?.category || 'Service' }}</span>
+            <span class="text-sm font-bold text-gray-400 uppercase tracking-wider">{{ fav.vendor?.category || 'Service' }}</span>
             <span class="text-sm font-bold text-parentPrimary group-hover:translate-x-1 transition-transform inline-block">Book Now &rarr;</span>
           </div>
         </div>

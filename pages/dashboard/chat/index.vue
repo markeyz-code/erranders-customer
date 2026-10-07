@@ -52,7 +52,7 @@
                   {{ new Date(conv.lastMessage.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
                 </span>
               </div>
-              <p class="text-xs text-gray-500 truncate" :class="conv.unreadCount > 0 ? 'font-bold text-gray-900' : ''">
+              <p class="text-sm text-gray-500 truncate" :class="conv.unreadCount > 0 ? 'font-bold text-gray-900' : ''">
                 {{ conv.lastMessage?.message || conv.lastMessage?.content || 'Started a conversation' }}
               </p>
             </div>

@@ -33,14 +33,14 @@
           <div class="bg-gray-50 p-1 rounded-xl flex">
             <button 
               @click="timeFilter = 'upcoming'"
-              class="flex-1 py-2 text-xs font-bold rounded-lg transition-all"
+              class="flex-1 py-2 text-sm font-bold rounded-lg transition-all"
               :class="timeFilter === 'upcoming' ? 'bg-white text-gray-900 border-[0.5px] border-gray-100' : 'text-gray-500 hover:text-gray-700'"
             >
               Upcoming
             </button>
             <button 
               @click="timeFilter = 'past'"
-              class="flex-1 py-2 text-xs font-bold rounded-lg transition-all"
+              class="flex-1 py-2 text-sm font-bold rounded-lg transition-all"
               :class="timeFilter === 'past' ? 'bg-white text-gray-900 border-[0.5px] border-gray-100' : 'text-gray-500 hover:text-gray-700'"
             >
               Past
@@ -71,7 +71,7 @@
               :class="selectedAppointment?._id === apt._id ? 'border-gray-25bg-gray-50' : 'border-transparent hover:bg-gray-50'"
             >
               <div class="flex justify-between items-start mb-2">
-                <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">{{ formatDate(apt.scheduledDate) }}</span>
+                <span class="text-sm font-bold text-gray-500 uppercase tracking-wider">{{ formatDate(apt.scheduledDate) }}</span>
                 <span 
                   class="px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider"
                   :class="{
@@ -118,7 +118,7 @@
             <img :src="selectedAppointment.vendor?.banner || selectedAppointment.vendor?.logo || 'https://placehold.co/800x400/eeeeee/999999?text=Store+Banner'" class="w-full h-full object-cover" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
             <div class="absolute bottom-6 left-6 text-white">
-              <span class="px-2.5 py-1 bg-emerald-500 rounded-lg text-xs font-bold uppercase tracking-wider mb-2 inline-block">
+              <span class="px-2.5 py-1 bg-emerald-500 rounded-lg text-sm font-bold uppercase tracking-wider mb-2 inline-block">
                 {{ selectedAppointment.status }}
               </span>
               <h2 class="text-3xl font-bold">{{ selectedAppointment.vendor?.storeName || 'Venue' }}</h2>
@@ -141,23 +141,23 @@
             <div class="grid grid-cols-4 gap-3 mb-8">
               <button v-if="['pending', 'confirmed'].includes(selectedAppointment.status)" @click="openReschedule" class="flex flex-col items-center gap-2 p-4 bg-white rounded-2xl border-[0.5px] border-gray-100 hover:border-gray-25hover:bg-gray-50 transition-all group active:scale-95">
                 <CalendarPlus class="w-6 h-6 text-gray-400 group-hover:text-gray-900 transition-colors" />
-                <span class="text-xs font-bold text-gray-600 group-hover:text-gray-900 transition-colors">Reschedule</span>
+                <span class="text-sm font-bold text-gray-600 group-hover:text-gray-900 transition-colors">Reschedule</span>
               </button>
               <button class="flex flex-col items-center gap-2 p-4 bg-white rounded-2xl border-[0.5px] border-gray-100 hover:border-gray-25hover:bg-gray-50 transition-all group active:scale-95">
                 <MapPin class="w-6 h-6 text-gray-400 group-hover:text-gray-900 transition-colors" />
-                <span class="text-xs font-bold text-gray-600 group-hover:text-gray-900 transition-colors">Directions</span>
+                <span class="text-sm font-bold text-gray-600 group-hover:text-gray-900 transition-colors">Directions</span>
               </button>
               <button @click="openChat" class="flex flex-col items-center gap-2 p-4 bg-white rounded-2xl border-[0.5px] border-gray-100 hover:border-gray-25hover:bg-gray-50 transition-all group active:scale-95">
                 <MessageSquare class="w-6 h-6 text-gray-400 group-hover:text-gray-900 transition-colors" />
-                <span class="text-xs font-bold text-gray-600 group-hover:text-gray-900 transition-colors">Message</span>
+                <span class="text-sm font-bold text-gray-600 group-hover:text-gray-900 transition-colors">Message</span>
               </button>
               <button v-if="['pending', 'confirmed'].includes(selectedAppointment.status)" @click="showCancelModal = true" class="flex flex-col items-center gap-2 p-4 bg-white rounded-2xl border-[0.5px] border-red-100 hover:border-red-500 hover:bg-red-50 transition-all group active:scale-95">
                 <XCircle class="w-6 h-6 text-red-400 group-hover:text-red-500 transition-colors" />
-                <span class="text-xs font-bold text-red-500 group-hover:text-red-600 transition-colors">Cancel</span>
+                <span class="text-sm font-bold text-red-500 group-hover:text-red-600 transition-colors">Cancel</span>
               </button>
               <NuxtLink v-else :to="`/vendors/${typeof selectedAppointment.vendor === 'string' ? selectedAppointment.vendor : selectedAppointment.vendor?._id}`" class="flex flex-col items-center justify-center gap-2 p-4 bg-white rounded-2xl border-[0.5px] border-gray-100 hover:border-gray-25hover:bg-gray-50 transition-all group text-center active:scale-95">
                 <Store class="w-6 h-6 text-gray-400 group-hover:text-gray-900 transition-colors" />
-                <span class="text-xs font-bold text-gray-600 group-hover:text-gray-900 transition-colors">Venue</span>
+                <span class="text-sm font-bold text-gray-600 group-hover:text-gray-900 transition-colors">Venue</span>
               </NuxtLink>
             </div>
 
@@ -171,14 +171,14 @@
                     <p class="text-sm text-gray-500 mt-1" v-if="item.variant">{{ item.variant.name }}</p>
 
                     <div v-if="item.extras?.length" class="mt-2 space-y-1">
-                      <p v-for="ext in item.extras" :key="ext.name" class="text-xs text-gray-400 flex items-center gap-1.5">
+                      <p v-for="ext in item.extras" :key="ext.name" class="text-sm text-gray-400 flex items-center gap-1.5">
                         <Plus class="w-3 h-3" /> {{ ext.name }} (+₦{{ ext.price }})
                       </p>
                     </div>
                   </div>
                   <div class="text-right">
                     <p class="font-bold text-gray-900">₦{{ calculateItemPrice(item).toLocaleString() }}</p>
-                    <p class="text-xs text-gray-400 mt-1">{{ item.durationInMinutes || item.service?.durationInMinutes || 30 }} min</p>
+                    <p class="text-sm text-gray-400 mt-1">{{ item.durationInMinutes || item.service?.durationInMinutes || 30 }} min</p>
                   </div>
                 </div>
               </div>
@@ -201,7 +201,7 @@
                 <Info class="w-5 h-5 text-orange-500 shrink-0 mt-0.5" />
                 <div>
                   <h4 class="text-sm font-bold text-orange-900 mb-1">Cancellation Policy</h4>
-                  <p class="text-xs text-orange-700/80 leading-relaxed">Cancel up to 24 hours before your appointment for a full refund. Cancellations within 24 hours will incur a cancellation fee equal to 50% of the total appointment cost.</p>
+                  <p class="text-sm text-orange-700/80 leading-relaxed">Cancel up to 24 hours before your appointment for a full refund. Cancellations within 24 hours will incur a cancellation fee equal to 50% of the total appointment cost.</p>
                 </div>
               </div>
             </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-2 w-full">
-    <label class="text-xs font-extrabold tracking-widest text-gray-900 uppercase">
+    <label class="text-sm font-extrabold  text-gray-900 uppercase">
       Birthday
     </label>
     
@@ -24,7 +24,7 @@
       >
         <div class="flex gap-3">
           <div class="flex-1">
-            <label class="block text-xs font-bold text-gray-500 mb-1">Month</label>
+            <label class="block text-sm font-bold text-gray-500 mb-1">Month</label>
             <select 
               v-model="selectedMonth" 
               class="w-full p-2 bg-gray-50 border border-gray-25 rounded-lg focus:outline-none focus:border-[#FF5C1A]"
@@ -36,7 +36,7 @@
             </select>
           </div>
           <div class="flex-1">
-            <label class="block text-xs font-bold text-gray-500 mb-1">Day</label>
+            <label class="block text-sm font-bold text-gray-500 mb-1">Day</label>
             <select 
               v-model="selectedDay" 
               class="w-full p-2 bg-gray-50 border border-gray-25 rounded-lg focus:outline-none focus:border-[#FF5C1A]"

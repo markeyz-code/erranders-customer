@@ -13,9 +13,9 @@
  <div class="flex flex-col min-w-0">
  <h1 class="text-base sm:text-lg font-medium text-gray-900 tracking-tight leading-none">Order Status</h1>
  <div v-if="order" class="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-1 sm:mt-1.5">
- <span class="text-xs sm:text-sm font-medium text-gray-400 truncate">ID: {{ order.orderNumber }}</span>
+ <span class="text-sm sm:text-sm font-medium text-gray-400 truncate">ID: {{ order.orderNumber }}</span>
  <span class="w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
- <span class="text-xs sm:text-sm font-bold text-gray-400 whitespace-nowrap">{{ formatDate(order.createdAt) }}</span>
+ <span class="text-sm sm:text-sm font-bold text-gray-400 whitespace-nowrap">{{ formatDate(order.createdAt) }}</span>
  </div>
  </div>
  </div>
@@ -25,7 +25,7 @@
          v-if="order?.type !== 'custom_errand'"
          @click="reorder" 
          :disabled="reordering"
-         class="w-full sm:w-auto px-4 py-2.5 sm:py-2 bg-gray-900 text-white rounded-xl text-xs sm:text-sm font-medium hover:bg-parentPrimary hover: hover:shadow-parentPrimary/20 transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
+         class="w-full sm:w-auto px-4 py-2.5 sm:py-2 bg-gray-900 text-white rounded-xl text-sm sm:text-sm font-medium hover:bg-parentPrimary hover: hover:shadow-parentPrimary/20 transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
          >
          <RefreshCw v-if="reordering" class="w-3.5 h-3.5 animate-spin" />
          <span>{{ reordering ? 'Processing' : 'Reorder Items' }}</span>
@@ -151,10 +151,10 @@
  <div class="p-4 bg-gray-50/50 rounded-xl text-sm text-gray-700 leading-relaxed whitespace-pre-line">
  {{ order.customDetails?.description }}
  <div v-if="order.customDetails?.attachedVoiceNote" class="mt-4 pt-4 border-t border-gray-200 flex flex-col gap-2">
- <span class="text-xs font-medium text-gray-500 uppercase tracking-widest">Attached Voice Note</span>
+ <span class="text-sm font-medium text-gray-500 uppercase ">Attached Voice Note</span>
  <audio :src="order.customDetails.attachedVoiceNote" controls class="w-full h-10 bg-white rounded-full " preload="metadata" />
  </div>
- <div class="mt-3 pt-3 border-t border-gray-200 flex justify-between items-center text-xs">
+ <div class="mt-3 pt-3 border-t border-gray-200 flex justify-between items-center text-sm">
  <span class="font-medium text-gray-500">Estimated Item Cost</span>
  <span class="font-bold text-gray-900">₦{{ (order.customDetails?.estimatedItemCost || 0).toLocaleString() }}</span>
  </div>
@@ -162,19 +162,19 @@
  <!-- Proof of Items Photo -->
  <div v-if="order.itemsPhoto" class="mt-4 pt-4 border-t border-gray-200">
    <div class="p-4 rounded-xl border border-gray-50 flex flex-col items-center">
-     <h4 class="text-[11px] font-bold text-gray-400 mb-4 tracking-widest uppercase flex items-center gap-1.5 w-full">
+     <h4 class="text-[11px] font-bold text-gray-400 mb-4  uppercase flex items-center gap-1.5 w-full">
        <Camera, PartyPopper class="w-3.5 h-3.5" /> Proof of Purchased Items
      </h4>
      <div class="w-full h-48 rounded-xl overflow-hidden bg-gray-50 border border-gray-50 mb-3 cursor-pointer" @click="window.open(order.itemsPhoto, '_blank')">
        <img :src="order.itemsPhoto" class="w-full h-full object-cover hover:scale-105 transition-transform" />
      </div>
-     <p class="text-xs text-gray-500 text-center">Your rider has uploaded a photo of the items purchased from the vendor.</p>
+     <p class="text-sm text-gray-500 text-center">Your rider has uploaded a photo of the items purchased from the vendor.</p>
    </div>
  </div>
 
  <!-- Reconciliation Status / Approval -->
  <div v-if="order.reconciliationStatus && order.reconciliationStatus !== 'not_applicable'" class="mt-4 pt-4 border-t border-gray-200">
- <div v-if="order.reconciliationStatus === 'pending'" class="text-xs font-medium text-amber-600 bg-amber-50 p-3 rounded-xl border border-amber-100 flex items-center gap-2">
+ <div v-if="order.reconciliationStatus === 'pending'" class="text-sm font-medium text-amber-600 bg-amber-50 p-3 rounded-xl border border-amber-100 flex items-center gap-2">
  <Clock class="w-4 h-4" /> Rider will submit actual item cost after purchase.
  </div>
  
@@ -193,7 +193,7 @@
             EXPIRED
           </span>
         </h4>
-        <p class="text-xs text-blue-700 mt-1">The rider reported spending <strong>₦{{ order.actualItemCost?.toLocaleString() }}</strong>.</p>
+        <p class="text-sm text-blue-700 mt-1">The rider reported spending <strong>₦{{ order.actualItemCost?.toLocaleString() }}</strong>.</p>
         
         <div v-if="order.actualItemCost > order.customDetails?.estimatedItemCost" class="mt-2 p-2 bg-amber-50 border border-amber-200 rounded-lg text-[11px] text-amber-800 font-medium">
           <p>⚠️ Price is higher than your estimate.</p>
@@ -209,14 +209,14 @@
     <div class="flex gap-2 mt-2">
       <a 
         :href="'tel:' + (order.errander?.phoneNumber || order.errander?.phone || '')"
-        class="flex-1 py-2.5 bg-white border border-blue-200 text-blue-700 rounded-lg text-xs font-bold hover:bg-blue-50 transition-all flex items-center justify-center gap-1.5"
+        class="flex-1 py-2.5 bg-white border border-blue-200 text-blue-700 rounded-lg text-sm font-bold hover:bg-blue-50 transition-all flex items-center justify-center gap-1.5"
       >
         <Phone class="w-3.5 h-3.5" /> Call Rider
       </a>
       <button 
         @click="approveReconciliation"
         :disabled="approvingReconciliation || reconciliationTimeLeft <= 0"
-        class="flex-[2] py-2.5 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+        class="flex-[2] py-2.5 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-700 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
       >
         <Loader2 v-if="approvingReconciliation" class="w-4 h-4 animate-spin" />
         <span v-else>👍</span>
@@ -225,7 +225,7 @@
     </div>
   </div>
 
- <div v-else-if="order.reconciliationStatus === 'approved'" class="text-xs font-bold text-emerald-700 bg-emerald-50 p-3 rounded-xl border border-emerald-100 flex items-center justify-between">
+ <div v-else-if="order.reconciliationStatus === 'approved'" class="text-sm font-bold text-emerald-700 bg-emerald-50 p-3 rounded-xl border border-emerald-100 flex items-center justify-between">
  <div class="flex items-center gap-2">
  <CheckCircle class="w-4 h-4" /> Actual Cost: ₦{{ order.actualItemCost?.toLocaleString() }}
  </div>
@@ -256,7 +256,7 @@
  <p class="text-sm font-bold text-gray-900 truncate tracking-tight">{{ item.name }}</p>
  <p v-if="item.customizations?.length" class="text-[10px] font-medium text-gray-400 mt-0.5">Base: ₦{{ item.price?.toLocaleString() }}</p>
  </div>
- <p class="text-xs font-bold text-gray-900 shrink-0">₦{{ item.price?.toLocaleString() }} <span class="text-gray-400 ml-0.5">×{{ item.quantity }}</span></p>
+ <p class="text-sm font-bold text-gray-900 shrink-0">₦{{ item.price?.toLocaleString() }} <span class="text-gray-400 ml-0.5">×{{ item.quantity }}</span></p>
  </div>
  
  <div v-if="item.customizations?.length" class="mt-1.5 mb-2 pl-2 border-l-2 border-gray-100 space-y-1">
@@ -267,7 +267,7 @@
  </div>
  
  <div class="flex justify-end mt-1">
- <span class="text-xs font-bold text-parentPrimary">Total: ₦{{ (item.subtotal || (item.price * item.quantity)).toLocaleString() }}</span>
+ <span class="text-sm font-bold text-parentPrimary">Total: ₦{{ (item.subtotal || (item.price * item.quantity)).toLocaleString() }}</span>
  </div>
  </div>
  </div>
@@ -286,7 +286,7 @@
  <p class="text-sm font-bold text-gray-900 truncate tracking-tight">{{ item.name }}</p>
  <p v-if="item.customizations?.length" class="text-[10px] font-medium text-gray-400 mt-0.5">Base: ₦{{ item.price?.toLocaleString() }}</p>
  </div>
- <p class="text-xs font-bold text-gray-900 shrink-0">₦{{ item.price?.toLocaleString() }} <span class="text-gray-400 ml-0.5">×{{ item.quantity }}</span></p>
+ <p class="text-sm font-bold text-gray-900 shrink-0">₦{{ item.price?.toLocaleString() }} <span class="text-gray-400 ml-0.5">×{{ item.quantity }}</span></p>
  </div>
  
  <div v-if="item.customizations?.length" class="mt-1.5 mb-2 pl-2 border-l-2 border-gray-100 space-y-1">
@@ -297,7 +297,7 @@
  </div>
  
  <div class="flex justify-end mt-1">
- <span class="text-xs font-bold text-parentPrimary">Total: ₦{{ (item.subtotal || (item.price * item.quantity)).toLocaleString() }}</span>
+ <span class="text-sm font-bold text-parentPrimary">Total: ₦{{ (item.subtotal || (item.price * item.quantity)).toLocaleString() }}</span>
  </div>
  </div>
  </div>
@@ -794,6 +794,52 @@
  </div>
  </Transition>
  
+ <!-- Ping Alert Banner - slides in from top -->
+ <Transition name="fade">
+ <div v-if="showPingBanner" class="fixed top-0 left-0 right-0 z-[200] animate-slide-down">
+   <div class="mx-4 mt-4 p-4 bg-gradient-to-r from-orange-500 via-red-500 to-orange-500 rounded-2xl shadow-2xl shadow-red-500/30 border border-white/20 backdrop-blur-sm">
+     <div class="flex items-center gap-3">
+       <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center animate-pulse shrink-0">
+         <Phone class="w-6 h-6 text-white" />
+       </div>
+       <div class="flex-1 min-w-0">
+         <p class="text-sm font-black text-white">🔔 {{ pingBannerData.senderName || 'Someone' }} is pinging you!</p>
+         <p class="text-sm text-white/80 font-medium mt-0.5 truncate">{{ pingBannerData.body || 'Please check your order now' }}</p>
+       </div>
+       <button @click="showPingBanner = false" class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center shrink-0 hover:bg-white/30 transition-colors">
+         <X class="w-4 h-4 text-white" />
+       </button>
+     </div>
+   </div>
+ </div>
+ </Transition>
+
+ <!-- Verification PIN Arrival Modal -->
+ <div v-if="showArrivalModal" class="fixed inset-0 z-[150] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+   <div class="bg-white rounded-3xl p-6 w-full max-w-sm relative animate-fade-in shadow-2xl flex flex-col items-center text-center">
+     <button @click="closeArrivalModal" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors">
+       <X class="w-4 h-4" />
+     </button>
+     
+     <div class="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mb-4">
+       <ShieldCheck class="w-8 h-8 text-emerald-600" />
+     </div>
+     
+     <h3 class="text-xl font-black text-gray-900 mb-2">Yepeeee! 🎉</h3>
+     <p class="text-sm text-gray-500 mb-6 font-medium">Your Errand ninja is almost here. Below is your verification code.</p>
+     
+     <div class="flex items-center justify-center gap-2 mb-6 w-full">
+       <div v-for="(digit, idx) in (order?.deliveryPin || '0000').split('')" :key="idx" class="w-12 h-14 rounded-xl bg-gray-900 flex items-center justify-center text-2xl font-black text-white shadow-inner">
+         {{ digit }}
+       </div>
+     </div>
+     
+     <button @click="copyVerificationCodeAndClose" class="w-full h-12 rounded-xl bg-[#FF5C1A] text-white font-bold flex items-center justify-center gap-2 hover:bg-[#e6511a] transition-colors shadow-lg shadow-[#FF5C1A]/20">
+       <ShieldCheck class="w-4 h-4" /> Copy Code
+     </button>
+   </div>
+ </div>
+
  <SupportInterventionModal 
  v-model:show="showSupportInterventionModal" 
  :order-id="order?.orderNumber" 
@@ -812,7 +858,7 @@ import {
  Search, CreditCard, MessageSquare, Clock, LayoutGrid, Star, Inbox, LifeBuoy, Store, ShieldCheck, User, X, ChevronRight, HeadphonesIcon, Heart, Bike, Camera
 } from 'lucide-vue-next';
 import { useRoute, useRouter } from '#imports';
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
 import { orders_api } from '@/api_factory/modules/orders';
 import OrderChat from '@/components/core/OrderChat.vue';
 import UiModal from '@/components/ui/UiModal.vue';
@@ -1089,6 +1135,73 @@ watch(() => order.value?.status, (newStatus) => {
    clearTimeout(supportTimer);
    isDelayed.value = false;
  }
+});
+
+// ── Verification PIN Arrival Modal ──
+const showArrivalModal = ref(false);
+const hasSeenArrivalModal = ref(false);
+
+const closeArrivalModal = () => {
+  showArrivalModal.value = false;
+  hasSeenArrivalModal.value = true;
+};
+
+const copyVerificationCode = async () => {
+  if (!order.value?.deliveryPin) return;
+  try {
+    await navigator.clipboard.writeText(order.value.deliveryPin);
+    showToast({ title: 'Copied!', message: 'Verification code copied to clipboard.', toastType: 'success' });
+  } catch (err) {
+    showToast({ title: 'Failed', message: 'Could not copy code.', toastType: 'error' });
+  }
+};
+
+const copyVerificationCodeAndClose = async () => {
+  await copyVerificationCode();
+  closeArrivalModal();
+};
+
+watch(() => order.value?.status, (newStatus) => {
+  if (newStatus === 'in_transit' && !hasSeenArrivalModal.value) {
+    showArrivalModal.value = true;
+  }
+}, { immediate: true });
+
+// ── Ping Alert Banner ──
+const showPingBanner = ref(false);
+const pingBannerData = ref<{ senderName?: string; body?: string }>({});
+let pingBannerTimeout: any;
+
+const handlePingReceived = (event: Event) => {
+  const detail = (event as CustomEvent).detail;
+  if (!detail) return;
+  // Only show if this ping is for the current order
+  if (detail.orderId && detail.orderId !== route.params.id) return;
+  
+  pingBannerData.value = {
+    senderName: detail.senderName || 'Someone',
+    body: detail.body || 'Please check your order now'
+  };
+  showPingBanner.value = true;
+  
+  // Auto-dismiss after 12 seconds
+  clearTimeout(pingBannerTimeout);
+  pingBannerTimeout = setTimeout(() => {
+    showPingBanner.value = false;
+  }, 12000);
+};
+
+onMounted(() => {
+  if (typeof window !== 'undefined') {
+    window.addEventListener('errandr:ping-received', handlePingReceived);
+  }
+});
+
+onBeforeUnmount(() => {
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('errandr:ping-received', handlePingReceived);
+  }
+  clearTimeout(pingBannerTimeout);
 });
 
 import { useSocket } from '@/composables/useSocket';

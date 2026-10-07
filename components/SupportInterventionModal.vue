@@ -33,7 +33,7 @@
 
       <!-- Footer for Cancel Intercept -->
       <div v-if="mode === 'cancel-intercept'" class="p-4 bg-gray-50 text-center border-t border-gray-100">
-        <button @click="$emit('confirmCancel')" class="text-xs font-bold text-gray-400 hover:text-red-500 transition-colors py-2 px-4 rounded-lg hover:bg-red-50 w-full">
+        <button @click="$emit('confirmCancel')" class="text-sm font-bold text-gray-400 hover:text-red-500 transition-colors py-2 px-4 rounded-lg hover:bg-red-50 w-full">
           No thanks, I still want to cancel
         </button>
       </div>

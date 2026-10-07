@@ -49,7 +49,7 @@
               <!-- Streak Gamification UI -->
               <div v-if="user.currentStreak > 0" class="flex items-center gap-1.5 px-3 py-1.5 bg-orange-50 border border-orange-100 rounded-full cursor-help relative group" title="Your Errand Streak!">
                 <span class="text-base leading-none">🔥</span>
-                <span class="text-xs font-bold text-orange-600">{{ user.currentStreak }} Wk</span>
+                <span class="text-sm font-bold text-orange-600">{{ user.currentStreak }} Wk</span>
                 <div v-if="user.freeDeliveryTokens > 0" class="absolute -top-2 -right-2 bg-green-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
                   🎟 {{ user.freeDeliveryTokens }}
                 </div>
@@ -90,7 +90,7 @@
                     {{ user.firstName?.[0] || user.email?.[0] }}
                   </div>
                   <div>
-                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-0.5">Signed in</p>
+                    <p class="text-sm font-bold text-gray-400 uppercase  mb-0.5">Signed in</p>
                     <p class="text-sm font-black text-gray-900 truncate">{{ user.firstName }} {{ user.lastName }}</p>
                   </div>
                 </div>
@@ -98,25 +98,25 @@
                 <div class="p-4 grid grid-cols-2 gap-2">
                   <!-- Explore Section Commented Out -->
                   <!-- 
-                  <div class="col-span-2 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 mt-1 px-2">Explore</div>
+                  <div class="col-span-2 text-[10px] font-black text-gray-400 uppercase  mb-1 mt-1 px-2">Explore</div>
                   
                   <MenuItem v-slot="{ active }">
                     <NuxtLink to="/" :class="[active ? 'bg-orange-50/50 scale-95' : 'bg-gray-50/50 hover:bg-gray-100/50', 'group flex flex-col items-center justify-center rounded-2xl p-4 transition-all']">
                       <Home class="w-5 h-5 mb-2" :class="active ? 'text-parentPrimary' : 'text-gray-600'" />
-                      <span class="text-xs font-bold text-gray-700">Home</span>
+                      <span class="text-sm font-bold text-gray-700">Home</span>
                     </NuxtLink>
                   </MenuItem>
                   
                   <MenuItem v-slot="{ active }">
                     <NuxtLink to="/faq" :class="[active ? 'bg-orange-50/50 scale-95' : 'bg-gray-50/50 hover:bg-gray-100/50', 'group flex flex-col items-center justify-center rounded-2xl p-4 transition-all']">
                       <Info class="w-5 h-5 mb-2" :class="active ? 'text-parentPrimary' : 'text-gray-600'" />
-                      <span class="text-xs font-bold text-gray-700">FAQ</span>
+                      <span class="text-sm font-bold text-gray-700">FAQ</span>
                     </NuxtLink>
                   </MenuItem> 
                   -->
 
                   <!-- Services Section -->
-                  <div class="col-span-2 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 mt-3 px-2">Services</div>
+                  <div class="col-span-2 text-[10px] font-black text-gray-400 uppercase  mb-1 mt-3 px-2">Services</div>
 
                   <MenuItem v-slot="{ active }">
                     <NuxtLink to="/errands/custom" :class="[active ? 'bg-orange-50 scale-95' : 'bg-orange-50/30 hover:bg-orange-50', 'group flex items-center gap-3 rounded-2xl p-3 col-span-2 transition-all border border-orange-100/50']">
@@ -133,14 +133,14 @@
                   <MenuItem v-slot="{ active }">
                     <button @click="isBookingModalOpen = true" :class="[active ? 'bg-gray-100 scale-95' : 'bg-gray-50/50 hover:bg-gray-100/50', 'group flex items-center gap-3 rounded-2xl p-3 transition-all text-left']">
                       <Calendar class="w-4 h-4 text-gray-600" />
-                      <span class="text-xs font-bold text-gray-700">Bookings</span>
+                      <span class="text-sm font-bold text-gray-700">Bookings</span>
                     </button>
                   </MenuItem>
 
                   <MenuItem v-slot="{ active }">
                     <button @click="isOrderModalOpen = true" :class="[active ? 'bg-gray-100 scale-95' : 'bg-gray-50/50 hover:bg-gray-100/50', 'group flex items-center gap-3 rounded-2xl p-3 transition-all text-left']">
                       <Package class="w-4 h-4 text-gray-600" />
-                      <span class="text-xs font-bold text-gray-700">Orders</span>
+                      <span class="text-sm font-bold text-gray-700">Orders</span>
                     </button>
                   </MenuItem>
 
@@ -157,19 +157,19 @@
                   </MenuItem>
 
                   <!-- Partners & Actions -->
-                  <div class="col-span-2 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 mt-3 px-2">Partner with us</div>
+                  <div class="col-span-2 text-[10px] font-black text-gray-400 uppercase  mb-1 mt-3 px-2">Partner with us</div>
                   
                   <MenuItem v-slot="{ active }">
                     <a href="https://vendor.erranders.org/auth/register" :class="[active ? 'bg-gray-900 text-white scale-95' : 'bg-gray-800 text-white hover:bg-gray-900', 'group flex items-center justify-center gap-2 rounded-2xl p-3 transition-all shadow-sm']">
                       <Store class="w-4 h-4" />
-                      <span class="text-xs font-bold">Vendor</span>
+                      <span class="text-sm font-bold">Vendor</span>
                     </a>
                   </MenuItem>
 
                   <MenuItem v-slot="{ active }">
                     <a href="https://dispatch.erranders.org/auth/register" :class="[active ? 'bg-gray-900 text-white scale-95' : 'bg-gray-800 text-white hover:bg-gray-900', 'group flex items-center justify-center gap-2 rounded-2xl p-3 transition-all shadow-sm']">
                       <Bike class="w-4 h-4" />
-                      <span class="text-xs font-bold">Errand Ninja</span>
+                      <span class="text-sm font-bold">Errand Ninja</span>
                     </a>
                   </MenuItem>
                 </div>
@@ -193,13 +193,13 @@
                   <template v-else>
                     <div class="grid grid-cols-2 gap-2">
                       <MenuItem v-slot="{ active }">
-                        <NuxtLink to="/dashboard" :class="[active ? 'bg-white scale-95' : 'bg-transparent hover:bg-white', 'flex items-center justify-center gap-2 rounded-xl py-2.5 text-xs font-bold text-gray-900 transition-all border border-transparent hover:border-gray-200']">
+                        <NuxtLink to="/dashboard" :class="[active ? 'bg-white scale-95' : 'bg-transparent hover:bg-white', 'flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-bold text-gray-900 transition-all border border-transparent hover:border-gray-200']">
                           <LayoutDashboard class="w-3.5 h-3.5" />
                           Dashboard
                         </NuxtLink>
                       </MenuItem>
                       <MenuItem v-slot="{ active }">
-                        <button @click="handleLogout" :class="[active ? 'bg-white scale-95' : 'bg-transparent hover:bg-white', 'flex items-center justify-center gap-2 rounded-xl py-2.5 text-xs font-bold text-rose-600 transition-all border border-transparent hover:border-rose-100']">
+                        <button @click="handleLogout" :class="[active ? 'bg-white scale-95' : 'bg-transparent hover:bg-white', 'flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-bold text-rose-600 transition-all border border-transparent hover:border-rose-100']">
                           <LogOut class="w-3.5 h-3.5" />
                           Log out
                         </button>

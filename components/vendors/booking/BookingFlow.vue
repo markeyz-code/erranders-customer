@@ -8,7 +8,7 @@
             <ArrowLeft class="w-5 h-5 text-gray-700" />
           </button>
           
-          <div class="flex items-center gap-2 md:gap-4 text-xs font-bold text-gray-400">
+          <div class="flex items-center gap-2 md:gap-4 text-sm font-bold text-gray-400">
             <span :class="{'text-gray-900': step === 'services'}">Services</span>
             <ChevronRight class="w-3 h-3" />
             <span :class="{'text-gray-900': step === 'time'}">Time</span>
@@ -39,7 +39,7 @@
                   v-for="cat in categories" 
                   :key="cat"
                   @click="activeCategory = cat"
-                  class="whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-bold border-[0.5px] transition-all"
+                  class="whitespace-nowrap px-3.5 py-1.5 rounded-full text-sm font-bold border-[0.5px] transition-all"
                   :class="activeCategory === cat ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-500 border-gray-200/80 hover:border-gray-300'"
                 >
                   {{ cat }}
@@ -56,7 +56,7 @@
                 >
                   <div>
                     <h3 class="font-bold text-gray-900 text-sm group-hover:text-parentPrimary transition-colors">{{ service.name }}</h3>
-                    <p class="text-xs text-gray-400 mt-0.5">
+                    <p class="text-sm text-gray-400 mt-0.5">
                       {{ service.variants?.length ? `${service.durationInMinutes} – ${Math.max(...service.variants.map((v:any)=>v.durationInMinutes))} mins` : `${service.durationInMinutes} mins` }}
                     </p>
                     <p class="text-[11px] text-gray-400 mt-1.5 line-clamp-2 leading-relaxed max-w-xl">{{ service.description }}</p>
@@ -75,11 +75,11 @@
               <!-- Mobile: Cart preview on services step -->
               <div v-if="cart.length" class="lg:hidden bg-white rounded-xl border border-gray-50/80 overflow-hidden mt-4">
                 <div class="px-4 py-3 border-b border-gray-50 flex justify-between items-center">
-                  <span class="text-xs font-bold text-gray-500">Cart ({{ cart.length }})</span>
-                  <span class="text-xs font-bold text-gray-900">NGN {{ cartTotal.toLocaleString() }}</span>
+                  <span class="text-sm font-bold text-gray-500">Cart ({{ cart.length }})</span>
+                  <span class="text-sm font-bold text-gray-900">NGN {{ cartTotal.toLocaleString() }}</span>
                 </div>
                 <div class="px-4 py-2.5 space-y-2">
-                  <div v-for="(item, idx) in cart" :key="idx" class="flex justify-between items-center text-xs">
+                  <div v-for="(item, idx) in cart" :key="idx" class="flex justify-between items-center text-sm">
                     <div class="flex-1">
                       <span class="font-semibold text-gray-900">{{ item.variantName || item.service.name }}</span>
                       <span class="text-gray-400 ml-1">· {{ item.durationInMinutes }}m</span>
@@ -121,7 +121,7 @@
                       <button 
                         v-for="day in daysInMonth" :key="day"
                         @click="isCalendarDayClosed(day) ? null : selectDateFromCalendar(day)"
-                        class="h-8 w-full rounded-full flex items-center justify-center text-xs font-bold transition-all"
+                        class="h-8 w-full rounded-full flex items-center justify-center text-sm font-bold transition-all"
                         :class="getCalendarDayClass(day)"
                         :disabled="isCalendarDayClosed(day)"
                       >
@@ -130,8 +130,8 @@
                     </div>
                     
                     <div class="mt-3 flex justify-between border-t border-gray-50 pt-3">
-                      <button @click="selectedDate = ''; showCalendar = false" class="text-xs font-bold text-gray-400 hover:text-gray-600">Clear</button>
-                      <button @click="goToToday" class="text-xs font-bold text-parentPrimary hover:brightness-110">Today</button>
+                      <button @click="selectedDate = ''; showCalendar = false" class="text-sm font-bold text-gray-400 hover:text-gray-600">Clear</button>
+                      <button @click="goToToday" class="text-sm font-bold text-parentPrimary hover:brightness-110">Today</button>
                     </div>
                   </div>
                 </div>
@@ -162,7 +162,7 @@
                 
                 <div v-if="fetchingAvailability" class="absolute inset-0 z-10 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center rounded-xl">
                   <Loader2 class="w-8 h-8 text-parentPrimary animate-spin mb-2" />
-                  <span class="text-xs font-bold text-gray-600">Loading availability...</span>
+                  <span class="text-sm font-bold text-gray-600">Loading availability...</span>
                 </div>
 
                 <div v-if="availableTimes.length" class="flex flex-col space-y-2 max-h-[350px] overflow-y-auto pr-2">
@@ -196,7 +196,7 @@
                     <CalendarX class="w-6 h-6 text-gray-400" />
                   </div>
                   <h4 class="text-gray-900 font-semibold text-sm mb-1">Fully Booked</h4>
-                  <p class="text-xs text-gray-500 max-w-[200px]">There are no available time slots on this date. Please try selecting another day.</p>
+                  <p class="text-sm text-gray-500 max-w-[200px]">There are no available time slots on this date. Please try selecting another day.</p>
                 </div>
               </div>
             </div>
@@ -213,14 +213,14 @@
                     <img v-else :src="vendor.logo || '/placeholder-store.jpg'" class="w-full h-full object-cover" />
                   </div>
                   <div class="flex-1">
-                    <h3 class="font-bold text-gray-900 text-xs">{{ vendor.storeName }}</h3>
+                    <h3 class="font-bold text-gray-900 text-sm">{{ vendor.storeName }}</h3>
                     <p class="text-[11px] text-gray-400 mt-0.5">{{ formatDate(selectedDate) }} · {{ selectedTime }}</p>
                   </div>
                 </div>
                 <div class="px-4 py-2.5 space-y-2">
                   <div v-for="(item, idx) in cart" :key="idx" class="flex justify-between items-center">
                     <div class="flex-1">
-                      <p class="text-xs font-semibold text-gray-900">{{ item.variantName || item.service.name }}</p>
+                      <p class="text-sm font-semibold text-gray-900">{{ item.variantName || item.service.name }}</p>
                       <p class="text-[10px] text-gray-400">{{ item.durationInMinutes }}m{{ item.variantName ? ` · ${item.service.name}` : '' }}</p>
                       <div v-if="item.extras?.length" class="mt-1 space-y-0.5">
                         <div v-for="ext in item.extras" :key="ext.name" class="flex justify-between text-[10px] text-gray-400">
@@ -229,7 +229,7 @@
                         </div>
                       </div>
                     </div>
-                    <span class="text-xs font-bold text-gray-900 ml-3">₦{{ getItemTotal(item).toLocaleString() }}</span>
+                    <span class="text-sm font-bold text-gray-900 ml-3">₦{{ getItemTotal(item).toLocaleString() }}</span>
                   </div>
                 </div>
                 <div class="px-4 py-3 border-t border-gray-50 bg-gray-50/50 flex flex-col gap-2">
@@ -271,7 +271,7 @@
                     </div>
                     <div class="flex-1">
                       <h4 class="text-sm font-semibold text-gray-900">Pay Online (Paystack)</h4>
-                      <p class="text-xs text-gray-500 mt-0.5">Pay securely with your card or bank transfer.</p>
+                      <p class="text-sm text-gray-500 mt-0.5">Pay securely with your card or bank transfer.</p>
                     </div>
                   </label>
 
@@ -294,11 +294,11 @@
                 </div>
                 <div>
                   <h3 class="font-bold text-gray-900 truncate">{{ vendor.storeName }}</h3>
-                  <div class="flex items-center gap-1 text-xs font-bold text-gray-900 mt-1">
+                  <div class="flex items-center gap-1 text-sm font-bold text-gray-900 mt-1">
                     {{ vendor.rating?.toFixed(1) || '5.0' }} <Star class="w-3 h-3 text-amber-400 fill-amber-400" /> 
                     <span class="text-gray-400 font-normal">({{ vendor.totalRatings || 0 }})</span>
                   </div>
-                  <p class="text-xs text-gray-500 mt-0.5 truncate">{{ vendor.address }}</p>
+                  <p class="text-sm text-gray-500 mt-0.5 truncate">{{ vendor.address }}</p>
                 </div>
               </div>
 
@@ -320,11 +320,11 @@
                   <div v-for="(item, idx) in cart" :key="idx" class="flex justify-between items-start gap-4">
                     <div class="flex-1">
                       <p class="text-sm font-bold text-gray-900">{{ item.variantName ? item.variantName : item.service.name }}</p>
-                      <p class="text-xs text-gray-500 font-medium mt-0.5">{{ item.durationInMinutes }} mins {{ item.variantName ? `with ${item.service.name}` : '' }}</p>
+                      <p class="text-sm text-gray-500 font-medium mt-0.5">{{ item.durationInMinutes }} mins {{ item.variantName ? `with ${item.service.name}` : '' }}</p>
                       
                       <!-- Extras -->
                       <div v-if="item.extras?.length" class="mt-2 space-y-1">
-                        <div v-for="ext in item.extras" :key="ext.name" class="flex justify-between text-xs text-gray-500">
+                        <div v-for="ext in item.extras" :key="ext.name" class="flex justify-between text-sm text-gray-500">
                           <span>+ {{ ext.name }}</span>
                           <span class="font-medium">NGN {{ ext.price.toLocaleString() }}</span>
                         </div>
@@ -349,8 +349,8 @@
                   <span class="font-bold text-parentPrimary text-lg">{{ cart.length ? `NGN ${commitmentFee.toLocaleString()}` : 'free' }}</span>
                 </div>
                 <div class="flex justify-between items-center mb-4 text-gray-500">
-                  <span class="text-xs font-medium">Balance (Pay in Person)</span>
-                  <span class="text-xs font-medium text-gray-900">{{ cart.length ? `NGN ${pendingBalance.toLocaleString()}` : 'free' }}</span>
+                  <span class="text-sm font-medium">Balance (Pay in Person)</span>
+                  <span class="text-sm font-medium text-gray-900">{{ cart.length ? `NGN ${pendingBalance.toLocaleString()}` : 'free' }}</span>
                 </div>
                 <button 
                   @click="handleContinue"
@@ -412,7 +412,7 @@
                 <span>Commitment Fee (Pay Now)</span>
                 <span class="text-parentPrimary">₦{{ commitmentFee.toLocaleString() }}</span>
               </div>
-              <div class="flex justify-between items-center text-gray-500 text-xs">
+              <div class="flex justify-between items-center text-gray-500 text-sm">
                 <span>Balance (Pay in Person)</span>
                 <span class="font-bold text-gray-600">₦{{ pendingBalance.toLocaleString() }}</span>
               </div>

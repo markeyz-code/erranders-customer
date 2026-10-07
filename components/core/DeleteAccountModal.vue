@@ -23,7 +23,7 @@
             <h2 class="text-xl font-bold text-gray-900 tracking-tight leading-none mb-2">
               Delete Account
             </h2>
-            <p class="text-xs font-medium text-gray-500 leading-relaxed px-2">
+            <p class="text-sm font-medium text-gray-500 leading-relaxed px-2">
               We're sad to see you go! Please let us know why you are leaving so we can improve.
             </p>
           </div>
@@ -37,7 +37,7 @@
           <!-- Form -->
           <form @submit.prevent="handleSubmit" class="space-y-4">
             <div>
-              <label class="block text-xs font-bold text-gray-700 mb-1.5 ml-1">Reason for leaving (Optional)</label>
+              <label class="block text-sm font-bold text-gray-700 mb-1.5 ml-1">Reason for leaving (Optional)</label>
               <textarea 
                 v-model="reason" 
                 placeholder="Tell us what went wrong..."

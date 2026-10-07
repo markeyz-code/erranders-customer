@@ -7,8 +7,8 @@
         </div>
         <div>
           <h3 class="font-bold text-gray-900">{{ service.name }}</h3>
-          <p class="text-xs text-gray-500 mt-1">{{ service.description }}</p>
-          <div class="flex items-center gap-2 mt-2 font-medium text-xs">
+          <p class="text-sm text-gray-500 mt-1">{{ service.description }}</p>
+          <div class="flex items-center gap-2 mt-2 font-medium text-sm">
             <span class="text-parentPrimary">₦{{ service.price?.toLocaleString() }}</span>
             <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
             <span class="text-gray-500">{{ service.durationInMinutes }} mins</span>
@@ -18,7 +18,7 @@
 
       <div class="space-y-4">
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1.5">Select Date</label>
+          <label class="block text-sm font-bold text-gray-700 mb-1.5">Select Date</label>
           <input 
             type="datetime-local" 
             v-model="bookingForm.scheduledDate" 
@@ -28,7 +28,7 @@
         </div>
         
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1.5">Select Time</label>
+          <label class="block text-sm font-bold text-gray-700 mb-1.5">Select Time</label>
           <input 
             type="time" 
             v-model="bookingForm.startTime" 
@@ -37,7 +37,7 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1.5">Notes (Optional)</label>
+          <label class="block text-sm font-bold text-gray-700 mb-1.5">Notes (Optional)</label>
           <textarea 
             v-model="bookingForm.notes" 
             rows="3"

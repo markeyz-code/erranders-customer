@@ -48,7 +48,7 @@
                 <span v-if="service.category" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">{{ service.category }}</span>
               </div>
               <h3 class="font-bold text-base text-gray-900 group-hover:text-parentPrimary transition-colors">{{ service.name }}</h3>
-              <p class="text-xs font-medium text-gray-500 mt-1 flex items-center gap-1.5">
+              <p class="text-sm font-medium text-gray-500 mt-1 flex items-center gap-1.5">
                 <Clock class="w-3.5 h-3.5 text-gray-400" />
                 {{ service.variants?.length ? `${service.durationInMinutes} mins - ${Math.max(...service.variants.map((v:any)=>v.durationInMinutes))} mins` : `${service.durationInMinutes} mins` }}
               </p>
@@ -59,13 +59,13 @@
             <div class="flex items-center gap-2">
               <button 
                 @click="messageVendor(service)"
-                class="px-5 py-2 rounded-full bg-white text-gray-700 font-bold text-xs hover:bg-gray-100 transition-colors shrink-0 border border-gray-25"
+                class="px-5 py-2 rounded-full bg-white text-gray-700 font-bold text-sm hover:bg-gray-100 transition-colors shrink-0 border border-gray-25"
               >
                 Message
               </button>
               <button 
                 @click="handleBookService(service)"
-                class="px-5 py-2 rounded-full bg-gray-50 text-parentPrimary font-bold text-xs hover:bg-parentPrimary hover:text-white transition-colors shrink-0 border border-gray-25 hover:border-parentPrimary"
+                class="px-5 py-2 rounded-full bg-gray-50 text-parentPrimary font-bold text-sm hover:bg-parentPrimary hover:text-white transition-colors shrink-0 border border-gray-25 hover:border-parentPrimary"
               >
                 Book
               </button>

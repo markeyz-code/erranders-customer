@@ -5,7 +5,7 @@
       <h1 class="text-2xl md:text-3xl font-medium text-gray-900 tracking-tight leading-none mb-1">
         Search Catalog
       </h1>
-      <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+      <p class="text-[10px] font-bold text-gray-400 uppercase ">
         Find food, snacks, and products on campus
       </p>
     </header>
@@ -35,7 +35,7 @@
     <!-- Results Section -->
     <div v-if="query && results.length > 0">
       <div class="flex items-center gap-4 mb-4">
-        <h2 class="text-xs font-medium uppercase tracking-wider text-gray-400 shrink-0">Results for "{{ query }}"</h2>
+        <h2 class="text-sm font-medium uppercase tracking-wider text-gray-400 shrink-0">Results for "{{ query }}"</h2>
         <div class="flex-1 h-px bg-gray-100" />
       </div>
 
@@ -57,7 +57,7 @@
               </div>
               <!-- Price Badge -->
               <div v-if="item.price !== undefined" class="absolute bottom-2 left-2">
-                <span class="px-2.5 py-1 bg-white/95 backdrop-blur-md rounded-lg text-xs font-bold text-gray-900 border border-gray-50 shadow-sm">
+                <span class="px-2.5 py-1 bg-white/95 backdrop-blur-md rounded-lg text-sm font-bold text-gray-900 border border-gray-50 shadow-sm">
                   ₦{{ item.price?.toLocaleString() }}
                 </span>
               </div>
@@ -84,7 +84,7 @@
         <span class="text-3xl">🔭</span>
       </div>
       <h3 class="text-lg font-medium text-gray-900 mb-1 tracking-tight">No results found</h3>
-      <p class="text-xs font-medium text-gray-500 max-w-xs mx-auto">We couldn't find anything matching your keywords. Try again with a different term.</p>
+      <p class="text-sm font-medium text-gray-500 max-w-xs mx-auto">We couldn't find anything matching your keywords. Try again with a different term.</p>
     </div>
 
     <div v-if="!query" class="bg-white border border-dashed border-gray-200 rounded-2xl text-center py-20 px-4 mt-6">
@@ -92,7 +92,7 @@
         <span class="text-3xl">🔍</span>
       </div>
       <h3 class="text-lg font-medium text-gray-900 mb-1 tracking-tight">Start searching</h3>
-      <p class="text-xs font-medium text-gray-500 max-w-xs mx-auto">Type above to find meals, grocery items, snacks, or stationery instantenously.</p>
+      <p class="text-sm font-medium text-gray-500 max-w-xs mx-auto">Type above to find meals, grocery items, snacks, or stationery instantenously.</p>
     </div>
   </div>
 </template>

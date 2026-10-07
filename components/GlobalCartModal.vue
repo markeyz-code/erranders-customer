@@ -21,11 +21,11 @@
               <div v-if="pack.name && pack.name !== 'Pack 1'" class="text-[10px] font-bold text-gray-400 tracking-wider uppercase">{{ pack.name }}</div>
               <div v-for="(item, idx) in pack.items" :key="idx" class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
-                  <span class="text-xs font-bold text-gray-500">{{ item.quantity }}x</span>
-                  <p class="text-xs font-medium text-gray-700 truncate max-w-[140px]">{{ item.name }}</p>
+                  <span class="text-sm font-bold text-gray-500">{{ item.quantity }}x</span>
+                  <p class="text-sm font-medium text-gray-700 truncate max-w-[140px]">{{ item.name }}</p>
                 </div>
                 <div class="flex items-center gap-3">
-                  <span class="text-xs font-bold text-gray-900">₦{{ item.subtotal.toLocaleString() }}</span>
+                  <span class="text-sm font-bold text-gray-900">₦{{ item.subtotal.toLocaleString() }}</span>
                   <button @click="removeItem(vendorId, pack.id, idx)" class="w-6 h-6 rounded-full bg-white border border-gray-25 flex items-center justify-center text-rose-500 hover:bg-rose-50 active:scale-95 transition-all">
                     <X class="w-3 h-3" />
                   </button>

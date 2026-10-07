@@ -11,7 +11,7 @@
             </button>
             <div class="flex-1 min-w-0">
               <h2 class="text-gray-900 font-semibold text-sm truncate">{{ report?.title }}</h2>
-              <p class="text-xs text-gray-400 capitalize mt-0.5">
+              <p class="text-sm text-gray-400 capitalize mt-0.5">
                 {{ report?.category?.replace(/_/g, ' ') }} • {{ report?.vendor?.storeName || 'general support' }}
               </p>
             </div>
@@ -64,7 +64,7 @@
             </div>
             <div>
               <p class="text-gray-900 text-sm font-bold">our support team is looking into this</p>
-              <p class="text-gray-400 text-xs font-medium mt-1">An admin will review and message you shortly.</p>
+              <p class="text-gray-400 text-sm font-medium mt-1">An admin will review and message you shortly.</p>
             </div>
           </div>
         </div>

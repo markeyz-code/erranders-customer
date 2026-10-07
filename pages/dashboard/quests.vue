@@ -4,7 +4,7 @@
     <header class="pt-6 pb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-0 sm:px-0">
       <div>
         <h1 class="text-2xl md:text-3xl font-medium text-gray-900 tracking-tight leading-none mb-1">Campus Quests</h1>
-        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Missions & Rewards Program</p>
+        <p class="text-[10px] font-bold text-gray-400 uppercase ">Missions & Rewards Program</p>
       </div>
       <div class="flex items-center gap-2 px-3 py-1.5 bg-parentPrimary/5 border border-parentPrimary/10 rounded-xl self-start sm:self-auto">
         <span class="text-[10px] font-medium text-parentPrimary uppercase tracking-wider">Active Season: Semester 1</span>
@@ -22,7 +22,7 @@
           
           <div class="relative z-10">
             <h3 class="text-lg font-medium tracking-tight text-gray-900 mb-2">The Errandr Legend</h3>
-            <p class="text-gray-600 text-xs font-medium leading-relaxed mb-6 max-w-md">
+            <p class="text-gray-600 text-sm font-medium leading-relaxed mb-6 max-w-md">
               Complete all seasonal quests to unlock the <span class="font-bold text-gray-900">Legendary Errandr</span> badge and get exclusive 50% delivery discounts for an entire month!
             </p>
             <div class="flex items-center gap-4">
@@ -39,12 +39,12 @@
       <div class="space-y-6">
         <!-- How Quests Work -->
         <div class="bg-white border-0 sm:border border-gray-50 shadow-none sm:shadow-sm rounded-none sm:rounded-2xl p-4 sm:p-4">
-          <h4 class="text-[10px] font-medium text-gray-400 uppercase tracking-widest mb-5">How Quests Work</h4>
+          <h4 class="text-[10px] font-medium text-gray-400 uppercase  mb-5">How Quests Work</h4>
           <ul class="space-y-4">
              <li v-for="(step, i) in steps" :key="i" class="flex gap-3">
                 <div class="w-6 h-6 rounded-lg bg-gray-50 border border-gray-50 flex items-center justify-center text-[10px] font-medium text-gray-900 shrink-0">{{ i + 1 }}</div>
                 <div>
-                   <p class="text-xs font-medium text-gray-900 tracking-tight mb-0.5">{{ step.title }}</p>
+                   <p class="text-sm font-medium text-gray-900 tracking-tight mb-0.5">{{ step.title }}</p>
                    <p class="text-[11px] font-bold text-gray-500 leading-relaxed">{{ step.desc }}</p>
                 </div>
              </li>
@@ -57,7 +57,7 @@
             <Trophy class="w-4 h-4" />
           </div>
           <h4 class="text-base font-medium tracking-tight text-gray-900 mb-2 leading-tight">Climb the Hall of Fame</h4>
-          <p class="text-xs font-medium text-gray-500 mb-5 leading-relaxed">Top erranders and customers get special perks every weekend.</p>
+          <p class="text-sm font-medium text-gray-500 mb-5 leading-relaxed">Top erranders and customers get special perks every weekend.</p>
           
           <NuxtLink to="/dashboard/leaderboard" class="inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-wider bg-gray-50 hover:bg-gray-100 text-gray-900 px-4 py-2 rounded-xl transition-colors active:scale-95 border border-gray-50">
             View Rankings <ArrowRight class="w-3 h-3" />

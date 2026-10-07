@@ -28,7 +28,7 @@
             <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
           </div>
           <h1 class="text-2xl font-bold text-gray-900">Erranders</h1>
-          <p class="text-xs text-gray-500 uppercase tracking-widest font-semibold mt-1">Market Pool Receipt</p>
+          <p class="text-sm text-gray-500 uppercase  font-semibold mt-1">Market Pool Receipt</p>
         </div>
 
         <div v-if="loading" class="flex justify-center py-10">
@@ -59,7 +59,7 @@
               <div v-for="item in order.items" :key="item.itemId" class="flex justify-between items-start">
                 <div>
                   <p class="font-semibold text-gray-800 text-sm">{{ item.itemDetails?.name || 'Item' }}</p>
-                  <p class="text-xs text-gray-500">Qty: {{ item.quantity }}</p>
+                  <p class="text-sm text-gray-500">Qty: {{ item.quantity }}</p>
                 </div>
                 <p class="font-semibold text-gray-800 text-sm">₦{{ (item.priceAtPurchase * item.quantity).toLocaleString() }}</p>
               </div>

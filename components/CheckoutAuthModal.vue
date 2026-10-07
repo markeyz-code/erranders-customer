@@ -38,7 +38,7 @@
             <button 
               type="button" 
               @click="view = 'options'" 
-              class="inline-flex items-center gap-1.5 text-xs font-bold text-gray-400 hover:text-gray-900 transition-colors"
+              class="inline-flex items-center gap-1.5 text-sm font-bold text-gray-400 hover:text-gray-900 transition-colors"
             >
               <ArrowLeft class="w-3 h-3" />
               <span>Back</span>
@@ -65,7 +65,7 @@
             </button>
             <div class="relative py-2 flex items-center justify-center">
               <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-100"></div></div>
-              <span class="relative bg-white px-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest">or</span>
+              <span class="relative bg-white px-3 text-[10px] font-bold text-gray-400 uppercase ">or</span>
             </div>
             <button 
               @click="view = 'login'" 
@@ -81,7 +81,7 @@
             </button>
             <!-- <div class="relative py-2 flex items-center justify-center">
               <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-100"></div></div>
-              <span class="relative bg-white px-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest">or</span>
+              <span class="relative bg-white px-3 text-[10px] font-bold text-gray-400 uppercase ">or</span>
             </div>
             <button 
               @click="view = 'guest'" 
@@ -108,7 +108,7 @@
                 </button>
                 <div class="relative py-2 flex items-center justify-center mb-2">
                   <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-100"></div></div>
-                  <span class="relative bg-white px-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest">or sign in with email</span>
+                  <span class="relative bg-white px-3 text-[10px] font-bold text-gray-400 uppercase ">or sign in with email</span>
                 </div>
                 <input v-model="loginForm.email" type="email" placeholder="Email Address" required class="w-full px-4 py-3.5 bg-gray-50 rounded-xl text-base font-bold text-gray-900 outline-none focus:ring-2 focus:ring-parentPrimary/20 transition-all placeholder:text-gray-400" />
                 <div class="relative">
@@ -149,7 +149,7 @@
                 </button>
                 <div class="relative py-2 flex items-center justify-center mb-2">
                   <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-100"></div></div>
-                  <span class="relative bg-white px-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest">or sign up with email</span>
+                  <span class="relative bg-white px-3 text-[10px] font-bold text-gray-400 uppercase ">or sign up with email</span>
                 </div>
               </div>
               <div class="grid grid-cols-2 gap-3 mt-3">
@@ -178,7 +178,7 @@
                   <input v-for="i in 6" :key="i" :id="'otp-input-'+i" v-model="(view === 'verify_reset' ? resetOtpDigits : otpDigits)[i-1]" type="text" maxlength="1" @input="handleOtpInput($event, i)" @keydown.delete="handleOtpBackspace($event, i)" class="w-10 h-12 text-center text-lg font-bold bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-parentPrimary/20 transition-all" />
                 </div>
                 <div class="text-center pt-2">
-                  <button type="button" @click="handleResend" :disabled="resendLoading || resendTimer > 0" class="text-xs font-bold text-parentPrimary hover:underline disabled:text-gray-300">
+                  <button type="button" @click="handleResend" :disabled="resendLoading || resendTimer > 0" class="text-sm font-bold text-parentPrimary hover:underline disabled:text-gray-300">
                     {{ resendTimer > 0 ? `Resend in ${resendTimer}s` : 'Resend Code' }}
                   </button>
                 </div>

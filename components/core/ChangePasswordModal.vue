@@ -23,7 +23,7 @@
             <h2 class="text-xl font-bold text-gray-900 tracking-tight leading-none mb-2">
               Change Password
             </h2>
-            <p class="text-xs font-medium text-gray-500 leading-relaxed px-2">
+            <p class="text-sm font-medium text-gray-500 leading-relaxed px-2">
               Enter your current password and choose a strong new password.
             </p>
           </div>
@@ -37,7 +37,7 @@
           <!-- Form -->
           <form @submit.prevent="handleSubmit" class="space-y-4">
             <div>
-              <label class="block text-xs font-bold text-gray-700 mb-1.5 ml-1">Current Password</label>
+              <label class="block text-sm font-bold text-gray-700 mb-1.5 ml-1">Current Password</label>
               <div class="relative">
                 <input 
                   v-model="form.currentPassword" 
@@ -59,7 +59,7 @@
             </div>
 
             <div>
-              <label class="block text-xs font-bold text-gray-700 mb-1.5 ml-1">New Password</label>
+              <label class="block text-sm font-bold text-gray-700 mb-1.5 ml-1">New Password</label>
               <div class="relative">
                 <input 
                   v-model="form.newPassword" 

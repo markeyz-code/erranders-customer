@@ -122,7 +122,7 @@
               
               <!-- Bottom Row: Actions -->
               <div class="relative z-10 w-full pt-2 border-t border-gray-50">
-                <div v-if="bid.lastNegotiatorRole === 'student'" class="text-xs text-center text-amber-500 font-bold bg-amber-50 px-3 py-2 rounded-xl animate-pulse w-full">Waiting for rider response...</div>
+                <div v-if="bid.lastNegotiatorRole === 'student'" class="text-sm text-center text-amber-500 font-bold bg-amber-50 px-3 py-2 rounded-xl animate-pulse w-full">Waiting for rider response...</div>
                 <div v-else class="flex gap-2 w-full">
                   <button 
                     @click="rejectBid(bid)"

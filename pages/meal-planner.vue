@@ -27,7 +27,7 @@
 
           <div class="px-5 sm:px-5 py-5 sm:py-7 space-y-5 sm:space-y-7">
             <div class="space-y-2">
-              <label class="text-xs text-[#9C9584] flex items-center gap-2">
+              <label class="text-sm text-[#9C9584] flex items-center gap-2">
                 <Wallet class="w-3.5 h-3.5 text-parentPrimary shrink-0" /> weekly budget
               </label>
               <div class="relative group/field">
@@ -43,7 +43,7 @@
             </div>
 
             <div class="space-y-2">
-              <label class="text-xs text-[#9C9584] flex items-center gap-2">
+              <label class="text-sm text-[#9C9584] flex items-center gap-2">
                 <UtensilsCrossed class="w-3.5 h-3.5 text-parentPrimary shrink-0" /> meals per day
               </label>
               <div class="grid grid-cols-3 gap-1.5 sm:gap-2">
@@ -51,7 +51,7 @@
                   v-for="i in 3"
                   :key="i"
                   @click="mealsPerDay = i"
-                  class="py-2.5 rounded-xl text-xs sm:text-sm font-medium border transition-colors"
+                  class="py-2.5 rounded-xl text-sm sm:text-sm font-medium border transition-colors"
                   :class="mealsPerDay === i
                     ? 'bg-[#17150F] text-white border-[#17150F]'
                     : 'bg-[#FBFAF6] text-[#6B6455] border-[#E7E2D4] hover:border-[#C9C2AF]'"
@@ -89,7 +89,7 @@
           </div>
           <div class="px-5 sm:px-5 py-5 sm:py-7 flex items-end justify-between gap-3">
             <div class="min-w-0">
-              <p class="text-xs text-white/40 mb-1">potential savings</p>
+              <p class="text-sm text-white/40 mb-1">potential savings</p>
               <p class="font-mono text-xl sm:text-2xl text-[#5FAE85] truncate">₦{{ plan.savings.toLocaleString() }}</p>
             </div>
             <p class="text-[10px] font-mono text-white/30 shrink-0">stub no. {{ plan.savings.toString().slice(-4).padStart(4,'0') }}</p>
@@ -127,7 +127,7 @@
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 sm:px-1">
             <div>
               <h3 class="font-display text-xl sm:text-2xl font-medium lowercase">weekly roadmap</h3>
-              <p class="text-xs sm:text-sm text-[#9C9584] lowercase">optimized for market &amp; campus dining</p>
+              <p class="text-sm sm:text-sm text-[#9C9584] lowercase">optimized for market &amp; campus dining</p>
             </div>
             <button @click="downloadPdf" class="print:hidden self-start sm:self-auto px-5 py-2.5 bg-white border border-[#E7E2D4] rounded-xl text-sm font-medium lowercase hover:border-[#17150F] transition-colors">
               download pdf
@@ -141,7 +141,7 @@
               class="bg-white rounded-none sm:rounded-[1.75rem] border-0 sm:border border-[#E7E2D4] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-12px_rgba(23,21,15,0.25)] transition-all duration-300 flex flex-col overflow-hidden"
             >
               <div class="px-5 sm:px-4 py-4 flex justify-between items-center">
-                <span class="text-xs px-3 py-1.5 bg-[#17150F] text-white rounded-md">day {{ dayPlan.day }}</span>
+                <span class="text-sm px-3 py-1.5 bg-[#17150F] text-white rounded-md">day {{ dayPlan.day }}</span>
                 <span class="font-mono text-base sm:text-lg">₦{{ dayPlan.dailyCost.toLocaleString() }}</span>
               </div>
 
@@ -165,7 +165,7 @@
                     <span v-else>🍗</span>
                   </div>
                   <div class="flex-1 min-w-0">
-                    <p class="text-xs text-[#9C9584] mb-0.5 group-hover/item:text-parentPrimary">{{ meal.type }}</p>
+                    <p class="text-sm text-[#9C9584] mb-0.5 group-hover/item:text-parentPrimary">{{ meal.type }}</p>
                     <p class="text-sm font-medium truncate">{{ meal.options.map((o) => o.product.name).join(' + ') }}</p>
                   </div>
                   <ArrowUpRight class="w-4 h-4 text-[#C9C2AF] opacity-0 group-hover/item:opacity-100 group-hover/item:text-parentPrimary transition-all shrink-0 hidden sm:block" />
@@ -177,7 +177,7 @@
                   v-for="nutrient in getDayNutrients(dayPlan)"
                   :key="nutrient"
                   :class="getNutrientClass(nutrient)"
-                  class="px-2.5 py-1 rounded-md text-xs lowercase border"
+                  class="px-2.5 py-1 rounded-md text-sm lowercase border"
                 >
                   {{ nutrient }}
                 </span>

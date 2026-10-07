@@ -32,6 +32,13 @@ if (typeof document !== 'undefined') {
   document.addEventListener('click', unlockAudio);
 }
 
+const playPingAlertSound = () => {
+  // Play the urgent alert sound immediately
+  playSound('/sounds/order-alert.mp3');
+  // Play it again after 1.5 seconds for emphasis
+  setTimeout(() => playSound('/sounds/order-alert.mp3'), 1500);
+}
+
 export const useRealtimeNotifications = () => {
   const { showToast } = useCustomToast()
   const { socket, connectSocket } = useRealtimeSocket()
@@ -40,6 +47,37 @@ export const useRealtimeNotifications = () => {
 
   const handleNotification = (payload: any) => {
     if (!payload) return
+
+    // Special aggressive handling for PING_NOTIFICATION
+    if (payload.type === 'PING_NOTIFICATION') {
+      playPingAlertSound()
+
+      addNotification({
+        id: payload.id || `ping_${Date.now()}`,
+        ...payload
+      })
+
+      const senderName = payload.data?.senderName || 'Someone'
+      const orderNum = payload.data?.orderNumber || ''
+
+      showToast({
+        title: `🔔 ${senderName} is pinging you!`,
+        message: payload.body || `Regarding order #${orderNum}. Please check your order now!`,
+        toastType: 'warning',
+        duration: 10000,
+        action: payload.data?.orderId ? () => {
+          window.location.href = `/orders/${payload.data.orderId}`
+        } : undefined
+      })
+
+      // Emit a custom browser event so the order page can react with a visible banner
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('errandr:ping-received', {
+          detail: { ...payload.data, body: payload.body, title: payload.title }
+        }))
+      }
+      return
+    }
 
     if (payload.type === 'ORDER_BIDS_UPDATE' || payload.type === 'BID_COUNTERED') {
       playCounterOfferSound()

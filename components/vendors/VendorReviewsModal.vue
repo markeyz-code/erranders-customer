@@ -17,9 +17,9 @@
           <div class="flex items-center gap-2 mt-1">
             <div class="flex items-center gap-1 bg-amber-50 px-2 py-0.5 rounded border border-amber-100">
               <Star class="w-3.5 h-3.5 text-amber-500 fill-current" />
-              <span class="text-xs font-bold text-amber-700">{{ vendor?.rating?.toFixed(1) || '5.0' }}</span>
+              <span class="text-sm font-bold text-amber-700">{{ vendor?.rating?.toFixed(1) || '5.0' }}</span>
             </div>
-            <span class="text-xs text-gray-500 font-medium">{{ vendor?.totalRatings || 0 }} total ratings</span>
+            <span class="text-sm text-gray-500 font-medium">{{ vendor?.totalRatings || 0 }} total ratings</span>
           </div>
         </div>
         <button 

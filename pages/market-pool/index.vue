@@ -21,7 +21,7 @@
           </div>
         </div>
       <div class="flex items-center gap-2">
-        <button @click="$router.push('/market-pool/orders')" class="text-xs font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full transition-colors hidden sm:block">
+        <button @click="$router.push('/market-pool/orders')" class="text-sm font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full transition-colors hidden sm:block">
           My Orders
         </button>
         <button @click="$router.push('/market-pool/orders')" class="p-2 rounded-full hover:bg-gray-100 transition-colors sm:hidden" title="My Orders">
@@ -47,14 +47,14 @@
       <div class="max-w-7xl mx-auto px-4 py-5 relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 class="text-xl font-extrabold mb-1">Buy Bulk, Pay Less</h2>
-          <p class="text-xs text-white/70 leading-relaxed max-w-md">
+          <p class="text-sm text-white/70 leading-relaxed max-w-md">
             Join this week's pool to get food items at wholesale prices. We buy in bulk and repackage for you.
           </p>
         </div>
         <div class="bg-white/10 rounded-xl p-3 backdrop-blur-md border border-white/10 inline-block w-full md:w-auto md:min-w-[250px]">
           <div class="flex items-center justify-between gap-4">
-            <span class="text-xs font-medium text-white/80">Pool Closes In:</span>
-            <span class="text-sm font-bold font-mono tracking-widest bg-white text-primary px-3 py-1.5 rounded-lg shadow-sm">
+            <span class="text-sm font-medium text-white/80">Pool Closes In:</span>
+            <span class="text-sm font-bold font-mono  bg-white text-primary px-3 py-1.5 rounded-lg shadow-sm">
               {{ timeRemainingText }}
             </span>
           </div>
@@ -83,14 +83,14 @@
     <div v-else class="p-4 max-w-7xl mx-auto">
       <div class="flex items-center justify-between mb-2">
         <h3 class="font-bold text-gray-800">Available Items</h3>
-        <span class="text-xs text-gray-500">{{ items.length }} items</span>
+        <span class="text-sm text-gray-500">{{ items.length }} items</span>
       </div>
 
       <!-- Categories Tab Bar -->
       <div class="flex overflow-x-auto gap-2 pb-4 mb-2 snap-x [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         <button 
           @click="activeCategory = 'All'"
-          :class="['px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap snap-start transition-colors border', activeCategory === 'All' ? 'bg-primary text-white border-primary' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50']"
+          :class="['px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap snap-start transition-colors border', activeCategory === 'All' ? 'bg-primary text-white border-primary' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50']"
         >
           All
         </button>
@@ -98,7 +98,7 @@
           v-for="cat in categories" 
           :key="cat"
           @click="activeCategory = cat"
-          :class="['px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap snap-start transition-colors border', activeCategory === cat ? 'bg-primary text-white border-primary' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50']"
+          :class="['px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap snap-start transition-colors border', activeCategory === cat ? 'bg-primary text-white border-primary' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50']"
         >
           {{ cat }}
         </button>
@@ -176,7 +176,7 @@
       <!-- Custom Request CTA -->
       <div class="mt-8 p-5 bg-orange-50 rounded-2xl border border-orange-100 flex flex-col items-center text-center">
         <h3 class="font-bold text-gray-900 mb-1">Don't see what you want?</h3>
-        <p class="text-xs text-gray-600 mb-4">Request a custom item and we'll try to add it to the pool or source it for you.</p>
+        <p class="text-sm text-gray-600 mb-4">Request a custom item and we'll try to add it to the pool or source it for you.</p>
         <button @click="showRequestModal = true" class="px-5 py-2.5 bg-primary text-white text-sm font-bold rounded-xl shadow-sm hover:bg-primary/90 transition-colors w-full sm:w-auto">
           Request Custom Item
         </button>
@@ -230,7 +230,7 @@
             <img :src="selectedItem.imageUrl" class="w-16 h-16 object-cover rounded-lg shadow-sm" />
             <div>
               <h4 class="font-bold text-gray-900 leading-tight">{{ selectedItem.name }}</h4>
-              <p class="text-xs text-gray-500 mt-0.5">{{ selectedItem.studentQuantity }}</p>
+              <p class="text-sm text-gray-500 mt-0.5">{{ selectedItem.studentQuantity }}</p>
               <p class="text-sm font-bold text-primary mt-1">₦{{ selectedItem.appPrice.toLocaleString() }}</p>
             </div>
           </div>
@@ -247,7 +247,7 @@
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1.5 flex justify-between">
               <span>Additional Information</span>
-              <span class="text-xs text-gray-400 font-normal">Optional</span>
+              <span class="text-sm text-gray-400 font-normal">Optional</span>
             </label>
             <textarea 
               v-model="cartForm.preferences" 
@@ -308,11 +308,11 @@
           </div>
 
           <div class="flex flex-wrap gap-2 mb-6">
-            <span class="bg-gray-100 text-gray-700 text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+            <span class="bg-gray-100 text-gray-700 text-sm font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
               {{ selectedProduct?.studentQuantity }}
             </span>
-            <span v-if="selectedProduct?.weightEstimate" class="bg-orange-50 text-orange-700 text-xs font-bold px-3 py-1.5 rounded-lg">
+            <span v-if="selectedProduct?.weightEstimate" class="bg-orange-50 text-orange-700 text-sm font-bold px-3 py-1.5 rounded-lg">
               Est. Weight: {{ selectedProduct?.weightEstimate }}
             </span>
           </div>

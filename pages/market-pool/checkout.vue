@@ -36,7 +36,7 @@
               <p class="font-bold text-sm text-gray-900">₦{{ (item.appPrice * item.quantity).toLocaleString() }}</p>
               <div class="flex items-center gap-2 mt-1 justify-end">
                 <button @click="marketStore.updateQuantity(item.cartId, item.quantity - 1)" class="w-5 h-5 rounded bg-gray-100 flex items-center justify-center text-gray-600">-</button>
-                <span class="text-xs font-medium w-3 text-center">{{ item.quantity }}</span>
+                <span class="text-sm font-medium w-3 text-center">{{ item.quantity }}</span>
                 <button @click="marketStore.updateQuantity(item.cartId, item.quantity + 1)" class="w-5 h-5 rounded bg-gray-100 flex items-center justify-center text-gray-600">+</button>
               </div>
             </div>
@@ -88,11 +88,11 @@
             
             <div v-if="useProxy" class="space-y-3 p-3 bg-gray-50 rounded-xl border border-gray-50">
               <div>
-                <label class="block text-xs font-semibold text-gray-600 mb-1">Receiver Name</label>
+                <label class="block text-sm font-semibold text-gray-600 mb-1">Receiver Name</label>
                 <input v-model="deliveryDetails.proxyName" type="text" placeholder="e.g. John Doe (Roommate)" class="w-full bg-white border-gray-200 text-gray-900 rounded-lg focus:ring-primary px-3 py-2 border outline-none text-sm">
               </div>
               <div>
-                <label class="block text-xs font-semibold text-gray-600 mb-1">Receiver Phone Number</label>
+                <label class="block text-sm font-semibold text-gray-600 mb-1">Receiver Phone Number</label>
                 <input v-model="deliveryDetails.proxyPhone" type="tel" placeholder="080..." class="w-full bg-white border-gray-200 text-gray-900 rounded-lg focus:ring-primary px-3 py-2 border outline-none text-sm">
               </div>
             </div>

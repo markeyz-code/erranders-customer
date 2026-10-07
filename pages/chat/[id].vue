@@ -74,8 +74,8 @@
   <div class="flex flex-col gap-1 w-full relative group/msg">
     <!-- Reply block -->
     <div v-if="msg.replyTo || msg.replyToMessageId" class="bg-black/5 rounded p-1.5 mb-1 text-sm border-l-4 border-[#00A884] opacity-80 flex flex-col cursor-pointer max-w-[200px] truncate" @click="scrollToReply(msg)">
-      <span class="text-[#00A884] font-semibold text-xs">{{ msg.replyTo?.sender?.firstName || 'User' }}</span>
-      <span class="truncate text-xs">{{ msg.replyTo?.messageType === 'image' ? 'Photo' : msg.replyTo?.messageType === 'voice' ? 'Voice note' : msg.replyTo?.message || 'Replied message' }}</span>
+      <span class="text-[#00A884] font-semibold text-sm">{{ msg.replyTo?.sender?.firstName || 'User' }}</span>
+      <span class="truncate text-sm">{{ msg.replyTo?.messageType === 'image' ? 'Photo' : msg.replyTo?.messageType === 'voice' ? 'Voice note' : msg.replyTo?.message || 'Replied message' }}</span>
     </div>
     
     <!-- Image -->
@@ -137,7 +137,7 @@
     <div v-if="replyingTo" class="bg-[#E2E8F0] rounded-lg p-2 mx-2 flex items-center justify-between shadow-inner animate-fade-in relative border-l-4 border-[#00A884]">
       <div class="flex flex-col min-w-0 pr-4">
         <span class="text-[#00A884] font-bold text-sm">Replying to {{ replyingTo?.sender?.firstName || 'User' }}</span>
-        <span class="text-xs text-gray-600 truncate">{{ replyingTo.messageType === 'image' ? 'Photo' : replyingTo.messageType === 'voice' ? 'Voice note' : replyingTo.message }}</span>
+        <span class="text-sm text-gray-600 truncate">{{ replyingTo.messageType === 'image' ? 'Photo' : replyingTo.messageType === 'voice' ? 'Voice note' : replyingTo.message }}</span>
       </div>
       <button @click="replyingTo = null" class="p-1 text-gray-500 hover:text-gray-800 rounded-full hover:bg-gray-300 transition-colors shrink-0">
         <X class="w-4 h-4" />

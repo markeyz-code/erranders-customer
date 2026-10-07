@@ -4,7 +4,7 @@
     <header class="pt-6 pb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
         <h1 class="text-2xl md:text-3xl font-medium text-gray-900 tracking-tight leading-none mb-1">Campus Hall of Fame</h1>
-        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Top Orderers & Hustlers this Month</p>
+        <p class="text-[10px] font-bold text-gray-400 uppercase ">Top Orderers & Hustlers this Month</p>
       </div>
       <div class="flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-100 rounded-xl self-start sm:self-auto">
         <Trophy class="w-3.5 h-3.5 text-amber-600 animate-pulse" />
@@ -22,7 +22,7 @@
           :class="idx === 0 ? 'bg-gradient-to-b from-amber-50/30 to-white border-amber-200/50 shadow-sm' : ''"
         >
           <!-- Ranking Badge -->
-          <div class="absolute top-3 right-3 w-7 h-7 rounded-xl flex items-center justify-center text-xs font-medium shadow-sm" :class="getPodiumBadge(idx)">
+          <div class="absolute top-3 right-3 w-7 h-7 rounded-xl flex items-center justify-center text-sm font-medium shadow-sm" :class="getPodiumBadge(idx)">
             #{{ idx + 1 }}
           </div>
           
@@ -33,7 +33,7 @@
              </div>
           </div>
           
-          <h3 class="text-xs font-medium text-gray-900 tracking-tight mb-0.5">{{ leader.firstName }} {{ leader.lastName }}</h3>
+          <h3 class="text-sm font-medium text-gray-900 tracking-tight mb-0.5">{{ leader.firstName }} {{ leader.lastName }}</h3>
           <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-3">{{ leader.faculty || 'Campus' }}</p>
           
           <div class="px-2.5 py-1 bg-gray-50 border border-gray-50 rounded-lg text-[10px] font-medium text-parentPrimary tracking-tight">
@@ -53,12 +53,12 @@
           <div class="absolute -right-10 -top-10 w-40 h-40 bg-parentPrimary/5 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-700"></div>
           
           <div class="relative z-10">
-            <h4 class="text-xs font-medium uppercase tracking-widest text-gray-400 mb-5">Hall of Fame Perks</h4>
+            <h4 class="text-sm font-medium uppercase  text-gray-400 mb-5">Hall of Fame Perks</h4>
             <div class="space-y-4">
                <div v-for="perk in perks" :key="perk.title" class="flex items-start gap-3">
-                  <div class="w-7 h-7 rounded-lg bg-gray-50 border border-gray-50 flex items-center justify-center text-xs shrink-0">{{ perk.icon }}</div>
+                  <div class="w-7 h-7 rounded-lg bg-gray-50 border border-gray-50 flex items-center justify-center text-sm shrink-0">{{ perk.icon }}</div>
                   <div>
-                     <p class="text-xs font-medium tracking-tight text-gray-900 mb-0.5">{{ perk.title }}</p>
+                     <p class="text-sm font-medium tracking-tight text-gray-900 mb-0.5">{{ perk.title }}</p>
                      <p class="text-[11px] font-bold text-gray-500 leading-relaxed">{{ perk.desc }}</p>
                   </div>
                </div>

@@ -27,7 +27,7 @@
  <component :is="stat.icon" class="w-4 h-4" :class="stat.iconColor" />
  </div>
  <div class="min-w-0">
- <p class="ff-mono text-[9px] font-bold text-[#9C968E] uppercase tracking-widest mb-0.5">{{ stat.label }}</p>
+ <p class="ff-mono text-[9px] font-bold text-[#9C968E] uppercase  mb-0.5">{{ stat.label }}</p>
  <div class="flex items-baseline gap-1">
  <p class="text-sm font-bold text-[#171310] tracking-tight">{{ stat.value }}</p>
  <span v-if="stat.suffix" class="ff-mono text-[9px] font-bold text-[#9C968E]">{{ stat.suffix }}</span>
@@ -42,7 +42,7 @@
  <div class="absolute right-0 top-0 w-64 h-64 bg-[#FF5C1A]/20 rounded-full blur-[80px] -mr-20 -mt-20 group-hover:bg-[#FF5C1A]/30 transition-colors duration-700"></div>
 
  <div class="relative z-10 flex-1 max-w-xl">
- <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-md rounded-lg border border-white/10 text-white ff-mono text-[10px] font-bold uppercase tracking-widest mb-4">
+ <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-md rounded-lg border border-white/10 text-white ff-mono text-[10px] font-bold uppercase  mb-4">
  <Rocket class="w-3.5 h-3.5 text-[#FF5C1A]" /> Now with Negotiable Fees
  </div>
  <h2 class="ff-display text-2xl md:text-3xl font-bold text-white tracking-tight mb-2">
@@ -70,7 +70,7 @@
   <div class="absolute right-0 top-0 w-64 h-64 bg-white/20 rounded-full blur-[80px] -mr-20 -mt-20"></div>
 
   <div class="relative z-10 flex-1 w-full md:max-w-xl text-center md:text-left">
-  <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-md rounded-lg text-white ff-mono text-[10px] font-bold uppercase tracking-widest mb-3 md:mb-4 mx-auto md:mx-0">
+  <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-md rounded-lg text-white ff-mono text-[10px] font-bold uppercase  mb-3 md:mb-4 mx-auto md:mx-0">
   <Trophy class="w-3.5 h-3.5 text-white" /> Turn Points into Cash
   </div>
   <h2 class="ff-display text-2xl md:text-3xl font-bold text-white tracking-tight mb-2 leading-tight">
@@ -97,7 +97,7 @@
  <UtensilsCrossed class="w-5 h-5 text-[#9C968E] group-hover:text-[#FF5C1A] transition-colors" />
  </div>
  <h3 class="ff-display text-base font-bold text-[#171310] tracking-tight mb-1">Meal Planner</h3>
- <p class="text-xs text-[#9C968E] font-bold">Plan your week and save up to 25%</p>
+ <p class="text-sm text-[#9C968E] font-bold">Plan your week and save up to 25%</p>
  </div>
  <div class="w-10 h-10 bg-[#FAF8F5] text-[#9C968E] rounded-lg flex items-center justify-center shrink-0 group-hover:text-[#FF5C1A] group-hover:bg-[#FF5C1A]/10 transition-colors">
  <ArrowRight class="w-4 h-4" />
@@ -110,7 +110,7 @@
   <Users class="w-5 h-5 text-[#9C968E] group-hover:text-[#FF5C1A] transition-colors" />
   </div>
   <h3 class="ff-display text-base font-bold text-[#171310] tracking-tight mb-1">Group Orders</h3>
-  <p class="text-xs text-[#9C968E] font-bold">Order with friends and split the bill</p>
+  <p class="text-sm text-[#9C968E] font-bold">Order with friends and split the bill</p>
   </div>
   <div class="w-10 h-10 bg-[#FAF8F5] text-[#9C968E] rounded-lg flex items-center justify-center shrink-0 group-hover:text-[#FF5C1A] group-hover:bg-[#FF5C1A]/10 transition-colors">
   <ArrowRight class="w-4 h-4" />
@@ -123,7 +123,7 @@
   <ShoppingCart class="w-5 h-5 text-[#9C968E] group-hover:text-[#FF5C1A] transition-colors" />
   </div>
   <h3 class="ff-display text-base font-bold text-[#171310] tracking-tight mb-1">Market Pool</h3>
-  <p class="text-xs text-[#9C968E] font-bold">Buy food in bulk at wholesale prices</p>
+  <p class="text-sm text-[#9C968E] font-bold">Buy food in bulk at wholesale prices</p>
   </div>
   <div class="w-10 h-10 bg-[#FAF8F5] text-[#9C968E] rounded-lg flex items-center justify-center shrink-0 group-hover:text-[#FF5C1A] group-hover:bg-[#FF5C1A]/10 transition-colors">
   <ArrowRight class="w-4 h-4" />
@@ -136,7 +136,7 @@
   <Package class="w-5 h-5 text-[#9C968E] group-hover:text-[#FF5C1A] transition-colors" />
   </div>
   <h3 class="ff-display text-base font-bold text-[#171310] tracking-tight mb-1">Pool Orders</h3>
-  <p class="text-xs text-[#9C968E] font-bold">Track and manage your market pool requests</p>
+  <p class="text-sm text-[#9C968E] font-bold">Track and manage your market pool requests</p>
   </div>
   <div class="w-10 h-10 bg-[#FAF8F5] text-[#9C968E] rounded-lg flex items-center justify-center shrink-0 group-hover:text-[#FF5C1A] group-hover:bg-[#FF5C1A]/10 transition-colors">
   <ArrowRight class="w-4 h-4" />
@@ -149,9 +149,9 @@
  <div class="flex items-center justify-between">
  <div>
  <h2 class="ff-display text-lg font-bold text-[#171310] tracking-tight">Campus Favorites</h2>
- <p class="ff-mono text-[9px] font-bold text-[#9C968E] uppercase tracking-widest mt-0.5">Top picks for you</p>
+ <p class="ff-mono text-[9px] font-bold text-[#9C968E] uppercase  mt-0.5">Top picks for you</p>
  </div>
- <NuxtLink to="/vendors" class="text-xs font-bold text-[#FF5C1A] hover:underline px-3 py-1.5 bg-[#FF5C1A]/5 rounded-lg">
+ <NuxtLink to="/vendors" class="text-sm font-bold text-[#FF5C1A] hover:underline px-3 py-1.5 bg-[#FF5C1A]/5 rounded-lg">
  View All
  </NuxtLink>
  </div>
@@ -176,7 +176,7 @@
  </div>
 
  <div class="relative z-10 flex flex-col items-center gap-4">
- <div class="ff-mono inline-flex items-center gap-2 px-4 py-2 bg-[#FAF8F5] border border-[#E7E2DA] rounded-lg text-[10px] font-bold text-[#9C968E] uppercase tracking-widest">
+ <div class="ff-mono inline-flex items-center gap-2 px-4 py-2 bg-[#FAF8F5] border border-[#E7E2DA] rounded-lg text-[10px] font-bold text-[#9C968E] uppercase ">
  <Clock class="w-3.5 h-3.5 text-[#9C968E]" />
  Opens at 8:00 AM
  </div>
@@ -199,7 +199,7 @@
 
  <div v-if="fetchError === 'network'" class="mt-4 flex items-center justify-center gap-2 px-4 py-2 bg-rose-50 border border-rose-100 rounded-lg">
  <WifiOff class="w-3.5 h-3.5 text-rose-500 shrink-0" />
- <p class="ff-mono text-[10px] font-bold text-rose-600 uppercase tracking-widest">No Connection</p>
+ <p class="ff-mono text-[10px] font-bold text-rose-600 uppercase ">No Connection</p>
  </div>
  </div>
  </div>
@@ -222,7 +222,7 @@
  </div>
  <div class="flex-1 min-w-0 py-1">
  <h3 class="text-sm font-bold text-[#171310] group-hover:text-[#FF5C1A] truncate tracking-tight mb-1 transition-colors">{{ vendor.storeName }}</h3>
- <p class="text-xs text-[#9C968E] font-bold truncate mb-2">{{ vendor.category || 'Restaurant' }}</p>
+ <p class="text-sm text-[#9C968E] font-bold truncate mb-2">{{ vendor.category || 'Restaurant' }}</p>
  <div class="flex items-center gap-3">
  <div class="flex items-center gap-1">
  <Star class="w-3.5 h-3.5 text-amber-500 fill-current" />

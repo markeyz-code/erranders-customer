@@ -67,7 +67,7 @@
         Please reach out to our customer service team via the contacts below for immediate assistance.
     </p>
     <div class="flex flex-col gap-2 relative z-10">
-        <a v-for="agent in supportAgents" :key="agent.name" :href="getWhatsAppLink(agent.number, agent.name)" target="_blank" class="w-full flex items-center justify-center gap-2 py-2.5 bg-[#25D366] text-white rounded-xl text-xs font-bold hover:bg-[#20bd5a] transition-colors shadow-sm">
+        <a v-for="agent in supportAgents" :key="agent.name" :href="getWhatsAppLink(agent.number, agent.name)" target="_blank" class="w-full flex items-center justify-center gap-2 py-2.5 bg-[#25D366] text-white rounded-xl text-sm font-bold hover:bg-[#20bd5a] transition-colors shadow-sm">
             <MessageCircle class="w-4 h-4" /> Message {{ agent.name }}
         </a>
     </div>

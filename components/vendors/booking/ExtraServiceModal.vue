@@ -22,7 +22,7 @@
             <div>
               <p class="font-bold text-gray-900">{{ extra.name }}</p>
               <div class="flex items-center gap-2 mt-1">
-                <span class="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md">
+                <span class="text-sm font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md">
                   + {{ extra.durationInMinutes }} mins
                 </span>
                 <span class="text-sm font-bold text-gray-900">

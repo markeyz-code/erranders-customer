@@ -27,7 +27,7 @@
               </div>
               <div>
                 <p class="font-bold text-sm text-gray-900">{{ variant.name }}</p>
-                <p class="text-xs text-gray-500 font-medium">{{ variant.durationInMinutes }} mins</p>
+                <p class="text-sm text-gray-500 font-medium">{{ variant.durationInMinutes }} mins</p>
               </div>
             </div>
             <div class="text-right">

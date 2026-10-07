@@ -6,7 +6,7 @@
       <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-indigo-900/40 rounded-full blur-3xl"></div>
       
       <div class="relative z-10">
-        <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-bold uppercase tracking-wider mb-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm font-bold uppercase tracking-wider mb-6">
           <i class="lucide-sparkles"></i>
           Student Exclusive
         </div>
@@ -55,7 +55,7 @@
             <i v-if="loading" class="lucide-loader-2 animate-spin"></i>
             <span>{{ loading ? 'Processing...' : 'Subscribe Now' }}</span>
           </button>
-          <p class="text-center text-[10px] text-gray-400 mt-3 font-medium uppercase tracking-widest">Deducted from Wallet</p>
+          <p class="text-center text-[10px] text-gray-400 mt-3 font-medium uppercase ">Deducted from Wallet</p>
         </div>
       </div>
     </div>

@@ -18,7 +18,7 @@
     <!-- Empty state -->
     <div v-else-if="quests.length === 0" class="py-12 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-200">
       <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl mx-auto mb-3 shadow-sm border border-gray-50">🏆</div>
-      <p class="text-xs font-bold text-gray-400">No active quests right now. Check back later!</p>
+      <p class="text-sm font-bold text-gray-400">No active quests right now. Check back later!</p>
     </div>
 
     <!-- Quests list -->
@@ -36,11 +36,11 @@
           <div class="flex-1 min-w-0">
             <div class="flex items-start justify-between gap-2 mb-1.5">
               <div>
-                <h4 class="font-medium text-gray-900 text-xs tracking-tight truncate">{{ quest.title }}</h4>
+                <h4 class="font-medium text-gray-900 text-sm tracking-tight truncate">{{ quest.title }}</h4>
                 <p class="text-[10px] font-bold text-gray-400 line-clamp-2 mt-0.5">{{ quest.description }}</p>
               </div>
               <div class="text-right shrink-0">
-                <span class="text-xs font-medium text-emerald-600">+{{ quest.rewardPoints }} pts</span>
+                <span class="text-sm font-medium text-emerald-600">+{{ quest.rewardPoints }} pts</span>
               </div>
             </div>
 

@@ -9,7 +9,7 @@
         <Clock class="w-4 h-4" :class="order ? 'text-parentPrimary' : 'text-gray-400'" />
         <div>
           <h4 class="text-sm font-bold tracking-tight" :class="order ? 'text-gray-900' : 'text-gray-500'">{{ timeLabel }}</h4>
-          <p v-if="order && getExactTime(order)" class="text-xs font-semibold text-parentPrimary mt-0.5">
+          <p v-if="order && getExactTime(order)" class="text-sm font-semibold text-parentPrimary mt-0.5">
             Initiates at {{ getExactTime(order) }}
           </p>
         </div>
@@ -29,14 +29,14 @@
       <div class="w-10 h-10 bg-gray-100 group-hover:bg-parentPrimary/10 rounded-full flex items-center justify-center transition-colors mb-3">
         <Plus class="w-5 h-5 text-gray-400 group-hover:text-parentPrimary transition-colors"/>
       </div>
-      <p class="text-xs font-bold text-gray-500 group-hover:text-parentPrimary transition-colors">Add Meal</p>
+      <p class="text-sm font-bold text-gray-500 group-hover:text-parentPrimary transition-colors">Add Meal</p>
     </div>
 
     <!-- Filled State -->
     <div v-else class="flex-1 flex flex-col justify-between">
       <div>
         <h5 class="font-bold text-gray-900 text-base leading-tight mb-1">{{ order.items[0]?.name || 'Meal Order' }}</h5>
-        <p class="text-xs font-medium text-gray-500" v-if="order.items.length > 1">+ {{ order.items.length - 1 }} more items</p>
+        <p class="text-sm font-medium text-gray-500" v-if="order.items.length > 1">+ {{ order.items.length - 1 }} more items</p>
       </div>
       
       <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">

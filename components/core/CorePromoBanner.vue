@@ -6,7 +6,7 @@
           <span class="md:hidden">🎉 One Month Anniversary!</span>
           <span class="hidden md:inline">🎉 Celebrating our One Month Anniversary!</span>
           <span class="block sm:inline sm:ml-2">
-            Use code <strong class="font-bold px-1.5 py-0.5 bg-white text-orange-600 rounded text-xs">NEW75</strong> for 75% off (New Users) or <strong class="font-bold px-1.5 py-0.5 bg-white text-orange-600 rounded text-xs">ERRAND50</strong> for 50% off!
+            Use code <strong class="font-bold px-1.5 py-0.5 bg-white text-orange-600 rounded text-sm">NEW75</strong> for 75% off (New Users) or <strong class="font-bold px-1.5 py-0.5 bg-white text-orange-600 rounded text-sm">ERRAND50</strong> for 50% off!
           </span>
         </p>
       </div>

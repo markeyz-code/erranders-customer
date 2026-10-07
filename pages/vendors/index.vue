@@ -10,7 +10,7 @@
           <h2 class="text-2xl md:text-3xl font-medium text-gray-900 tracking-tight leading-none">
             {{ filteredVendors.length }} Campus Stores
           </h2>
-          <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">
+          <p class="text-[10px] font-bold text-gray-400 uppercase  mt-1">
             Available in your campus area
           </p>
         </div>
@@ -31,7 +31,7 @@
           <div class="relative z-30" ref="categoryDropdownRef">
             <button 
               @click="showCategoryDropdown = !showCategoryDropdown"
-              class="flex items-center gap-2 px-4 py-2.5 border border-gray-50 rounded-xl text-xs font-medium transition-all shadow-sm shrink-0 active:scale-95 bg-white"
+              class="flex items-center gap-2 px-4 py-2.5 border border-gray-50 rounded-xl text-sm font-medium transition-all shadow-sm shrink-0 active:scale-95 bg-white"
               :class="globalFilter ? 'text-parentPrimary border-parentPrimary/30' : 'text-gray-700 hover:bg-gray-50'"
             >
               <span v-if="globalFilter">{{ globalFiltersList.find(f => f.keyword === globalFilter)?.icon || '📌' }}</span>
@@ -45,7 +45,7 @@
               <div v-if="showCategoryDropdown" class="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-50 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] overflow-hidden max-h-[300px] overflow-y-auto">
                 <button 
                   @click="setFilter(''); showCategoryDropdown = false; selectedCategory = 'all'"
-                  class="w-full text-left px-4 py-3 text-xs font-bold hover:bg-gray-50 transition-colors flex items-center gap-3"
+                  class="w-full text-left px-4 py-3 text-sm font-bold hover:bg-gray-50 transition-colors flex items-center gap-3"
                   :class="!globalFilter ? 'text-parentPrimary bg-parentPrimary/5' : 'text-gray-600'"
                 >
                   <Filter class="w-3.5 h-3.5" />
@@ -55,7 +55,7 @@
                   v-for="filter in globalFiltersList" 
                   :key="filter.keyword"
                   @click="setFilter(filter.keyword); showCategoryDropdown = false; selectedCategory = 'all'"
-                  class="w-full text-left px-4 py-3 text-xs font-bold hover:bg-gray-50 transition-colors flex items-center gap-3"
+                  class="w-full text-left px-4 py-3 text-sm font-bold hover:bg-gray-50 transition-colors flex items-center gap-3"
                   :class="globalFilter === filter.keyword ? 'text-parentPrimary bg-parentPrimary/5' : 'text-gray-600'"
                 >
                   <span class="text-sm leading-none">{{ filter.icon }}</span>
@@ -67,7 +67,7 @@
           
           <button 
             @click="showMobileFilters = true" 
-            class="flex items-center gap-2 px-4 py-2.5 border border-gray-50 rounded-xl text-xs font-medium text-gray-700 hover:bg-gray-50 transition-colors bg-white shadow-sm shrink-0 active:scale-95"
+            class="flex items-center gap-2 px-4 py-2.5 border border-gray-50 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors bg-white shadow-sm shrink-0 active:scale-95"
           >
             <SlidersHorizontal class="w-3.5 h-3.5" /> Filters
           </button>
@@ -76,7 +76,7 @@
           <div class="relative z-30" ref="sortDropdownRef">
             <button 
               @click="showSortDropdown = !showSortDropdown"
-              class="flex items-center gap-2 px-4 py-2.5 border border-gray-50 rounded-xl text-xs font-medium text-gray-700 hover:bg-gray-50 transition-colors bg-white shadow-sm shrink-0 active:scale-95"
+              class="flex items-center gap-2 px-4 py-2.5 border border-gray-50 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors bg-white shadow-sm shrink-0 active:scale-95"
             >
               Sort By
               <ChevronDown class="w-3 h-3 ml-1 transition-transform" :class="{ 'rotate-180': showSortDropdown }" />
@@ -86,21 +86,21 @@
               <div v-if="showSortDropdown" class="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-50 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] overflow-hidden">
                 <button 
                   @click="sortBy = 'latest'; showSortDropdown = false"
-                  class="w-full text-left px-4 py-3 text-xs font-bold hover:bg-gray-50 transition-colors"
+                  class="w-full text-left px-4 py-3 text-sm font-bold hover:bg-gray-50 transition-colors"
                   :class="sortBy === 'latest' ? 'text-parentPrimary bg-parentPrimary/5' : 'text-gray-600'"
                 >
                   Latest Added
                 </button>
                 <button 
                   @click="sortBy = 'alphabetical'; showSortDropdown = false"
-                  class="w-full text-left px-4 py-3 text-xs font-bold hover:bg-gray-50 transition-colors"
+                  class="w-full text-left px-4 py-3 text-sm font-bold hover:bg-gray-50 transition-colors"
                   :class="sortBy === 'alphabetical' ? 'text-parentPrimary bg-parentPrimary/5' : 'text-gray-600'"
                 >
                   Alphabetical (A-Z)
                 </button>
                 <button 
                   @click="sortBy = 'popularity'; showSortDropdown = false"
-                  class="w-full text-left px-4 py-3 text-xs font-bold hover:bg-gray-50 transition-colors"
+                  class="w-full text-left px-4 py-3 text-sm font-bold hover:bg-gray-50 transition-colors"
                   :class="sortBy === 'popularity' ? 'text-parentPrimary bg-parentPrimary/5' : 'text-gray-600'"
                 >
                   Most Popular
@@ -112,7 +112,7 @@
           <button 
             v-if="hasActiveFilters"
             @click="resetAllFilters" 
-            class="text-xs font-medium text-parentPrimary hover:underline px-3 py-2.5 bg-parentPrimary/10 rounded-xl shrink-0 active:scale-95"
+            class="text-sm font-medium text-parentPrimary hover:underline px-3 py-2.5 bg-parentPrimary/10 rounded-xl shrink-0 active:scale-95"
           >
             Reset
           </button>
@@ -248,16 +248,16 @@
 
         <!-- Active filter chips (visual hint) -->
         <div class="relative z-10 flex flex-wrap items-center justify-center gap-2 mb-8">
-          <span v-if="searchQuery" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-xs font-bold text-gray-600">
+          <span v-if="searchQuery" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-sm font-bold text-gray-600">
             🔍 "{{ searchQuery }}"
           </span>
-          <span v-if="selectedCategory !== 'all'" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-xs font-bold text-gray-600">
+          <span v-if="selectedCategory !== 'all'" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-sm font-bold text-gray-600">
             📌 <span class="capitalize">{{ selectedCategory }}</span>
           </span>
-          <span v-if="showOnlyOffers" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-xs font-bold text-gray-600">
+          <span v-if="showOnlyOffers" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-sm font-bold text-gray-600">
             🏷️ Offers only
           </span>
-          <span v-if="showQuickDelivery" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-xs font-bold text-gray-600">
+          <span v-if="showQuickDelivery" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-sm font-bold text-gray-600">
             ⚡ Under 30 min
           </span>
         </div>
@@ -266,13 +266,13 @@
         <div class="relative z-10 flex items-center justify-center gap-3">
           <button
             @click="resetAllFilters"
-            class="inline-flex items-center gap-2 px-4 py-2.5 bg-parentPrimary text-white rounded-xl text-xs font-medium hover:scale-105 transition-transform shadow-sm border border-gray-50 shadow-parentPrimary/20 active:scale-95"
+            class="inline-flex items-center gap-2 px-4 py-2.5 bg-parentPrimary text-white rounded-xl text-sm font-medium hover:scale-105 transition-transform shadow-sm border border-gray-50 shadow-parentPrimary/20 active:scale-95"
           >
             Reset Filters
           </button>
           <NuxtLink
             to="/dashboard"
-            class="inline-flex items-center px-4 py-2.5 bg-gray-100 text-gray-700 rounded-xl text-xs font-medium hover:bg-gray-200 transition-colors active:scale-95"
+            class="inline-flex items-center px-4 py-2.5 bg-gray-100 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-200 transition-colors active:scale-95"
           >
             Go Home
           </NuxtLink>
@@ -320,11 +320,11 @@
 
             <!-- Offers & Quick Delivery toggles -->
             <div class="space-y-3">
-              <p class="text-[10px] font-medium uppercase tracking-widest text-gray-400">Quick Filters</p>
+              <p class="text-[10px] font-medium uppercase  text-gray-400">Quick Filters</p>
               <div class="grid grid-cols-2 gap-3">
                 <button
                   @click="showOnlyOffers = !showOnlyOffers"
-                  class="flex items-center justify-center gap-2 px-3 py-3 rounded-xl border transition-all text-xs font-medium"
+                  class="flex items-center justify-center gap-2 px-3 py-3 rounded-xl border transition-all text-sm font-medium"
                   :class="showOnlyOffers ? 'bg-parentPrimary text-white border-parentPrimary shadow-sm border border-gray-50' : 'bg-white text-gray-600 border-gray-100 hover:bg-gray-50'"
                 >
                   <Tag class="w-3.5 h-3.5" />
@@ -333,7 +333,7 @@
 
                 <button
                   @click="showQuickDelivery = !showQuickDelivery"
-                  class="flex items-center justify-center gap-2 px-3 py-3 rounded-xl border transition-all text-xs font-medium"
+                  class="flex items-center justify-center gap-2 px-3 py-3 rounded-xl border transition-all text-sm font-medium"
                   :class="showQuickDelivery ? 'bg-parentPrimary text-white border-parentPrimary shadow-sm border border-gray-50' : 'bg-white text-gray-600 border-gray-100 hover:bg-gray-50'"
                 >
                   <Clock class="w-3.5 h-3.5" />
@@ -344,7 +344,7 @@
 
             <!-- Rating Selector -->
             <div class="space-y-2">
-              <p class="text-[10px] font-medium uppercase tracking-widest text-gray-400">Minimum Rating</p>
+              <p class="text-[10px] font-medium uppercase  text-gray-400">Minimum Rating</p>
               <UiSelectInput 
                 v-model="minRating" 
                 :options="ratingOptions"
@@ -353,7 +353,7 @@
 
             <!-- Delivery Fee slider -->
             <div class="space-y-3">
-              <div class="flex justify-between text-[10px] font-medium uppercase tracking-widest text-gray-400">
+              <div class="flex justify-between text-[10px] font-medium uppercase  text-gray-400">
                 <span>Max Delivery Fee</span>
                 <span class="text-parentPrimary">₦{{ maxDeliveryFee }}</span>
               </div>
@@ -371,13 +371,13 @@
             <div class="pt-4 mt-auto border-t border-gray-100 flex gap-3">
               <button 
                 @click="resetAllFilters" 
-                class="flex-1 py-3.5 border border-gray-25 text-gray-700 rounded-xl text-xs font-medium uppercase tracking-wider hover:bg-gray-50 active:scale-95"
+                class="flex-1 py-3.5 border border-gray-25 text-gray-700 rounded-xl text-sm font-medium uppercase tracking-wider hover:bg-gray-50 active:scale-95"
               >
                 Reset All
               </button>
               <button 
                 @click="showMobileFilters = false" 
-                class="flex-1 py-3.5 bg-parentPrimary text-white rounded-xl text-xs font-medium uppercase tracking-wider hover:bg-parentPrimary/90 active:scale-95 shadow-sm border border-gray-50 shadow-parentPrimary/10"
+                class="flex-1 py-3.5 bg-parentPrimary text-white rounded-xl text-sm font-medium uppercase tracking-wider hover:bg-parentPrimary/90 active:scale-95 shadow-sm border border-gray-50 shadow-parentPrimary/10"
               >
                 Apply
               </button>

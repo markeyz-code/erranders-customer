@@ -43,18 +43,18 @@
 
                 <div v-if="order" class="w-full bg-gray-50 rounded-2xl p-4 mt-6 border border-gray-50 text-left">
                   <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs font-bold text-gray-400 tracking-wider uppercase">Order Total</span>
+                    <span class="text-sm font-bold text-gray-400 tracking-wider uppercase">Order Total</span>
                     <span class="text-sm font-bold text-gray-900">₦{{ order.total?.toLocaleString() }}</span>
                   </div>
                   <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs font-bold text-gray-400 tracking-wider uppercase">Items</span>
+                    <span class="text-sm font-bold text-gray-400 tracking-wider uppercase">Items</span>
                     <span class="text-sm font-medium text-gray-700">{{ order.items?.length || 0 }} items</span>
                   </div>
                   
                   <div v-if="order.items && order.items.length" class="mt-3 pt-3 border-t border-gray-200/50 max-h-32 overflow-y-auto space-y-2">
                     <div v-for="(item, idx) in order.items" :key="idx" class="flex justify-between items-start text-sm">
                       <div class="flex items-start gap-2">
-                        <span class="font-bold text-gray-800 bg-white px-1.5 py-0.5 rounded text-xs border border-gray-50 shadow-sm">{{ item.quantity }}x</span>
+                        <span class="font-bold text-gray-800 bg-white px-1.5 py-0.5 rounded text-sm border border-gray-50 shadow-sm">{{ item.quantity }}x</span>
                         <div class="flex flex-col">
                           <span class="text-gray-700 font-medium">{{ item.name }}</span>
                           <span v-if="item.customizations && item.customizations.length" class="text-[10px] text-gray-400 leading-tight">
@@ -62,7 +62,7 @@
                           </span>
                         </div>
                       </div>
-                      <span class="font-bold text-gray-900 text-xs mt-0.5">₦{{ (item.subtotal || (item.price * item.quantity)).toLocaleString() }}</span>
+                      <span class="font-bold text-gray-900 text-sm mt-0.5">₦{{ (item.subtotal || (item.price * item.quantity)).toLocaleString() }}</span>
                     </div>
                   </div>
                 </div>

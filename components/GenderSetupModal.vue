@@ -23,7 +23,7 @@
         <form @submit.prevent="submitPreferences" class="space-y-6">
           <!-- User Gender -->
           <div>
-            <label class="block text-xs font-bold text-gray-700 mb-3 tracking-wide uppercase">Your Gender</label>
+            <label class="block text-sm font-bold text-gray-700 mb-3 tracking-wide uppercase">Your Gender</label>
             <div class="grid grid-cols-2 gap-3">
               <button 
                 type="button"
@@ -50,7 +50,7 @@
 
           <!-- Errander Preference -->
           <div>
-            <label class="block text-xs font-bold text-gray-700 mb-3 tracking-wide uppercase">Preferred Errander Gender</label>
+            <label class="block text-sm font-bold text-gray-700 mb-3 tracking-wide uppercase">Preferred Errander Gender</label>
             <div class="grid grid-cols-3 gap-2">
               <button 
                 type="button"

@@ -36,7 +36,7 @@
                   {{ report.title }}
                 </h3>
               </div>
-              <span class="text-xs font-bold text-gray-400 shrink-0">
+              <span class="text-sm font-bold text-gray-400 shrink-0">
                 {{ new Date(report.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric' }) }}
               </span>
             </div>
@@ -45,7 +45,7 @@
               {{ report.description }}
             </p>
             
-            <div class="mt-4 pt-4 border-t border-gray-50 flex items-center justify-between text-xs font-bold text-gray-400">
+            <div class="mt-4 pt-4 border-t border-gray-50 flex items-center justify-between text-sm font-bold text-gray-400">
               <span class="capitalize">
                 {{ report.category?.replace(/_/g, ' ') }} • {{ report.vendor?.storeName || 'general support' }}
               </span>
@@ -87,7 +87,7 @@
 
             <!-- Subject Title -->
             <div class="space-y-2">
-              <label class="block text-xs font-bold text-gray-400 tracking-wider">Subject Title</label>
+              <label class="block text-sm font-bold text-gray-400 tracking-wider">Subject Title</label>
               <input 
                 v-model="form.title" 
                 type="text" 
@@ -99,7 +99,7 @@
 
             <!-- Detailed Description -->
             <div class="space-y-2">
-              <label class="block text-xs font-bold text-gray-400 tracking-wider">Details</label>
+              <label class="block text-sm font-bold text-gray-400 tracking-wider">Details</label>
               <textarea 
                 v-model="form.description" 
                 rows="5" 
@@ -113,7 +113,7 @@
             <button 
               type="submit" 
               :disabled="submitting || !form.category || !form.title || !form.description" 
-              class="w-full py-4 bg-parentPrimary text-white rounded-xl text-xs font-medium hover:bg-parentPrimary/90 active:scale-[0.98] transition-all shadow-sm border border-gray-50 shadow-parentPrimary/20 disabled:opacity-50 flex items-center justify-center gap-2"
+              class="w-full py-4 bg-parentPrimary text-white rounded-xl text-sm font-medium hover:bg-parentPrimary/90 active:scale-[0.98] transition-all shadow-sm border border-gray-50 shadow-parentPrimary/20 disabled:opacity-50 flex items-center justify-center gap-2"
             >
               <Send class="w-3.5 h-3.5" />
               {{ submitting ? 'submitting ticket...' : 'submit support ticket' }}

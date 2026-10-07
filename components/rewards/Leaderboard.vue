@@ -16,7 +16,7 @@
             v-for="t in types" 
             :key="t.key"
             @click="activeType = t.key"
-            class="px-3 py-1.5 rounded-lg text-xs font-medium uppercase transition-all"
+            class="px-3 py-1.5 rounded-lg text-sm font-medium uppercase transition-all"
             :class="activeType === t.key ? 'bg-parentPrimary text-white shadow-sm' : 'text-gray-400 hover:text-gray-700'"
           >
             {{ t.label }}
@@ -32,7 +32,7 @@
       <!-- Empty state -->
       <div v-else-if="leaders.length === 0" class="flex-1 flex flex-col items-center justify-center py-12 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
         <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl mb-3 shadow-sm border border-gray-50">🏆</div>
-        <p class="text-xs font-bold text-gray-400">Leaderboard is being updated...</p>
+        <p class="text-sm font-bold text-gray-400">Leaderboard is being updated...</p>
       </div>
 
       <!-- Leaders list -->
@@ -42,24 +42,24 @@
           :key="user._id"
           class="flex items-center gap-3 p-3 rounded-xl border border-transparent hover:border-gray-100 hover:bg-gray-50/50 transition-all group"
         >
-          <div class="w-7 h-7 flex items-center justify-center font-medium text-xs shrink-0 rounded-lg" :class="getRankClass(index)">
+          <div class="w-7 h-7 flex items-center justify-center font-medium text-sm shrink-0 rounded-lg" :class="getRankClass(index)">
             #{{ index + 1 }}
           </div>
           
           <div class="w-9 h-9 rounded-xl bg-gray-50 flex-shrink-0 overflow-hidden border border-gray-50 relative">
             <img v-if="user.avatar" :src="user.avatar" class="w-full h-full object-cover" />
-            <div v-else class="w-full h-full flex items-center justify-center uppercase text-xs font-medium text-parentPrimary bg-parentPrimary/10">
+            <div v-else class="w-full h-full flex items-center justify-center uppercase text-sm font-medium text-parentPrimary bg-parentPrimary/10">
               {{ user.firstName?.[0] }}{{ user.lastName?.[0] }}
             </div>
           </div>
 
           <div class="flex-1 min-w-0">
-            <h4 class="font-bold text-xs truncate text-gray-900">{{ user.firstName }} {{ user.lastName }}</h4>
+            <h4 class="font-bold text-sm truncate text-gray-900">{{ user.firstName }} {{ user.lastName }}</h4>
             <p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider truncate mt-0.5">{{ user.faculty || 'Campus' }}</p>
           </div>
 
           <div class="text-right shrink-0">
-            <p class="text-xs font-medium text-parentPrimary tracking-tight">{{ getScoreLabel(user) }}</p>
+            <p class="text-sm font-medium text-parentPrimary tracking-tight">{{ getScoreLabel(user) }}</p>
             <p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Points: {{ user.points }}</p>
           </div>
         </div>

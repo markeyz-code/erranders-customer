@@ -43,7 +43,7 @@
         <!-- Profile Dropdown -->
         <Menu v-if="user" as="div" class="relative">
           <MenuButton class="flex items-center gap-2.5 p-1 sm:p-1.5 rounded-xl bg-gray-50 border border-gray-50 hover:bg-gray-100 transition-all focus:outline-none">
-            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gray-900 text-white flex items-center justify-center font-bold text-xs sm:text-sm uppercase shadow-sm">
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gray-900 text-white flex items-center justify-center font-bold text-sm sm:text-sm uppercase shadow-sm">
               {{ user.firstName?.[0] || user.email?.[0] }}
             </div>
             <ChevronDown class="w-3.5 h-3.5 text-gray-400 hidden lg:block" />
@@ -110,7 +110,7 @@
           <div class="flex items-center justify-between pb-4 border-b border-gray-100 shrink-0">
             <div>
               <h3 class="text-xl font-bold text-gray-900 tracking-tight">notifications</h3>
-              <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">
+              <p class="text-[10px] font-bold text-gray-400 uppercase  mt-0.5">
                 stay updated on your orders
               </p>
             </div>
@@ -118,7 +118,7 @@
               <button 
                 v-if="notifications.length > 0 && unreadCount > 0"
                 @click="markAllAsRead"
-                class="text-xs font-bold text-parentPrimary hover:underline px-3 py-1.5 bg-parentPrimary/10 rounded-xl active:scale-95 transition-transform"
+                class="text-sm font-bold text-parentPrimary hover:underline px-3 py-1.5 bg-parentPrimary/10 rounded-xl active:scale-95 transition-transform"
               >
                 mark all as read
               </button>
@@ -142,7 +142,7 @@
               </div>
               <div class="space-y-1">
                 <h4 class="text-sm font-bold text-gray-900 leading-none">No new alerts</h4>
-                <p class="text-xs text-gray-400 max-w-[200px] mt-2 leading-relaxed">We'll alert you here for order updates and rewards.</p>
+                <p class="text-sm text-gray-400 max-w-[200px] mt-2 leading-relaxed">We'll alert you here for order updates and rewards.</p>
               </div>
             </div>
 
@@ -165,15 +165,15 @@
                 </div>
                 <div class="flex-1 min-w-0">
                   <div class="flex justify-between items-start gap-2">
-                    <h4 class="font-bold text-gray-900 text-xs tracking-tight leading-tight group-hover:text-parentPrimary transition-colors">{{ notif.title }}</h4>
+                    <h4 class="font-bold text-gray-900 text-sm tracking-tight leading-tight group-hover:text-parentPrimary transition-colors">{{ notif.title }}</h4>
                     <span class="text-[9px] font-medium text-gray-400 whitespace-nowrap">{{ formatTime(notif.createdAt) }}</span>
                   </div>
-                  <p class="text-xs text-gray-500 mt-1 leading-relaxed">{{ notif.body }}</p>
+                  <p class="text-sm text-gray-500 mt-1 leading-relaxed">{{ notif.body }}</p>
                   
                   <div v-if="notif.data?.orderId" class="mt-2">
                     <span class="inline-flex items-center text-[10px] font-bold text-parentPrimary gap-0.5 hover:gap-1 transition-all">
                       View order details
-                      <span class="text-xs">→</span>
+                      <span class="text-sm">→</span>
                     </span>
                   </div>
                 </div>
@@ -189,7 +189,7 @@
             <NuxtLink 
               to="/notifications" 
               @click="showNotificationsDrawer = false"
-              class="flex items-center justify-center w-full py-3 bg-gray-950 text-white rounded-xl text-xs font-bold hover:bg-gray-900 transition-colors uppercase tracking-wider shadow-sm border border-gray-50 active:scale-98"
+              class="flex items-center justify-center w-full py-3 bg-gray-950 text-white rounded-xl text-sm font-bold hover:bg-gray-900 transition-colors uppercase tracking-wider shadow-sm border border-gray-50 active:scale-98"
             >
               go to notification center
             </NuxtLink>

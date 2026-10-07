@@ -15,7 +15,7 @@
             </div>
             <div>
               <h2 class="text-base font-bold text-gray-900 leading-tight">{{ toTitleCase(vendor.storeName) }}</h2>
-              <p class="text-xs text-gray-500 font-medium">Mini Mart</p>
+              <p class="text-sm text-gray-500 font-medium">Mini Mart</p>
             </div>
           </div>
         </div>
@@ -43,13 +43,13 @@
               :class="{ 'opacity-50 grayscale pointer-events-none': isProductOutOfStock(pack) }"
             >
               <!-- Promo Badge -->
-              <div v-if="pack.isPrepaidByPlatform" class="absolute top-0 right-0 z-10 px-2 py-1 bg-indigo-500 text-white rounded-bl-lg shadow-sm text-[9px] font-bold uppercase tracking-widest">
+              <div v-if="pack.isPrepaidByPlatform" class="absolute top-0 right-0 z-10 px-2 py-1 bg-indigo-500 text-white rounded-bl-lg shadow-sm text-[9px] font-bold uppercase ">
                 Promo
               </div>
               
               <div>
                 <h4 class="font-bold text-gray-900 mb-1 text-[15px] pr-10">{{ pack.name }}</h4>
-                <p class="text-xs text-gray-500 mb-2">{{ pack.description || 'Bundle items' }}</p>
+                <p class="text-sm text-gray-500 mb-2">{{ pack.description || 'Bundle items' }}</p>
               </div>
               <div class="text-sm font-bold text-gray-900 mt-auto flex items-center justify-between">
                 <span>₦{{ (pack.bundlePrice || pack.price || 0).toLocaleString() }}</span>
@@ -105,7 +105,7 @@
         <!-- Full store -->
         <div v-if="showFullStore" class="mb-8">
           <div v-for="cat in categories" :key="cat" class="mb-6">
-            <h3 class="text-gray-500 font-bold mb-2 text-xs uppercase tracking-widest px-2" v-if="groupedProducts[cat] && groupedProducts[cat].length > 0">{{ cat }}</h3>
+            <h3 class="text-gray-500 font-bold mb-2 text-sm uppercase  px-2" v-if="groupedProducts[cat] && groupedProducts[cat].length > 0">{{ cat }}</h3>
             <div class="flex flex-col">
               <div 
                 v-for="product in groupedProducts[cat]" 
@@ -197,7 +197,7 @@
           <button 
             v-if="cart.getVendorStats(vendor._id).itemCount > 0"
             @click="showMobileCartDrawer = true" 
-            class="lg:hidden flex items-center gap-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl text-xs font-medium transition-all shadow-sm border border-gray-50"
+            class="lg:hidden flex items-center gap-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-medium transition-all shadow-sm border border-gray-50"
           >
             <ShoppingBag class="w-3.5 h-3.5" />
             <span class="bg-parentPrimary px-1.5 py-0.5 rounded-md text-[10px]">{{ cart.getVendorStats(vendor._id).itemCount }}</span>
@@ -300,7 +300,7 @@
               </div>
               <h1 class="text-2xl md:text-3xl font-medium text-white tracking-tight leading-tight truncate">{{ toTitleCase(vendor.storeName) }}</h1>
               <!-- Stats Row -->
-              <div class="flex items-center gap-3 mt-2 text-white/70 text-xs font-bold flex-wrap">
+              <div class="flex items-center gap-3 mt-2 text-white/70 text-sm font-bold flex-wrap">
                 <button @click="showReviewsModal = true" class="flex items-center gap-1 hover:text-white transition-colors cursor-pointer active:scale-95 bg-white/10 px-2 py-1 rounded-lg border border-white/10">
                   <Star class="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
                   <span class="text-white font-medium">{{ vendor.rating?.toFixed(1) || '5.0' }}</span>
@@ -334,7 +334,7 @@
         <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
           <button 
             @click="handleStartGroupOrder"
-            class="flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-medium transition-all whitespace-nowrap shrink-0 shadow-sm border border-gray-50 active:scale-95"
+            class="flex items-center gap-2 px-4 py-2.5 rounded-2xl text-sm font-medium transition-all whitespace-nowrap shrink-0 shadow-sm border border-gray-50 active:scale-95"
             :class="isGroupOrderActiveForThisVendor ? 'bg-emerald-500 text-white' : 'bg-white text-gray-900 border border-gray-50 shadow-sm border border-gray-50'"
           >
             <Users class="w-3.5 h-3.5" />
@@ -343,7 +343,7 @@
           
           <button 
             @click="showMobileCartDrawer = true" 
-            class="lg:hidden flex items-center gap-2 px-4 py-2.5 bg-white text-gray-900 rounded-2xl text-xs font-medium transition-all whitespace-nowrap shadow-sm border border-gray-50 border border-gray-50 shrink-0 active:scale-95"
+            class="lg:hidden flex items-center gap-2 px-4 py-2.5 bg-white text-gray-900 rounded-2xl text-sm font-medium transition-all whitespace-nowrap shadow-sm border border-gray-50 border border-gray-50 shrink-0 active:scale-95"
           >
             <ShoppingBag class="w-3.5 h-3.5" />
             <span v-if="cart.getVendorStats(vendor._id).itemCount > 0" class="bg-parentPrimary text-white px-1.5 py-0.5 rounded-md text-[10px]">{{ cart.getVendorStats(vendor._id).itemCount }}</span>
@@ -367,7 +367,7 @@
             <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/20 to-transparent flex flex-col justify-end p-4">
               <span class="absolute top-3 right-3 px-2 py-0.5 bg-parentPrimary text-white rounded-md text-[9px] font-medium shadow-sm">Offer</span>
               <h3 class="text-sm font-medium text-white tracking-tight leading-tight">{{ toTitleCase(banner.title) }}</h3>
-              <p class="text-xs font-bold text-white/70 mt-0.5 truncate">{{ banner.description }}</p>
+              <p class="text-sm font-bold text-white/70 mt-0.5 truncate">{{ banner.description }}</p>
               
               <div v-if="banner.endAt" class="flex items-center gap-1 mt-1.5">
                 <Clock class="w-3 h-3 text-amber-400" />
@@ -388,9 +388,9 @@
                 <div class="w-8 h-8 rounded-xl bg-parentPrimary text-white flex items-center justify-center shadow-sm border border-gray-50">
                   <Calendar class="w-4 h-4" />
                 </div>
-                <h3 class="text-xs font-medium text-white tracking-wider">{{ activeBatch.windowName }}</h3>
+                <h3 class="text-sm font-medium text-white tracking-wider">{{ activeBatch.windowName }}</h3>
               </div>
-              <div class="flex flex-wrap gap-4 text-xs">
+              <div class="flex flex-wrap gap-4 text-sm">
                 <div>
                   <p class="text-white/40 font-medium mb-0.5">Accepting until</p>
                   <p class="font-medium text-parentPrimary">{{ new Date(activeBatch.deadline).toLocaleString() }}</p>
@@ -488,7 +488,7 @@
                 <img :src="getMediaItems(product)[0]?.url || '/placeholder-store.jpg'" class="w-full h-full object-cover" />
               </div>
               <h3 class="text-sm font-medium text-gray-900 leading-tight truncate mb-1">{{ product.name }}</h3>
-              <p class="text-xs font-bold text-gray-900 mb-2">₦{{ (product.discountPrice || product.pricePerPortion || product.price || 0).toLocaleString() }}</p>
+              <p class="text-sm font-bold text-gray-900 mb-2">₦{{ (product.discountPrice || product.pricePerPortion || product.price || 0).toLocaleString() }}</p>
               
               <div v-if="isMiniMart && getProductCount(product._id) > 0" class="absolute bottom-3 right-3 flex items-center gap-1.5 bg-gray-100 rounded-xl px-1 py-1 h-8 shadow-sm">
                 <button @click.stop="removeFromCart(product)" class="w-6 h-6 flex items-center justify-center rounded-lg bg-white shadow-sm hover:bg-gray-50 active:scale-95 transition-all text-gray-700">
@@ -519,7 +519,7 @@
               <div class="flex items-center gap-3 mb-5">
                 <h2 class="text-lg font-medium text-gray-900 tracking-tight">Combos &amp; Promos</h2>
                 <div class="h-px bg-gray-100 flex-1"></div>
-                <span class="text-xs font-bold text-gray-400">{{ packs.length }} items</span>
+                <span class="text-sm font-bold text-gray-400">{{ packs.length }} items</span>
               </div>
               <div class="flex gap-3 overflow-x-auto scrollbar-hide pb-2 snap-x">
                 <div 
@@ -529,12 +529,12 @@
                   class="relative bg-gray-50 border border-gray-50 rounded-xl p-4 w-[280px] md:w-[320px] max-w-[85vw] shrink-0 snap-start cursor-pointer hover:bg-gray-100 hover:border-parentPrimary/20 hover:shadow-sm transition-all flex flex-col justify-between overflow-hidden"
                   :class="{ 'opacity-50 grayscale pointer-events-none': isProductOutOfStock(pack) }"
                 >
-                  <div v-if="pack.isPrepaidByPlatform" class="absolute top-0 right-0 z-10 px-2 py-1 bg-indigo-500 text-white rounded-bl-lg shadow-sm text-[9px] font-bold uppercase tracking-widest">
+                  <div v-if="pack.isPrepaidByPlatform" class="absolute top-0 right-0 z-10 px-2 py-1 bg-indigo-500 text-white rounded-bl-lg shadow-sm text-[9px] font-bold uppercase ">
                     Promo
                   </div>
                   <div>
                     <h4 class="font-bold text-gray-900 mb-1 text-[15px] pr-10 leading-tight">{{ pack.name }}</h4>
-                    <p class="text-xs text-gray-500 mb-3 line-clamp-2 leading-relaxed">{{ pack.description || 'Bundle items' }}</p>
+                    <p class="text-sm text-gray-500 mb-3 line-clamp-2 leading-relaxed">{{ pack.description || 'Bundle items' }}</p>
                   </div>
                   <div class="text-sm font-bold text-gray-900 mt-auto flex items-center justify-between">
                     <span>₦{{ (pack.bundlePrice || pack.price || 0).toLocaleString() }}</span>
@@ -558,7 +558,7 @@
               <div class="flex items-center gap-3 mb-5">
                 <h2 class="text-lg font-medium text-gray-900 tracking-tight">{{ toTitleCase(cat) }}</h2>
                 <div class="h-px bg-gray-100 flex-1"></div>
-                <span class="text-xs font-bold text-gray-400">{{ groupedProducts[cat]?.length || 0 }} items</span>
+                <span class="text-sm font-bold text-gray-400">{{ groupedProducts[cat]?.length || 0 }} items</span>
               </div>
 
               <!-- MOBILE: Horizontal List Cards -->
@@ -655,7 +655,7 @@
                   >
                     <template #overlay="{ item }">
                       <!-- Item Count overlay -->
-                      <div v-if="getProductCount(product._id) > 0" class="absolute top-3 right-3 flex items-center gap-1.5 bg-parentPrimary text-white px-2.5 py-1 rounded-lg text-xs font-medium shadow-sm border border-gray-50 z-20">
+                      <div v-if="getProductCount(product._id) > 0" class="absolute top-3 right-3 flex items-center gap-1.5 bg-parentPrimary text-white px-2.5 py-1 rounded-lg text-sm font-medium shadow-sm border border-gray-50 z-20">
                         <ShoppingBag class="w-3 h-3" />
                         {{ getProductCount(product._id) }}
                       </div>
@@ -672,7 +672,7 @@
                     
                     <div class="flex items-end justify-between mt-4 pt-3 border-t border-gray-50">
                       <div>
-                        <span v-if="product.discountPrice" class="text-xs text-gray-300 line-through block mb-0.5">₦{{ (product.pricePerPortion || product.price || 0).toLocaleString() }}</span>
+                        <span v-if="product.discountPrice" class="text-sm text-gray-300 line-through block mb-0.5">₦{{ (product.pricePerPortion || product.price || 0).toLocaleString() }}</span>
                         <div class="flex items-baseline gap-1">
                           <span class="text-base font-medium text-gray-900">₦{{ (product.discountPrice || product.pricePerPortion || product.price || 0).toLocaleString() }}</span>
                           <span v-if="product.portionUnit" class="text-[10px] text-gray-500">per {{ product.portionUnit }}</span>
@@ -693,7 +693,7 @@
                         <button @click.stop="removeFromCart(product)" class="w-7 h-7 flex items-center justify-center rounded-lg bg-white shadow-sm hover:bg-gray-50 active:scale-95 transition-all text-gray-700">
                           <Minus class="w-3.5 h-3.5" />
                         </button>
-                        <span class="text-xs font-bold w-4 text-center text-gray-900">{{ getProductCount(product._id) }}</span>
+                        <span class="text-sm font-bold w-4 text-center text-gray-900">{{ getProductCount(product._id) }}</span>
                         <button @click.stop="quickAddToCart(product)" class="w-7 h-7 flex items-center justify-center rounded-lg bg-parentPrimary shadow-sm hover:brightness-110 active:scale-95 transition-all text-white">
                           <Plus class="w-3.5 h-3.5" />
                         </button>
@@ -751,11 +751,11 @@
                     <div class="flex items-end justify-between mt-4 pt-3 border-t border-gray-50">
                       <div>
                         <span class="text-base font-medium text-gray-900">₦{{ service.price.toLocaleString() }}</span>
-                        <span class="text-xs text-gray-500 block">{{ service.durationInMinutes }} mins</span>
+                        <span class="text-sm text-gray-500 block">{{ service.durationInMinutes }} mins</span>
                       </div>
                       <button 
                         @click.stop="openBookingModal(service)"
-                        class="px-4 py-2 bg-gray-900 text-white rounded-xl text-xs font-bold hover:bg-parentPrimary transition-all shadow-sm border border-gray-50"
+                        class="px-4 py-2 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-parentPrimary transition-all shadow-sm border border-gray-50"
                       >
                         Book
                       </button>
@@ -775,18 +775,18 @@
               <!-- Group Participants -->
               <div v-if="groupOrder && groupOrder.participants" class="bg-white rounded-2xl border border-gray-50 shadow-sm overflow-hidden">
                 <div class="flex items-center justify-between px-5 py-4 bg-gray-50/50 border-b border-gray-100">
-                  <h3 class="text-xs font-medium text-gray-400 tracking-widest">Participants ({{ groupOrder.participants?.length || 0 }})</h3>
+                  <h3 class="text-sm font-medium text-gray-400 ">Participants ({{ groupOrder.participants?.length || 0 }})</h3>
                   <button v-if="isHost" @click="copyInviteLink" class="text-[10px] font-medium text-parentPrimary hover:underline">Copy Link</button>
                 </div>
                 <div class="p-3 space-y-2">
                   <div v-for="p in groupOrder.participants" :key="p.user?._id || p.user" class="p-3 bg-gray-50 rounded-xl flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-medium text-xs text-gray-500 overflow-hidden shrink-0">
+                    <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-medium text-sm text-gray-500 overflow-hidden shrink-0">
                       <img v-if="p.user?.avatar" :src="p.user.avatar" class="w-full h-full object-cover" />
                       <span v-else>{{ p.user?.firstName?.[0] || 'G' }}</span>
                     </div>
                     <div class="flex-1 min-w-0">
                       <div class="flex items-center gap-2">
-                        <p class="text-xs font-medium text-gray-900 truncate">{{ p.user?.firstName || 'Guest' }} {{ p.user?.lastName || '' }}</p>
+                        <p class="text-sm font-medium text-gray-900 truncate">{{ p.user?.firstName || 'Guest' }} {{ p.user?.lastName || '' }}</p>
                         <span v-if="p.user?._id === groupOrder.host?._id || p.user === groupOrder.host" class="px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded text-[8px] font-medium">Host</span>
                       </div>
                       <p class="text-[10px] font-bold text-gray-400">{{ p.items?.length || 0 }} items · ₦{{ (p.total || 0).toLocaleString() }}</p>
@@ -800,7 +800,7 @@
                   <div class="pt-2 flex flex-col gap-2">
                     <button 
                       @click="toggleReady(!getMyStatus?.isReady)"
-                      class="w-full py-2.5 rounded-xl text-xs font-medium transition-all border"
+                      class="w-full py-2.5 rounded-xl text-sm font-medium transition-all border"
                       :class="getMyStatus?.isReady ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-white text-gray-400 border-gray-100 hover:text-gray-900'"
                     >
                       {{ getMyStatus?.isReady ? 'You are Ready' : 'Mark as Ready' }}
@@ -809,7 +809,7 @@
                       v-if="isHost && groupOrder.status === 'open'"
                       @click="handleCheckoutGroupOrder"
                       :disabled="!canCheckout"
-                      class="w-full py-3 bg-gray-900 text-white rounded-xl text-xs font-medium hover:bg-parentPrimary transition-all shadow-sm border border-gray-50 disabled:opacity-50"
+                      class="w-full py-3 bg-gray-900 text-white rounded-xl text-sm font-medium hover:bg-parentPrimary transition-all shadow-sm border border-gray-50 disabled:opacity-50"
                     >
                       Checkout Everything
                     </button>
@@ -823,7 +823,7 @@
               <!-- Cart Summary Card -->
               <div class="bg-white rounded-2xl border border-gray-50 shadow-sm overflow-hidden">
                 <div class="flex items-center justify-between px-5 py-4 bg-gray-50/50 border-b border-gray-100">
-                  <h3 class="text-xs font-medium text-gray-900 tracking-tight">Your {{ packsTerm }}</h3>
+                  <h3 class="text-sm font-medium text-gray-900 tracking-tight">Your {{ packsTerm }}</h3>
                   <ShoppingCart class="w-4 h-4 text-parentPrimary" />
                 </div>
 
@@ -873,27 +873,27 @@
                           <img v-else :src="item.image || (isFoodVendor ? '/placeholder-food.jpg' : '/placeholder-store.jpg')" class="w-full h-full object-cover" />
                         </div>
                         <div class="flex-1 min-w-0">
-                          <p class="text-xs font-medium text-gray-900 truncate">{{ toTitleCase(item.name) }}</p>
+                          <p class="text-sm font-medium text-gray-900 truncate">{{ toTitleCase(item.name) }}</p>
                           <div v-if="item.customizations && item.customizations.length > 0" class="mt-0.5 space-y-0.5 mb-1">
                             <p v-for="(c, cIdx) in item.customizations" :key="cIdx" class="text-[10px] font-medium text-gray-400 leading-tight line-clamp-1">
                               + {{ c.name }} <span v-if="c.price > 0">(₦{{ c.price.toLocaleString() }})</span>
                             </p>
                           </div>
                           <div class="text-right">
-                            <p class="text-xs font-medium text-parentPrimary">₦{{ ((item.subtotal || item.price || 0) / (item.quantity || 1)).toLocaleString() }}</p>
+                            <p class="text-sm font-medium text-parentPrimary">₦{{ ((item.subtotal || item.price || 0) / (item.quantity || 1)).toLocaleString() }}</p>
                           </div>
                         </div>
                         <div class="flex items-center gap-1 bg-gray-50 rounded-lg p-1 border border-gray-50 shrink-0">
-                          <button @click="cart.updateItemQuantity(vendor._id, pack.id, iIndex, item.quantity - 1)" class="w-6 h-6 rounded-md bg-white text-gray-500 flex items-center justify-center hover:text-rose-500 transition-all text-xs font-bold shadow-sm">−</button>
-                          <span class="text-xs font-medium min-w-[16px] text-center">{{ item.quantity }}</span>
-                          <button @click="cart.updateItemQuantity(vendor._id, pack.id, iIndex, item.quantity + 1)" class="w-6 h-6 rounded-md bg-white text-gray-500 flex items-center justify-center hover:text-parentPrimary transition-all text-xs font-bold shadow-sm">+</button>
+                          <button @click="cart.updateItemQuantity(vendor._id, pack.id, iIndex, item.quantity - 1)" class="w-6 h-6 rounded-md bg-white text-gray-500 flex items-center justify-center hover:text-rose-500 transition-all text-sm font-bold shadow-sm">−</button>
+                          <span class="text-sm font-medium min-w-[16px] text-center">{{ item.quantity }}</span>
+                          <button @click="cart.updateItemQuantity(vendor._id, pack.id, iIndex, item.quantity + 1)" class="w-6 h-6 rounded-md bg-white text-gray-500 flex items-center justify-center hover:text-parentPrimary transition-all text-sm font-bold shadow-sm">+</button>
                         </div>
                       </div>
                     </div>
                   </div>
 
                   <!-- Add Pack -->
-                  <button v-if="isFoodVendor" @click="addNewPack(vendor._id)" class="w-full py-3 border border-dashed border-gray-200 rounded-xl text-xs font-medium text-gray-400 hover:border-parentPrimary hover:text-parentPrimary transition-all flex items-center justify-center gap-2">
+                  <button v-if="isFoodVendor" @click="addNewPack(vendor._id)" class="w-full py-3 border border-dashed border-gray-200 rounded-xl text-sm font-medium text-gray-400 hover:border-parentPrimary hover:text-parentPrimary transition-all flex items-center justify-center gap-2">
                     <Plus class="w-3.5 h-3.5" /> New {{ packTerm }}
                   </button>
                   
@@ -903,7 +903,7 @@
                       <div class="flex items-center gap-3 text-left">
                         <FileText class="w-5 h-5 text-gray-600 stroke-[2]" />
                         <div class="min-w-0">
-                          <p class="text-xs font-bold text-gray-900 mb-0.5">Leave a note</p>
+                          <p class="text-sm font-bold text-gray-900 mb-0.5">Leave a note</p>
                           <p class="text-[10px] font-medium text-gray-400 truncate w-32">{{ cart.vendorNotes.value[vendor._id] || 'Any requests...' }}</p>
                         </div>
                       </div>
@@ -914,7 +914,7 @@
                   <!-- Checkout -->
                   <div class="pt-4 border-t border-gray-100 space-y-4 mt-4">
                     <div class="flex justify-between items-center">
-                      <span class="text-xs font-medium text-gray-400 tracking-wider">Subtotal</span>
+                      <span class="text-sm font-medium text-gray-400 tracking-wider">Subtotal</span>
                       <span class="text-xl font-medium text-gray-900 tracking-tighter">₦{{ (cart.getVendorStats(vendor._id).subtotal + cart.getVendorStats(vendor._id).packagingFee).toLocaleString() }}</span>
                     </div>
                     <NuxtLink 
@@ -922,7 +922,7 @@
                       :to="canProceedToCheckout ? (isGroupOrderActiveForThisVendor ? `/cart?group=${activeCode}` : '/cart') : ''" 
                       @click="!canProceedToCheckout ? $event.preventDefault() : null"
                       :class="!canProceedToCheckout ? 'opacity-50 cursor-not-allowed' : 'hover:bg-parentPrimary/90 active:scale-[0.98] shadow-sm border border-gray-50 shadow-parentPrimary/20'"
-                      class="block w-full py-4 bg-parentPrimary text-white rounded-2xl text-center text-xs font-medium tracking-wider transition-all"
+                      class="block w-full py-4 bg-parentPrimary text-white rounded-2xl text-center text-sm font-medium tracking-wider transition-all"
                     >
                       {{ isGroupOrderActiveForThisVendor ? 'Finalize Order' : 'Proceed to Checkout' }}
                     </NuxtLink>
@@ -933,7 +933,7 @@
                 <div v-else class="p-5 text-center">
                   <div class="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">🛒</div>
                   <p class="text-sm font-medium text-gray-900 mb-1">Your cart is empty</p>
-                  <p class="text-xs font-medium text-gray-400">Tap + on any item to start your order</p>
+                  <p class="text-sm font-medium text-gray-400">Tap + on any item to start your order</p>
                 </div>
               </div>
             </div>
@@ -972,7 +972,7 @@
                 <ArrowLeft class="w-5 h-5"/>
               </button>
               <div class="text-center">
-                <p class="text-[10px] font-bold text-gray-900 tracking-widest uppercase mb-0.5">Your Cart From</p>
+                <p class="text-[10px] font-bold text-gray-900  uppercase mb-0.5">Your Cart From</p>
                 <h2 class="text-[17px] font-bold text-gray-900 leading-none">{{ vendor.storeName }}</h2>
               </div>
               <button @click="showMobileCartDrawer = false" class="w-10 h-10 bg-gray-50 hover:bg-gray-100 transition-colors rounded-full flex items-center justify-center text-gray-400 shrink-0 active:scale-95">
@@ -984,14 +984,14 @@
           <div class="flex-1 flex flex-col bg-white">
             <!-- Group Participants (if in group) -->
             <div v-if="groupOrder" class="p-5 space-y-3 border-b border-gray-50">
-              <h3 class="text-xs font-medium text-gray-400 tracking-widest">Participants ({{ groupOrder.participants?.length || 0 }})</h3>
+              <h3 class="text-sm font-medium text-gray-400 ">Participants ({{ groupOrder.participants?.length || 0 }})</h3>
               <div v-for="p in groupOrder.participants" :key="p.user?._id || p.user" class="p-3 bg-gray-50 rounded-xl flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-medium text-xs text-gray-500 overflow-hidden shrink-0">
+                <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-medium text-sm text-gray-500 overflow-hidden shrink-0">
                   <img v-if="p.user?.avatar" :src="p.user?.avatar" class="w-full h-full object-cover" />
                   <span v-else>{{ p.user?.firstName?.[0] || 'G' }}</span>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <p class="text-xs font-medium text-gray-900 truncate">{{ p.user?.firstName || 'Guest' }} {{ p.user?.lastName || '' }}</p>
+                  <p class="text-sm font-medium text-gray-900 truncate">{{ p.user?.firstName || 'Guest' }} {{ p.user?.lastName || '' }}</p>
                   <p class="text-[10px] font-bold text-gray-400">{{ p.items?.length || 0 }} items · ₦{{ (p.total || 0).toLocaleString() }}</p>
                 </div>
                 <div :class="p.isReady ? 'bg-emerald-500' : 'bg-gray-200'" class="w-2 h-2 rounded-full"></div>
@@ -999,12 +999,12 @@
               <div class="flex flex-col gap-2 pt-1">
                 <button 
                   @click="toggleReady(!getMyStatus?.isReady)"
-                  class="w-full py-2.5 rounded-xl text-xs font-medium transition-all border"
+                  class="w-full py-2.5 rounded-xl text-sm font-medium transition-all border"
                   :class="getMyStatus?.isReady ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-white text-gray-400 border-gray-100'"
                 >
                   {{ getMyStatus?.isReady ? 'You are Ready' : 'Mark as Ready' }}
                 </button>
-                <button v-if="isHost && groupOrder.status === 'open'" @click="handleCheckoutGroupOrder" :disabled="!canCheckout" class="w-full py-3 bg-gray-900 text-white rounded-xl text-xs font-medium hover:bg-parentPrimary transition-all shadow-sm border border-gray-50 disabled:opacity-50">
+                <button v-if="isHost && groupOrder.status === 'open'" @click="handleCheckoutGroupOrder" :disabled="!canCheckout" class="w-full py-3 bg-gray-900 text-white rounded-xl text-sm font-medium hover:bg-parentPrimary transition-all shadow-sm border border-gray-50 disabled:opacity-50">
                   Checkout Everything
                 </button>
                 <button @click="showLeaveConfirmationModal = true; showMobileCartDrawer = false" class="w-full py-2 text-[10px] font-medium text-rose-400">Leave Group</button>
@@ -1033,7 +1033,7 @@
                     <label class="block text-[10px] font-bold text-amber-700 tracking-wider mb-2 uppercase">Pack Size</label>
                     <div
                       @click="openPackDropdowns[pack.id + 'mobile'] = !openPackDropdowns[pack.id + 'mobile']"
-                      class="w-full bg-white text-xs p-2.5 rounded-xl border border-amber-200 cursor-pointer flex items-center justify-between hover:border-parentPrimary/50 transition-colors shadow-sm"
+                      class="w-full bg-white text-sm p-2.5 rounded-xl border border-amber-200 cursor-pointer flex items-center justify-between hover:border-parentPrimary/50 transition-colors shadow-sm"
                     >
                       <span class="font-medium text-gray-700">
                         {{ pack.packType?.name || pack.name }} · ₦{{ pack.packType?.price?.toLocaleString() || vendor.packs.find((p: any) => p.name === (pack.packType?.name || pack.name))?.price?.toLocaleString() }}
@@ -1045,7 +1045,7 @@
                         v-for="(vp, vpIdx) in vendor.packs.filter((p: any) => p.isActive !== false)"
                         :key="vpIdx"
                         @click="cart.setPackType(vendor._id, pack.id, { name: vp.name, price: vp.price }); openPackDropdowns[pack.id + 'mobile'] = false"
-                        class="px-4 py-3 text-xs font-medium text-gray-700 hover:bg-gray-50 cursor-pointer flex justify-between items-center border-b border-gray-50 last:border-0"
+                        class="px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer flex justify-between items-center border-b border-gray-50 last:border-0"
                         :class="{ 'bg-parentPrimary/5 text-parentPrimary': (pack.packType?.name || pack.name) === vp.name }"
                       >
                         <span>{{ vp.name }}</span>
@@ -1094,10 +1094,10 @@
                   
                   <!-- Pack Actions -->
                   <div v-if="isFoodVendor" class="px-5 pb-5 pt-3 bg-gray-50/30 flex items-center gap-3">
-                    <button @click="cart.setActivePack(vendor._id, pack.id); showMobileCartDrawer = false" class="flex-1 py-2 bg-parentPrimary/10 text-parentPrimary rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-parentPrimary/20 transition-colors">
+                    <button @click="cart.setActivePack(vendor._id, pack.id); showMobileCartDrawer = false" class="flex-1 py-2 bg-parentPrimary/10 text-parentPrimary rounded-xl text-sm font-bold flex items-center justify-center gap-1.5 hover:bg-parentPrimary/20 transition-colors">
                       <Plus class="w-3.5 h-3.5" /> Add Item
                     </button>
-                    <button @click="cart.duplicatePack(vendor._id, pack.id)" class="flex-1 py-2.5 bg-white border border-gray-25 text-gray-700 rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors shadow-sm">
+                    <button @click="cart.duplicatePack(vendor._id, pack.id)" class="flex-1 py-2.5 bg-white border border-gray-25 text-gray-700 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors shadow-sm">
                       <Copy class="w-4 h-4" /> Duplicate
                     </button>
                   </div>
@@ -1105,10 +1105,10 @@
 
                 <!-- Global Cart Actions -->
                 <div class="flex items-center gap-3 pt-2 mb-4 relative z-30">
-                  <button @click="showMobileCartDrawer = false" class="flex-1 py-3.5 bg-gray-100 text-gray-900 rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors active:scale-[0.98]">
+                  <button @click="showMobileCartDrawer = false" class="flex-1 py-3.5 bg-gray-100 text-gray-900 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors active:scale-[0.98]">
                     <Plus class="w-4 h-4" /> Add More
                   </button>
-                  <button @click="cart.clearCart(vendor._id)" class="flex-1 py-3.5 bg-red-50 text-red-500 rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:bg-red-100 transition-colors active:scale-[0.98]">
+                  <button @click="cart.clearCart(vendor._id)" class="flex-1 py-3.5 bg-red-50 text-red-500 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-red-100 transition-colors active:scale-[0.98]">
                     <Trash2 class="w-4 h-4" /> Clear Cart
                   </button>
                 </div>
@@ -1230,35 +1230,35 @@
               </button>
               <div class="absolute bottom-4 left-6 right-6">
                 <h2 class="text-xl font-medium text-white tracking-tight">{{ toTitleCase(vendor.storeName) }}</h2>
-                <p class="text-xs font-bold text-white/70 mt-1">{{ vendor.category || 'Restaurant' }}</p>
+                <p class="text-sm font-bold text-white/70 mt-1">{{ vendor.category || 'Restaurant' }}</p>
               </div>
             </div>
             <!-- Info -->
             <div class="p-4 md:p-5 space-y-6 max-h-[50vh] overflow-y-auto">
               <div>
-                <h3 class="text-[10px] font-medium text-gray-400 tracking-widest mb-2">About</h3>
+                <h3 class="text-[10px] font-medium text-gray-400  mb-2">About</h3>
                 <p class="text-sm text-gray-600 leading-relaxed font-medium">{{ vendor.description || 'No description available.' }}</p>
               </div>
               <div class="grid grid-cols-2 gap-6">
                 <div>
-                  <div class="flex items-center gap-2 text-[10px] font-medium text-gray-400 tracking-widest mb-2">
+                  <div class="flex items-center gap-2 text-[10px] font-medium text-gray-400  mb-2">
                     <Clock class="w-3 h-3" /> Hours
                   </div>
                   <div class="space-y-0.5">
-                    <p v-for="(hours, day) in vendor.availability" :key="day" class="text-xs font-bold text-gray-900">
+                    <p v-for="(hours, day) in vendor.availability" :key="day" class="text-sm font-bold text-gray-900">
                       <span class="text-gray-400 w-14 inline-block">{{ day }}:</span> {{ hours }}
                     </p>
-                    <p v-if="!vendor.availability" class="text-xs font-bold text-gray-900">Open 24/7</p>
+                    <p v-if="!vendor.availability" class="text-sm font-bold text-gray-900">Open 24/7</p>
                   </div>
                 </div>
                 <div>
-                  <div class="flex items-center gap-2 text-[10px] font-medium text-gray-400 tracking-widest mb-2">
+                  <div class="flex items-center gap-2 text-[10px] font-medium text-gray-400  mb-2">
                     <MapPin class="w-3 h-3" /> Location
                   </div>
-                  <p class="text-xs font-bold text-gray-900 leading-relaxed">{{ vendor.address || 'University Main Campus' }}</p>
+                  <p class="text-sm font-bold text-gray-900 leading-relaxed">{{ vendor.address || 'University Main Campus' }}</p>
                 </div>
               </div>
-              <button @click="showStoreInfo = false" class="w-full py-3.5 bg-gray-900 text-white rounded-2xl font-medium text-xs hover:bg-parentPrimary transition-all shadow-sm border border-gray-50 active:scale-[0.98]">
+              <button @click="showStoreInfo = false" class="w-full py-3.5 bg-gray-900 text-white rounded-2xl font-medium text-sm hover:bg-parentPrimary transition-all shadow-sm border border-gray-50 active:scale-[0.98]">
                 Got it
               </button>
             </div>
@@ -1313,9 +1313,9 @@
         <div class="p-4 bg-gray-50 border border-gray-50 rounded-xl flex items-center justify-between gap-3">
           <div class="flex flex-col items-start truncate">
             <span class="text-[10px] font-bold text-gray-400 tracking-wider">Invite Code</span>
-            <span class="text-sm font-bold text-gray-900 tracking-widest">{{ activeCode }}</span>
+            <span class="text-sm font-bold text-gray-900 ">{{ activeCode }}</span>
           </div>
-          <button @click="copyInviteLink" class="px-4 py-2 bg-white border border-gray-25 shadow-sm rounded-lg text-xs font-bold text-gray-700 hover:text-parentPrimary hover:border-parentPrimary transition-colors flex items-center gap-2 shrink-0">
+          <button @click="copyInviteLink" class="px-4 py-2 bg-white border border-gray-25 shadow-sm rounded-lg text-sm font-bold text-gray-700 hover:text-parentPrimary hover:border-parentPrimary transition-colors flex items-center gap-2 shrink-0">
             <Copy class="w-3.5 h-3.5" /> Copy Link
           </button>
         </div>
@@ -1448,10 +1448,10 @@
               <!-- Chowdeck style header -->
               <div class="flex flex-col space-y-1 pb-4 border-b border-gray-100">
                 <h2 class="text-xl font-bold text-gray-900">{{ selectedProduct.name }}</h2>
-                <span class="text-xs text-gray-400 font-medium">{{ selectedProduct.category?.name || selectedProduct.category }}</span>
+                <span class="text-sm text-gray-400 font-medium">{{ selectedProduct.category?.name || selectedProduct.category }}</span>
                 <div class="mt-2">
                   <span class="text-sm font-bold text-gray-900">₦{{ (selectedProduct.discountPrice || selectedProduct.pricePerPortion || selectedProduct.bundlePrice || selectedProduct.price || 0).toLocaleString() }}</span>
-                  <span v-if="selectedProduct.portionUnit || isFoodVendor" class="text-xs text-gray-900 font-bold ml-1">{{ selectedProduct.portionUnit ? `per ${selectedProduct.portionUnit}` : (selectedProduct.bundlePrice ? 'per pack' : 'per portion') }}</span>
+                  <span v-if="selectedProduct.portionUnit || isFoodVendor" class="text-sm text-gray-900 font-bold ml-1">{{ selectedProduct.portionUnit ? `per ${selectedProduct.portionUnit}` : (selectedProduct.bundlePrice ? 'per pack' : 'per portion') }}</span>
                 </div>
               </div>
 
@@ -1479,7 +1479,7 @@
                     >
                       <div class="flex flex-col">
                         <span class="text-sm font-medium text-gray-700" :class="selectedCustomizations[mod._id]?.[item.name] ? 'text-gray-900 font-bold' : ''">{{ item.name }}</span>
-                        <span v-if="formatModifierPrice(item, mod, selectedProduct)" class="text-xs mt-0.5" :class="selectedCustomizations[mod._id]?.[item.name] ? 'text-parentPrimary font-bold' : 'text-gray-500'">{{ formatModifierPrice(item, mod, selectedProduct) }}</span>
+                        <span v-if="formatModifierPrice(item, mod, selectedProduct)" class="text-sm mt-0.5" :class="selectedCustomizations[mod._id]?.[item.name] ? 'text-parentPrimary font-bold' : 'text-gray-500'">{{ formatModifierPrice(item, mod, selectedProduct) }}</span>
                       </div>
                       
                       <div class="w-5 h-5 rounded-full border flex items-center justify-center transition-colors shrink-0" :class="selectedCustomizations[mod._id]?.[item.name] ? 'border-parentPrimary' : 'border-gray-200'">
@@ -1508,7 +1508,7 @@
                     >
                       <div class="flex flex-col">
                         <span class="text-sm font-medium text-gray-700" :class="selectedCustomizations[addon._id]?.[item.name] ? 'text-gray-900 font-bold' : ''">{{ item.name }}</span>
-                        <span v-if="formatModifierPrice(item, addon, selectedProduct)" class="text-xs mt-0.5" :class="selectedCustomizations[addon._id]?.[item.name] ? 'text-parentPrimary font-bold' : 'text-gray-500'">{{ formatModifierPrice(item, addon, selectedProduct) }}</span>
+                        <span v-if="formatModifierPrice(item, addon, selectedProduct)" class="text-sm mt-0.5" :class="selectedCustomizations[addon._id]?.[item.name] ? 'text-parentPrimary font-bold' : 'text-gray-500'">{{ formatModifierPrice(item, addon, selectedProduct) }}</span>
                       </div>
                       
                       <!-- Single Select Radio -->
@@ -1544,7 +1544,7 @@
                   class="w-full px-3 py-2 border border-gray-25 rounded-xl bg-gray-50 text-base focus:outline-none focus:ring-1 focus:ring-parentPrimary focus:bg-white transition-all resize-none placeholder-gray-400"
                   :placeholder="isFoodVendor ? 'E.g. No onions, extra spicy...' : 'E.g. Specific color, custom message...'"
                 ></textarea>
-                <p class="text-xs text-gray-600 mt-1">Special requests are subject to the vendor's approval and may incur extra charges.</p>
+                <p class="text-sm text-gray-600 mt-1">Special requests are subject to the vendor's approval and may incur extra charges.</p>
               </div>
 
               <!-- Quantity & Add -->
@@ -1555,13 +1555,13 @@
                     <span v-if="selectedProduct.discountPrice && dynamicPrice === selectedProduct.discountPrice" class="text-sm text-gray-300 line-through">₦{{ selectedProduct.price.toLocaleString() }}</span>
                     <div class="flex items-baseline gap-1">
                       <span class="text-2xl font-medium text-gray-900 tracking-tighter">₦{{ dynamicPrice.toLocaleString() }}</span>
-                      <span v-if="selectedProduct.portionUnit || isFoodVendor" class="text-xs text-gray-500 font-medium">{{ selectedProduct.portionUnit ? `per ${selectedProduct.portionUnit}` : 'per portion' }}</span>
+                      <span v-if="selectedProduct.portionUnit || isFoodVendor" class="text-sm text-gray-500 font-medium">{{ selectedProduct.portionUnit ? `per ${selectedProduct.portionUnit}` : 'per portion' }}</span>
                     </div>
                   </div>
                 </div>
                 
                 <div v-if="isProductOutOfStock(selectedProduct)" class="flex items-center gap-3">
-                  <span class="text-xs font-bold text-red-500 uppercase tracking-wider">Out of stock</span>
+                  <span class="text-sm font-bold text-red-500 uppercase tracking-wider">Out of stock</span>
                   <button 
                     @click="notifyRestock(selectedProduct._id)"
                     class="h-12 px-5 bg-gray-100 hover:bg-amber-100 text-gray-700 hover:text-amber-700 rounded-xl font-bold transition-all flex items-center gap-2"
@@ -1609,7 +1609,7 @@
               
               <div class="space-y-4 flex-1 flex flex-col">
                 <div class="flex-1 flex flex-col">
-                  <p class="text-xs font-bold text-gray-900 mb-3">Instructions For Vendor</p>
+                  <p class="text-sm font-bold text-gray-900 mb-3">Instructions For Vendor</p>
                   <textarea 
                     v-model="tempVendorNote"
                     placeholder="Example: Please I want extra pepper"
@@ -1643,7 +1643,7 @@
   <div v-else class="min-h-screen bg-white flex items-center justify-center">
     <div class="flex flex-col items-center gap-4">
       <div class="w-10 h-10 border border-gray-25 border-t-parentPrimary rounded-full animate-spin"></div>
-      <p class="text-xs font-bold text-gray-400">Loading store...</p>
+      <p class="text-sm font-bold text-gray-400">Loading store...</p>
     </div>
   </div>
 </template>

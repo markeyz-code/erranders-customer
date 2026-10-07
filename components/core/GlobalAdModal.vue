@@ -31,7 +31,7 @@
             </div>
             
             <div class="mt-4">
-              <span class="text-[#FF5C1A] text-[10px] font-black tracking-widest uppercase mb-1 block">
+              <span class="text-[#FF5C1A] text-[10px] font-black  uppercase mb-1 block">
                 🔥 Hot on Campus
               </span>
               <h3 class="text-2xl font-black text-gray-900 leading-tight mb-2 truncate">
@@ -61,7 +61,7 @@
             </div>
           </div>
           <div class="p-4 bg-white text-center">
-            <span class="px-3 py-1 bg-orange-100 text-[#FF5C1A] rounded-full text-xs font-bold mb-3 inline-block uppercase tracking-wider">
+            <span class="px-3 py-1 bg-orange-100 text-[#FF5C1A] rounded-full text-sm font-bold mb-3 inline-block uppercase tracking-wider">
               Special Feature
             </span>
             <h3 class="text-2xl font-bold text-gray-900 mb-2">Need Something Else?</h3>
@@ -79,7 +79,7 @@
             <div class="absolute bottom-0 left-0 -mb-4 -ml-4 w-32 h-32 bg-black/10 rounded-full blur-xl"></div>
             
             <div class="relative z-10 flex flex-col items-center">
-              <span class="px-3 py-1 bg-black/20 text-white backdrop-blur-md rounded-full text-xs font-bold mb-5 inline-block uppercase tracking-wider">
+              <span class="px-3 py-1 bg-black/20 text-white backdrop-blur-md rounded-full text-sm font-bold mb-5 inline-block uppercase tracking-wider">
                 Meet Your Errander
               </span>
               <div class="relative w-24 h-24 mb-4">
@@ -88,7 +88,7 @@
                   alt="Dispatcher"
                   class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-sm border border-gray-50"
                 />
-                <div class="absolute -bottom-2 -right-2 bg-white text-amber-500 text-xs font-bold px-2 py-1 rounded-lg shadow-sm border border-gray-50 flex items-center gap-1">
+                <div class="absolute -bottom-2 -right-2 bg-white text-amber-500 text-sm font-bold px-2 py-1 rounded-lg shadow-sm border border-gray-50 flex items-center gap-1">
                   <Star class="w-3 h-3 fill-current" />
                   {{ currentAd.data.rating || '5.0' }}
                 </div>

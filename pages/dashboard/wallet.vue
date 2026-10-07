@@ -20,7 +20,7 @@
         
         <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <p class="text-sm font-medium text-white/40 tracking-widest mb-2">Available Balance</p>
+            <p class="text-sm font-medium text-white/40  mb-2">Available Balance</p>
             <div class="flex items-baseline gap-2">
               <span class="text-4xl md:text-5xl font-medium tracking-tighter">₦{{ (balance || 0).toLocaleString() }}</span>
               <button @click="handleFetchWallet" class="p-1.5 hover:bg-white/10 rounded-lg transition-colors">
@@ -30,7 +30,7 @@
           </div>
           <button 
             @click="showTopup = true"
-            class="px-4 py-3.5 bg-parentPrimary text-white rounded-xl text-xs font-medium tracking-wider hover:bg-parentPrimary/90 active:scale-95 transition-all shadow-sm border border-gray-50 shadow-parentPrimary/30 flex items-center gap-2 self-start md:self-center"
+            class="px-4 py-3.5 bg-parentPrimary text-white rounded-xl text-sm font-medium tracking-wider hover:bg-parentPrimary/90 active:scale-95 transition-all shadow-sm border border-gray-50 shadow-parentPrimary/30 flex items-center gap-2 self-start md:self-center"
           >
             <Plus class="w-4 h-4" />
             Add Money
@@ -54,7 +54,7 @@
           </div>
         </div>
         <div class="bg-white/60 p-3 rounded-xl border border-emerald-100/50">
-          <p class="text-xs font-medium text-emerald-800 leading-relaxed max-w-xs">Transfer to this dedicated account number to automatically fund your wallet instantly. No card required.</p>
+          <p class="text-sm font-medium text-emerald-800 leading-relaxed max-w-xs">Transfer to this dedicated account number to automatically fund your wallet instantly. No card required.</p>
         </div>
       </div>
 
@@ -64,7 +64,7 @@
           <Loader2 class="w-7 h-7 text-emerald-500 animate-spin" />
         </div>
         <h3 class="text-base font-medium text-gray-900 tracking-tight">Verifying Transaction...</h3>
-        <p class="text-xs text-gray-400 mt-1.5 font-medium">Please wait while we confirm your top-up.</p>
+        <p class="text-sm text-gray-400 mt-1.5 font-medium">Please wait while we confirm your top-up.</p>
       </div>
 
       <!-- Recent Transactions -->
@@ -93,7 +93,7 @@
               <ArrowDownLeft v-else class="w-4 h-4" />
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-xs font-medium text-gray-900 truncate leading-tight">{{ tx.description }}</p>
+              <p class="text-sm font-medium text-gray-900 truncate leading-tight">{{ tx.description }}</p>
               <p class="text-sm text-gray-400 font-medium mt-0.5">
                 {{ new Date(tx.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) }}
               </p>
@@ -114,7 +114,7 @@
           <div class="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto mb-3">
             <WalletIcon class="w-7 h-7 text-gray-300" />
           </div>
-          <p class="text-xs font-medium text-gray-900 mb-0.5">No transactions yet</p>
+          <p class="text-sm font-medium text-gray-900 mb-0.5">No transactions yet</p>
           <p class="text-sm font-medium text-gray-400">Your activity will show up here</p>
         </div>
       </div>
@@ -188,7 +188,7 @@
                   :key="a"
                   @click="amount = a"
                   :class="amount === a ? 'bg-parentPrimary text-white border-parentPrimary shadow-sm border border-gray-50 shadow-parentPrimary/20' : 'bg-white text-gray-600 border-gray-100 hover:border-parentPrimary/30'"
-                  class="flex-1 py-2.5 rounded-xl text-xs font-medium transition-all border active:scale-95"
+                  class="flex-1 py-2.5 rounded-xl text-sm font-medium transition-all border active:scale-95"
                 >
                   ₦{{ a >= 1000 ? (a / 1000) + 'k' : a }}
                 </button>
@@ -197,18 +197,18 @@
               <!-- Current Balance Indicator -->
               <div class="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3">
                 <span class="text-sm font-bold text-gray-400">Current balance</span>
-                <span class="text-xs font-medium text-gray-900">₦{{ (balance || 0).toLocaleString() }}</span>
+                <span class="text-sm font-medium text-gray-900">₦{{ (balance || 0).toLocaleString() }}</span>
               </div>
               <div v-if="amount > 0" class="flex items-center justify-between bg-emerald-50 rounded-xl px-4 py-3 border border-emerald-100">
                 <span class="text-sm font-bold text-emerald-600">New balance after funding</span>
-                <span class="text-xs font-medium text-emerald-600">₦{{ ((balance || 0) + Number(amount)).toLocaleString() }}</span>
+                <span class="text-sm font-medium text-emerald-600">₦{{ ((balance || 0) + Number(amount)).toLocaleString() }}</span>
               </div>
 
               <!-- Continue Button -->
               <button 
                 @click="initiateTopup"
                 :disabled="loadingPayment || amount < 50"
-                class="w-full py-4 bg-parentPrimary text-white rounded-xl text-xs font-medium tracking-wider hover:bg-parentPrimary/90 disabled:opacity-40 transition-all shadow-sm border border-gray-50 shadow-parentPrimary/20 flex items-center justify-center gap-2 active:scale-[0.98]"
+                class="w-full py-4 bg-parentPrimary text-white rounded-xl text-sm font-medium tracking-wider hover:bg-parentPrimary/90 disabled:opacity-40 transition-all shadow-sm border border-gray-50 shadow-parentPrimary/20 flex items-center justify-center gap-2 active:scale-[0.98]"
               >
                 <Loader2 v-if="loadingPayment" class="w-4 h-4 animate-spin" />
                 <span v-else>Continue with Paystack</span>
@@ -258,7 +258,7 @@
                 <ShoppingBag v-else class="w-8 h-8" />
               </div>
               
-              <p class="text-[9px] font-medium text-white/40 tracking-widest mb-1.5 relative z-10">Transaction Details</p>
+              <p class="text-[9px] font-medium text-white/40  mb-1.5 relative z-10">Transaction Details</p>
               <p class="text-3xl font-medium text-white tracking-tighter relative z-10">
                 {{ selectedTx.type === 'credit' ? '+' : '-' }}₦{{ selectedTx.amount.toLocaleString() }}
               </p>
@@ -275,7 +275,7 @@
                 </div>
                 <div class="flex justify-between items-start">
                   <span class="text-sm font-bold text-gray-400 tracking-wider">Description</span>
-                  <span class="text-xs font-medium text-gray-900 text-right max-w-[180px]">{{ selectedTx.description }}</span>
+                  <span class="text-sm font-medium text-gray-900 text-right max-w-[180px]">{{ selectedTx.description }}</span>
                 </div>
                 <div class="flex justify-between items-center">
                   <span class="text-sm font-bold text-gray-400 tracking-wider">Reference</span>
@@ -283,7 +283,7 @@
                 </div>
                 <div class="flex justify-between items-center">
                   <span class="text-sm font-bold text-gray-400 tracking-wider">Date</span>
-                  <span class="text-xs font-bold text-gray-600">{{ new Date(selectedTx.createdAt).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }) }}</span>
+                  <span class="text-sm font-bold text-gray-600">{{ new Date(selectedTx.createdAt).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }) }}</span>
                 </div>
               </div>
 
@@ -291,14 +291,14 @@
               <div class="flex gap-3 print:hidden">
                 <button 
                   @click="printReceipt"
-                  class="flex-1 py-3.5 bg-gray-900 text-white rounded-xl text-xs font-medium hover:bg-parentPrimary transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
+                  class="flex-1 py-3.5 bg-gray-900 text-white rounded-xl text-sm font-medium hover:bg-parentPrimary transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
                 >
                   <Printer class="w-3.5 h-3.5" />
                   Print Receipt
                 </button>
                 <button 
                   @click="selectedTx = null"
-                  class="flex-1 py-3.5 bg-gray-50 text-gray-500 rounded-xl text-xs font-medium hover:bg-gray-100 transition-all active:scale-[0.98]"
+                  class="flex-1 py-3.5 bg-gray-50 text-gray-500 rounded-xl text-sm font-medium hover:bg-gray-100 transition-all active:scale-[0.98]"
                 >
                   Close
                 </button>

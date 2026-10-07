@@ -77,7 +77,7 @@
               ></span>
               <component :is="item.icon" class="w-[18px] h-[18px] shrink-0" :class="isActive(item.path) ? 'text-[#FF5C1A]' : ''"></component>
               <span class="flex-1">{{ item.label }}</span>
-              <span class="ff-mono text-[9px] font-bold tracking-widest opacity-40">{{ item.code }}</span>
+              <span class="ff-mono text-[9px] font-bold  opacity-40">{{ item.code }}</span>
             </NuxtLink>
           </TransitionGroup>
         </nav>
@@ -99,7 +99,7 @@
             ></span>
             <component :is="item.icon" class="w-[18px] h-[18px] shrink-0" :class="isActive(item.path) ? 'text-[#FF5C1A]' : ''"></component>
             <span class="flex-1">{{ item.label }}</span>
-            <span class="ff-mono text-[9px] font-bold tracking-widest opacity-40">{{ item.code }}</span>
+            <span class="ff-mono text-[9px] font-bold  opacity-40">{{ item.code }}</span>
           </NuxtLink>
         </div>
       </div>
@@ -243,7 +243,7 @@
                 ></span>
                 <component :is="item.icon" class="w-[18px] h-[18px] shrink-0" :class="isActive(item.path) ? 'text-[#FF5C1A]' : ''"></component>
                 <span class="flex-1">{{ item.label }}</span>
-                <span class="ff-mono text-[9px] font-bold tracking-widest opacity-40">{{ item.code }}</span>
+                <span class="ff-mono text-[9px] font-bold  opacity-40">{{ item.code }}</span>
               </NuxtLink>
             </TransitionGroup>
           </nav>
@@ -266,7 +266,7 @@
               ></span>
               <component :is="item.icon" class="w-[18px] h-[18px] shrink-0" :class="isActive(item.path) ? 'text-[#FF5C1A]' : ''"></component>
               <span class="flex-1">{{ item.label }}</span>
-              <span class="ff-mono text-[9px] font-bold tracking-widest opacity-40">{{ item.code }}</span>
+              <span class="ff-mono text-[9px] font-bold  opacity-40">{{ item.code }}</span>
             </NuxtLink>
 
             <button
@@ -328,12 +328,12 @@
       
       <!-- Footer -->
       <!-- <footer class="mt-10 pt-6 border-t border-[#E7E2DA] flex flex-col md:flex-row items-center justify-between gap-4 animate-fade-in">
-        <p class="text-xs font-bold text-[#9C968E]">© {{ new Date().getFullYear() }} Errandr</p>
+        <p class="text-sm font-bold text-[#9C968E]">© {{ new Date().getFullYear() }} Errandr</p>
         <div class="flex items-center gap-4">
-          <NuxtLink to="/terms" class="text-xs font-bold text-[#9C968E] hover:text-[#171310] transition-colors">Terms</NuxtLink>
-          <NuxtLink to="/privacy" class="text-xs font-bold text-[#9C968E] hover:text-[#171310] transition-colors">Privacy</NuxtLink>
-          <NuxtLink to="/refund" class="text-xs font-bold text-[#9C968E] hover:text-[#171310] transition-colors">Refunds</NuxtLink>
-          <NuxtLink to="/contact" class="text-xs font-bold text-[#9C968E] hover:text-[#171310] transition-colors">Contact</NuxtLink>
+          <NuxtLink to="/terms" class="text-sm font-bold text-[#9C968E] hover:text-[#171310] transition-colors">Terms</NuxtLink>
+          <NuxtLink to="/privacy" class="text-sm font-bold text-[#9C968E] hover:text-[#171310] transition-colors">Privacy</NuxtLink>
+          <NuxtLink to="/refund" class="text-sm font-bold text-[#9C968E] hover:text-[#171310] transition-colors">Refunds</NuxtLink>
+          <NuxtLink to="/contact" class="text-sm font-bold text-[#9C968E] hover:text-[#171310] transition-colors">Contact</NuxtLink>
         </div>
       </footer> -->
     </main>

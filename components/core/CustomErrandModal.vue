@@ -57,25 +57,25 @@
                     <div class="mt-2 flex flex-wrap gap-2">
                       <button 
                         @click="form.description = 'Get drugs from the pharmacy'"
-                        class="text-xs font-medium px-3 py-1.5 bg-gray-50 border border-gray-50 rounded-full text-gray-600 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-colors"
+                        class="text-sm font-medium px-3 py-1.5 bg-gray-50 border border-gray-50 rounded-full text-gray-600 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-colors"
                       >
                         💊 Get drugs from the pharmacy
                       </button>
                       <button 
                         @click="form.description = 'Buy energy drinks and snacks for exam prep'"
-                        class="text-xs font-medium px-3 py-1.5 bg-gray-50 border border-gray-50 rounded-full text-gray-600 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-colors"
+                        class="text-sm font-medium px-3 py-1.5 bg-gray-50 border border-gray-50 rounded-full text-gray-600 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-colors"
                       >
                         ⚡ Buy energy drinks/snacks
                       </button>
                       <button 
                         @click="form.description = 'Print assignment and submit'"
-                        class="text-xs font-medium px-3 py-1.5 bg-gray-50 border border-gray-50 rounded-full text-gray-600 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-colors"
+                        class="text-sm font-medium px-3 py-1.5 bg-gray-50 border border-gray-50 rounded-full text-gray-600 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-colors"
                       >
                         🖨️ Print assignment
                       </button>
                       <button 
                         @click="form.description = 'Pick up a package'"
-                        class="text-xs font-medium px-3 py-1.5 bg-gray-50 border border-gray-50 rounded-full text-gray-600 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-colors"
+                        class="text-sm font-medium px-3 py-1.5 bg-gray-50 border border-gray-50 rounded-full text-gray-600 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-colors"
                       >
                         📦 Pick up a package
                       </button>
@@ -130,7 +130,7 @@
 
                   <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1">Estimated Item Cost (₦)</label>
-                    <p class="text-xs text-gray-500 mb-2">How much do you think the items you are asking the runner to buy will cost? This goes directly to the runner.</p>
+                    <p class="text-sm text-gray-500 mb-2">How much do you think the items you are asking the runner to buy will cost? This goes directly to the runner.</p>
                     <div class="relative">
                       <span class="absolute left-4 top-3 text-gray-500 font-bold">₦</span>
                       <input 
@@ -144,7 +144,7 @@
 
                   <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1">Runner Fee (₦)</label>
-                    <p class="text-xs text-gray-500 mb-2">How much are you offering the runner for their time and effort?</p>
+                    <p class="text-sm text-gray-500 mb-2">How much are you offering the runner for their time and effort?</p>
                     <div class="relative">
                       <span class="absolute left-4 top-3 text-gray-500 font-bold">₦</span>
                       <input 
@@ -155,9 +155,9 @@
                       />
                     </div>
                     <div class="flex gap-2 mt-3">
-                      <button @click="form.runnerFee = 500" class="px-3 py-1.5 text-xs font-semibold border border-gray-25 rounded-lg hover:bg-gray-50 text-gray-600 transition-colors">₦500</button>
-                      <button @click="form.runnerFee = 1000" class="px-3 py-1.5 text-xs font-semibold border border-gray-25 rounded-lg hover:bg-gray-50 text-gray-600 transition-colors">₦1,000</button>
-                      <button @click="form.runnerFee = 2000" class="px-3 py-1.5 text-xs font-semibold border border-gray-25 rounded-lg hover:bg-gray-50 text-gray-600 transition-colors">₦2,000</button>
+                      <button @click="form.runnerFee = 500" class="px-3 py-1.5 text-sm font-semibold border border-gray-25 rounded-lg hover:bg-gray-50 text-gray-600 transition-colors">₦500</button>
+                      <button @click="form.runnerFee = 1000" class="px-3 py-1.5 text-sm font-semibold border border-gray-25 rounded-lg hover:bg-gray-50 text-gray-600 transition-colors">₦1,000</button>
+                      <button @click="form.runnerFee = 2000" class="px-3 py-1.5 text-sm font-semibold border border-gray-25 rounded-lg hover:bg-gray-50 text-gray-600 transition-colors">₦2,000</button>
                     </div>
                   </div>
 
@@ -199,7 +199,7 @@
                     </div>
                   </div>
 
-                  <div class="bg-orange-50 text-orange-800 text-xs p-4 rounded-xl border border-orange-100 leading-relaxed font-medium">
+                  <div class="bg-orange-50 text-orange-800 text-sm p-4 rounded-xl border border-orange-100 leading-relaxed font-medium">
                     You do not need to pay yet. Once a rider accepts your errand, you will pay them directly for both the Item Cost and the Runner Fee.
                   </div>
 

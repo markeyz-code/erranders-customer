@@ -141,7 +141,7 @@
                       <Layers class="w-4 h-4 text-[#FF5C1A]" />
                       Join an Errand Pool (Split Fee)
                     </h3>
-                    <p class="text-xs text-[#766A61] mb-4">Someone in your area is already requesting an errand. Join their pool to split the delivery fee!</p>
+                    <p class="text-sm text-[#766A61] mb-4">Someone in your area is already requesting an errand. Join their pool to split the delivery fee!</p>
                     
                     <div class="space-y-2 relative z-10">
                       <div v-for="pool in openPools" :key="pool._id" 
@@ -150,16 +150,16 @@
                            :class="selectedPoolId === pool._id ? 'border-[#FF5C1A] ring-1 ring-[#FF5C1A]' : 'border-[#170D08]/15 hover:border-[#170D08]/30'">
                         <div>
                           <p class="font-sans font-bold text-sm text-[#170D08]">{{ pool.title }}</p>
-                          <p class="text-xs text-[#766A61] mt-0.5">{{ pool.orders?.length || 1 }} of {{ pool.maxParticipants }} spots filled</p>
+                          <p class="text-sm text-[#766A61] mt-0.5">{{ pool.orders?.length || 1 }} of {{ pool.maxParticipants }} spots filled</p>
                         </div>
                         <div class="text-right">
-                          <p class="text-xs text-[#766A61] line-through">₦{{ pool.baseDeliveryFee }}</p>
+                          <p class="text-sm text-[#766A61] line-through">₦{{ pool.baseDeliveryFee }}</p>
                           <p class="font-bold text-[#FF5C1A] text-sm">₦{{ Math.floor(pool.baseDeliveryFee / ((pool.orders?.length || 1) + 1)) }}</p>
                         </div>
                       </div>
                     </div>
                     
-                    <button v-if="selectedPoolId" @click="selectedPoolId = null" class="mt-3 text-xs font-bold text-[#FF5C1A] hover:underline">
+                    <button v-if="selectedPoolId" @click="selectedPoolId = null" class="mt-3 text-sm font-bold text-[#FF5C1A] hover:underline">
                       Cancel Pool Selection
                     </button>
                   </div>
@@ -321,7 +321,7 @@
                     <div v-if="recentDropoffs.length > 0" class="flex gap-1.5">
                       <button
                         v-for="loc in recentDropoffs" :key="loc" @click="form.dropoffLocation = loc"
-                        class="font-sans text-xs  px-1.5 py-0.5 rounded-sm bg-[#170D08]/5 text-[#766A61] hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors"
+                        class="font-sans text-sm  px-1.5 py-0.5 rounded-sm bg-[#170D08]/5 text-[#766A61] hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors"
                       >{{ loc }}</button>
                     </div>
                   </div>
@@ -387,7 +387,7 @@
                     <div v-if="selectedPoolId" class="bg-[#FF5C1A]/10 border border-dashed border-[#FF5C1A] p-4 rounded-sm flex items-center justify-between">
                       <div>
                         <p class="font-bold text-sm text-[#170D08]">Locked to Pool Split Fee</p>
-                        <p class="text-xs text-[#766A61]">You are joining an existing pool.</p>
+                        <p class="text-sm text-[#766A61]">You are joining an existing pool.</p>
                       </div>
                       <span class="font-sans text-xl font-bold text-[#FF5C1A]">₦{{ formatMoney(form.runnerFee) }}</span>
                     </div>
@@ -473,7 +473,7 @@
 
                 <div class="rounded-sm p-4 flex justify-between items-center -rotate-[0.6deg] border-[3px] border-[#FF5C1A]">
                   <div>
-                    <p class="font-sans text-sm font-bold  tracking-widest text-[#FF5C1A]">Amount Due</p>
+                    <p class="font-sans text-sm font-bold   text-[#FF5C1A]">Amount Due</p>
                     <p class="text-sm mt-0.5 text-[#766A61]">Paid securely via Paystack</p>
                   </div>
                   <span class="font-sans text-3xl font-bold tracking-tight text-[#FF5C1A]">₦{{ formatMoney(grandTotal) }}</span>

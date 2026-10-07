@@ -32,7 +32,7 @@
       <!-- Support Section -->
       <div class="mt-12 p-5 bg-white rounded-2xl shadow-sm border border-gray-50 w-full max-w-sm">
         <h3 class="text-sm font-bold text-gray-800 mb-1">Need Support?</h3>
-        <p class="text-xs text-gray-500 mb-4">Got questions about your order? We're here to help.</p>
+        <p class="text-sm text-gray-500 mb-4">Got questions about your order? We're here to help.</p>
         <button @click="showSupportModal = true" class="flex items-center justify-center gap-2 py-2.5 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-xl text-sm font-semibold transition-colors border border-gray-25 w-full">
           <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
           Contact Support
@@ -46,7 +46,7 @@
         <div class="p-6 border-b border-gray-100 flex items-center justify-between">
           <div>
             <h3 class="font-black text-lg text-gray-900">Contact Support</h3>
-            <p class="text-xs text-gray-500 mt-1">We typically reply within minutes.</p>
+            <p class="text-sm text-gray-500 mt-1">We typically reply within minutes.</p>
           </div>
           <button @click="showSupportModal = false" class="bg-gray-100 text-gray-500 hover:bg-gray-200 p-2 rounded-full transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -60,7 +60,7 @@
             </div>
             <div>
               <h4 class="font-bold text-gray-900">WhatsApp</h4>
-              <p class="text-xs text-gray-500">Fastest response time</p>
+              <p class="text-sm text-gray-500">Fastest response time</p>
             </div>
           </a>
 
@@ -70,7 +70,7 @@
             </div>
             <div class="text-left">
               <h4 class="font-bold text-gray-900">Email Support</h4>
-              <p class="text-xs text-gray-500">support@erranders.com</p>
+              <p class="text-sm text-gray-500">support@erranders.com</p>
             </div>
           </button>
         </div>

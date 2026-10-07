@@ -46,7 +46,7 @@
               </h4>
               <p :class="[
                 'font-medium leading-tight',
-                toast.title ? 'text-xs opacity-90' : 'text-sm',
+                toast.title ? 'text-sm opacity-90' : 'text-sm',
                 {
                   'text-white': ['error', 'success', 'warning', 'info'].includes(toast.type),
                   'text-gray-600': toast.type === 'notification'

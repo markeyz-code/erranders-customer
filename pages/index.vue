@@ -151,7 +151,7 @@
             <p class="text-sm font-medium text-gray-900 mb-0.5 truncate">
               No results for "{{ heroSearchQuery }}"
             </p>
-            <p class="text-xs font-medium text-gray-500 leading-relaxed mb-3">
+            <p class="text-sm font-medium text-gray-500 leading-relaxed mb-3">
               We couldn't find what you were looking for. Try a different search!
             </p>
             <!-- Suggestion tags -->
@@ -170,7 +170,7 @@
 
         <!-- Time-of-day fallback suggestions -->
         <div v-if="timeOfDaySuggestions.length > 0" class="mt-3">
-          <p class="px-4 pb-2 text-[11px] font-medium text-gray-300 tracking-widest uppercase">Popular for {{ suggestionTimeText }}</p>
+          <p class="px-4 pb-2 text-[11px] font-medium text-gray-300  uppercase">Popular for {{ suggestionTimeText }}</p>
           <div
             v-for="product in timeOfDaySuggestions.slice(0, 3)"
             :key="'tod-' + product._id"
@@ -182,10 +182,10 @@
               <Store v-else class="w-4 h-4 text-parentPrimary/30" />
             </div>
             <div class="flex-1 min-w-0">
-              <h4 class="text-xs font-medium text-gray-900 truncate group-hover:text-parentPrimary transition-colors">{{ product.name }}</h4>
+              <h4 class="text-sm font-medium text-gray-900 truncate group-hover:text-parentPrimary transition-colors">{{ product.name }}</h4>
               <p class="text-[11px] font-bold text-gray-400">{{ product.vendor?.storeName || 'Campus Vendor' }}</p>
             </div>
-            <span class="text-xs font-medium text-gray-900 flex-shrink-0">₦{{ product.price?.toLocaleString() }}</span>
+            <span class="text-sm font-medium text-gray-900 flex-shrink-0">₦{{ product.price?.toLocaleString() }}</span>
           </div>
         </div>
       </div>
@@ -228,7 +228,7 @@
                   class="bg-white/80 backdrop-blur-sm border border-gray-50 rounded-full px-4 py-2 shadow-sm flex items-center gap-2 hover:border-parentPrimary/50 hover:bg-white cursor-pointer transition-all h-10"
                 >
                   <Filter class="w-4 h-4" :class="globalFilter ? 'text-parentPrimary' : 'text-gray-400'" />
-                  <span class="text-xs md:text-sm font-medium" :class="globalFilter ? 'text-gray-900' : 'text-gray-600'">
+                  <span class="text-sm md:text-sm font-medium" :class="globalFilter ? 'text-gray-900' : 'text-gray-600'">
                     {{ globalFilter ? globalFiltersList.find(f => f.keyword === globalFilter)?.label || globalFilter : 'Any category' }}
                   </span>
                   <ChevronDown class="w-3.5 h-3.5 text-gray-400 transition-transform ml-0.5" :class="{ 'rotate-180': showCategoryDropdown }" />
@@ -278,7 +278,7 @@
                 
                 <Transition name="fade-up">
                   <div v-if="showLocationDropdown" class="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white border border-gray-50 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] z-[80] overflow-hidden py-2 w-56">
-                    <div class="px-4 py-2 text-xs font-bold text-gray-400 uppercase tracking-wider">Popular Locations</div>
+                    <div class="px-4 py-2 text-sm font-bold text-gray-400 uppercase tracking-wider">Popular Locations</div>
                     <button 
                       @click="searchLocation = 'UNILAG'; showLocationDropdown = false; fetchSuggestions()"
                       class="w-full text-left px-4 py-3 text-sm font-medium hover:bg-gray-50 transition-colors text-gray-700 flex items-center gap-3"
@@ -313,7 +313,7 @@
                   class="bg-white/80 backdrop-blur-sm border border-gray-25 rounded-full px-4 py-2 shadow-sm flex items-center gap-2 hover:border-parentPrimary/50 hover:bg-white cursor-pointer transition-all h-10"
                 >
                   <Calendar class="w-4 h-4 text-gray-400" />
-                  <span class="text-xs md:text-sm font-medium text-gray-600 whitespace-nowrap">
+                  <span class="text-sm md:text-sm font-medium text-gray-600 whitespace-nowrap">
                     {{ searchTime === 'any' ? 'Any time' : searchTime === 'now' ? 'Now' : 'Scheduled' }}
                   </span>
                   <ChevronDown class="w-3.5 h-3.5 text-gray-400 transition-transform ml-0.5" :class="{ 'rotate-180': showTimeDropdown }" />
@@ -488,7 +488,7 @@
         <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-100 shadow-xl relative z-10 space-y-4">
           <div class="flex items-center justify-between border-b border-gray-100 pb-4">
             <div>
-              <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Scheduled for</p>
+              <p class="text-sm font-bold text-gray-400 uppercase  mb-1">Scheduled for</p>
               <p class="text-lg font-black text-gray-900">Tomorrow, 1:00 PM</p>
             </div>
             <div class="w-10 h-10 bg-green-50 text-green-600 rounded-full flex items-center justify-center">
@@ -513,7 +513,7 @@
             <span class="text-sm font-bold text-gray-500 flex items-center gap-1">
               <Repeat class="w-3.5 h-3.5" /> Recurs every Tuesday
             </span>
-            <span class="px-3 py-1 bg-green-50 text-green-700 text-xs font-bold rounded-full">Active</span>
+            <span class="px-3 py-1 bg-green-50 text-green-700 text-sm font-bold rounded-full">Active</span>
           </div>
         </div>
       </div>
