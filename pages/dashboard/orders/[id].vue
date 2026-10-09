@@ -1098,11 +1098,11 @@ onMounted(async () => {
     
     checkAutoOpenChat();
 
-    if (route.query.reference && (order.value.status === 'awaiting_payment' || route.query.trxref)) {
+    if (route.query.reference && (order.value?.status === 'awaiting_payment' || route.query.trxref)) {
        try {
          // Any order in awaiting_payment with a reference needs payForCustomErrand to confirm
-         if (order.value.status === 'awaiting_payment') {
-           await api.post(`/orders/${order.value._id}/custom/pay`, { paymentReference: route.query.reference });
+         if (order.value?.status === 'awaiting_payment') {
+           await api.post(`/orders/${order.value?._id}/custom/pay`, { paymentReference: route.query.reference });
          } else {
            await verifyPayment(route.query.reference as string);
          }
