@@ -1713,6 +1713,27 @@ onMounted(async () => {
     try { await fetchGroupOrder(route.query.group as string); } catch (e) { console.error(e); }
   }
 
+  // Handle lingering pending orders if they paid but closed the tab before redirect
+  if (!route.query.reference && typeof window !== 'undefined') {
+    try {
+      const pendingIdsStr = localStorage.getItem('errandr_pending_order_ids');
+      if (pendingIdsStr) {
+        const pendingIds = JSON.parse(pendingIdsStr);
+        if (pendingIds && pendingIds.length > 0) {
+          orders_api.getOrder(pendingIds[0]).then(res => {
+            const order = res?.data || res;
+            if (order && (order.paymentStatus === 'paid' || order.status !== 'pending_payment' && order.status !== 'cancelled')) {
+              cartStore.allVendorIds.value.forEach(vId => cartStore.clearCart(vId));
+              cartStore.clearCart();
+              localStorage.removeItem('errandr_checkout_data');
+              localStorage.removeItem('errandr_pending_order_ids');
+            }
+          }).catch(() => {});
+        }
+      }
+    } catch (e) {}
+  }
+
   // Handle return from payment (Standard Redirect Flow verification)
   if (route.query.reference) {
     placing.value = true;
