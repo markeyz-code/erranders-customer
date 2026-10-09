@@ -163,7 +163,7 @@
  <div v-if="order.itemsPhoto" class="mt-4 pt-4 border-t border-gray-200">
    <div class="p-4 rounded-xl border border-gray-50 flex flex-col items-center">
      <h4 class="text-[11px] font-bold text-gray-400 mb-4  uppercase flex items-center gap-1.5 w-full">
-       <Camera, PartyPopper class="w-3.5 h-3.5" /> Proof of Purchased Items
+       <Camera class="w-3.5 h-3.5" /> Proof of Purchased Items
      </h4>
      <div class="w-full h-48 rounded-xl overflow-hidden bg-gray-50 border border-gray-50 mb-3 cursor-pointer" @click="window.open(order.itemsPhoto, '_blank')">
        <img :src="order.itemsPhoto" class="w-full h-full object-cover hover:scale-105 transition-transform" />
@@ -855,7 +855,7 @@
 import { 
  ArrowLeft, Phone, MapPin, Truck, ShoppingBag, 
  Package, CheckCircle2, AlertCircle, RefreshCw,
- Search, CreditCard, MessageSquare, Clock, LayoutGrid, Star, Inbox, LifeBuoy, Store, ShieldCheck, User, X, ChevronRight, HeadphonesIcon, Heart, Bike, Camera
+ Search, CreditCard, MessageSquare, Clock, LayoutGrid, Star, Inbox, LifeBuoy, Store, ShieldCheck, User, X, ChevronRight, HeadphonesIcon, Heart, Bike, Camera, PartyPopper, CheckCircle
 } from 'lucide-vue-next';
 import { useRoute, useRouter } from '#imports';
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
@@ -867,9 +867,11 @@ import { useConfirmModal } from '@/composables/core/useConfirmModal';
 import { useUser } from '@/composables/modules/auth/user';
 import { usePayments } from '@/composables/modules/payments';
 import { Loader2 } from 'lucide-vue-next';
+import { GATEWAY_ENDPOINT_WITH_AUTH as api } from '@/api_factory/axios.config';
 
 const route = useRoute();
 const router = useRouter();
+const { confirm } = useConfirmModal();
 
 const getGroupedCustomizations = (customizations: any[]) => {
  if (!customizations) return [];
