@@ -156,10 +156,10 @@
                    </button>
                 </div>
 
-                <div v-if="order.viewers && order.viewers.length > 0" class="w-full mt-6 pt-5 border-t border-gray-100 text-left">
+                <div v-if="(order.viewers && order.viewers.length > 0) || viewersCount > 0" class="w-full mt-6 pt-5 border-t border-gray-100 text-left">
                    <h4 class="text-[11px] font-bold text-gray-900 uppercase flex items-center gap-1.5 mb-3">
-                     <span class="w-1.5 h-1.5 rounded-full bg-[#FF5C1A] animate-pulse"></span>
-                     {{ order.viewers.length }} Rider{{ order.viewers.length > 1 ? 's' : '' }} viewing right now
+                     <span class="w-1.5 h-1.5 rounded-full bg-[#FF5C1A]" :class="viewersCount > 0 ? 'animate-pulse' : ''"></span>
+                     {{ Math.max(order.viewers?.length || 0, viewersCount) }} Rider{{ Math.max(order.viewers?.length || 0, viewersCount) > 1 ? 's' : '' }} viewed this request
                    </h4>
                    <div class="flex flex-wrap gap-2">
                       <div v-for="viewer in order.viewers" :key="viewer._id" class="flex items-center gap-2 border border-gray-50 px-2.5 py-1.5 rounded-lg">
@@ -1170,7 +1170,10 @@ watch(() => socket.value, (newSocket) => {
 
     // Listen for ALL notification types that could affect this order
     newSocket.on('notification:new', async (payload: any) => {
-      const { type, data, title, body } = payload;
+      // Handle wrapped notifications
+      const notifData = payload.notification || payload;
+      const { type, data, title, body } = notifData;
+      
       const orderIdMatch = data?.orderId === route.params.id || data?.order?._id === route.params.id || payload.orderId === route.params.id;
       
       if (!orderIdMatch) return;
@@ -1181,6 +1184,12 @@ watch(() => socket.value, (newSocket) => {
           return;
       }
       
+      if (type === 'ERRAND_VIEWER_ADDED' && data?.viewers) {
+          if (order.value) {
+            order.value.viewers = data.viewers;
+          }
+      }
+
       if (type !== 'ERRAND_VIEWER_ADDED') {
         showToast({ title: title || 'Order Updated', message: body || 'Your order has been updated.', toastType: 'info' });
       }
