@@ -508,7 +508,7 @@
                    <h4 class="text-[11px] font-bold text-gray-400 mb-4  uppercase flex items-center gap-1.5 w-full">
                      <Camera class="w-3.5 h-3.5" /> Proof of Purchased Items
                    </h4>
-                   <div class="w-full h-48 rounded-xl overflow-hidden bg-gray-50 border border-gray-50 mb-3 cursor-pointer" @click="window.open(order.itemsPhoto, '_blank')">
+                   <div class="w-full h-48 rounded-xl overflow-hidden bg-gray-50 border border-gray-50 mb-3 cursor-pointer" @click="openPhoto(order.itemsPhoto)">
                      <img :src="order.itemsPhoto" class="w-full h-full object-cover hover:scale-105 transition-transform" />
                    </div>
                    <p class="text-sm text-gray-500 text-center">Your rider has uploaded a photo of the items purchased from the vendor.</p>
@@ -529,7 +529,7 @@
              </div>
 
              <!-- Rating -->
-             <div v-if="order && order.status === 'DELIVERED' && (!order.hasRatedVendor || !order.hasRatedErrander)" class="pt-6 border-t border-gray-100">
+             <div v-if="order && order.status === 'delivered' && (!order.hasRatedVendor || !order.hasRatedErrander)" class="pt-6 border-t border-gray-100">
                    <div class="text-center mb-5">
                       <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-yellow-50 text-yellow-600 text-[10px] font-bold tracking-wide mb-3">
                          <Sparkles class="w-3 h-3" /> Earn 20 Reward Points
@@ -897,12 +897,18 @@ import { usePayments } from '@/composables/modules/payments';
 import { useUser } from '@/composables/modules/auth/user';
 import { useWallet } from '@/composables/modules/wallets';
 import { useRealtimeSocket } from '@/composables/core/useRealtimeSocket';
+import { useSocket } from '@/composables/useSocket';
 import { GATEWAY_ENDPOINT_WITH_AUTH as api } from '@/api_factory/axios.config';
 import MapboxMap from '@/components/ui/MapboxMap.vue';
 
 definePageMeta({
   layout: 'student'
 })
+
+const route = useRoute();
+const router = useRouter();
+const order = ref<any>(null);
+const openPhoto = (url: string) => window.open(url, '_blank');
 
 // Chat state
 const isChatOpen = ref(false);
@@ -1019,9 +1025,6 @@ const checkAutoOpenChat = () => {
   }
 };
 
-const route = useRoute();
-const router = useRouter();
-const order = ref<any>(null);
 const { showToast } = useCustomToast();
 const { user } = useUser();
 const { balance, fetchWallet } = useWallet();
@@ -1141,9 +1144,6 @@ const startPolling = () => {
       if (newOrder && newOrder.status !== order.value?.status) {
         order.value = newOrder;
         showToast({ title: 'Order Updated', message: `Status: ${newOrder.status?.replace(/_/g, ' ')}`, toastType: 'info' });
-      } else if (newOrder) {
-        // Silently update data without toast
-        order.value = newOrder;
       }
     } catch (e) {
       // Silently fail
