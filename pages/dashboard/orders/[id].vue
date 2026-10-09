@@ -883,7 +883,9 @@ import {
   X,
   ImagePlus,
   Camera,
-  RefreshCw
+  RefreshCw,
+  AlertCircle,
+  Phone
 } from 'lucide-vue-next';
 import { ref, onMounted, onUnmounted, reactive, computed, watch } from 'vue';
 import { useRoute, useRouter, useHead, useRuntimeConfig } from '#imports';
