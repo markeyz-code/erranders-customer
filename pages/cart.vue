@@ -1748,6 +1748,13 @@ onMounted(async () => {
         const url = new URL(window.location.href);
         url.searchParams.delete('reference');
         window.history.replaceState({}, '', url.toString());
+        
+        if (typeof window !== 'undefined' && localStorage.getItem('errandr_auto_checkout')) {
+          localStorage.removeItem('errandr_auto_checkout');
+          setTimeout(() => {
+            startPayment();
+          }, 300);
+        }
         return;
       }
 
@@ -2007,20 +2014,37 @@ const startPayment = async () => {
 };
 
 const startTopup = async () => {
-  console.log('Initiating topup to dashboard...', topupAmount.value);
   if (!topupAmount.value || Number(topupAmount.value) <= 10) {
     showToast({ title: 'Invalid Amount', message: 'Please enter a valid amount', toastType: 'error' });
     return;
   }
+  
   try {
-    const target = `/dashboard/wallet?topup=${topupAmount.value}&redirect=/cart`;
-    await router.push(target);
-    setTimeout(() => {
-       if (window.location.pathname !== '/dashboard/wallet') window.location.href = target;
-    }, 500);
-  } catch (e) {
-    console.error('Redirection failed:', e);
-    window.location.href = `/dashboard/wallet?topup=${topupAmount.value}&redirect=/cart`;
+    placing.value = true;
+    const amount = Math.round(Number(topupAmount.value));
+    
+    // Set a flag to automatically checkout when they return
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('errandr_auto_checkout', 'true');
+    }
+    
+    const data = await initializePayment({
+      amount,
+      customer: { name: user.value?.firstName || guestName.value || 'Student', email: user.value?.email || guestEmail.value || 'guest@errandr.com' },
+      callback_url: `${window.location.origin}/cart${route.query.group ? '?group=' + route.query.group : ''}`,
+      metadata: { type: 'wallet_topup', userId: user.value?._id },
+    });
+    
+    const authUrl = data?.data?.authorization_url || data?.authorization_url;
+    if (authUrl) {
+      window.location.href = authUrl;
+    } else {
+      placing.value = false;
+      showToast({ title: 'Error', message: 'Payment gateway unavailable', toastType: 'error' });
+    }
+  } catch (e: any) {
+    placing.value = false;
+    showToast({ title: 'Error', message: e.message || 'Failed to initiate top-up', toastType: 'error' });
   }
 };
 
