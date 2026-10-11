@@ -17,158 +17,138 @@
     </header>
 
     <!-- ============================================== -->
-    <!-- IMPORTED MEAL DESK ROADMAP VISUALIZER         -->
     <!-- ============================================== -->
-    <div v-if="importedPlan" class="mb-8 rounded-3xl bg-white border border-[#E7E2DA] text-gray-900 p-5 md:p-6 shadow-sm relative overflow-hidden">
-      <!-- Background Subtle Accent -->
-      <div class="absolute -right-16 -top-16 w-56 h-56 bg-orange-100/50 rounded-full blur-3xl pointer-events-none"></div>
-
-      <!-- Header Bar -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100 relative z-10">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-orange-50 text-[#FF5C1A] border border-orange-200 flex items-center justify-center shrink-0 shadow-sm">
-            <Sparkles class="w-5 h-5" />
+    <!-- MEAL AUTOPILOT ACTIVE ROUTINE & KICKOFF BAR    -->
+    <!-- ============================================== -->
+    <div v-if="importedPlan" class="mb-8 rounded-3xl bg-white border border-[#E7E2DA] p-5 sm:p-6 shadow-sm relative overflow-hidden">
+      <!-- Top Status Row -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-gray-100">
+        <div class="flex items-center gap-3.5">
+          <div class="w-11 h-11 rounded-2xl bg-orange-50 text-[#FF5C1A] border border-orange-200 flex items-center justify-center shrink-0 shadow-sm">
+            <Sparkles class="w-6 h-6" />
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#FF5C1A] text-white">
-                Meal Desk Synced
+              <span class="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full"
+                :class="isAutopilotActive ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-amber-100 text-amber-800 border border-amber-200'"
+              >
+                <span class="w-1.5 h-1.5 rounded-full" :class="isAutopilotActive ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'"></span>
+                {{ isAutopilotActive ? 'Autopilot Live & Synced' : 'Autopilot Paused' }}
               </span>
-              <span class="text-xs text-gray-500 font-medium">Weekly Nutrition Roadmap</span>
+              <span class="text-xs text-gray-400 font-medium hidden sm:inline">• Meal Desk 7-Day Routine</span>
             </div>
-            <h2 class="text-lg md:text-xl font-bold text-gray-900 mt-0.5">
-              Optimized 7-Day Campus Schedule
+            <h2 class="text-lg sm:text-xl font-black text-gray-900 mt-1 flex items-center gap-2">
+              Weekly Campus Meal Roadmap
             </h2>
           </div>
         </div>
 
-        <div class="flex items-center gap-2 self-end sm:self-auto">
+        <!-- Controls: Pause/Resume & Adjust on Meal Desk -->
+        <div class="flex items-center gap-2 self-start md:self-auto">
           <button 
-            @click="isVisualizerExpanded = !isVisualizerExpanded"
-            class="px-3.5 py-1.5 rounded-xl bg-gray-50 hover:bg-gray-100 text-xs font-bold text-gray-700 border border-[#E7E2DA] transition-colors flex items-center gap-1.5 shadow-sm"
+            type="button"
+            @click="toggleAutopilotStatus"
+            :class="[
+              'px-3.5 py-2 rounded-xl text-xs font-bold transition-all border flex items-center gap-1.5 active:scale-95 shadow-xs',
+              isAutopilotActive 
+                ? 'bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100' 
+                : 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700'
+            ]"
           >
-            <Eye class="w-3.5 h-3.5 text-[#FF5C1A]" />
-            {{ isVisualizerExpanded ? 'Collapse' : 'Expand Visualizer' }}
+            <Pause v-if="isAutopilotActive" class="w-3.5 h-3.5" />
+            <Play v-else class="w-3.5 h-3.5" />
+            {{ isAutopilotActive ? 'Pause Autopilot' : 'Resume Autopilot' }}
           </button>
-          <button 
-            @click="dismissImportedPlan"
-            title="Dismiss Imported Plan"
-            class="w-8 h-8 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-400 hover:text-gray-700 border border-[#E7E2DA] flex items-center justify-center transition-colors"
+          <NuxtLink 
+            to="/dashboard/meal-desk"
+            class="px-3.5 py-2 rounded-xl bg-gray-50 hover:bg-gray-100 text-xs font-bold text-gray-700 border border-[#E7E2DA] transition-all flex items-center gap-1.5 shadow-xs active:scale-95"
           >
-            <X class="w-4 h-4" />
-          </button>
+            <Edit2 class="w-3.5 h-3.5 text-[#FF5C1A]" />
+            Adjust on Meal Desk
+          </NuxtLink>
         </div>
       </div>
 
-      <!-- Plan Summary Stats -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 py-4 border-b border-gray-100 text-xs relative z-10">
-        <div class="bg-[#FAF8F5] rounded-2xl p-3 border border-[#EFECE6]">
-          <p class="text-gray-500 text-[11px] font-medium">Estimated 7-Day Total</p>
-          <p class="text-base font-black text-gray-900 mt-0.5">₦{{ Number(importedPlan.totalCost || 0).toLocaleString() }}</p>
+      <!-- Kickoff Date & End Date Configuration Bar -->
+      <div class="py-4 border-b border-gray-100 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Kickoff Start Date -->
+        <div class="bg-[#FAF8F5] p-3.5 rounded-2xl border border-[#EFECE6]">
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="text-[10px] font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
+              <Calendar class="w-3.5 h-3.5 text-[#FF5C1A]" /> Kickoff (Start Date)
+            </label>
+            <span class="text-[10px] font-bold text-[#FF5C1A] bg-orange-50 px-2 py-0.5 rounded-md border border-orange-100">
+              Starts {{ kickoffLabel }}
+            </span>
+          </div>
+          <div class="flex items-center gap-2">
+            <input 
+              type="date" 
+              v-model="kickoffDate" 
+              @change="onKickoffDateChanged"
+              class="w-full bg-white border border-[#E7E2DA] rounded-xl px-3 py-2 text-xs font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]"
+            />
+          </div>
+          <div class="flex items-center gap-1.5 mt-2">
+            <button 
+              type="button" 
+              @click="setKickoffTomorrow" 
+              class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-white border border-gray-200 hover:border-[#FF5C1A] text-gray-700 hover:text-[#FF5C1A] transition-colors"
+            >
+              Tomorrow
+            </button>
+            <button 
+              type="button" 
+              @click="setKickoffNextMonday" 
+              class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-white border border-gray-200 hover:border-[#FF5C1A] text-gray-700 hover:text-[#FF5C1A] transition-colors"
+            >
+              Next Monday
+            </button>
+          </div>
         </div>
-        <div class="bg-[#FAF8F5] rounded-2xl p-3 border border-[#EFECE6]">
-          <p class="text-gray-500 text-[11px] font-medium">Meal Frequency</p>
-          <p class="text-base font-black text-gray-900 mt-0.5">{{ importedPlan.mealsPerDay || 2 }} Meals / Day</p>
-        </div>
-        <div class="bg-[#FAF8F5] rounded-2xl p-3 border border-[#EFECE6]">
-          <p class="text-gray-500 text-[11px] font-medium">Plan Status</p>
-          <p class="text-base font-black text-emerald-600 mt-0.5 flex items-center gap-1">
-            <CheckCircle2 class="w-3.5 h-3.5" /> Ready for Routine
+
+        <!-- Completion End Date -->
+        <div class="bg-[#FAF8F5] p-3.5 rounded-2xl border border-[#EFECE6] flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider block mb-1">
+              Cycle End Date (7-Day Duration)
+            </span>
+            <p class="text-sm font-black text-gray-900 mt-1">
+              {{ calculatedEndDate }}
+            </p>
+          </div>
+          <p class="text-[11px] text-gray-500 font-medium">
+            Full 7-day campus coverage automatically repeating or renewing.
           </p>
         </div>
-        <div class="bg-[#FAF8F5] rounded-2xl p-3 border border-[#EFECE6]">
-          <p class="text-gray-500 text-[11px] font-medium">Selected Vendors</p>
-          <p class="text-base font-black text-gray-900 mt-0.5 truncate">{{ (importedPlan.selectedVendors || []).length || 'Campus' }} Outlets</p>
+
+        <!-- Next Delivery & Total -->
+        <div class="bg-[#FAF8F5] p-3.5 rounded-2xl border border-[#EFECE6] flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider block mb-1">
+              Next Scheduled Delivery
+            </span>
+            <p class="text-xs font-bold text-emerald-700 flex items-center gap-1 mt-0.5">
+              <Clock class="w-3.5 h-3.5 text-emerald-600" />
+              {{ nextDeliveryInfo }}
+            </p>
+          </div>
+          <div class="flex items-center justify-between text-xs pt-2 border-t border-gray-200/60 mt-2">
+            <span class="text-gray-500 font-medium">7-Day All-Inclusive:</span>
+            <span class="font-black text-[#FF5C1A]">₦{{ Number(importedPlan.totalCost || 0).toLocaleString() }}</span>
+          </div>
         </div>
       </div>
 
-      <!-- Fee Breakdown Chips -->
-      <div class="py-3 border-b border-gray-100 flex flex-wrap items-center gap-2 text-xs relative z-10">
-        <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mr-1">Includes:</span>
-        <span class="px-2.5 py-1 rounded-lg bg-orange-50 text-[#FF5C1A] font-semibold border border-orange-100 flex items-center gap-1">
-          🍲 Food Subtotal
+      <!-- Sync Note Banner -->
+      <div class="pt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-gray-600">
+        <p class="flex items-center gap-1.5 font-medium">
+          <CheckCircle2 class="w-4 h-4 text-emerald-600 shrink-0" />
+          <span>Every day's meals are auto-assigned to your calendar below based on your kickoff date. No manual entry needed.</span>
+        </p>
+        <span class="text-[11px] font-bold text-gray-400">
+          {{ (importedPlan.days || []).length }} Days • {{ importedPlan.mealsPerDay || 2 }} Meals Daily
         </span>
-        <span class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-800 font-semibold border border-amber-200/60 flex items-center gap-1">
-          🥡 Takeaway Packs (₦150/meal)
-        </span>
-        <span class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200/60 flex items-center gap-1">
-          🥷 Errand Ninja Delivery (₦350/day)
-        </span>
-        <span class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-800 font-semibold border border-indigo-200/60 flex items-center gap-1">
-          ⚡ Service Charge (₦50/day)
-        </span>
-      </div>
-
-      <!-- Expanded Day Visualizer -->
-      <div v-if="isVisualizerExpanded" class="pt-4 space-y-4 relative z-10 animate-fade-in">
-        <!-- Day Selector Tabs -->
-        <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
-          <button
-            v-for="(day, idx) in (importedPlan.days || [])"
-            :key="idx"
-            @click="selectedImportedDayIndex = idx"
-            class="px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-2 border"
-            :class="selectedImportedDayIndex === idx ? 'bg-[#FF5C1A] text-white border-[#FF5C1A] shadow-md shadow-orange-500/20' : 'bg-[#FAF8F5] text-gray-700 border-[#E7E2DA] hover:bg-gray-100'"
-          >
-            <span>Day {{ day.day || idx + 1 }}</span>
-            <span class="text-[10px]" :class="selectedImportedDayIndex === idx ? 'text-white/80' : 'text-gray-500'">₦{{ Number(day.dailyCost || day.totalCost || 0).toLocaleString() }}</span>
-          </button>
-        </div>
-
-        <!-- Selected Day Meals Grid -->
-        <div v-if="currentImportedDay" class="bg-[#FAF8F5] border border-[#EFECE6] rounded-2xl p-4">
-          <div class="flex items-center justify-between mb-3">
-            <div>
-              <h4 class="text-sm font-bold text-gray-900 flex items-center gap-2">
-                <span>Day {{ currentImportedDay.day }} Meal Roadmap</span>
-                <span class="text-xs font-normal text-gray-500">(Daily Total: ₦{{ Number(currentImportedDay.dailyCost || currentImportedDay.totalCost || 0).toLocaleString() }})</span>
-              </h4>
-            </div>
-            <NuxtLink 
-              to="/dashboard/meal-desk"
-              class="text-xs font-bold text-[#FF5C1A] hover:underline flex items-center gap-1"
-            >
-              Edit on Meal Desk <ExternalLink class="w-3 h-3" />
-            </NuxtLink>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            <div 
-              v-for="(meal, mIdx) in (currentImportedDay.meals || [])" 
-              :key="mIdx"
-              class="bg-white border border-[#E7E2DA] rounded-xl p-3.5 flex flex-col justify-between hover:border-[#FF5C1A] transition-all shadow-sm"
-            >
-              <div>
-                <div class="flex items-center justify-between mb-2">
-                  <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md"
-                    :class="meal.type === 'breakfast' ? 'bg-amber-100 text-amber-800' : meal.type === 'lunch' ? 'bg-orange-100 text-orange-800' : 'bg-indigo-100 text-indigo-800'"
-                  >
-                    {{ meal.type || (mIdx === 0 ? 'Breakfast' : mIdx === 1 ? 'Lunch' : 'Dinner') }}
-                  </span>
-                  <span class="text-xs font-black text-gray-900">₦{{ Number(meal.price || 0).toLocaleString() }}</span>
-                </div>
-                <h5 class="text-sm font-bold text-gray-900 line-clamp-2 leading-tight">{{ meal.name }}</h5>
-                <p class="text-xs text-gray-500 flex items-center gap-1.5 mt-1.5">
-                  <Store class="w-3.5 h-3.5 text-[#FF5C1A] shrink-0" />
-                  <span class="truncate">{{ meal.source || 'Campus Vendor' }}</span>
-                </p>
-                <div class="mt-2">
-                  <span class="text-[10px] font-medium text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200/50">
-                    🥡 Takeaway pack included
-                  </span>
-                </div>
-              </div>
-
-              <div v-if="meal.breakdown?.nutrition" class="mt-3 pt-2.5 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-500">
-                <span class="flex items-center gap-1 text-[#FF5C1A] font-medium">
-                  <Flame class="w-3 h-3" /> {{ meal.breakdown.nutrition.calories }} kcal
-                </span>
-                <span class="text-gray-600">Protein: {{ meal.breakdown.nutrition.protein }}g</span>
-                <span class="text-gray-600">Carbs: {{ meal.breakdown.nutrition.carbs }}g</span>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -690,7 +670,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { Repeat, X, Plus, Clock, Trash2, Store, ChevronRight, ChevronLeft, Loader2, ChevronDown, Package, MapPin, Building, Check, Info, User, Phone, Navigation, Map, Receipt, Truck, ShieldCheck, Banknote, Sparkles, Eye, Flame, CheckCircle2, ExternalLink } from 'lucide-vue-next'
+import { Repeat, X, Plus, Clock, Trash2, Store, ChevronRight, ChevronLeft, Loader2, ChevronDown, Package, MapPin, Building, Check, Info, User, Phone, Navigation, Map, Receipt, Truck, ShieldCheck, Banknote, Sparkles, Eye, Flame, CheckCircle2, ExternalLink, Calendar, Pause, Play, Edit2 } from 'lucide-vue-next'
 import { orders_api } from '@/api_factory/modules/orders'
 import { vendors_api } from '@/api_factory/modules/vendors'
 import { menu_items_api } from '@/api_factory/modules/menu-items'
@@ -705,15 +685,120 @@ const { showToast } = useCustomToast()
 const loading = ref(true)
 const orders = ref([])
 
-// Meal Desk Imported Plan State
+// Meal Desk Imported Plan & Autopilot Kickoff State
 const importedPlan = ref(null)
-const isVisualizerExpanded = ref(true)
-const selectedImportedDayIndex = ref(0)
+const isAutopilotActive = ref(true)
+const kickoffDate = ref('')
+const dismissedSyncedSlots = ref([])
 
-const currentImportedDay = computed(() => {
-  if (!importedPlan.value?.days) return null
-  return importedPlan.value.days[selectedImportedDayIndex.value] || null
+// Helper: format YYYY-MM-DD
+const formatDateToISO = (d) => {
+  const year = d.getFullYear()
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+// Compute calendar day-of-week mapping from Kickoff Start Date
+const dayOfWeekMapping = computed(() => {
+  if (!kickoffDate.value || !importedPlan.value?.days) return {}
+  const mapping = {}
+  const [year, month, day] = kickoffDate.value.split('-').map(Number)
+  const startDate = new Date(year, month - 1, day)
+  
+  importedPlan.value.days.forEach((dayPlan, idx) => {
+    const curDate = new Date(startDate)
+    curDate.setDate(startDate.getDate() + idx)
+    const weekday = curDate.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase()
+    mapping[weekday] = {
+      ...dayPlan,
+      calendarDate: curDate,
+      dayNumber: idx + 1
+    }
+  })
+  return mapping
 })
+
+// Human readable kickoff indicator (e.g. "Tomorrow", "Today", "Mon, Oct 12")
+const kickoffLabel = computed(() => {
+  if (!kickoffDate.value) return 'Scheduled'
+  const todayStr = formatDateToISO(new Date())
+  const tomorrow = new Date()
+  tomorrow.setDate(tomorrow.getDate() + 1)
+  const tomorrowStr = formatDateToISO(tomorrow)
+
+  if (kickoffDate.value === todayStr) return 'Today'
+  if (kickoffDate.value === tomorrowStr) return 'Tomorrow'
+
+  const [year, month, day] = kickoffDate.value.split('-').map(Number)
+  const d = new Date(year, month - 1, day)
+  return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+})
+
+// Computed 7-Day Cycle End Date
+const calculatedEndDate = computed(() => {
+  if (!kickoffDate.value) return '7 Days from kickoff'
+  const [year, month, day] = kickoffDate.value.split('-').map(Number)
+  const end = new Date(year, month - 1, day)
+  end.setDate(end.getDate() + 6) // Day 7
+  return end.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })
+})
+
+// Next scheduled delivery preview text
+const nextDeliveryInfo = computed(() => {
+  if (!isAutopilotActive.value) return 'Paused (Not dispatching)'
+  if (!kickoffDate.value) return 'Awaiting Kickoff'
+  
+  const todayStr = formatDateToISO(new Date())
+  if (kickoffDate.value === todayStr) {
+    return 'Today • 08:30 AM (Breakfast)'
+  }
+  return `${kickoffLabel.value} • 08:30 AM (Breakfast)`
+})
+
+const onKickoffDateChanged = () => {
+  if (kickoffDate.value) {
+    try {
+      localStorage.setItem('errandr_autopilot_kickoff', kickoffDate.value)
+    } catch (e) {}
+    showToast({ 
+      title: 'Kickoff Updated', 
+      message: `Autopilot routine will start on ${kickoffLabel.value}`, 
+      toastType: 'success' 
+    })
+  }
+}
+
+const setKickoffTomorrow = () => {
+  const tomorrow = new Date()
+  tomorrow.setDate(tomorrow.getDate() + 1)
+  kickoffDate.value = formatDateToISO(tomorrow)
+  onKickoffDateChanged()
+}
+
+const setKickoffNextMonday = () => {
+  const d = new Date()
+  // calculate days until next Monday
+  const day = d.getDay()
+  const daysUntilMonday = ((1 + 7 - day) % 7) || 7
+  d.setDate(d.getDate() + daysUntilMonday)
+  kickoffDate.value = formatDateToISO(d)
+  onKickoffDateChanged()
+}
+
+const toggleAutopilotStatus = () => {
+  isAutopilotActive.value = !isAutopilotActive.value
+  try {
+    localStorage.setItem('errandr_autopilot_status', isAutopilotActive.value ? 'active' : 'paused')
+  } catch (e) {}
+  showToast({
+    title: isAutopilotActive.value ? 'Autopilot Resumed' : 'Autopilot Paused',
+    message: isAutopilotActive.value 
+      ? 'Scheduled campus meal deliveries will run automatically.' 
+      : 'Meal deliveries paused until you resume.',
+    toastType: isAutopilotActive.value ? 'success' : 'info'
+  })
+}
 
 const dismissImportedPlan = () => {
   importedPlan.value = null
@@ -834,6 +919,7 @@ const fetchOrders = async () => {
 }
 
 const getScheduledOrderForSlot = (day, timeWindow) => {
+  // 1. Check if user configured a manual recurring order in database
   for (const order of orders.value) {
     if (order.status === 'active' || order.status === 'paused') {
       const match = order.schedules?.find(s => s.day === day && s.timeWindow === timeWindow)
@@ -848,11 +934,67 @@ const getScheduledOrderForSlot = (day, timeWindow) => {
           items: displayItems,
           status: order.status,
           total: order.total,
-          scheduleId: match._id || match.id
+          scheduleId: match._id || match.id,
+          exactTime: match.exactTime || '12:00'
         }
       }
     }
   }
+
+  // 2. Feed automatically from Synced Meal Desk Plan into this calendar slot!
+  if (importedPlan.value && dayOfWeekMapping.value[day]) {
+    const slotKey = `${day}_${timeWindow}`
+    if (dismissedSyncedSlots.value.includes(slotKey)) return null
+
+    const dayPlan = dayOfWeekMapping.value[day]
+    let mealIndex = -1
+    let defaultTime = '08:30'
+
+    if (timeWindow.includes('08:00 AM')) {
+      mealIndex = 0 // Breakfast
+      defaultTime = '08:30'
+    } else if (timeWindow.includes('12:00 PM')) {
+      mealIndex = 1 // Lunch
+      defaultTime = '12:30'
+    } else if (timeWindow.includes('05:00 PM')) {
+      mealIndex = (dayPlan.meals && dayPlan.meals.length >= 3) ? 2 : -1 // Dinner
+      defaultTime = '18:00'
+    }
+
+    if (mealIndex >= 0 && dayPlan.meals && dayPlan.meals[mealIndex]) {
+      const m = dayPlan.meals[mealIndex]
+      const itemsList = (m.items && m.items.length > 0)
+        ? m.items.map(it => ({
+            name: it.name,
+            quantity: it.portions || 1,
+            price: it.price || 0,
+            image: it.image
+          }))
+        : [{
+            name: m.mealName || m.name,
+            quantity: 1,
+            price: m.mealPrice || m.price || 0,
+            image: m.image
+          }]
+
+      return {
+        _id: `synced_${slotKey}`,
+        isSyncedFromMealDesk: true,
+        vendor: {
+          storeName: m.vendorName || m.vendor?.storeName || 'Campus Partner',
+          name: m.vendorName || m.vendor?.name || 'Campus Partner',
+          _id: m.vendorId || m.vendor?._id
+        },
+        items: itemsList,
+        status: isAutopilotActive.value ? 'active' : 'paused',
+        total: m.mealPrice || m.total || 0,
+        exactTime: defaultTime,
+        mealType: m.mealType,
+        nutrition: m.nutrition
+      }
+    }
+  }
+
   return null
 }
 
@@ -863,6 +1005,25 @@ const getDayMealsCount = (day) => {
       count += o.schedules?.filter(s => s.day === day).length || 0
     }
   })
+
+  // Include synced meals count for this day
+  if (importedPlan.value && dayOfWeekMapping.value[day]) {
+    timeSlots.forEach(slot => {
+      // If no manual order exists in this slot, check if synced meal fills it
+      const hasManual = orders.value.some(o => 
+        (o.status === 'active' || o.status === 'paused') && 
+        o.schedules?.some(s => s.day === day && s.timeWindow === slot.key)
+      )
+      if (!hasManual) {
+        const slotKey = `${day}_${slot.key}`
+        if (!dismissedSyncedSlots.value.includes(slotKey)) {
+          const scheduled = getScheduledOrderForSlot(day, slot.key)
+          if (scheduled) count++
+        }
+      }
+    })
+  }
+
   return count
 }
 
@@ -887,7 +1048,8 @@ const openAddMealModal = async (day, time) => {
 
 const openEditMealModal = async (day, time, order) => {
   resetModalState()
-  activeModalContext.value = { day, time, editOrderId: order._id }
+  const isSynced = String(order._id).startsWith('synced_')
+  activeModalContext.value = { day, time, editOrderId: isSynced ? null : order._id }
   showAddModal.value = true
   modalLoading.value = true
 
@@ -929,7 +1091,7 @@ const openEditMealModal = async (day, time, order) => {
         })
       }
 
-      // Pre-populate delivery from the raw order
+      // Pre-populate delivery from the raw order if available
       const rawOrder = orders.value.find(o => o._id === order._id)
       if (rawOrder) {
         recipientName.value = rawOrder.recipientName || ''
@@ -944,10 +1106,12 @@ const openEditMealModal = async (day, time, order) => {
         } else {
           exactTime.value = '12:00'
         }
+      } else {
+        exactTime.value = order.exactTime || '12:00'
       }
     } else {
       modalView.value = 'vendors'
-      exactTime.value = '12:00'
+      exactTime.value = order.exactTime || '12:00'
     }
   } catch (e) {
     console.error(e)
@@ -1218,6 +1382,19 @@ const executeDelete = async () => {
   if (!orderToDelete.value) return
   isDeleting.value = true
   try {
+    if (String(orderToDelete.value).startsWith('synced_')) {
+      const slotKey = String(orderToDelete.value).replace('synced_', '')
+      if (!dismissedSyncedSlots.value.includes(slotKey)) {
+        dismissedSyncedSlots.value.push(slotKey)
+        try {
+          localStorage.setItem('errandr_autopilot_dismissed_slots', JSON.stringify(dismissedSyncedSlots.value))
+        } catch (e) {}
+      }
+      showToast({ title: 'Removed', message: 'Meal removed from this routine slot', toastType: 'info' })
+      showDeleteModal.value = false
+      return
+    }
+
     await orders_api.cancelRecurringOrder(orderToDelete.value)
     orders.value = orders.value.filter(o => o._id !== orderToDelete.value)
     showToast({ title: 'Success', message: 'Meal automation cancelled', toastType: 'success' })
@@ -1263,12 +1440,46 @@ onMounted(() => {
   fetchPlatformSettings()
 
   try {
+    // 1. Load imported plan
     const saved = localStorage.getItem('errandr_autopilot_imported_plan')
     if (saved) {
       importedPlan.value = JSON.parse(saved)
     }
+
+    // 2. Load autopilot status (active vs paused)
+    const savedStatus = localStorage.getItem('errandr_autopilot_status')
+    if (savedStatus) {
+      isAutopilotActive.value = savedStatus !== 'paused'
+    }
+
+    // 3. Load dismissed slots
+    const savedDismissed = localStorage.getItem('errandr_autopilot_dismissed_slots')
+    if (savedDismissed) {
+      dismissedSyncedSlots.value = JSON.parse(savedDismissed)
+    }
+
+    // 4. Load kickoff date (defaults to tomorrow if not set)
+    const savedKickoff = localStorage.getItem('errandr_autopilot_kickoff')
+    if (savedKickoff) {
+      kickoffDate.value = savedKickoff
+    } else {
+      const tomorrow = new Date()
+      tomorrow.setDate(tomorrow.getDate() + 1)
+      kickoffDate.value = formatDateToISO(tomorrow)
+      localStorage.setItem('errandr_autopilot_kickoff', kickoffDate.value)
+    }
+
+    // 5. If we have a kickoff date, select that day of week by default so student sees the kickoff day immediately!
+    if (kickoffDate.value) {
+      const [y, m, d] = kickoffDate.value.split('-').map(Number)
+      const kDate = new Date(y, m - 1, d)
+      const kWeekday = kDate.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase()
+      if (kWeekday) {
+        selectedDay.value = kWeekday
+      }
+    }
   } catch (e) {
-    console.error('Failed to load imported meal desk plan', e)
+    console.error('Failed to load autopilot configuration', e)
   }
 })
 </script>

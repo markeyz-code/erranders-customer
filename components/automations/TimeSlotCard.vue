@@ -36,7 +36,16 @@
     <div v-else class="flex-1 flex flex-col justify-between">
       <div>
         <h5 class="font-bold text-gray-900 text-base leading-tight mb-1">{{ order.items[0]?.name || 'Meal Order' }}</h5>
-        <p class="text-sm font-medium text-gray-500" v-if="order.items.length > 1">+ {{ order.items.length - 1 }} more items</p>
+        <p v-if="order.vendor?.storeName || order.vendor?.name" class="text-xs text-gray-500 font-medium flex items-center gap-1 mt-0.5">
+          <Store class="w-3.5 h-3.5 text-[#FF5C1A] shrink-0" />
+          <span class="truncate">{{ order.vendor?.storeName || order.vendor?.name }}</span>
+        </p>
+        <div v-if="order.isSyncedFromMealDesk" class="mt-2">
+          <span class="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider text-[#FF5C1A] bg-orange-50 px-2 py-0.5 rounded-md border border-orange-100">
+            ⚡ Autopilot Synced
+          </span>
+        </div>
+        <p class="text-sm font-medium text-gray-500 mt-1" v-if="order.items.length > 1">+ {{ order.items.length - 1 }} more items</p>
       </div>
       
       <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
@@ -59,7 +68,7 @@
 </template>
 
 <script setup>
-import { Clock, Plus, Trash2, Edit2 } from 'lucide-vue-next'
+import { Clock, Plus, Trash2, Edit2, Store } from 'lucide-vue-next'
 
 const props = defineProps({
   timeLabel: { type: String, required: true },
