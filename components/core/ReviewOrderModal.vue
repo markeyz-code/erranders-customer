@@ -123,12 +123,20 @@ const submitReview = async () => {
 
   submitting.value = true
   try {
-    await orders_api.rateOrder(props.order._id, {
+    const payload: any = {
       rating: rating.value,
-      review: review.value,
-      vendorRating: rating.value,
-      erranderRating: rating.value
-    })
+      review: review.value
+    }
+    
+    if (!props.order.hasRatedVendor) {
+      payload.vendorRating = rating.value
+    }
+    
+    if (props.order.errander && !props.order.hasRatedErrander) {
+      payload.erranderRating = rating.value
+    }
+
+    await orders_api.rateOrder(props.order._id, payload)
     showToast({
       title: 'Review Submitted',
       message: 'Thank you for your feedback!',

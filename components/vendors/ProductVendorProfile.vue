@@ -797,14 +797,49 @@
                     </div>
                   </div>
                   <!-- Group Actions -->
-                  <div class="pt-2 flex flex-col gap-2">
-                    <button 
-                      @click="toggleReady(!getMyStatus?.isReady)"
-                      class="w-full py-2.5 rounded-xl text-sm font-medium transition-all border"
-                      :class="getMyStatus?.isReady ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-white text-gray-400 border-gray-100 hover:text-gray-900'"
-                    >
-                      {{ getMyStatus?.isReady ? 'You are Ready' : 'Mark as Ready' }}
-                    </button>
+                  <div class="pt-2 flex flex-col gap-2.5">
+                    <!-- When User is Ready -->
+                    <div v-if="getMyStatus?.isReady" class="p-3.5 rounded-xl bg-emerald-50/90 border border-emerald-200/80 flex flex-col gap-2.5">
+                      <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                          <div class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                            <Check class="w-3.5 h-3.5 stroke-[3]" />
+                          </div>
+                          <div>
+                            <p class="text-xs font-bold text-emerald-950 leading-tight">You're Marked as Ready</p>
+                            <p class="text-[10px] text-emerald-700 font-medium mt-0.5">Your items are locked in for the host</p>
+                          </div>
+                        </div>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-100 text-emerald-800">
+                          Ready
+                        </span>
+                      </div>
+                      <button 
+                        @click="toggleReady(false)"
+                        class="w-full py-2 rounded-lg text-xs font-semibold transition-all bg-white hover:bg-gray-50 active:scale-[0.98] text-gray-700 border border-emerald-200 shadow-2xs flex items-center justify-center gap-1.5"
+                      >
+                        <RotateCcw class="w-3 h-3 text-gray-500" />
+                        Need changes? Switch back to Carting
+                      </button>
+                      <p class="text-[10px] text-emerald-700/80 text-center leading-tight">
+                        You can adjust your items or switch back to carting any time before the host pays.
+                      </p>
+                    </div>
+
+                    <!-- When User is Still Carting -->
+                    <div v-else class="flex flex-col gap-1.5">
+                      <button 
+                        @click="toggleReady(true)"
+                        class="w-full py-2.5 rounded-xl text-sm font-bold transition-all bg-white hover:bg-emerald-50 active:scale-[0.98] text-emerald-700 border border-emerald-300 hover:border-emerald-400 shadow-2xs flex items-center justify-center gap-2"
+                      >
+                        <CheckCircle2 class="w-4 h-4 text-emerald-600" />
+                        Mark Order as Ready
+                      </button>
+                      <p class="text-[10px] text-gray-500 leading-tight text-center px-1">
+                        Click when done adding items so the host knows they can proceed to checkout.
+                      </p>
+                    </div>
+
                     <button 
                       v-if="isHost && groupOrder.status === 'open'"
                       @click="handleCheckoutGroupOrder"
@@ -813,7 +848,7 @@
                     >
                       Checkout Everything
                     </button>
-                    <button @click="showLeaveConfirmationModal = true" class="w-full py-2 text-[10px] font-medium text-rose-400 hover:text-rose-600 transition-all">
+                    <button @click="showLeaveConfirmationModal = true" class="w-full py-1.5 text-[10px] font-medium text-rose-400 hover:text-rose-600 transition-all text-center">
                       Leave Group
                     </button>
                   </div>
@@ -996,18 +1031,53 @@
                 </div>
                 <div :class="p.isReady ? 'bg-emerald-500' : 'bg-gray-200'" class="w-2 h-2 rounded-full"></div>
               </div>
-              <div class="flex flex-col gap-2 pt-1">
-                <button 
-                  @click="toggleReady(!getMyStatus?.isReady)"
-                  class="w-full py-2.5 rounded-xl text-sm font-medium transition-all border"
-                  :class="getMyStatus?.isReady ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-white text-gray-400 border-gray-100'"
-                >
-                  {{ getMyStatus?.isReady ? 'You are Ready' : 'Mark as Ready' }}
-                </button>
+              <div class="flex flex-col gap-2.5 pt-1">
+                <!-- When User is Ready -->
+                <div v-if="getMyStatus?.isReady" class="p-3.5 rounded-xl bg-emerald-50/90 border border-emerald-200/80 flex flex-col gap-2.5">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <div class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                        <Check class="w-3.5 h-3.5 stroke-[3]" />
+                      </div>
+                      <div>
+                        <p class="text-xs font-bold text-emerald-950 leading-tight">You're Marked as Ready</p>
+                        <p class="text-[10px] text-emerald-700 font-medium mt-0.5">Your items are locked in for the host</p>
+                      </div>
+                    </div>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-100 text-emerald-800">
+                      Ready
+                    </span>
+                  </div>
+                  <button 
+                    @click="toggleReady(false)"
+                    class="w-full py-2 rounded-lg text-xs font-semibold transition-all bg-white hover:bg-gray-50 active:scale-[0.98] text-gray-700 border border-emerald-200 shadow-2xs flex items-center justify-center gap-1.5"
+                  >
+                    <RotateCcw class="w-3 h-3 text-gray-500" />
+                    Need changes? Switch back to Carting
+                  </button>
+                  <p class="text-[10px] text-emerald-700/80 text-center leading-tight">
+                    You can adjust your items or switch back to carting any time before the host pays.
+                  </p>
+                </div>
+
+                <!-- When User is Still Carting -->
+                <div v-else class="flex flex-col gap-1.5">
+                  <button 
+                    @click="toggleReady(true)"
+                    class="w-full py-2.5 rounded-xl text-sm font-bold transition-all bg-white hover:bg-emerald-50 active:scale-[0.98] text-emerald-700 border border-emerald-300 hover:border-emerald-400 shadow-2xs flex items-center justify-center gap-2"
+                  >
+                    <CheckCircle2 class="w-4 h-4 text-emerald-600" />
+                    Mark Order as Ready
+                  </button>
+                  <p class="text-[10px] text-gray-500 leading-tight text-center px-1">
+                    Click when done adding items so the host knows they can proceed to checkout.
+                  </p>
+                </div>
+
                 <button v-if="isHost && groupOrder.status === 'open'" @click="handleCheckoutGroupOrder" :disabled="!canCheckout" class="w-full py-3 bg-gray-900 text-white rounded-xl text-sm font-medium hover:bg-parentPrimary transition-all shadow-sm border border-gray-50 disabled:opacity-50">
                   Checkout Everything
                 </button>
-                <button @click="showLeaveConfirmationModal = true; showMobileCartDrawer = false" class="w-full py-2 text-[10px] font-medium text-rose-400">Leave Group</button>
+                <button @click="showLeaveConfirmationModal = true; showMobileCartDrawer = false" class="w-full py-1.5 text-[10px] font-medium text-rose-400 text-center">Leave Group</button>
               </div>
             </div>
 
@@ -1650,7 +1720,7 @@
 
 <script setup lang="ts">
 import { 
-  Share2, Heart, ShoppingCart, ShoppingBag, ArrowLeft, ArrowRight, Clock, Star, MapPin, Search, Info, ChevronRight, ChevronDown, Users, Calendar, Copy, Trash2, X, Bike, Plus, Minus, Loader2, LogOut, Bell, FileText, RefreshCw, Lock
+  Share2, Heart, ShoppingCart, ShoppingBag, ArrowLeft, ArrowRight, Clock, Star, MapPin, Search, Info, ChevronRight, ChevronDown, Users, Calendar, Copy, Trash2, X, Bike, Plus, Minus, Loader2, LogOut, Bell, FileText, RefreshCw, Lock, CheckCircle2, RotateCcw, Check
 } from 'lucide-vue-next';
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 

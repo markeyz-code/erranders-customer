@@ -145,6 +145,20 @@
                   </MenuItem>
 
                   <MenuItem v-slot="{ active }">
+                    <NuxtLink to="/dashboard/group-orders" :class="[active ? 'bg-gray-100 scale-95' : 'bg-gray-50/50 hover:bg-gray-100/50', 'group flex items-center gap-3 rounded-2xl p-3 transition-all text-left']">
+                      <Users class="w-4 h-4 text-gray-600" />
+                      <span class="text-sm font-bold text-gray-700">Group Orders</span>
+                    </NuxtLink>
+                  </MenuItem>
+
+                  <MenuItem v-slot="{ active }">
+                    <NuxtLink to="/market-pool" :class="[active ? 'bg-gray-100 scale-95' : 'bg-gray-50/50 hover:bg-gray-100/50', 'group flex items-center gap-3 rounded-2xl p-3 transition-all text-left']">
+                      <ShoppingBag class="w-4 h-4 text-gray-600" />
+                      <span class="text-sm font-bold text-gray-700">Market Pool</span>
+                    </NuxtLink>
+                  </MenuItem>
+
+                  <MenuItem v-slot="{ active }">
                     <NuxtLink to="/dashboard/recurring-orders" :class="[active ? 'bg-orange-50 scale-95' : 'bg-gray-50/50 hover:bg-orange-50/50', 'group flex items-center gap-3 rounded-2xl p-3 col-span-2 transition-all border border-transparent hover:border-orange-100/50 text-left']">
                       <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-parentPrimary">
                         <Repeat class="w-4 h-4" />
@@ -229,7 +243,7 @@ import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import { useUser } from "@/composables/modules/auth/user"
 import { useCart } from "@/composables/modules/cart"
-import { Home, User, LogOut, Menu as MenuIcon, Filter, ChevronDown, ShoppingCart, Info, Zap, Package, Calendar, Store, Bike, LayoutDashboard, Repeat } from 'lucide-vue-next'
+import { Home, User, LogOut, Menu as MenuIcon, Filter, ChevronDown, ShoppingCart, Info, Zap, Package, Calendar, Store, Bike, LayoutDashboard, Repeat, Users, ShoppingBag } from 'lucide-vue-next'
 import { useRoute } from 'vue-router'
 import { useGlobalFilter } from '@/composables/core/useGlobalFilter'
 

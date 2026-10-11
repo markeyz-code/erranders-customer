@@ -383,7 +383,8 @@ import {
   Package,
   Scissors,
   Sparkles,
-  Repeat
+  Repeat,
+  ChefHat
 } from 'lucide-vue-next'
 import { useRealtimeNotifications } from '@/composables/core/useRealtimeNotifications'
 import { useNotifications } from '@/composables/modules/notifications/useNotifications'
@@ -428,6 +429,7 @@ const errandsNavItems = [
   { path: '/dashboard', label: 'Home', icon: Home, code: 'HM' },
   { path: '/dashboard/search', label: 'Search', icon: Search, code: 'SR' },
   { path: '/dashboard/orders', label: 'Orders', icon: ShoppingBag, code: 'OR' },
+  { path: '/dashboard/meal-desk', label: 'Meal Desk', icon: ChefHat, code: 'MD' },
   { path: '/dashboard/recurring-orders', label: 'Meal Autopilot', icon: Repeat, code: 'RO' },
   { path: '/dashboard/group-orders', label: 'Group Orders', icon: Users, code: 'GO' },
   { path: '/dashboard/quests', label: 'Campus Quests', icon: Target, code: 'CQ' },
@@ -458,6 +460,7 @@ const pageTitles: Record<string, { title: string; description: string }> = {
   '/dashboard': { title: 'Dashboard', description: 'Welcome back to Errandr' },
   '/dashboard/search': { title: 'Search', description: 'Find anything on campus' },
   '/dashboard/orders': { title: 'My Errands', description: 'Track your active and past orders' },
+  '/dashboard/meal-desk': { title: 'Meal Desk', description: 'Plan and budget your weekly meals' },
   '/dashboard/recurring-orders': { title: 'Meal Autopilot', description: 'Set it, forget it — your meals, on schedule' },
   '/dashboard/group-orders': { title: 'Group Orders', description: 'Manage your multiplayer carts and order history' },
   '/dashboard/favorites': { title: 'My Favorites', description: 'Your most loved items and venues' },
@@ -534,7 +537,7 @@ const checkOrders = () => {
   const delivered = studentOrders.value.find((o: any) => 
     o.type !== 'custom_errand' &&
     (o.status === 'delivered' || o.status === 'picked_up' || o.status === 'DELIVERED' || o.status === 'COMPLETED') && 
-    (!o.hasRatedVendor || !o.hasRatedErrander)
+    (!o.hasRatedVendor || (o.errander && !o.hasRatedErrander))
   )
   if (delivered && !pendingOrderModalOpen.value && route.path !== `/dashboard/orders/${delivered._id}` && !reviewOrderModalOpen.value) {
     reviewOrder.value = delivered

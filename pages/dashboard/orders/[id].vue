@@ -418,7 +418,7 @@
                             </div>
                          </div>
                        </div>
-                       <p class="text-sm font-bold text-gray-900 shrink-0">₦{{ (item.price * item.quantity).toLocaleString() }}</p>
+                       <p class="text-sm font-bold text-gray-900 shrink-0">₦{{ ((item.price || 0) * (item.quantity || 1)).toLocaleString() }}</p>
                      </div>
                    </div>
 
@@ -626,7 +626,7 @@
           
           <h3 class="text-lg font-bold text-center mb-2">Fund Your Wallet</h3>
           <p class="text-sm text-gray-600 text-center mb-6">
-            You need <strong class="text-gray-900">₦{{ fundAmountNeeded.toLocaleString() }}</strong> more to pay for this errand. Fund your wallet now to proceed.
+            You need <strong class="text-gray-900">₦{{ (fundAmountNeeded || 0).toLocaleString() }}</strong> more to pay for this errand. Fund your wallet now to proceed.
           </p>
 
           <button
@@ -635,7 +635,7 @@
             class="w-full bg-[#FF5C1A] text-white font-bold py-3 rounded-xl hover:bg-[#e6511a] transition-all flex justify-center items-center gap-2"
           >
             <Loader2 v-if="isInitializingPayment" class="w-4 h-4 animate-spin" />
-            <span>Fund ₦{{ fundAmountNeeded.toLocaleString() }}</span>
+            <span>Fund ₦{{ (fundAmountNeeded || 0).toLocaleString() }}</span>
           </button>
         </div>
       </div>
@@ -790,7 +790,7 @@
       </div>
       <h3 class="text-xl font-black text-gray-900 mb-2">Extra Funds Required</h3>
       <p class="text-sm font-medium text-gray-500 mb-6 leading-relaxed">
-        Your Errander needs an extra <strong class="text-blue-600">₦{{ topupAmount.toLocaleString() }}</strong> to complete your custom errand.
+        Your Errander needs an extra <strong class="text-blue-600">₦{{ (topupAmount || 0).toLocaleString() }}</strong> to complete your custom errand.
       </p>
       
       <div class="flex gap-3">
@@ -1044,7 +1044,7 @@ const handleFeeInput = (e: Event) => {
     formattedNewFee.value = '';
   } else {
     newFee.value = numericValue;
-    formattedNewFee.value = numericValue.toLocaleString('en-US');
+    formattedNewFee.value = (numericValue || 0).toLocaleString('en-US');
   }
 };
 const isIncreasingFee = ref(false);
@@ -1077,7 +1077,7 @@ const fetchOrder = async () => {
     if (order.value.type === 'custom_errand') {
         if (order.value.deliveryFee) {
             newFee.value = order.value.deliveryFee + 100;
-            formattedNewFee.value = newFee.value.toLocaleString('en-US');
+            formattedNewFee.value = (newFee.value || 0).toLocaleString('en-US');
         }
     }
 }
