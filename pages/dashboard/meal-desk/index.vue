@@ -4,7 +4,7 @@
     <header class="bg-white border-b border-[#E7E2DA] sticky top-0 z-40">
       <div class="px-4 sm:px-6 py-4 flex items-center justify-between">
         <div class="flex items-center gap-4">
-          <button @click="$router.back()" class="p-2 hover:bg-gray-100 rounded-full transition-colors active:scale-95">
+          <button @click="handleBack" type="button" class="p-2 hover:bg-gray-100 rounded-full transition-colors active:scale-95" title="Go Back">
             <ArrowLeft class="w-5 h-5 text-gray-900" />
           </button>
           <div>
@@ -1470,7 +1470,7 @@
               <div>
                 <span class="text-[9px] font-bold text-emerald-900/60 uppercase tracking-wider block">Account Name</span>
                 <span class="text-xs font-bold text-emerald-950 truncate block">
-                  {{ wallet?.virtualAccount?.accountName || (user ? `${user.firstName} ${user.lastName}` : 'Errandr Customer') }}
+                  {{ wallet?.virtualAccount?.accountName || (user?.firstName ? `${user.firstName} ${user.lastName || ''}` : 'Errandr Customer') }}
                 </span>
               </div>
             </div>
@@ -1507,7 +1507,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import { useRoute } from '#app';
+import { useRouter, useRoute } from 'vue-router';
 import { 
   ArrowLeft, ChefHat, Wallet, Utensils, Settings2, 
   HeartPulse, Store, ChevronRight, Zap, Brain, 
@@ -1523,10 +1523,23 @@ import { useWallet } from '@/composables/modules/wallets';
 import { usePayments } from '@/composables/modules/payments';
 import { useUser } from '@/composables/modules/auth/user';
 
+definePageMeta({
+  layout: 'student'
+});
+
+const router = useRouter();
 const route = useRoute();
 const { user } = useUser();
 const { balance, wallet, fetchWallet } = useWallet();
 const { initializePayment, verifyPayment } = usePayments();
+
+const handleBack = () => {
+  if (typeof window !== 'undefined' && window.history.length > 1) {
+    router.back();
+  } else {
+    navigateTo('/dashboard/recurring-orders');
+  }
+};
 
 // Wallet In-Page Funding Modal States
 const showFundWalletModal = ref(false);
@@ -1772,20 +1785,19 @@ const normalizeIteration = (iter: any) => {
   if (!iter) return null;
 
   const days = (iter.days || []).map((d: any, dayIdx: number) => {
-    const dailyCost = Number(d.dailyCost ?? d.totalCost ?? 0);
     const foodSubtotal = Number(d.foodSubtotal ?? 0);
     const packagingFee = Number(d.packagingFee ?? 0);
-    const deliveryFee = Number(d.deliveryFee ?? 0);
-    const serviceFee = Number(d.serviceFee ?? 0);
+    const deliveryFee = Number(d.deliveryFee ?? 350);
+    const serviceFee = Number(d.serviceFee ?? 50);
 
     const meals = (d.meals || []).map((m: any, mIdx: number) => {
-      const firstOpt = m.options?.[0] || {};
-      const vendorName = firstOpt.vendor?.storeName || firstOpt.vendor?.name || m.vendor?.storeName || (m.isCustom ? 'Custom Request' : 'Campus Vendor');
-      const vendorLogo = firstOpt.vendor?.logo || firstOpt.vendor?.image || m.vendor?.logo || '';
-      const mealName = m.name || firstOpt.product?.name || `Meal ${mIdx + 1}`;
-      const price = Number(m.estimatedCost ?? m.price ?? firstOpt.price ?? 0);
+      const firstOpt = (m.options && m.options.length > 0) ? m.options[0] : {};
+      const vendorName = firstOpt.vendor?.storeName || firstOpt.vendor?.name || m.vendor?.storeName || m.vendor?.name || m.vendorName || (m.isCustom ? 'Custom Request' : (m.source || 'Campus Vendor'));
+      const vendorLogo = firstOpt.vendor?.logo || firstOpt.vendor?.image || m.vendor?.logo || m.logo || '';
+      const mealName = m.name || m.mealName || firstOpt.product?.name || `Meal ${mIdx + 1}`;
+      const price = Number(m.estimatedCost ?? m.price ?? m.mealPrice ?? firstOpt.price ?? 0);
       const isCustom = Boolean(m.isCustom || firstOpt.category === 'custom' || firstOpt.product?._id === 'custom');
-      const mealType = m.type || (mIdx === 0 ? 'breakfast' : mIdx === 1 ? 'lunch' : 'dinner');
+      const mealType = m.type || m.mealType || (mIdx === 0 ? 'breakfast' : mIdx === 1 ? 'lunch' : 'dinner');
 
       return {
         ...m,
@@ -1800,6 +1812,10 @@ const normalizeIteration = (iter: any) => {
         breakdown: m.breakdown || null
       };
     });
+
+    const mealsSum = meals.reduce((sum: number, m: any) => sum + (m.price || 0), 0);
+    const calculatedDailyCost = mealsSum + deliveryFee + serviceFee;
+    const dailyCost = Number(d.dailyCost ?? d.totalCost ?? calculatedDailyCost);
 
     return {
       ...d,
@@ -2124,6 +2140,37 @@ const checkWalletBalance = async () => {
 
 onMounted(async () => {
   fetchWallet();
+
+  // Restore saved meal plan from localStorage if user is returning or editing from Autopilot
+  try {
+    const savedPlan = localStorage.getItem('errandr_autopilot_imported_plan');
+    if (savedPlan) {
+      const parsed = JSON.parse(savedPlan);
+      if (parsed) {
+        if (parsed.budget) {
+          budget.value = Number(parsed.budget);
+          dailyBudget.value = parsed.dailyBudget ? Number(parsed.dailyBudget) : Math.round(Number(parsed.budget) / 7);
+        }
+        if (parsed.bufferAmount !== undefined) bufferAmount.value = Number(parsed.bufferAmount);
+        if (parsed.mealsPerDay) mealsPerDay.value = Number(parsed.mealsPerDay);
+        if (Array.isArray(parsed.selectedVendors) && parsed.selectedVendors.length > 0) {
+          selectedVendors.value = parsed.selectedVendors;
+        }
+        if (Array.isArray(parsed.medicalConditions)) medicalConditions.value = parsed.medicalConditions;
+        if (Array.isArray(parsed.dislikes)) dislikesList.value = parsed.dislikes;
+        if (typeof parsed.allowCustomErrands === 'boolean') allowCustomErrands.value = parsed.allowCustomErrands;
+        if (typeof parsed.includeDrinks === 'boolean') includeDrinks.value = parsed.includeDrinks;
+
+        const normalized = normalizeIteration(parsed);
+        if (normalized && normalized.days && normalized.days.length > 0) {
+          iterations.value = [normalized];
+          currentIterationIndex.value = 0;
+        }
+      }
+    }
+  } catch (err) {
+    console.error('Failed to restore saved meal desk plan', err);
+  }
 
   try {
     const res = await vendors_api.getAll();
