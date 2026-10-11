@@ -33,7 +33,27 @@
               <ChefHat class="w-5 h-5" />
             </div>
           </div>
-          <div class="border-t border-dashed border-[#E7E2DA] mb-5 -mx-5 sm:-mx-6"></div>
+          <div class="border-t border-dashed border-[#E7E2DA] mb-4 -mx-5 sm:-mx-6"></div>
+
+          <!-- Student Wallet Balance Glance -->
+          <div class="mb-5 p-3 rounded-2xl bg-orange-50/60 border border-orange-100/80 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-xl bg-orange-100 text-[#FF5C1A] flex items-center justify-center shrink-0">
+                <Wallet class="w-4 h-4" />
+              </div>
+              <div>
+                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider block leading-none">Wallet Balance</span>
+                <span class="text-xs font-black text-gray-900 mt-0.5 block leading-tight">₦{{ (balance || 0).toLocaleString() }}</span>
+              </div>
+            </div>
+            <button 
+              type="button"
+              @click="openFundWalletModal()"
+              class="px-2.5 py-1 rounded-lg bg-white border border-[#E7E2DA] hover:border-[#FF5C1A] hover:bg-orange-50 text-[11px] font-bold text-[#FF5C1A] transition-all shadow-2xs active:scale-95"
+            >
+              + Fund
+            </button>
+          </div>
 
           <div class="space-y-5">
             <!-- Daily & Weekly Budget -->
@@ -408,9 +428,11 @@
               </div>
             </div>
             <button 
-              @click="$router.push('/dashboard/wallet')"
-              class="px-5 py-2.5 bg-rose-600 text-white rounded-xl text-xs font-bold hover:bg-rose-700 active:scale-95 transition-all whitespace-nowrap shadow-md shadow-rose-600/20 self-start sm:self-auto"
+              type="button"
+              @click="openFundWalletModal(budgetDeficit > bufferAmount ? budgetDeficit - bufferAmount : budgetDeficit)"
+              class="px-5 py-2.5 bg-rose-600 text-white rounded-xl text-xs font-bold hover:bg-rose-700 active:scale-95 transition-all whitespace-nowrap shadow-md shadow-rose-600/20 self-start sm:self-auto flex items-center gap-1.5"
             >
+              <Wallet class="w-3.5 h-3.5" />
               Fund Wallet
             </button>
           </div>
@@ -1264,21 +1286,263 @@
       </div>
     </div>
 
+    <!-- ============================================ -->
+    <!-- WALLET FUNDING MODAL (In-Page, No Redirection) -->
+    <!-- ============================================ -->
+    <div 
+      v-if="showFundWalletModal" 
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      @click.self="showFundWalletModal = false"
+    >
+      <div class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border border-gray-100 animate-in fade-in zoom-in-95 duration-200">
+        <!-- Modal Header -->
+        <div class="p-5 sm:p-6 bg-gradient-to-r from-gray-900 to-gray-800 text-white relative">
+          <button 
+            @click="showFundWalletModal = false" 
+            class="absolute top-5 right-5 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all active:scale-95"
+          >
+            <X class="w-4 h-4" />
+          </button>
+          <div class="flex items-center gap-3 mb-2">
+            <div class="w-10 h-10 rounded-2xl bg-[#FF5C1A] flex items-center justify-center text-white shadow-lg shadow-orange-500/20">
+              <Wallet class="w-5 h-5" />
+            </div>
+            <div>
+              <h3 class="text-base sm:text-lg font-black tracking-tight">Fund Your Wallet</h3>
+              <p class="text-xs text-gray-300 font-medium">Add funds directly without leaving Meal Desk</p>
+            </div>
+          </div>
+
+          <!-- Quick Balance Bar -->
+          <div class="mt-4 p-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] font-bold text-gray-300 uppercase tracking-wider block">Current Balance</span>
+              <span class="text-base font-black text-white">₦{{ (balance || 0).toLocaleString() }}</span>
+            </div>
+            <div v-if="budgetDeficit > 0" class="text-right">
+              <span class="text-[10px] font-bold text-rose-300 uppercase tracking-wider block">Plan Deficit</span>
+              <span class="text-xs font-black text-rose-300">+₦{{ budgetDeficit.toLocaleString() }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Method Switcher Tabs -->
+        <div class="grid grid-cols-2 p-1.5 m-5 bg-gray-100 rounded-2xl gap-1">
+          <button 
+            type="button"
+            @click="activeFundMethod = 'paystack'"
+            :class="[
+              'py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5',
+              activeFundMethod === 'paystack'
+                ? 'bg-white text-gray-900 shadow-sm'
+                : 'text-gray-500 hover:text-gray-900'
+            ]"
+          >
+            <CreditCard class="w-3.5 h-3.5 text-[#FF5C1A]" />
+            Paystack / Card
+          </button>
+          <button 
+            type="button"
+            @click="activeFundMethod = 'virtual_account'"
+            :class="[
+              'py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5',
+              activeFundMethod === 'virtual_account'
+                ? 'bg-white text-gray-900 shadow-sm'
+                : 'text-gray-500 hover:text-gray-900'
+            ]"
+          >
+            <Landmark class="w-3.5 h-3.5 text-emerald-600" />
+            Bank Transfer
+          </button>
+        </div>
+
+        <!-- Content Area -->
+        <div class="px-5 pb-6">
+          <!-- 1. PAYSTACK METHOD -->
+          <div v-if="activeFundMethod === 'paystack'" class="space-y-4">
+            <!-- Amount Input -->
+            <div>
+              <label class="text-[11px] font-bold text-gray-600 uppercase tracking-wider block mb-1.5">
+                Funding Amount
+              </label>
+              <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 font-black text-gray-900 text-base">₦</span>
+                <input 
+                  type="text" 
+                  v-model="formattedFundAmount" 
+                  placeholder="5,000"
+                  class="w-full bg-[#FDFCFB] border border-[#E7E2DA] rounded-2xl py-3 pl-9 pr-4 font-black text-gray-900 text-base focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A] transition-all"
+                >
+              </div>
+            </div>
+
+            <!-- Quick Amount Chips -->
+            <div>
+              <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1.5">Quick Presets</label>
+              <div class="flex flex-wrap gap-1.5">
+                <button 
+                  v-if="budgetDeficit > 0"
+                  type="button"
+                  @click="fundAmount = budgetDeficit"
+                  :class="[
+                    'py-1.5 px-2.5 rounded-xl text-xs font-bold transition-all border active:scale-95 flex items-center gap-1',
+                    fundAmount === budgetDeficit 
+                      ? 'bg-rose-50 text-rose-700 border-rose-300 ring-1 ring-rose-300' 
+                      : 'bg-rose-50/50 text-rose-600 border-rose-200 hover:bg-rose-50'
+                  ]"
+                >
+                  <AlertCircle class="w-3 h-3" />
+                  Exact Deficit (₦{{ budgetDeficit.toLocaleString() }})
+                </button>
+                <button 
+                  v-for="amt in [2000, 5000, 10000, 20000]" 
+                  :key="amt"
+                  type="button"
+                  @click="fundAmount = amt"
+                  :class="[
+                    'py-1.5 px-2.5 rounded-xl text-xs font-bold transition-all border active:scale-95',
+                    fundAmount === amt 
+                      ? 'bg-gray-900 text-white border-gray-900 shadow-sm' 
+                      : 'bg-white text-gray-600 border-[#E7E2DA] hover:bg-gray-50'
+                  ]"
+                >
+                  ₦{{ amt.toLocaleString() }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Preview Balance -->
+            <div class="p-3 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-between text-xs">
+              <span class="text-gray-500 font-medium">Balance After Funding:</span>
+              <span class="font-black text-emerald-600 text-sm">
+                ₦{{ ((balance || 0) + Number(fundAmount || 0)).toLocaleString() }}
+              </span>
+            </div>
+
+            <!-- Pay Button -->
+            <button 
+              type="button"
+              @click="initiatePaystackFunding"
+              :disabled="isInitializingFunding || fundAmount < 100"
+              class="w-full py-3.5 bg-[#FF5C1A] text-white rounded-2xl font-bold text-sm hover:bg-[#e04f14] active:scale-[0.99] disabled:opacity-50 transition-all shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2"
+            >
+              <Loader2 v-if="isInitializingFunding" class="w-4 h-4 animate-spin" />
+              <span v-else>Pay with Paystack</span>
+              <ArrowRight v-if="!isInitializingFunding" class="w-4 h-4" />
+            </button>
+            <p class="text-[10px] text-gray-400 text-center font-medium">
+              🔒 256-bit encrypted via Paystack. Supports Debit Card, USSD & Apple Pay.
+            </p>
+          </div>
+
+          <!-- 2. VIRTUAL ACCOUNT METHOD -->
+          <div v-else class="space-y-4">
+            <div class="p-4 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200/80 relative">
+              <div class="flex items-center justify-between mb-2.5">
+                <span class="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
+                  Dedicated Account
+                </span>
+                <span class="text-xs font-bold text-emerald-700">
+                  {{ wallet?.virtualAccount?.bankName || 'Wema Bank' }}
+                </span>
+              </div>
+
+              <!-- Account Number & Copy -->
+              <div class="flex items-center justify-between gap-3 bg-white p-3 rounded-xl border border-emerald-100 shadow-sm mb-2.5">
+                <div>
+                  <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider block">Account Number</span>
+                  <span class="text-lg font-black text-gray-900 tracking-wider font-mono">
+                    {{ wallet?.virtualAccount?.accountNumber || 'Generating account...' }}
+                  </span>
+                </div>
+                <button 
+                  type="button"
+                  @click="copyAccountNumber"
+                  class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95 shadow-sm"
+                >
+                  <CheckCheck v-if="copiedAccount" class="w-3.5 h-3.5" />
+                  <Copy v-else class="w-3.5 h-3.5" />
+                  {{ copiedAccount ? 'Copied!' : 'Copy' }}
+                </button>
+              </div>
+
+              <!-- Account Name -->
+              <div>
+                <span class="text-[9px] font-bold text-emerald-900/60 uppercase tracking-wider block">Account Name</span>
+                <span class="text-xs font-bold text-emerald-950 truncate block">
+                  {{ wallet?.virtualAccount?.accountName || (user ? `${user.firstName} ${user.lastName}` : 'Errandr Customer') }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Steps Info -->
+            <div class="space-y-2 text-xs text-gray-600">
+              <div class="flex items-start gap-2">
+                <div class="w-4 h-4 rounded-full bg-orange-100 text-[#FF5C1A] flex items-center justify-center font-bold text-[9px] shrink-0 mt-0.5">1</div>
+                <p>Transfer the desired amount from your bank app (GTB, Kuda, PalmPay, OPay, Zenith, etc.) to the account above.</p>
+              </div>
+              <div class="flex items-start gap-2">
+                <div class="w-4 h-4 rounded-full bg-orange-100 text-[#FF5C1A] flex items-center justify-center font-bold text-[9px] shrink-0 mt-0.5">2</div>
+                <p>Your wallet is credited automatically. Click refresh below once you make the transfer.</p>
+              </div>
+            </div>
+
+            <!-- Refresh / Check Balance Button -->
+            <button 
+              type="button"
+              @click="checkWalletBalance"
+              :disabled="isCheckingBalance"
+              class="w-full py-3 bg-gray-900 text-white rounded-2xl font-bold text-xs hover:bg-gray-800 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm"
+            >
+              <RefreshCcw class="w-3.5 h-3.5" :class="isCheckingBalance ? 'animate-spin' : ''" />
+              <span>{{ isCheckingBalance ? 'Checking Balance...' : 'I Have Sent The Money (Refresh)' }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
+import { useRoute } from '#app';
 import { 
   ArrowLeft, ChefHat, Wallet, Utensils, Settings2, 
   HeartPulse, Store, ChevronRight, Zap, Brain, 
   Download, ChevronLeft, RefreshCcw, Activity, AlertTriangle, Repeat,
   X, Search, Check, ShieldCheck, Sparkles, AlertCircle, Loader2,
-  Flame, Dumbbell, Apple, Heart, Coffee, Edit2, Eye
+  Flame, Dumbbell, Apple, Heart, Coffee, Edit2, Eye,
+  CreditCard, Landmark, Copy, CheckCheck, ArrowRight
 } from 'lucide-vue-next';
 import { meal_planner_api } from '@/api_factory/modules/meal-planner';
 import { vendors_api } from '@/api_factory/modules/vendors';
 import { useToast } from '@/composables/useToast';
+import { useWallet } from '@/composables/modules/wallets';
+import { usePayments } from '@/composables/modules/payments';
+import { useUser } from '@/composables/modules/auth/user';
+
+const route = useRoute();
+const { user } = useUser();
+const { balance, wallet, fetchWallet } = useWallet();
+const { initializePayment, verifyPayment } = usePayments();
+
+// Wallet In-Page Funding Modal States
+const showFundWalletModal = ref(false);
+const activeFundMethod = ref<'paystack' | 'virtual_account'>('paystack');
+const fundAmount = ref(5000);
+const copiedAccount = ref(false);
+const isCheckingBalance = ref(false);
+const isInitializingFunding = ref(false);
+
+const formattedFundAmount = computed({
+  get: () => fundAmount.value ? fundAmount.value.toLocaleString() : '',
+  set: (val: string) => {
+    const numeric = parseInt(val.replace(/[^\d]/g, ''), 10);
+    fundAmount.value = isNaN(numeric) ? 0 : numeric;
+  }
+});
 
 // Form States
 const budget = ref(10000);
@@ -1785,7 +2049,82 @@ const downloadPlan = () => {
   showToast('Generating downloadable meal schedule PDF...', 'info', undefined, 'Download');
 };
 
+// Wallet In-Page Funding Methods
+const openFundWalletModal = (preset?: number) => {
+  if (preset && preset > 0) {
+    fundAmount.value = preset;
+  } else if (budgetDeficit.value > 0) {
+    fundAmount.value = budgetDeficit.value;
+  } else {
+    fundAmount.value = 5000;
+  }
+  fetchWallet();
+  showFundWalletModal.value = true;
+};
+
+const initiatePaystackFunding = async () => {
+  if (fundAmount.value < 100) {
+    showToast('Minimum funding amount is ₦100', 'warning', undefined, 'Invalid Amount');
+    return;
+  }
+  isInitializingFunding.value = true;
+  try {
+    const callbackUrl = `${window.location.origin}${window.location.pathname}?funded=true`;
+    const res = await initializePayment({
+      amount: fundAmount.value,
+      purpose: 'wallet_funding',
+      callbackUrl,
+      metadata: {
+        userId: user.value?._id,
+        purpose: 'wallet_funding',
+      }
+    });
+    const authUrl = res?.data?.authorization_url || res?.authorization_url;
+    const reference = res?.data?.reference || res?.reference;
+    if (reference) {
+      localStorage.setItem('recent_topup_ref', reference);
+    }
+    if (authUrl) {
+      window.location.href = authUrl;
+    } else {
+      showToast('Unable to launch Paystack gateway. Please try bank transfer.', 'error', undefined, 'Gateway Error');
+    }
+  } catch (err: any) {
+    const msg = err?.response?.data?.message || err?.message || 'Failed to initialize payment';
+    showToast(msg, 'error', undefined, 'Payment Error');
+  } finally {
+    isInitializingFunding.value = false;
+  }
+};
+
+const copyAccountNumber = async () => {
+  const accNum = wallet.value?.virtualAccount?.accountNumber;
+  if (!accNum) return;
+  try {
+    await navigator.clipboard.writeText(accNum);
+    copiedAccount.value = true;
+    showToast('Account number copied to clipboard!', 'success', undefined, 'Copied');
+    setTimeout(() => { copiedAccount.value = false; }, 2500);
+  } catch {
+    showToast('Account number: ' + accNum, 'info', undefined, 'Account Number');
+  }
+};
+
+const checkWalletBalance = async () => {
+  isCheckingBalance.value = true;
+  const oldBalance = balance.value;
+  await fetchWallet();
+  isCheckingBalance.value = false;
+  if (balance.value > oldBalance) {
+    showToast(`Payment received! New balance: ₦${balance.value.toLocaleString()}`, 'success', undefined, 'Wallet Funded');
+  } else {
+    showToast(`Current balance: ₦${balance.value.toLocaleString()}. Transfers typically reflect in 30-60 seconds.`, 'info', undefined, 'Balance Checked');
+  }
+};
+
 onMounted(async () => {
+  fetchWallet();
+
   try {
     const res = await vendors_api.getAll();
     allVendors.value = res.data?.vendors || res.data || [];
@@ -1799,6 +2138,30 @@ onMounted(async () => {
     availableVendorItems.value = itemsRes.data || [];
   } catch (err) {
     console.error('Failed to load menu items', err);
+  }
+
+  // Check for return from Paystack verification
+  const reference = (route.query.reference as string) || (route.query.trxref as string) || localStorage.getItem('recent_topup_ref');
+  if (route.query.reference || route.query.funded || route.query.trxref) {
+    if (reference) {
+      try {
+        const res = await verifyPayment(reference);
+        const success = res?.status === 'success' || res?.data?.status === 'success';
+        if (success) {
+          showToast('Wallet funded successfully! Your balance has been updated.', 'success', undefined, 'Funding Complete');
+          await fetchWallet();
+        }
+      } catch (e) {
+        console.warn('Verification error:', e);
+      } finally {
+        localStorage.removeItem('recent_topup_ref');
+        const url = new URL(window.location.href);
+        url.searchParams.delete('reference');
+        url.searchParams.delete('trxref');
+        url.searchParams.delete('funded');
+        window.history.replaceState({}, '', url.toString());
+      }
+    }
   }
 });
 </script>
