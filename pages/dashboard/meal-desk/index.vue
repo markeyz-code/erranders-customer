@@ -19,7 +19,7 @@
       </div>
     </header>
 
-    <main class="container mx-auto px-4 sm:px-6 py-6 sm:py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <main class="container mx-auto px-4 py-6 sm:py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
       <!-- Left Column: Controls & Intelligence -->
       <div class="lg:col-span-4 space-y-6">
         <!-- Input Card -->
