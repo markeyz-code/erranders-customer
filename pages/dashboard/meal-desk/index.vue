@@ -36,19 +36,71 @@
           <div class="border-t border-dashed border-[#E7E2DA] mb-5 -mx-5 sm:-mx-6"></div>
 
           <div class="space-y-5">
-            <!-- Budget -->
-            <div>
-              <label class="flex items-center gap-2 text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">
-                <Wallet class="w-3.5 h-3.5 text-[#FF5C1A]" /> Weekly Budget
-              </label>
-              <div class="relative">
-                <span class="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-gray-900 text-base">₦</span>
-                <input 
-                  type="text" 
-                  v-model="formattedBudget" 
-                  placeholder="10,000"
-                  class="w-full bg-[#FDFCFB] border border-[#E7E2DA] rounded-xl py-3 pl-9 pr-4 font-bold text-gray-900 text-base focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A] transition-all"
-                >
+            <!-- Daily & Weekly Budget -->
+            <div class="space-y-3">
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label class="flex items-center gap-1.5 text-[11px] font-bold text-gray-700 uppercase tracking-wider">
+                    <Wallet class="w-3.5 h-3.5 text-[#FF5C1A]" /> Daily Meal Budget
+                  </label>
+                  <span class="text-[10px] font-semibold text-gray-400">Target per day</span>
+                </div>
+                <div class="relative">
+                  <span class="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-gray-900 text-sm">₦</span>
+                  <input 
+                    type="text" 
+                    v-model="formattedDailyBudget" 
+                    placeholder="1,500"
+                    class="w-full bg-[#FDFCFB] border border-[#E7E2DA] rounded-xl py-2.5 pl-8 pr-3 font-bold text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A] transition-all"
+                  >
+                </div>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label class="flex items-center gap-1.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                    Weekly Budget Total
+                  </label>
+                  <span class="text-[10px] font-semibold text-gray-400">7-day cycle</span>
+                </div>
+                <div class="relative">
+                  <span class="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-gray-900 text-sm">₦</span>
+                  <input 
+                    type="text" 
+                    v-model="formattedBudget" 
+                    placeholder="10,000"
+                    class="w-full bg-[#FDFCFB] border border-[#E7E2DA] rounded-xl py-2.5 pl-8 pr-3 font-bold text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A] transition-all"
+                  >
+                </div>
+              </div>
+
+              <!-- Budget Buffer Amount -->
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label class="flex items-center gap-1.5 text-[11px] font-bold text-gray-700 uppercase tracking-wider">
+                    <ShieldCheck class="w-3.5 h-3.5 text-emerald-600" /> Budget Buffer
+                  </label>
+                  <span class="text-[10px] font-semibold text-emerald-700">+₦{{ bufferAmount.toLocaleString() }} max</span>
+                </div>
+                <div class="grid grid-cols-4 gap-1.5">
+                  <button 
+                    v-for="amt in [0, 500, 1000, 2000]" 
+                    :key="amt"
+                    type="button"
+                    @click="bufferAmount = amt"
+                    :class="[
+                      'py-1.5 px-1 rounded-lg text-xs font-bold transition-all border text-center active:scale-95',
+                      bufferAmount === amt 
+                        ? 'bg-emerald-50 text-emerald-800 border-emerald-400 ring-1 ring-emerald-400' 
+                        : 'bg-white text-gray-600 border-[#E7E2DA] hover:bg-gray-50'
+                    ]"
+                  >
+                    {{ amt === 0 ? '₦0' : `+₦${amt.toLocaleString()}` }}
+                  </button>
+                </div>
+                <p class="text-[10px] text-gray-400 mt-1 leading-tight">
+                  Adds headroom if vendor combos exceed base budget by small variations.
+                </p>
               </div>
             </div>
 
@@ -342,16 +394,16 @@
             </div>
           </div>
 
-          <!-- Budget Deficit Warning -->
-          <div v-if="budgetDeficit > 0" class="bg-rose-50 border border-rose-200 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
+          <!-- Budget Deficit Warning / Buffer Utilized Status -->
+          <div v-if="budgetDeficit > 0 && budgetDeficit > bufferAmount" class="bg-rose-50 border border-rose-200 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
             <div class="flex gap-3.5">
               <div class="w-9 h-9 rounded-xl bg-rose-100 flex items-center justify-center text-rose-600 shrink-0 mt-0.5">
                 <AlertTriangle class="w-5 h-5" />
               </div>
               <div>
-                <p class="text-sm font-bold text-rose-900 mb-0.5">Budget Deficit Detected</p>
+                <p class="text-sm font-bold text-rose-900 mb-0.5">Budget Deficit Exceeds Buffer</p>
                 <p class="text-xs sm:text-sm text-rose-700 font-medium">
-                  This iteration costs <strong>₦{{ (generatedPlan.totalCost || 0).toLocaleString() }}</strong>, exceeding your budget by <strong class="text-rose-900">₦{{ budgetDeficit.toLocaleString() }}</strong>.
+                  This iteration costs <strong>₦{{ (generatedPlan.totalCost || 0).toLocaleString() }}</strong>, exceeding your base budget + safety buffer by <strong class="text-rose-900">₦{{ (budgetDeficit - bufferAmount).toLocaleString() }}</strong>.
                 </p>
               </div>
             </div>
@@ -361,6 +413,22 @@
             >
               Fund Wallet
             </button>
+          </div>
+          <div v-else-if="budgetDeficit > 0 && budgetDeficit <= bufferAmount" class="bg-emerald-50 border border-emerald-200 rounded-2xl p-3.5 sm:p-4 flex items-center justify-between gap-4 shadow-sm">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-700 shrink-0">
+                <ShieldCheck class="w-4 h-4" />
+              </div>
+              <div>
+                <p class="text-xs sm:text-sm font-bold text-emerald-950">Covered by Safety Buffer</p>
+                <p class="text-[11px] sm:text-xs text-emerald-800 font-medium">
+                  Utilizing <strong>₦{{ budgetDeficit.toLocaleString() }}</strong> of your <strong>₦{{ bufferAmount.toLocaleString() }}</strong> authorized buffer headroom.
+                </p>
+              </div>
+            </div>
+            <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 shrink-0">
+              Within Buffer
+            </span>
           </div>
 
           <!-- Days List -->
@@ -901,34 +969,58 @@
 
           <!-- What Makes Up This Meal -->
           <div>
-            <h4 class="text-xs font-black text-gray-900 uppercase tracking-wider flex items-center gap-2 mb-3">
-              <Utensils class="w-4 h-4 text-[#FF5C1A]" /> What Makes Up This Meal
-            </h4>
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="text-xs font-black text-gray-900 uppercase tracking-wider flex items-center gap-2">
+                <Utensils class="w-4 h-4 text-[#FF5C1A]" /> What Makes Up This Meal
+              </h4>
+              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                Portion & Price Breakdown
+              </span>
+            </div>
 
             <div class="space-y-2.5">
               <div 
                 v-for="(item, idx) in mealBreakdownItems" 
                 :key="idx" 
-                class="flex items-center justify-between p-3 rounded-xl border border-gray-100 bg-[#FDFCFB]"
+                class="flex items-center justify-between p-3.5 rounded-xl border border-gray-100 bg-[#FDFCFB] hover:border-gray-200 transition-all"
                 :class="item.category === 'Packaging' ? 'bg-amber-50/50 border-amber-200/60' : ''"
               >
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3 min-w-0">
                   <div 
-                    class="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black"
+                    class="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black shrink-0"
                     :class="item.category === 'Packaging' ? 'bg-amber-100 text-amber-800' : 'bg-orange-100/60 text-[#FF5C1A]'"
                   >
                     {{ idx + 1 }}
                   </div>
-                  <div>
-                    <div class="flex items-center gap-1.5">
-                      <p class="text-xs font-bold text-gray-900">{{ item.name }}</p>
-                      <span v-if="item.category === 'Packaging'" class="text-[9px] font-black px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 uppercase">Packaging</span>
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <p class="text-xs font-bold text-gray-900 truncate">{{ item.name }}</p>
+                      <span v-if="item.category === 'Packaging'" class="text-[9px] font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 uppercase">Packaging</span>
+                      <span v-else-if="item.portion" class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">
+                        {{ item.portion }}
+                      </span>
                     </div>
-                    <p class="text-[10px] text-gray-400 font-medium">{{ item.category }} • {{ item.portion }}</p>
+                    <p class="text-[10px] text-gray-400 font-medium mt-0.5">
+                      {{ item.category }} <span v-if="item.calories && item.calories > 0">• ~{{ item.calories }} kcal</span>
+                    </p>
                   </div>
                 </div>
-                <span v-if="item.category === 'Packaging'" class="text-xs font-black text-amber-800">+₦150</span>
-                <span v-else class="text-xs font-bold text-gray-700">~{{ item.calories }} kcal</span>
+                <div class="text-right shrink-0 ml-3">
+                  <span class="text-xs font-black" :class="item.category === 'Packaging' ? 'text-amber-800' : 'text-gray-900'">
+                    ₦{{ Number(item.price || 0).toLocaleString() }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Meal Price Composition Summary -->
+            <div class="mt-3.5 p-3.5 rounded-xl bg-orange-50/50 border border-orange-100 flex items-center justify-between">
+              <div>
+                <p class="text-[11px] font-bold text-gray-900">Total Meal Price Composition</p>
+                <p class="text-[10px] text-gray-500">Calculated directly from vendor portions + takeaway packaging</p>
+              </div>
+              <div class="text-right">
+                <span class="text-base font-black text-[#FF5C1A]">₦{{ (selectedMealForBreakdown.price || 0).toLocaleString() }}</span>
               </div>
             </div>
           </div>
@@ -1190,6 +1282,8 @@ import { useToast } from '@/composables/useToast';
 
 // Form States
 const budget = ref(10000);
+const dailyBudget = ref(Math.round(10000 / 7));
+const bufferAmount = ref(1000);
 const mealsPerDay = ref(2);
 const allowCustomErrands = ref(false);
 const includeDrinks = ref(false);
@@ -1256,6 +1350,18 @@ const formattedBudget = computed({
   set: (val: string) => {
     const numeric = parseInt(val.replace(/[^\d]/g, ''), 10);
     budget.value = isNaN(numeric) ? 0 : numeric;
+    dailyBudget.value = Math.round(budget.value / 7);
+  }
+});
+
+const formattedDailyBudget = computed({
+  get: () => {
+    return dailyBudget.value ? dailyBudget.value.toLocaleString() : '';
+  },
+  set: (val: string) => {
+    const numeric = parseInt(val.replace(/[^\d]/g, ''), 10);
+    dailyBudget.value = isNaN(numeric) ? 0 : numeric;
+    budget.value = dailyBudget.value * 7;
   }
 });
 
@@ -1352,15 +1458,17 @@ const healthNote = computed(() => {
 // Breakdown Computeds
 const mealBreakdownItems = computed(() => {
   if (!selectedMealForBreakdown.value) return [];
-  if (selectedMealForBreakdown.value.breakdown?.items) {
+  if (selectedMealForBreakdown.value.breakdown?.items && selectedMealForBreakdown.value.breakdown.items.length > 0) {
     return selectedMealForBreakdown.value.breakdown.items;
   }
   // Fallback breakdown
   const name = selectedMealForBreakdown.value.name || 'Local Meal';
+  const price = selectedMealForBreakdown.value.price || 1000;
+  const packagingFee = selectedMealForBreakdown.value.packagingFee || 150;
+  const foodPrice = Math.max(0, price - packagingFee);
   return [
-    { name: name, category: 'Main Portion', portion: '1 full serving', calories: 380 },
-    { name: 'Seasoned Protein & Savory Sauce', category: 'Protein', portion: '1 portion', calories: 220 },
-    { name: 'Fresh Steamed Vegetables', category: 'Fiber & Nutrients', portion: '1 side cup', calories: 50 },
+    { name: name, category: 'Main Portion', portion: '1 full serving', calories: 450, price: foodPrice },
+    { name: 'Eco-grade Takeaway Pack', category: 'Packaging', portion: '1 container', calories: 0, price: packagingFee },
   ];
 });
 
@@ -1472,6 +1580,8 @@ const generatePlan = async () => {
   try {
     const res = await meal_planner_api.generateIterations({
       budget: budget.value,
+      dailyBudget: dailyBudget.value,
+      bufferAmount: bufferAmount.value,
       mealsPerDay: mealsPerDay.value,
       vendors: selectedVendors.value,
       medicalConditions: medicalConditions.value,
@@ -1519,6 +1629,8 @@ const spinAgain = async () => {
   try {
     const res = await meal_planner_api.generateIterations({
       budget: budget.value,
+      dailyBudget: dailyBudget.value,
+      bufferAmount: bufferAmount.value,
       mealsPerDay: mealsPerDay.value,
       vendors: selectedVendors.value,
       medicalConditions: medicalConditions.value,
