@@ -170,6 +170,21 @@
                     </NuxtLink>
                   </MenuItem>
 
+                  <MenuItem v-slot="{ active }">
+                    <a href="https://barter.erranders.org/" target="_blank" rel="noopener noreferrer" :class="[active ? 'bg-amber-50 scale-95' : 'bg-amber-50/40 hover:bg-amber-50', 'group flex items-center gap-3 rounded-2xl p-3 col-span-2 transition-all border border-amber-200/50 text-left']">
+                      <div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-700">
+                        <ArrowLeftRight class="w-4 h-4" />
+                      </div>
+                      <div class="flex-1">
+                        <div class="flex items-center gap-1.5">
+                          <span class="block text-sm font-bold text-gray-900 group-hover:text-amber-700 transition-colors">Barter Campus Trade</span>
+                          <span class="text-[9px] bg-amber-400 text-slate-950 font-black px-1.5 py-0.2 rounded-full">NEW</span>
+                        </div>
+                        <span class="block text-[10px] text-gray-500 font-medium">Buy, sell &amp; swap student items</span>
+                      </div>
+                    </a>
+                  </MenuItem>
+
                   <!-- Partners & Actions -->
                   <div class="col-span-2 text-[10px] font-black text-gray-400 uppercase  mb-1 mt-3 px-2">Partner with us</div>
                   
@@ -243,7 +258,7 @@ import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import { useUser } from "@/composables/modules/auth/user"
 import { useCart } from "@/composables/modules/cart"
-import { Home, User, LogOut, Menu as MenuIcon, Filter, ChevronDown, ShoppingCart, Info, Zap, Package, Calendar, Store, Bike, LayoutDashboard, Repeat, Users, ShoppingBag } from 'lucide-vue-next'
+import { Home, User, LogOut, Menu as MenuIcon, Filter, ChevronDown, ShoppingCart, Info, Zap, Package, Calendar, Store, Bike, LayoutDashboard, Repeat, Users, ShoppingBag, ArrowLeftRight } from 'lucide-vue-next'
 import { useRoute } from 'vue-router'
 import { useGlobalFilter } from '@/composables/core/useGlobalFilter'
 

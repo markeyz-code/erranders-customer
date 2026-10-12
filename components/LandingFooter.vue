@@ -82,6 +82,14 @@
                   Become a Rider
                 </a>
               </li>
+              <li>
+                <a href="https://barter.erranders.org" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-2 text-slate-500 font-medium hover:text-amber-600 transition-colors">
+                  <div class="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-600 group-hover:scale-110 transition-transform">
+                    <ArrowLeftRight class="w-4 h-4" />
+                  </div>
+                  Student Barter (Trade)
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -106,7 +114,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Twitter, Instagram, Facebook, Store, Bike, ArrowUpRight } from 'lucide-vue-next'
+import { Twitter, Instagram, Facebook, Store, Bike, ArrowUpRight, ArrowLeftRight } from 'lucide-vue-next'
 
 // Easily configure these phrases to showcase what Erranders stands for!
 const headings = [
