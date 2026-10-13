@@ -29,8 +29,19 @@
               <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Order Slip - Errandr</p>
               <h2 class="text-lg font-black text-gray-900">Meal Desk</h2>
             </div>
-            <div class="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-[#FF5C1A] shadow-sm">
-              <ChefHat class="w-5 h-5" />
+            <div class="flex items-center gap-2">
+              <button 
+                type="button" 
+                @click="confirmResetConfiguration"
+                class="px-2.5 py-1.5 rounded-xl bg-gray-100 hover:bg-rose-50 text-gray-500 hover:text-rose-600 border border-[#E7E2DA] hover:border-rose-200 transition-all flex items-center gap-1.5 text-[11px] font-bold active:scale-95 shadow-2xs"
+                title="Clear configuration and restart from scratch"
+              >
+                <RotateCcw class="w-3.5 h-3.5" />
+                <span>Reset</span>
+              </button>
+              <div class="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-[#FF5C1A] shadow-sm">
+                <ChefHat class="w-5 h-5" />
+              </div>
             </div>
           </div>
           <div class="border-t border-dashed border-[#E7E2DA] mb-4 -mx-5 sm:-mx-6"></div>
@@ -268,6 +279,17 @@
                 {{ isGenerating ? 'Optimizing Your Plan...' : 'Optimize My Plan' }}
               </span>
             </button>
+
+            <!-- Clear Configuration & Restart Button -->
+            <button 
+              type="button"
+              @click="confirmResetConfiguration"
+              class="w-full py-3 rounded-xl bg-gray-50 hover:bg-rose-50 text-gray-600 hover:text-rose-600 border border-[#E7E2DA] hover:border-rose-200 text-xs font-bold transition-all flex items-center justify-center gap-2 active:scale-95 shadow-2xs"
+              title="Purge saved plan and reset all filters to default"
+            >
+              <RotateCcw class="w-3.5 h-3.5 text-gray-500" />
+              <span>Clear Configuration & Restart</span>
+            </button>
           </div>
         </div>
 
@@ -305,13 +327,25 @@
             <h2 class="text-2xl font-black text-gray-900 tracking-tight">Weekly Roadmap</h2>
             <p class="text-sm font-medium text-gray-500">Optimized for campus dining & nutrition</p>
           </div>
-          <button 
-            v-if="generatedPlan" 
-            @click="downloadPlan"
-            class="px-4 py-2 bg-white border border-[#E7E2DA] rounded-lg text-xs font-bold text-gray-700 hover:bg-gray-50 transition-all flex items-center gap-2 active:scale-95 shadow-sm"
-          >
-            <Download class="w-4 h-4" /> Download PDF
-          </button>
+          <div class="flex items-center gap-2">
+            <button 
+              type="button"
+              @click="confirmResetConfiguration"
+              class="px-3 py-2 bg-rose-50 border border-rose-200 rounded-lg text-xs font-bold text-rose-600 hover:bg-rose-100 transition-all flex items-center gap-1.5 active:scale-95 shadow-2xs"
+              title="Clear configuration and restart from scratch"
+            >
+              <RotateCcw class="w-3.5 h-3.5" />
+              <span class="hidden sm:inline">Clear & Restart</span>
+              <span class="sm:hidden">Reset</span>
+            </button>
+            <button 
+              v-if="generatedPlan" 
+              @click="downloadPlan"
+              class="px-4 py-2 bg-white border border-[#E7E2DA] rounded-lg text-xs font-bold text-gray-700 hover:bg-gray-50 transition-all flex items-center gap-2 active:scale-95 shadow-sm"
+            >
+              <Download class="w-4 h-4" /> Download PDF
+            </button>
+          </div>
         </div>
 
         <!-- Banner -->
@@ -531,18 +565,34 @@
                     <Lock class="w-3.5 h-3.5 text-gray-400" />
                     <span>Locked</span>
                   </span>
-                  <button 
-                    v-else
-                    @click="openEditMeal(day, index, day.meals[0], 0)"
-                    class="px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-700 text-xs font-bold rounded-lg border border-gray-200 transition-colors flex items-center gap-1.5"
-                  >
-                    <Edit2 class="w-3.5 h-3.5 text-gray-500" />
-                    <span>Edit Day</span>
-                  </button>
+                  <div v-else class="flex items-center gap-1.5">
+                    <button 
+                      @click="openEditMeal(day, index, day.meals[0], 0)"
+                      class="px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-700 text-xs font-bold rounded-lg border border-gray-200 transition-colors flex items-center gap-1.5"
+                      title="Edit dishes in Day"
+                    >
+                      <Edit2 class="w-3.5 h-3.5 text-gray-500" />
+                      <span>Edit Day</span>
+                    </button>
+                    <button 
+                      @click="deleteEntireDay(index)"
+                      class="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 text-xs font-bold rounded-lg border border-rose-200 transition-colors flex items-center gap-1 shadow-2xs"
+                      title="Delete this entire day from roadmap"
+                    >
+                      <Trash2 class="w-3.5 h-3.5" />
+                      <span class="hidden sm:inline">Delete Day</span>
+                    </button>
+                  </div>
                 </div>
               </div>
               
-              <div class="space-y-3">
+              <!-- Empty Day State -->
+              <div v-if="!day.meals || day.meals.length === 0" class="py-6 px-4 rounded-xl border border-dashed border-gray-200 bg-gray-50/50 text-center">
+                <p class="text-xs font-bold text-gray-500">No meals scheduled for this day</p>
+                <p class="text-[11px] text-gray-400 mt-0.5">Use Edit Day or delete this day to adjust your schedule</p>
+              </div>
+
+              <div v-else class="space-y-3">
                 <div 
                   v-for="(meal, mIndex) in (day.meals || [])" 
                   :key="mIndex" 
@@ -609,16 +659,24 @@
                     </div>
                   </div>
 
-                  <div class="flex items-center gap-3 shrink-0 ml-3">
+                  <div class="flex items-center gap-2 shrink-0 ml-3">
                     <span class="text-sm font-black text-gray-900">₦{{ (meal.price || 0).toLocaleString() }}</span>
-                    <button 
-                      v-if="!isDayPastOrKickedOff(day.day || index + 1)"
-                      @click.stop="openEditMeal(day, index, meal, mIndex)"
-                      class="p-2 rounded-lg bg-white border border-gray-200 hover:border-orange-400 text-gray-400 hover:text-[#FF5C1A] transition-all shadow-sm"
-                      title="Edit this meal"
-                    >
-                      <Edit2 class="w-3.5 h-3.5" />
-                    </button>
+                    <template v-if="!isDayPastOrKickedOff(day.day || index + 1)">
+                      <button 
+                        @click.stop="openEditMeal(day, index, meal, mIndex)"
+                        class="p-2 rounded-lg bg-white border border-gray-200 hover:border-orange-400 text-gray-500 hover:text-[#FF5C1A] transition-all shadow-sm"
+                        title="Edit this meal"
+                      >
+                        <Edit2 class="w-3.5 h-3.5" />
+                      </button>
+                      <button 
+                        @click.stop="deleteMealFromDay(index, mIndex)"
+                        class="p-2 rounded-lg bg-white border border-gray-200 hover:border-rose-400 text-gray-400 hover:text-rose-600 hover:bg-rose-50 transition-all shadow-sm"
+                        title="Delete this meal from day"
+                      >
+                        <Trash2 class="w-3.5 h-3.5" />
+                      </button>
+                    </template>
                     <span 
                       v-else
                       class="p-2 rounded-lg bg-gray-100 border border-gray-200 text-gray-400 cursor-not-allowed"
@@ -1190,6 +1248,14 @@
         <!-- Sticky Footer -->
         <div class="p-4 sm:p-6 border-t border-gray-100 bg-white shrink-0 flex items-center justify-between gap-3">
           <button 
+            v-if="!isDayPastOrKickedOff(selectedDayForBreakdown)"
+            @click="deleteMealFromBreakdown"
+            class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold py-3.5 px-4 rounded-xl border border-rose-200 active:scale-95 transition-all text-xs flex items-center justify-center gap-1.5 shadow-2xs"
+            title="Delete this meal from roadmap"
+          >
+            <Trash2 class="w-3.5 h-3.5" /> Delete Meal
+          </button>
+          <button 
             @click="triggerEditFromBreakdown" 
             class="flex-1 bg-gray-100 text-gray-800 font-bold py-3.5 px-4 rounded-xl hover:bg-gray-200 active:scale-95 transition-all text-xs flex items-center justify-center gap-2"
           >
@@ -1405,17 +1471,25 @@
         </div>
 
         <!-- Sticky Footer -->
-        <div class="p-4 sm:p-6 border-t border-gray-100 bg-white shrink-0 flex items-center justify-between gap-4 shadow-lg">
-          <div>
-            <p class="text-xs font-bold text-gray-900">
+        <div class="p-4 sm:p-6 border-t border-gray-100 bg-white shrink-0 flex items-center justify-between gap-3 shadow-lg">
+          <button 
+            type="button"
+            @click="deleteCurrentEditingMeal"
+            class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold py-3.5 px-4 rounded-xl border border-rose-200 active:scale-95 transition-all text-xs flex items-center gap-1.5 shadow-2xs"
+            title="Delete this meal from roadmap"
+          >
+            <Trash2 class="w-3.5 h-3.5" /> Delete Meal
+          </button>
+          <div class="text-right flex-1 min-w-0 pr-2">
+            <p class="text-xs font-bold text-gray-900 truncate">
               New Meal Cost: 
               <span class="text-[#FF5C1A]">₦{{ (currentPreviewPrice || 0).toLocaleString() }}</span>
             </p>
-            <p class="text-[10px] text-gray-400 font-medium">Budget and nutrition will re-evaluate on save</p>
+            <p class="text-[10px] text-gray-400 font-medium truncate">Budget and nutrition will re-evaluate on save</p>
           </div>
           <button 
             @click="saveMealEdit" 
-            class="bg-gray-900 text-white font-bold py-3.5 px-6 rounded-xl hover:bg-gray-800 active:scale-95 transition-all text-xs shadow-md"
+            class="bg-gray-900 text-white font-bold py-3.5 px-5 sm:px-6 rounded-xl hover:bg-gray-800 active:scale-95 transition-all text-xs shadow-md shrink-0"
           >
             Save & Recalculate Roadmap
           </button>
@@ -1653,7 +1727,7 @@ import {
   X, Search, Check, ShieldCheck, Sparkles, AlertCircle, Loader2,
   Flame, Dumbbell, Apple, Heart, Coffee, Edit2, Eye,
   CreditCard, Landmark, Copy, CheckCheck, ArrowRight,
-  Calendar, Clock, Lock
+  Calendar, Clock, Lock, Trash2, RotateCcw
 } from 'lucide-vue-next';
 import { meal_planner_api } from '@/api_factory/modules/meal-planner';
 import { vendors_api } from '@/api_factory/modules/vendors';
@@ -2324,31 +2398,182 @@ const saveMealEdit = () => {
     currentMeal.price = Math.round(unitFoodPrice * portions) + packaging;
   }
 
-  // 1. Recalculate Day Total Cost
-  const mealsSum = day.meals.reduce((sum: number, m: any) => sum + (Number(m.price) || 0), 0);
-  const delivery = Number(day.deliveryFee ?? 350);
-  const service = Number(day.serviceFee ?? 50);
-  day.dailyCost = mealsSum + delivery + service;
-  day.totalCost = day.dailyCost;
+  // Recalculate all totals in real-time
+  recalculatePlanTotals();
 
-  // 2. Recalculate Iteration Total Cost & Totals
-  const newIterationTotal = generatedPlan.value.days.reduce((sum: number, d: any) => sum + d.dailyCost, 0);
-  generatedPlan.value.totalCost = newIterationTotal;
-  generatedPlan.value.foodSubtotal = generatedPlan.value.days.reduce((sum: number, d: any) => {
-    return sum + d.meals.reduce((mSum: number, m: any) => mSum + (Number(m.foodSubtotal ?? (m.price - 150)) || 0), 0);
-  }, 0);
-  generatedPlan.value.packagingTotal = generatedPlan.value.days.reduce((sum: number, d: any) => sum + (d.packagingFee || (d.meals.length * 150)), 0);
-  generatedPlan.value.deliveryTotal = generatedPlan.value.days.reduce((sum: number, d: any) => sum + (d.deliveryFee || 350), 0);
-  generatedPlan.value.serviceTotal = generatedPlan.value.days.reduce((sum: number, d: any) => sum + (d.serviceFee || 50), 0);
-
-  // 3. Recalculate Budget Deficit
-  generatedPlan.value.budgetDeficit = Math.max(0, newIterationTotal - budget.value);
-
-  // 4. Update Nutrition Insight
+  // Update Nutrition Insight
   generatedPlan.value.healthNote = `Updated roadmap with customized meal selections. Provides balanced daily energy supporting your weekly goals.`;
 
   showEditModal.value = false;
   showToast(`Day ${editingDayNumber.value} updated! Total and nutrition re-evaluated.`, 'success', undefined, 'Meal Updated');
+};
+
+// Real-Time Roadmap Recalculation Engine
+const recalculatePlanTotals = () => {
+  if (!generatedPlan.value) return;
+  const plan = generatedPlan.value;
+  if (!plan.days || plan.days.length === 0) {
+    plan.totalCost = 0;
+    plan.foodSubtotal = 0;
+    plan.packagingTotal = 0;
+    plan.deliveryTotal = 0;
+    plan.serviceTotal = 0;
+    plan.budgetDeficit = 0;
+    return;
+  }
+
+  // Recalculate each day
+  plan.days.forEach((d: any, idx: number) => {
+    d.day = idx + 1;
+    const mealsCount = d.meals ? d.meals.length : 0;
+    const foodSub = (d.meals || []).reduce((sum: number, m: any) => {
+      const pkg = Number(m.packagingFee || 150);
+      const pr = Number(m.price || 0);
+      const foodP = Math.max(0, pr - pkg);
+      return sum + (Number(m.foodSubtotal ?? foodP) || 0);
+    }, 0);
+    const packagingFee = mealsCount * 150;
+    const deliveryFee = mealsCount > 0 ? Number(d.deliveryFee ?? 350) : 0;
+    const serviceFee = mealsCount > 0 ? Number(d.serviceFee ?? 50) : 0;
+
+    d.foodSubtotal = foodSub;
+    d.packagingFee = packagingFee;
+    d.deliveryFee = deliveryFee;
+    d.serviceFee = serviceFee;
+    const mealsSum = (d.meals || []).reduce((sum: number, m: any) => sum + (Number(m.price) || 0), 0);
+    d.dailyCost = mealsSum + deliveryFee + serviceFee;
+    d.totalCost = d.dailyCost;
+  });
+
+  const totalCost = plan.days.reduce((sum: number, d: any) => sum + d.dailyCost, 0);
+  plan.totalCost = totalCost;
+  plan.foodSubtotal = plan.days.reduce((sum: number, d: any) => sum + (d.foodSubtotal || 0), 0);
+  plan.packagingTotal = plan.days.reduce((sum: number, d: any) => sum + (d.packagingFee || 0), 0);
+  plan.deliveryTotal = plan.days.reduce((sum: number, d: any) => sum + (d.deliveryFee || 0), 0);
+  plan.serviceTotal = plan.days.reduce((sum: number, d: any) => sum + (d.serviceFee || 0), 0);
+  const maxAllowedBudget = Number(budget.value || 0) + Number(bufferAmount.value || 0);
+  plan.budgetDeficit = Math.max(0, totalCost - maxAllowedBudget);
+
+  // Sync back to localStorage if plan was previously stored
+  try {
+    const existing = localStorage.getItem('errandr_autopilot_imported_plan');
+    if (existing) {
+      localStorage.setItem('errandr_autopilot_imported_plan', JSON.stringify({
+        ...plan,
+        cycleDays: plan.days.length,
+        budget: budget.value,
+        dailyBudget: dailyBudget.value,
+        mealsPerDay: mealsPerDay.value,
+        selectedVendors: selectedVendors.value,
+        medicalConditions: medicalConditions.value,
+        importedAt: new Date().toISOString()
+      }));
+    }
+  } catch (e) {
+    console.error('Failed to sync plan to local storage', e);
+  }
+};
+
+// Delete Meal From Day Card
+const deleteMealFromDay = (dayIndex: number, mealIndex: number) => {
+  if (!generatedPlan.value) return;
+  const day = generatedPlan.value.days[dayIndex];
+  if (!day) return;
+  const dayNum = day.day || dayIndex + 1;
+  if (isDayPastOrKickedOff(dayNum)) {
+    showToast('Cannot delete meals from locked past days.', 'warning', undefined, 'Day Locked');
+    return;
+  }
+  const deletedMealName = day.meals[mealIndex]?.name || 'Meal';
+  day.meals.splice(mealIndex, 1);
+  recalculatePlanTotals();
+  showToast(`${deletedMealName} removed from Day ${dayNum}. Roadmap recalculated!`, 'info', undefined, 'Meal Deleted');
+};
+
+// Delete Entire Day From Roadmap
+const deleteEntireDay = (dayIndex: number) => {
+  if (!generatedPlan.value) return;
+  const day = generatedPlan.value.days[dayIndex];
+  if (!day) return;
+  const dayNum = day.day || dayIndex + 1;
+  if (isDayPastOrKickedOff(dayNum)) {
+    showToast('Cannot delete locked past days.', 'warning', undefined, 'Day Locked');
+    return;
+  }
+  if (typeof window !== 'undefined' && !window.confirm(`Are you sure you want to delete Day ${dayNum} from your roadmap?`)) {
+    return;
+  }
+  generatedPlan.value.days.splice(dayIndex, 1);
+  recalculatePlanTotals();
+  cycleDays.value = Math.max(1, generatedPlan.value.days.length);
+  showToast(`Day ${dayNum} removed from roadmap. Total re-evaluated!`, 'info', undefined, 'Day Removed');
+};
+
+// Delete Current Meal Inside Edit Modal
+const deleteCurrentEditingMeal = () => {
+  if (!generatedPlan.value) return;
+  const day = generatedPlan.value.days[editingDayIndex.value];
+  if (!day) return;
+  const dayNum = day.day || editingDayIndex.value + 1;
+  if (isDayPastOrKickedOff(dayNum)) {
+    showToast('Cannot delete meals from locked past days.', 'warning', undefined, 'Day Locked');
+    return;
+  }
+  const deletedMealName = day.meals[editingMealIndex.value]?.name || 'Meal';
+  day.meals.splice(editingMealIndex.value, 1);
+  showEditModal.value = false;
+  recalculatePlanTotals();
+  showToast(`${deletedMealName} removed from Day ${dayNum}. Roadmap recalculated!`, 'info', undefined, 'Meal Deleted');
+};
+
+// Delete Meal From Breakdown Modal
+const deleteMealFromBreakdown = () => {
+  if (!generatedPlan.value || !selectedMealForBreakdown.value) return;
+  const dayIdx = Math.max(0, selectedDayForBreakdown.value - 1);
+  const day = generatedPlan.value.days[dayIdx];
+  if (!day) return;
+  if (isDayPastOrKickedOff(selectedDayForBreakdown.value)) {
+    showToast('Cannot delete meals from locked past days.', 'warning', undefined, 'Day Locked');
+    return;
+  }
+  const mealIdx = day.meals.findIndex((m: any) => m.name === selectedMealForBreakdown.value.name);
+  if (mealIdx >= 0) {
+    const deletedName = day.meals[mealIdx].name;
+    day.meals.splice(mealIdx, 1);
+    showBreakdownModal.value = false;
+    recalculatePlanTotals();
+    showToast(`${deletedName} removed from Day ${selectedDayForBreakdown.value}. Roadmap recalculated!`, 'info', undefined, 'Meal Deleted');
+  }
+};
+
+// Clear Configuration and Restart from Scratch
+const confirmResetConfiguration = () => {
+  if (typeof window !== 'undefined' && !window.confirm('Are you sure you want to clear your current configuration and restart from scratch? All customized selections will be reset.')) {
+    return;
+  }
+  try {
+    localStorage.removeItem('errandr_autopilot_imported_plan');
+  } catch (e) {
+    console.error('Failed to clear stored plan', e);
+  }
+  budget.value = 20000;
+  cycleDays.value = 7;
+  customCycleDays.value = null;
+  bufferAmount.value = 1000;
+  mealsPerDay.value = 2;
+  allowCustomErrands.value = false;
+  includeDrinks.value = false;
+  medicalConditions.value = [];
+  dislikesList.value = [];
+  customDislikesText.value = '';
+  selectedVendors.value = [];
+  iterations.value = [];
+  currentIterationIndex.value = 0;
+  showBreakdownModal.value = false;
+  showEditModal.value = false;
+  showMedicalModal.value = false;
+  showVendorsModal.value = false;
+  showToast('Configuration and saved plan cleared! You can now start fresh.', 'info', undefined, 'Plan Reset');
 };
 
 const pushToAutopilot = () => {

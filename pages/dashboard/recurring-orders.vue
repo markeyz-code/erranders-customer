@@ -66,6 +66,15 @@
             <Edit2 class="w-3.5 h-3.5 text-[#FF5C1A]" />
             Adjust on Meal Desk
           </NuxtLink>
+          <button 
+            type="button" 
+            @click="confirmClearImportedPlan"
+            class="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-xs font-bold text-rose-600 border border-rose-200 transition-all flex items-center gap-1.5 shadow-xs active:scale-95"
+            title="Clear imported meal plan and restart"
+          >
+            <RotateCcw class="w-3.5 h-3.5" />
+            Clear Plan
+          </button>
         </div>
       </div>
 
@@ -671,7 +680,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { Repeat, X, Plus, Clock, Trash2, Store, ChevronRight, ChevronLeft, Loader2, ChevronDown, Package, MapPin, Building, Check, Info, User, Phone, Navigation, Map, Receipt, Truck, ShieldCheck, Banknote, Sparkles, Eye, Flame, CheckCircle2, ExternalLink, Calendar, Pause, Play, Edit2 } from 'lucide-vue-next'
+import { Repeat, X, Plus, Clock, Trash2, Store, ChevronRight, ChevronLeft, Loader2, ChevronDown, Package, MapPin, Building, Check, Info, User, Phone, Navigation, Map, Receipt, Truck, ShieldCheck, Banknote, Sparkles, Eye, Flame, CheckCircle2, ExternalLink, Calendar, Pause, Play, Edit2, RotateCcw } from 'lucide-vue-next'
 import { orders_api } from '@/api_factory/modules/orders'
 import { vendors_api } from '@/api_factory/modules/vendors'
 import { menu_items_api } from '@/api_factory/modules/menu-items'
@@ -812,6 +821,17 @@ const dismissImportedPlan = () => {
     localStorage.removeItem('errandr_autopilot_imported_plan')
   } catch (e) {}
   showToast({ title: 'Dismissed', message: 'Imported meal roadmap hidden', toastType: 'info' })
+}
+
+const confirmClearImportedPlan = () => {
+  if (typeof window !== 'undefined' && !window.confirm('Are you sure you want to clear your current imported meal plan? You can configure a fresh plan anytime on Meal Desk.')) {
+    return
+  }
+  importedPlan.value = null
+  try {
+    localStorage.removeItem('errandr_autopilot_imported_plan')
+  } catch (e) {}
+  showToast({ title: 'Plan Cleared', message: 'Imported meal roadmap cleared. You can restart fresh on Meal Desk.', toastType: 'info' })
 }
 
 // Time Slots
