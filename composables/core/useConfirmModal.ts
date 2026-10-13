@@ -4,14 +4,16 @@ const isOpen = ref(false)
 const title = ref('')
 const message = ref('')
 const confirmText = ref('Proceed')
+const cancelText = ref('Cancel')
 const variant = ref<'danger'|'warning'|'success'|'info'>('danger')
 let resolvePromise: ((value: boolean) => void) | null = null
 
 export const useConfirmModal = () => {
-  const confirm = (options: { title?: string, message: string, confirmText?: string, variant?: 'danger'|'warning'|'success'|'info' }) => {
+  const confirm = (options: { title?: string, message: string, confirmText?: string, cancelText?: string, variant?: 'danger'|'warning'|'success'|'info' }) => {
     title.value = options.title || 'Confirm Action'
     message.value = options.message
     confirmText.value = options.confirmText || 'Proceed'
+    cancelText.value = options.cancelText || 'Cancel'
     variant.value = options.variant || 'danger'
     isOpen.value = true
 
@@ -41,6 +43,7 @@ export const useConfirmModal = () => {
     title,
     message,
     confirmText,
+    cancelText,
     variant,
     confirm,
     handleConfirm,

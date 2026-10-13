@@ -1,20 +1,5 @@
 <template>
-  <div class="bg-white min-h-screen pb-24 animate-fade-in selection:bg-parentPrimary/15 selection:text-parentPrimary px-3 md:px-4 pt-6">
-    <!-- Header -->
-    <header class="mb-8">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 md:gap-6">
-        <div>
-          <p class="ff-mono text-[10px] font-bold text-gray-400 uppercase tracking-[0.15em] flex items-center gap-1.5 mb-2">
-            <Repeat class="w-3.5 h-3.5 text-parentPrimary" />
-            Meal Autopilot
-          </p>
-          <h1 class="ff-display text-2xl md:text-3xl font-bold text-gray-900 tracking-tight leading-none">
-            Set It. <span class="text-parentPrimary">Forget It.</span>
-          </h1>
-          <p class="text-sm font-medium text-gray-500 mt-2 max-w-md">Schedule your weekly meals across different vendors and we'll handle the rest - on autopilot.</p>
-        </div>
-      </div>
-    </header>
+  <div class="bg-white min-h-screen pb-24 animate-fade-in selection:bg-parentPrimary/15 selection:text-parentPrimary px-3 md:px-4">
 
     <!-- ============================================== -->
     <!-- ============================================== -->
@@ -688,10 +673,12 @@ import { auth_api } from '@/api_factory/modules/auth'
 import { users_api } from '@/api_factory/modules/users'
 import TimeSlotCard from '@/components/automations/TimeSlotCard.vue'
 import { useCustomToast } from '@/composables/core/useCustomToast'
+import { useConfirmModal } from '@/composables/core/useConfirmModal'
 
 definePageMeta({ layout: 'student' })
 
 const { showToast } = useCustomToast()
+const { confirm } = useConfirmModal()
 const loading = ref(true)
 const orders = ref([])
 
@@ -823,10 +810,15 @@ const dismissImportedPlan = () => {
   showToast({ title: 'Dismissed', message: 'Imported meal roadmap hidden', toastType: 'info' })
 }
 
-const confirmClearImportedPlan = () => {
-  if (typeof window !== 'undefined' && !window.confirm('Are you sure you want to clear your current imported meal plan? You can configure a fresh plan anytime on Meal Desk.')) {
-    return
-  }
+const confirmClearImportedPlan = async () => {
+  const confirmed = await confirm({
+    title: 'Clear Meal Roadmap?',
+    message: 'Are you sure you want to clear your current imported meal plan? You can configure a fresh plan anytime on Meal Desk.',
+    confirmText: 'Clear Plan',
+    cancelText: 'Keep Plan',
+    variant: 'danger'
+  })
+  if (!confirmed) return
   importedPlan.value = null
   try {
     localStorage.removeItem('errandr_autopilot_imported_plan')

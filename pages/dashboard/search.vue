@@ -1,14 +1,5 @@
 <template>
   <div class="animate-fade-in pb-32 selection:bg-parentPrimary/10 selection:text-parentPrimary px-4 md:px-4">
-    <!-- Header -->
-    <header class="pt-6 pb-4">
-      <h1 class="text-2xl md:text-3xl font-medium text-gray-900 tracking-tight leading-none mb-1">
-        Search Catalog
-      </h1>
-      <p class="text-[10px] font-bold text-gray-400 uppercase ">
-        Find food, snacks, and products on campus
-      </p>
-    </header>
 
     <!-- Search Section -->
     <div class="relative group z-30 max-w-3xl mb-6">

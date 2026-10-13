@@ -6,7 +6,7 @@
  <div class="relative bg-white rounded-[2.5rem] max-w-md w-full overflow-hidden transform transition-all group border border-white">
  <div class="p-10 text-center">
  <div :class="variantClass" class="w-20 h-20 rounded-md flex items-center justify-center mx-auto mb-8 border border-white transition-transform group-hover:scale-110">
- <component :is="icon || (variant === 'danger' ? 'AlertTriangle' : 'HelpCircle')" class="w-10 h-10" />
+ <component :is="icon || (variant === 'danger' ? Trash2 : AlertTriangle)" class="w-10 h-10" />
  </div>
  
  <h3 class="text-xl font-medium text-gray-900 tracking-tight leading-none mb-3">{{ title }}</h3>
@@ -19,7 +19,7 @@
  class="flex-1 py-2 px-6 bg-white border border-gray-50 text-gray-400 text-sm font-medium rounded-md hover:bg-gray-100 hover:text-gray-900 transition-all active:scale-95"
  @click="$emit('cancel')"
  >
- Go Back
+ {{ cancelText || 'Cancel' }}
  </button>
  <button 
  type="button" 
@@ -44,6 +44,7 @@ const props = defineProps<{
  title: string;
  message: string;
  confirmText?: string;
+ cancelText?: string;
  variant?: 'danger' | 'warning' | 'success' | 'info';
  icon?: any;
 }>();

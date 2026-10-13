@@ -2,7 +2,7 @@
  <div class="space-y-5 md:space-y-8 pb-24 animate-fade-in selection:bg-[#FF5C1A]/15 selection:text-[#FF5C1A] px-3 md:px-4 md:px-4">
 
  <!-- Header -->
- <header class="pt-6">
+ <header class="pt-6 lg:hidden">
  <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 md:gap-6">
  <div>
  <p class="ff-mono text-[10px] font-bold text-[#9C968E] uppercase tracking-[0.15em] flex items-center gap-1.5 mb-2">

@@ -1,9 +1,5 @@
 <template>
   <div class="max-w-3xl animate-fade-in selection:bg-parentPrimary/10 selection:text-parentPrimary px-3 md:px-0">
-    <div class="mb-8">
-      <h1 class="text-2xl font-bold text-gray-900 mb-1">My Profile</h1>
-      <p class="text-sm text-gray-500">Manage your personal information and preferences.</p>
-    </div>
 
     <!-- Main Profile Card -->
     <div class="bg-white rounded-3xl border border-gray-50 shadow-sm overflow-hidden mb-8">

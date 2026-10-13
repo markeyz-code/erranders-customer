@@ -1,15 +1,11 @@
 <template>
   <div class="space-y-6 animate-fade-in pb-32 px-3 sm:px-4 md:px-4">
-    <!-- Header -->
-    <header class="pt-6 pb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-0 sm:px-0">
-      <div>
-        <h1 class="text-2xl md:text-3xl font-medium text-gray-900 tracking-tight leading-none mb-1">Campus Quests</h1>
-        <p class="text-[10px] font-bold text-gray-400 uppercase ">Missions & Rewards Program</p>
-      </div>
-      <div class="flex items-center gap-2 px-3 py-1.5 bg-parentPrimary/5 border border-parentPrimary/10 rounded-xl self-start sm:self-auto">
+    <!-- Active Season Badge -->
+    <div class="flex items-center justify-end">
+      <div class="flex items-center gap-2 px-3 py-1.5 bg-parentPrimary/5 border border-parentPrimary/10 rounded-xl">
         <span class="text-[10px] font-medium text-parentPrimary uppercase tracking-wider">Active Season: Semester 1</span>
       </div>
-    </header>
+    </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Main Quest List -->

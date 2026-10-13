@@ -1,11 +1,5 @@
 <template>
   <div class="space-y-6 px-3">
-    <div class="flex items-center justify-between">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Group Orders</h1>
-        <p class="text-sm text-gray-500 mt-1">Manage your active and past multiplayer carts.</p>
-      </div>
-    </div>
 
     <!-- Loading State -->
     <div v-if="loading" class="flex flex-col items-center justify-center py-20 gap-4">

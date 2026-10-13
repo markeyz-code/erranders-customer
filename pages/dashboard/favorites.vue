@@ -1,9 +1,5 @@
 <template>
   <div class="space-y-6 animate-fade-in pb-32">
-    <div class="mb-8 px-2 md:px-0">
-      <h1 class="text-2xl font-bold text-gray-900 mb-1">Favorites</h1>
-      <p class="text-sm text-gray-500">Your saved venues and services.</p>
-    </div>
 
     <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-2 md:px-0">
       <div v-for="i in 6" :key="i" class="h-80 bg-white border border-gray-50 rounded-3xl animate-pulse" />

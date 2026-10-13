@@ -4,6 +4,7 @@
     :title="title"
     :message="message"
     :confirmText="confirmText"
+    :cancelText="cancelText"
     :variant="variant"
     @confirm="handleConfirm"
     @cancel="handleCancel"
@@ -14,5 +15,5 @@
 import ConfirmModal from './ConfirmModal.vue'
 import { useConfirmModal } from '@/composables/core/useConfirmModal'
 
-const { isOpen, title, message, confirmText, variant, handleConfirm, handleCancel } = useConfirmModal()
+const { isOpen, title, message, confirmText, cancelText, variant, handleConfirm, handleCancel } = useConfirmModal()
 </script>

@@ -1,17 +1,6 @@
 <template>
   <main class="min-h-screen pb-20">
-    <div class="max-w-3xl mx-auto px-3 pt-6 md:pt-8 space-y-6">
-      
-      <!-- Header -->
-      <div class="flex items-center gap-3">
-        <button @click="goBack" class="w-9 h-9 bg-white rounded-xl border border-gray-50 flex items-center justify-center hover:bg-gray-50 transition-all active:scale-95">
-          <ArrowLeft class="w-4 h-4 text-gray-900" />
-        </button>
-        <div>
-          <h1 class="text-xl font-medium text-gray-900 tracking-tight">My Wallet</h1>
-          <p class="text-sm font-bold text-gray-400">Manage your funds and transactions</p>
-        </div>
-      </div>
+    <div class="max-w-3xl mx-auto px-3 pt-0 md:pt-2 space-y-6">
 
       <!-- Wallet Balance Card -->
       <div class="relative overflow-hidden bg-gray-900 rounded-2xl p-4 md:p-5 text-white">

@@ -1,14 +1,5 @@
 <template>
   <div class="space-y-6 animate-fade-in pb-32 selection:bg-parentPrimary/10 selection:text-parentPrimary px-4 md:px-4">
-    <!-- Header -->
-    <header class="pt-6 pb-2">
-      <h1 class="text-2xl md:text-3xl font-medium text-gray-900 tracking-tight leading-none mb-1">
-        My Errands
-      </h1>
-      <p class="text-[10px] font-bold text-gray-400 uppercase ">
-        Track and manage your orders
-      </p>
-    </header>
 
     <!-- Reschedule Requests Section -->
     <div v-if="rescheduleRequests.length > 0" class="bg-amber-50 rounded-2xl p-4 border border-amber-200 shadow-sm space-y-3">

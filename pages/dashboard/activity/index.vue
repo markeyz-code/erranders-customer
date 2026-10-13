@@ -11,8 +11,6 @@
       <!-- Left Panel: Appointment List -->
       <div class="w-1/2 md:w-[350px] lg:w-[400px] shrink-0 border-r-[0.5px] border-gray-50 flex flex-col bg-white h-full overflow-hidden">
         <div class="p-4 pb-0 border-b-[0.5px] border-gray-50">
-          <h1 class="text-2xl font-bold text-gray-900 mb-4">Activity</h1>
-
           <!-- Activity Categories -->
           <div class="flex items-center gap-6 overflow-x-auto hide-scrollbar border-b-[0.5px] border-gray-100">
             <button 

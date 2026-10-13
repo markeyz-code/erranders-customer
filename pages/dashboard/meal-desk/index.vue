@@ -1,24 +1,5 @@
 <template>
   <div class="min-h-screen bg-[#FDFCFB]">
-    <!-- Top Nav -->
-    <header class="bg-white border-b border-[#E7E2DA] sticky top-0 z-40">
-      <div class="px-4 sm:px-6 py-4 flex items-center justify-between">
-        <div class="flex items-center gap-4">
-          <button @click="handleBack" type="button" class="p-2 hover:bg-gray-100 rounded-full transition-colors active:scale-95" title="Go Back">
-            <ArrowLeft class="w-5 h-5 text-gray-900" />
-          </button>
-          <div>
-            <div class="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-              <span class="text-[#FF5C1A]">●</span> Route
-              <span>·</span> Store
-            </div>
-            <h1 class="text-xl font-black text-gray-900 tracking-tight">Meal Desk</h1>
-            <p class="text-[11px] text-gray-500 font-medium">Errandr Companion</p>
-          </div>
-        </div>
-      </div>
-    </header>
-
     <main class="container mx-auto px-4 py-6 sm:py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
       <!-- Left Column: Controls & Intelligence -->
       <div class="lg:col-span-4 space-y-6">
@@ -543,10 +524,10 @@
           </div>
 
           <!-- Days List -->
-          <div class="space-y-4">
+          <div :key="roadmapRefreshKey" class="space-y-4">
             <div 
               v-for="(day, index) in (generatedPlan.days || [])" 
-              :key="index" 
+              :key="day.id || ('day-' + index)" 
               class="bg-white border border-[#E7E2DA] rounded-2xl p-4 sm:p-6 shadow-sm hover:border-gray-300 transition-all"
             >
               <div class="flex justify-between items-center mb-4 pb-3 border-b border-gray-100">
@@ -595,7 +576,7 @@
               <div v-else class="space-y-3">
                 <div 
                   v-for="(meal, mIndex) in (day.meals || [])" 
-                  :key="mIndex" 
+                  :key="meal.id || ('meal-' + index + '-' + mIndex + '-' + meal.name)" 
                   @click="openMealBreakdown(meal, day.day || index + 1)"
                   class="flex items-center justify-between p-3.5 rounded-xl bg-gray-50/80 hover:bg-orange-50/30 hover:border-orange-200 border border-transparent transition-all cursor-pointer group"
                 >
@@ -1718,7 +1699,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, nextTick } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { 
   ArrowLeft, ChefHat, Wallet, Utensils, Settings2, 
@@ -1732,6 +1713,7 @@ import {
 import { meal_planner_api } from '@/api_factory/modules/meal-planner';
 import { vendors_api } from '@/api_factory/modules/vendors';
 import { useToast } from '@/composables/useToast';
+import { useConfirmModal } from '@/composables/core/useConfirmModal';
 import { useWallet } from '@/composables/modules/wallets';
 import { usePayments } from '@/composables/modules/payments';
 import { useUser } from '@/composables/modules/auth/user';
@@ -1745,6 +1727,8 @@ const route = useRoute();
 const { user } = useUser();
 const { balance, wallet, fetchWallet } = useWallet();
 const { initializePayment, verifyPayment } = usePayments();
+const { confirm } = useConfirmModal();
+const roadmapRefreshKey = ref(0);
 
 const handleBack = () => {
   if (typeof window !== 'undefined' && window.history.length > 1) {
@@ -2129,8 +2113,11 @@ const normalizeIteration = (iter: any) => {
       const portions = Number(m.portions || 1);
       const preferredTime = m.preferredTime || (mIdx === 0 ? '08:30' : mIdx === 1 ? '12:30' : '18:30');
 
+      const mealId = m.id || m._id || `meal-${dayIdx}-${mIdx}-${mealName.replace(/\s+/g, '-').toLowerCase()}-${Math.random().toString(36).substring(2, 7)}`;
+
       return {
         ...m,
+        id: mealId,
         name: mealName,
         type: mealType,
         source: vendorName,
@@ -2148,9 +2135,11 @@ const normalizeIteration = (iter: any) => {
     const mealsSum = meals.reduce((sum: number, m: any) => sum + (m.price || 0), 0);
     const calculatedDailyCost = mealsSum + deliveryFee + serviceFee;
     const dailyCost = Number(d.dailyCost ?? d.totalCost ?? calculatedDailyCost);
+    const dayId = d.id || d._id || `day-${d.day || dayIdx + 1}-${Math.random().toString(36).substring(2, 7)}`;
 
     return {
       ...d,
+      id: dayId,
       day: d.day || dayIdx + 1,
       totalCost: dailyCost,
       dailyCost,
@@ -2475,7 +2464,7 @@ const recalculatePlanTotals = () => {
 };
 
 // Delete Meal From Day Card
-const deleteMealFromDay = (dayIndex: number, mealIndex: number) => {
+const deleteMealFromDay = async (dayIndex: number, mealIndex: number) => {
   if (!generatedPlan.value) return;
   const day = generatedPlan.value.days[dayIndex];
   if (!day) return;
@@ -2484,14 +2473,42 @@ const deleteMealFromDay = (dayIndex: number, mealIndex: number) => {
     showToast('Cannot delete meals from locked past days.', 'warning', undefined, 'Day Locked');
     return;
   }
-  const deletedMealName = day.meals[mealIndex]?.name || 'Meal';
-  day.meals.splice(mealIndex, 1);
+  const deletedMeal = day.meals?.[mealIndex];
+  const deletedMealName = deletedMeal?.name || 'Meal';
+
+  const confirmed = await confirm({
+    title: `Remove ${deletedMealName}?`,
+    message: `Are you sure you want to remove this meal from Day ${dayNum}? Your daily total and roadmap budget will be recalculated.`,
+    confirmText: 'Remove Meal',
+    cancelText: 'Keep Meal',
+    variant: 'danger'
+  });
+
+  if (!confirmed) return;
+
+  const currentIter = iterations.value[currentIterationIndex.value];
+  if (!currentIter || !currentIter.days) return;
+  const targetDay = currentIter.days[dayIndex];
+  if (!targetDay || !targetDay.meals) return;
+
+  // Filter out to create a fresh array reference
+  targetDay.meals = targetDay.meals.filter((_: any, idx: number) => idx !== mealIndex);
+
   recalculatePlanTotals();
+
+  // Force deep reactivity update across iterations
+  iterations.value[currentIterationIndex.value] = { ...currentIter };
+  iterations.value = [...iterations.value];
+
+  // Increment refresh key for internal DOM refresh so deleted item disappears immediately
+  roadmapRefreshKey.value++;
+  await nextTick();
+
   showToast(`${deletedMealName} removed from Day ${dayNum}. Roadmap recalculated!`, 'info', undefined, 'Meal Deleted');
 };
 
 // Delete Entire Day From Roadmap
-const deleteEntireDay = (dayIndex: number) => {
+const deleteEntireDay = async (dayIndex: number) => {
   if (!generatedPlan.value) return;
   const day = generatedPlan.value.days[dayIndex];
   if (!day) return;
@@ -2500,17 +2517,39 @@ const deleteEntireDay = (dayIndex: number) => {
     showToast('Cannot delete locked past days.', 'warning', undefined, 'Day Locked');
     return;
   }
-  if (typeof window !== 'undefined' && !window.confirm(`Are you sure you want to delete Day ${dayNum} from your roadmap?`)) {
-    return;
-  }
-  generatedPlan.value.days.splice(dayIndex, 1);
+
+  const confirmed = await confirm({
+    title: `Delete Day ${dayNum}?`,
+    message: `Are you sure you want to delete Day ${dayNum} from your roadmap? All meals for this day will be removed and your schedule will be recalculated.`,
+    confirmText: 'Delete Day',
+    cancelText: 'Keep Day',
+    variant: 'danger'
+  });
+
+  if (!confirmed) return;
+
+  const currentIter = iterations.value[currentIterationIndex.value];
+  if (!currentIter || !currentIter.days) return;
+
+  // Filter out day to create a fresh array reference
+  currentIter.days = currentIter.days.filter((_: any, idx: number) => idx !== dayIndex);
+
+  cycleDays.value = Math.max(1, currentIter.days.length);
   recalculatePlanTotals();
-  cycleDays.value = Math.max(1, generatedPlan.value.days.length);
+
+  // Force deep reactivity update across iterations
+  iterations.value[currentIterationIndex.value] = { ...currentIter };
+  iterations.value = [...iterations.value];
+
+  // Increment refresh key for internal DOM refresh so deleted item disappears immediately
+  roadmapRefreshKey.value++;
+  await nextTick();
+
   showToast(`Day ${dayNum} removed from roadmap. Total re-evaluated!`, 'info', undefined, 'Day Removed');
 };
 
 // Delete Current Meal Inside Edit Modal
-const deleteCurrentEditingMeal = () => {
+const deleteCurrentEditingMeal = async () => {
   if (!generatedPlan.value) return;
   const day = generatedPlan.value.days[editingDayIndex.value];
   if (!day) return;
@@ -2519,15 +2558,39 @@ const deleteCurrentEditingMeal = () => {
     showToast('Cannot delete meals from locked past days.', 'warning', undefined, 'Day Locked');
     return;
   }
-  const deletedMealName = day.meals[editingMealIndex.value]?.name || 'Meal';
-  day.meals.splice(editingMealIndex.value, 1);
+  const deletedMeal = day.meals?.[editingMealIndex.value];
+  const deletedMealName = deletedMeal?.name || 'Meal';
+
+  const confirmed = await confirm({
+    title: `Remove ${deletedMealName}?`,
+    message: `Are you sure you want to remove this meal from Day ${dayNum}?`,
+    confirmText: 'Remove Meal',
+    cancelText: 'Keep Meal',
+    variant: 'danger'
+  });
+
+  if (!confirmed) return;
+
+  const currentIter = iterations.value[currentIterationIndex.value];
+  if (!currentIter || !currentIter.days) return;
+  const targetDay = currentIter.days[editingDayIndex.value];
+  if (!targetDay || !targetDay.meals) return;
+
+  targetDay.meals = targetDay.meals.filter((_: any, idx: number) => idx !== editingMealIndex.value);
   showEditModal.value = false;
   recalculatePlanTotals();
+
+  iterations.value[currentIterationIndex.value] = { ...currentIter };
+  iterations.value = [...iterations.value];
+
+  roadmapRefreshKey.value++;
+  await nextTick();
+
   showToast(`${deletedMealName} removed from Day ${dayNum}. Roadmap recalculated!`, 'info', undefined, 'Meal Deleted');
 };
 
 // Delete Meal From Breakdown Modal
-const deleteMealFromBreakdown = () => {
+const deleteMealFromBreakdown = async () => {
   if (!generatedPlan.value || !selectedMealForBreakdown.value) return;
   const dayIdx = Math.max(0, selectedDayForBreakdown.value - 1);
   const day = generatedPlan.value.days[dayIdx];
@@ -2537,20 +2600,49 @@ const deleteMealFromBreakdown = () => {
     return;
   }
   const mealIdx = day.meals.findIndex((m: any) => m.name === selectedMealForBreakdown.value.name);
-  if (mealIdx >= 0) {
-    const deletedName = day.meals[mealIdx].name;
-    day.meals.splice(mealIdx, 1);
-    showBreakdownModal.value = false;
-    recalculatePlanTotals();
-    showToast(`${deletedName} removed from Day ${selectedDayForBreakdown.value}. Roadmap recalculated!`, 'info', undefined, 'Meal Deleted');
-  }
+  if (mealIdx < 0) return;
+  const deletedName = day.meals[mealIdx].name;
+
+  const confirmed = await confirm({
+    title: `Remove ${deletedName}?`,
+    message: `Are you sure you want to remove this meal from Day ${selectedDayForBreakdown.value}?`,
+    confirmText: 'Remove Meal',
+    cancelText: 'Keep Meal',
+    variant: 'danger'
+  });
+
+  if (!confirmed) return;
+
+  const currentIter = iterations.value[currentIterationIndex.value];
+  if (!currentIter || !currentIter.days) return;
+  const targetDay = currentIter.days[dayIdx];
+  if (!targetDay || !targetDay.meals) return;
+
+  targetDay.meals = targetDay.meals.filter((_: any, idx: number) => idx !== mealIdx);
+  showBreakdownModal.value = false;
+  recalculatePlanTotals();
+
+  iterations.value[currentIterationIndex.value] = { ...currentIter };
+  iterations.value = [...iterations.value];
+
+  roadmapRefreshKey.value++;
+  await nextTick();
+
+  showToast(`${deletedName} removed from Day ${selectedDayForBreakdown.value}. Roadmap recalculated!`, 'info', undefined, 'Meal Deleted');
 };
 
 // Clear Configuration and Restart from Scratch
-const confirmResetConfiguration = () => {
-  if (typeof window !== 'undefined' && !window.confirm('Are you sure you want to clear your current configuration and restart from scratch? All customized selections will be reset.')) {
-    return;
-  }
+const confirmResetConfiguration = async () => {
+  const confirmed = await confirm({
+    title: 'Restart from Scratch?',
+    message: 'Are you sure you want to clear your current configuration and restart from scratch? All customized selections will be reset.',
+    confirmText: 'Reset All',
+    cancelText: 'Keep Current',
+    variant: 'warning'
+  });
+
+  if (!confirmed) return;
+
   try {
     localStorage.removeItem('errandr_autopilot_imported_plan');
   } catch (e) {
@@ -2573,6 +2665,8 @@ const confirmResetConfiguration = () => {
   showEditModal.value = false;
   showMedicalModal.value = false;
   showVendorsModal.value = false;
+  roadmapRefreshKey.value++;
+  await nextTick();
   showToast('Configuration and saved plan cleared! You can now start fresh.', 'info', undefined, 'Plan Reset');
 };
 

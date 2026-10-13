@@ -1,16 +1,12 @@
 <template>
   <div class="space-y-6 animate-fade-in pb-32 px-3 md:px-4">
-    <!-- Header -->
-    <header class="pt-6 pb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-      <div>
-        <h1 class="text-2xl md:text-3xl font-medium text-gray-900 tracking-tight leading-none mb-1">Campus Hall of Fame</h1>
-        <p class="text-[10px] font-bold text-gray-400 uppercase ">Top Orderers & Hustlers this Month</p>
-      </div>
-      <div class="flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-100 rounded-xl self-start sm:self-auto">
+    <!-- Next Update Badge -->
+    <div class="flex items-center justify-end">
+      <div class="flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-100 rounded-xl">
         <Trophy class="w-3.5 h-3.5 text-amber-600 animate-pulse" />
         <span class="text-[10px] font-medium text-amber-700 uppercase tracking-wider">Next Update: Sunday 12PM</span>
       </div>
-    </header>
+    </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       <!-- Top 3 Podium -->

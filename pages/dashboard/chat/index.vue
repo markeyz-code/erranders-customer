@@ -4,8 +4,6 @@
     <!-- Left Panel: Conversations List -->
     <div class="w-full md:w-[350px] lg:w-[400px] border-r border-gray-50 flex flex-col bg-white shrink-0">
       <div class="p-4 pb-4 border-b border-gray-50">
-        <h1 class="text-2xl font-bold text-gray-900 mb-4">Messages</h1>
-        
         <!-- Search -->
         <div class="relative">
           <input 

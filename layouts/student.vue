@@ -291,7 +291,17 @@
             <button v-if="!isDashboard" @click="router.back()" class="w-10 h-10 rounded-lg bg-[#FAF8F5] flex items-center justify-center border border-[#E7E2DA] hover:bg-[#171310] hover:text-white hover:border-[#171310] transition-all group">
               <ArrowLeft class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform"></ArrowLeft>
             </button>
-            <div>
+            <div v-if="isDashboard">
+              <div class="flex items-center gap-2 mb-1.5">
+                <ShieldCheck class="w-3.5 h-3.5 text-[#FF5C1A]" />
+                <span class="ff-mono text-[10px] font-bold tracking-[0.15em] uppercase text-[#9C968E]">{{ user?.isPro ? 'Pro Member' : 'Campus Member' }}</span>
+              </div>
+              <h1 class="ff-display text-[26px] font-bold text-[#171310] tracking-tight leading-none">
+                Welcome back, <span class="text-[#FF5C1A]">{{ user?.firstName || 'Student' }}.</span>
+              </h1>
+              <p class="text-[13px] font-bold text-[#9C968E] mt-1.5">Here's your campus activity at a glance</p>
+            </div>
+            <div v-else>
               <div class="flex items-center gap-2 mb-1.5">
                 <span class="w-1.5 h-1.5 rounded-full bg-[#FF5C1A] animate-pulse"></span>
                 <span class="ff-mono text-[10px] font-bold tracking-[0.15em] uppercase text-[#9C968E]">Route · {{ pageTitle }}</span>
@@ -384,7 +394,8 @@ import {
   Scissors,
   Sparkles,
   Repeat,
-  ChefHat
+  ChefHat,
+  ShieldCheck
 } from 'lucide-vue-next'
 import { useRealtimeNotifications } from '@/composables/core/useRealtimeNotifications'
 import { useNotifications } from '@/composables/modules/notifications/useNotifications'
@@ -463,8 +474,15 @@ const pageTitles: Record<string, { title: string; description: string }> = {
   '/dashboard/meal-desk': { title: 'Meal Desk', description: 'Plan and budget your weekly meals' },
   '/dashboard/recurring-orders': { title: 'Meal Autopilot', description: 'Set it, forget it — your meals, on schedule' },
   '/dashboard/group-orders': { title: 'Group Orders', description: 'Manage your multiplayer carts and order history' },
+  '/dashboard/quests': { title: 'Campus Quests', description: 'Missions & rewards program' },
+  '/dashboard/leaderboard': { title: 'Campus Hall of Fame', description: 'Top orderers & hustlers this month' },
+  '/dashboard/prime': { title: 'Campus Prime', description: 'Exclusive student perks & membership' },
+  '/dashboard/how-it-works': { title: 'How It Works', description: 'Everything you need to know about Errandr' },
   '/dashboard/favorites': { title: 'My Favorites', description: 'Your most loved items and venues' },
   '/dashboard/profile': { title: 'My Profile', description: 'Manage your Errandr account' },
+  '/dashboard/profile/addresses': { title: 'Delivery Addresses', description: 'Manage your saved delivery locations' },
+  '/dashboard/profile/payments': { title: 'Payment Methods', description: 'Manage your saved cards and billing' },
+  '/dashboard/profile/security': { title: 'Security', description: 'Password and account security' },
   '/dashboard/activity': { title: 'My Activity', description: 'Manage your appointments and bookings' },
   '/dashboard/chat': { title: 'Messages', description: 'Your conversations with venues' },
   '/dashboard/forms': { title: 'Forms', description: 'Consultation forms and waivers' },
