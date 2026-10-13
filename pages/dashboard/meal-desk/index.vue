@@ -56,39 +56,21 @@
           </div>
 
           <div class="space-y-5">
-            <!-- Daily & Weekly Budget -->
+            <!-- Cycle Budget -->
             <div class="space-y-3">
               <div>
                 <div class="flex items-center justify-between mb-1.5">
                   <label class="flex items-center gap-1.5 text-[11px] font-bold text-gray-700 uppercase tracking-wider">
-                    <Wallet class="w-3.5 h-3.5 text-[#FF5C1A]" /> Daily Meal Budget
+                    <Wallet class="w-3.5 h-3.5 text-[#FF5C1A]" /> Cycle Budget
                   </label>
-                  <span class="text-[10px] font-semibold text-gray-400">Target per day</span>
-                </div>
-                <div class="relative">
-                  <span class="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-gray-900 text-sm">₦</span>
-                  <input 
-                    type="text" 
-                    v-model="formattedDailyBudget" 
-                    placeholder="1,500"
-                    class="w-full bg-[#FDFCFB] border border-[#E7E2DA] rounded-xl py-2.5 pl-8 pr-3 font-bold text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A] transition-all"
-                  >
-                </div>
-              </div>
-
-              <div>
-                <div class="flex items-center justify-between mb-1.5">
-                  <label class="flex items-center gap-1.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-                    Cycle Budget Total
-                  </label>
-                  <span class="text-[10px] font-semibold text-gray-400">{{ cycleDays }}-day cycle</span>
+                  <span class="text-[10px] font-semibold text-gray-400">{{ cycleDays }}-day cycle total</span>
                 </div>
                 <div class="relative">
                   <span class="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-gray-900 text-sm">₦</span>
                   <input 
                     type="text" 
                     v-model="formattedBudget" 
-                    placeholder="10,000"
+                    placeholder="20,000"
                     class="w-full bg-[#FDFCFB] border border-[#E7E2DA] rounded-xl py-2.5 pl-8 pr-3 font-bold text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A] transition-all"
                   >
                 </div>
@@ -507,6 +489,22 @@
             </div>
             <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 shrink-0">
               Within Buffer
+            </span>
+          </div>
+          <div v-else class="bg-emerald-50 border border-emerald-200 rounded-2xl p-3.5 sm:p-4 flex items-center justify-between gap-4 shadow-sm">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-700 shrink-0">
+                <ShieldCheck class="w-4 h-4" />
+              </div>
+              <div>
+                <p class="text-xs sm:text-sm font-bold text-emerald-950">Strictly Within Budget</p>
+                <p class="text-[11px] sm:text-xs text-emerald-800 font-medium">
+                  Total plan cost is <strong>₦{{ (generatedPlan.totalCost || 0).toLocaleString() }}</strong>, strictly abiding by your <strong>₦{{ budget.toLocaleString() }}</strong> cycle budget.
+                </p>
+              </div>
+            </div>
+            <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 shrink-0">
+              Within Budget
             </span>
           </div>
 
@@ -1699,10 +1697,12 @@ const formattedFundAmount = computed({
 });
 
 // Form States
-const budget = ref(10000);
+const budget = ref(20000);
 const cycleDays = ref(7);
 const customCycleDays = ref<number | null>(null);
-const dailyBudget = ref(Math.round(10000 / 7));
+const dailyBudget = computed(() => {
+  return Math.round(budget.value / Math.max(1, cycleDays.value));
+});
 const bufferAmount = ref(1000);
 const mealsPerDay = ref(2);
 const allowCustomErrands = ref(false);
@@ -1771,13 +1771,11 @@ const commonDislikeChips = [
 const setCycleDays = (days: number) => {
   cycleDays.value = Math.max(1, Math.min(30, days));
   customCycleDays.value = null;
-  dailyBudget.value = Math.round(budget.value / cycleDays.value);
 };
 
 const onCustomCycleDaysInput = () => {
   if (customCycleDays.value && customCycleDays.value >= 1) {
     cycleDays.value = Math.min(30, Math.max(1, Math.round(customCycleDays.value)));
-    dailyBudget.value = Math.round(budget.value / cycleDays.value);
   }
 };
 
@@ -1828,18 +1826,6 @@ const formattedBudget = computed({
   set: (val: string) => {
     const numeric = parseInt(val.replace(/[^\d]/g, ''), 10);
     budget.value = isNaN(numeric) ? 0 : numeric;
-    dailyBudget.value = Math.round(budget.value / Math.max(1, cycleDays.value));
-  }
-});
-
-const formattedDailyBudget = computed({
-  get: () => {
-    return dailyBudget.value ? dailyBudget.value.toLocaleString() : '';
-  },
-  set: (val: string) => {
-    const numeric = parseInt(val.replace(/[^\d]/g, ''), 10);
-    dailyBudget.value = isNaN(numeric) ? 0 : numeric;
-    budget.value = dailyBudget.value * Math.max(1, cycleDays.value);
   }
 });
 
@@ -2486,7 +2472,6 @@ onMounted(async () => {
         }
         if (parsed.budget) {
           budget.value = Number(parsed.budget);
-          dailyBudget.value = parsed.dailyBudget ? Number(parsed.dailyBudget) : Math.round(Number(parsed.budget) / cycleDays.value);
         }
         if (parsed.bufferAmount !== undefined) bufferAmount.value = Number(parsed.bufferAmount);
         if (parsed.mealsPerDay) mealsPerDay.value = Number(parsed.mealsPerDay);
