@@ -11,7 +11,7 @@
           <h1 class="ff-display text-2xl md:text-3xl font-bold text-gray-900 tracking-tight leading-none">
             Set It. <span class="text-parentPrimary">Forget It.</span>
           </h1>
-          <p class="text-sm font-medium text-gray-500 mt-2 max-w-md">Schedule your weekly meals across different vendors and we'll handle the rest — on autopilot.</p>
+          <p class="text-sm font-medium text-gray-500 mt-2 max-w-md">Schedule your weekly meals across different vendors and we'll handle the rest - on autopilot.</p>
         </div>
       </div>
     </header>
@@ -111,14 +111,14 @@
         <div class="bg-[#FAF8F5] p-3.5 rounded-2xl border border-[#EFECE6] flex flex-col justify-between">
           <div>
             <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider block mb-1">
-              Cycle End Date (7-Day Duration)
+              Cycle End Date ({{ cycleDuration }}-Day Duration)
             </span>
             <p class="text-sm font-black text-gray-900 mt-1">
               {{ calculatedEndDate }}
             </p>
           </div>
           <p class="text-[11px] text-gray-500 font-medium">
-            Full 7-day campus coverage automatically repeating or renewing.
+            Full {{ cycleDuration }}-day campus coverage automatically repeating or renewing.
           </p>
         </div>
 
@@ -134,7 +134,7 @@
             </p>
           </div>
           <div class="flex items-center justify-between text-xs pt-2 border-t border-gray-200/60 mt-2">
-            <span class="text-gray-500 font-medium">7-Day All-Inclusive:</span>
+            <span class="text-gray-500 font-medium">{{ cycleDuration }}-Day All-Inclusive:</span>
             <span class="font-black text-[#FF5C1A]">₦{{ Number(importedPlan.totalCost || 0).toLocaleString() }}</span>
           </div>
         </div>
@@ -210,6 +210,7 @@
           :slotKey="slot.key"
           :day="selectedDay"
           :order="getScheduledOrderForSlot(selectedDay, slot.key)"
+          :isPast="isSlotPastOrKickedOff(selectedDay, slot.key, getScheduledOrderForSlot(selectedDay, slot.key))"
           @add="openAddMealModal(selectedDay, slot.key)"
           @edit="openEditMealModal(selectedDay, slot.key, $event)"
           @delete="confirmDelete"
@@ -605,7 +606,7 @@
               class="w-full bg-parentPrimary hover:bg-parentPrimary/90 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-parentPrimary/30 flex justify-center items-center gap-2"
             >
               <Loader2 v-if="isSubmitting" class="w-5 h-5 animate-spin" />
-              <span v-else>{{ activeModalContext?.editOrderId ? 'Update Automation' : 'Confirm Automation' }} — ₦{{ orderTotal.toLocaleString() }}</span>
+              <span v-else>{{ activeModalContext?.editOrderId ? 'Update Automation' : 'Confirm Automation' }} - ₦{{ orderTotal.toLocaleString() }}</span>
             </button>
           </div>
 
@@ -735,12 +736,17 @@ const kickoffLabel = computed(() => {
   return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
 })
 
-// Computed 7-Day Cycle End Date
+// Computed Cycle Duration
+const cycleDuration = computed(() => {
+  return importedPlan.value?.cycleDays || (importedPlan.value?.days || []).length || 7
+})
+
+// Computed Cycle End Date
 const calculatedEndDate = computed(() => {
-  if (!kickoffDate.value) return '7 Days from kickoff'
+  if (!kickoffDate.value) return `${cycleDuration.value} Days from kickoff`
   const [year, month, day] = kickoffDate.value.split('-').map(Number)
   const end = new Date(year, month - 1, day)
-  end.setDate(end.getDate() + 6) // Day 7
+  end.setDate(end.getDate() + (cycleDuration.value - 1))
   return end.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })
 })
 
@@ -963,16 +969,18 @@ const getScheduledOrderForSlot = (day, timeWindow) => {
 
     if (mealIndex >= 0 && dayPlan.meals && dayPlan.meals[mealIndex]) {
       const m = dayPlan.meals[mealIndex]
+      const mealTime = m.preferredTime || m.exactTime || defaultTime
+      const mealPortions = Number(m.portions || 1)
       const itemsList = (m.items && m.items.length > 0)
         ? m.items.map(it => ({
             name: it.name,
-            quantity: it.portions || 1,
+            quantity: it.portions || mealPortions || 1,
             price: it.price || 0,
             image: it.image
           }))
         : [{
             name: m.mealName || m.name,
-            quantity: 1,
+            quantity: mealPortions,
             price: m.mealPrice || m.price || 0,
             image: m.image
           }]
@@ -986,16 +994,35 @@ const getScheduledOrderForSlot = (day, timeWindow) => {
           _id: m.vendorId || m.vendor?._id
         },
         items: itemsList,
+        portions: mealPortions,
         status: isAutopilotActive.value ? 'active' : 'paused',
-        total: m.mealPrice || m.total || 0,
-        exactTime: defaultTime,
-        mealType: m.mealType,
+        total: m.mealPrice || m.price || m.total || 0,
+        exactTime: mealTime,
+        mealType: m.mealType || m.type,
         nutrition: m.nutrition
       }
     }
   }
 
   return null
+}
+
+const isSlotPastOrKickedOff = (day, timeWindow, order) => {
+  if (!order) return false
+  if (importedPlan.value && dayOfWeekMapping.value[day]) {
+    const dayPlan = dayOfWeekMapping.value[day]
+    if (dayPlan.calendarDate) {
+      const now = new Date()
+      const slotDate = new Date(dayPlan.calendarDate)
+      
+      const exactTimeStr = order.exactTime || '12:00'
+      const [h, m] = exactTimeStr.split(':').map(Number)
+      slotDate.setHours(isNaN(h) ? 12 : h, isNaN(m) ? 0 : m, 0, 0)
+      
+      return now.getTime() > slotDate.getTime()
+    }
+  }
+  return false
 }
 
 const getDayMealsCount = (day) => {
@@ -1047,6 +1074,15 @@ const openAddMealModal = async (day, time) => {
 }
 
 const openEditMealModal = async (day, time, order) => {
+  if (isSlotPastOrKickedOff(day, time, order)) {
+    showToast({
+      title: 'Order Locked',
+      message: 'This scheduled meal has already kicked off and cannot be edited.',
+      toastType: 'info'
+    })
+    return
+  }
+
   resetModalState()
   const isSynced = String(order._id).startsWith('synced_')
   activeModalContext.value = { day, time, editOrderId: isSynced ? null : order._id }
@@ -1261,7 +1297,7 @@ const cartSubtotal = computed(() => {
   return sum
 })
 
-// Fee Calculations (matching cart.vue exactly — all from admin config)
+// Fee Calculations (matching cart.vue exactly: all from admin config)
 const serviceFee = computed(() => platformConvenienceFee.value + platformProcessingFee.value)
 const packagingFee = computed(() => selectedPackagingPack.value?.price || 0)
 const deliveryFee = computed(() => platformBaseFee.value)
@@ -1374,6 +1410,14 @@ const submitAutomation = async () => {
 // ============ DELETE ============
 
 const confirmDelete = (orderId) => {
+  if (selectedDay.value && String(orderId).startsWith('synced_')) {
+    const slotKey = String(orderId).replace('synced_', '')
+    const isPast = isSlotPastOrKickedOff(selectedDay.value, slotKey, { _id: orderId })
+    if (isPast) {
+      showToast({ title: 'Order Locked', message: 'Past orders that have kicked off cannot be removed.', toastType: 'info' })
+      return
+    }
+  }
   orderToDelete.value = orderId
   showDeleteModal.value = true
 }

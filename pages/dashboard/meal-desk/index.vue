@@ -79,9 +79,9 @@
               <div>
                 <div class="flex items-center justify-between mb-1.5">
                   <label class="flex items-center gap-1.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-                    Weekly Budget Total
+                    Cycle Budget Total
                   </label>
-                  <span class="text-[10px] font-semibold text-gray-400">7-day cycle</span>
+                  <span class="text-[10px] font-semibold text-gray-400">{{ cycleDays }}-day cycle</span>
                 </div>
                 <div class="relative">
                   <span class="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-gray-900 text-sm">₦</span>
@@ -121,6 +121,45 @@
                 <p class="text-[10px] text-gray-400 mt-1 leading-tight">
                   Adds headroom if vendor combos exceed base budget by small variations.
                 </p>
+              </div>
+            </div>
+
+            <!-- Cycle Duration (Days) -->
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <label class="flex items-center gap-2 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                  <Calendar class="w-3.5 h-3.5 text-[#FF5C1A]" /> Cycle Duration
+                </label>
+                <span class="text-[10px] font-bold text-[#FF5C1A] bg-orange-50 px-2 py-0.5 rounded-md border border-orange-100">
+                  {{ cycleDays }} {{ cycleDays === 1 ? 'Day' : 'Days' }} Cycle
+                </span>
+              </div>
+              <div class="grid grid-cols-4 gap-1.5 mb-2">
+                <button 
+                  v-for="d in [3, 5, 7, 14]" :key="d"
+                  type="button"
+                  @click="setCycleDays(d)"
+                  :class="[
+                    'py-2 rounded-xl text-xs font-bold transition-all border text-center active:scale-95',
+                    cycleDays === d 
+                      ? 'bg-gray-900 text-white border-gray-900 shadow-sm' 
+                      : 'bg-white text-gray-600 border-[#E7E2DA] hover:bg-gray-50'
+                  ]"
+                >
+                  {{ d }}d
+                </button>
+              </div>
+              <div class="flex items-center gap-2 bg-[#FDFCFB] border border-[#E7E2DA] rounded-xl px-3 py-1.5">
+                <span class="text-[10px] font-semibold text-gray-400 shrink-0">Custom Days:</span>
+                <input 
+                  type="number"
+                  min="1"
+                  max="30"
+                  v-model.number="customCycleDays"
+                  @input="onCustomCycleDaysInput"
+                  placeholder="e.g. 10"
+                  class="w-full bg-transparent font-bold text-xs text-gray-900 focus:outline-none"
+                />
               </div>
             </div>
 
@@ -305,7 +344,7 @@
             <div class="flex flex-wrap gap-3">
               <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-2">
                 <p class="text-[10px] font-medium text-white/70 uppercase mb-0.5">Meal Coverage</p>
-                <p class="font-bold text-sm">{{ generatedPlan ? generatedPlan.days.length : 7 }} Days Active</p>
+                <p class="font-bold text-sm">{{ generatedPlan ? generatedPlan.days.length : cycleDays }} Days Active</p>
               </div>
               <div class="bg-white text-gray-900 rounded-xl px-4 py-2">
                 <p class="text-[10px] font-medium text-gray-500 uppercase mb-0.5">Custom Errands</p>
@@ -314,6 +353,24 @@
             </div>
           </div>
           <div class="absolute -right-8 -bottom-8 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+        </div>
+
+        <!-- In-Progress Plan Protected Status Banner -->
+        <div v-if="hasAnyPastDays" class="mb-6 p-4 rounded-2xl bg-gray-900 text-white flex items-start sm:items-center justify-between gap-3 shadow-md">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-amber-400 shrink-0">
+              <Lock class="w-4 h-4" />
+            </div>
+            <div>
+              <p class="text-xs font-bold text-white">Roadmap In Progress</p>
+              <p class="text-[11px] text-gray-300 font-medium">
+                Past and dispatched days are locked to preserve historical orders. Upcoming future days can be freely customized.
+              </p>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-400/20 text-amber-300 border border-amber-400/30 shrink-0">
+            Protected
+          </span>
         </div>
 
         <!-- LOADING STATE IN ROADMAP -->
@@ -467,12 +524,17 @@
                   </span>
                   <h5 class="font-bold text-gray-900 text-base">Day {{ day.day || index + 1 }}</h5>
                 </div>
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-3">
                   <div class="text-right">
                     <span class="text-[10px] text-gray-400 font-medium uppercase tracking-wider block">Day Total</span>
                     <span class="text-sm font-black text-gray-900">₦{{ (day.totalCost || day.dailyCost || 0).toLocaleString() }}</span>
                   </div>
+                  <span v-if="isDayPastOrKickedOff(day.day || index + 1)" class="px-2.5 py-1.5 bg-gray-100 text-gray-500 text-xs font-bold rounded-lg border border-gray-200 flex items-center gap-1.5" title="Past orders that kicked off cannot be edited">
+                    <Lock class="w-3.5 h-3.5 text-gray-400" />
+                    <span>Locked</span>
+                  </span>
                   <button 
+                    v-else
                     @click="openEditMeal(day, index, day.meals[0], 0)"
                     class="px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-700 text-xs font-bold rounded-lg border border-gray-200 transition-colors flex items-center gap-1.5"
                   >
@@ -520,12 +582,19 @@
                     </div>
 
                     <div class="min-w-0">
-                      <div class="flex items-center gap-2">
+                      <div class="flex items-center gap-2 flex-wrap">
                         <p class="text-sm font-bold text-gray-900 group-hover:text-[#FF5C1A] transition-colors truncate">
                           {{ meal.name }}
                         </p>
                         <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-white border border-gray-200 text-gray-600 shrink-0">
                           {{ meal.type || (mIndex === 0 ? 'Breakfast' : mIndex === 1 ? 'Lunch' : 'Dinner') }}
+                        </span>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold text-gray-600 bg-white border border-gray-200 shrink-0 flex items-center gap-1">
+                          <Clock class="w-3 h-3 text-[#FF5C1A]" />
+                          {{ formatDisplayTime(meal.preferredTime || (mIndex === 0 ? '08:30' : mIndex === 1 ? '12:30' : '18:30')) }}
+                        </span>
+                        <span v-if="meal.portions && meal.portions > 1" class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider text-indigo-700 bg-indigo-50 border border-indigo-100 shrink-0">
+                          {{ meal.portions }} Portions
                         </span>
                       </div>
                       <div class="flex items-center gap-2 text-xs font-medium text-gray-500 mt-0.5 flex-wrap">
@@ -545,12 +614,20 @@
                   <div class="flex items-center gap-3 shrink-0 ml-3">
                     <span class="text-sm font-black text-gray-900">₦{{ (meal.price || 0).toLocaleString() }}</span>
                     <button 
+                      v-if="!isDayPastOrKickedOff(day.day || index + 1)"
                       @click.stop="openEditMeal(day, index, meal, mIndex)"
                       class="p-2 rounded-lg bg-white border border-gray-200 hover:border-orange-400 text-gray-400 hover:text-[#FF5C1A] transition-all shadow-sm"
                       title="Edit this meal"
                     >
                       <Edit2 class="w-3.5 h-3.5" />
                     </button>
+                    <span 
+                      v-else
+                      class="p-2 rounded-lg bg-gray-100 border border-gray-200 text-gray-400 cursor-not-allowed"
+                      title="Locked past order"
+                    >
+                      <Lock class="w-3.5 h-3.5" />
+                    </span>
                   </div>
                 </div>
               </div>
@@ -1027,8 +1104,30 @@
                     </p>
                   </div>
                 </div>
-                <div class="text-right shrink-0 ml-3">
-                  <span class="text-xs font-black" :class="item.category === 'Packaging' ? 'text-amber-800' : 'text-gray-900'">
+                <div class="flex items-center gap-3 shrink-0 ml-3">
+                  <!-- Portion counter for food dishes -->
+                  <div v-if="item.category !== 'Packaging' && !isDayPastOrKickedOff(selectedDayForBreakdown)" class="flex items-center gap-1 bg-white rounded-lg p-0.5 border border-gray-200 shadow-2xs">
+                    <button 
+                      type="button" 
+                      @click="decrementItemPortion(idx)" 
+                      :disabled="(item.portions || 1) <= 1"
+                      class="w-6 h-6 flex items-center justify-center bg-gray-50 hover:bg-orange-50 hover:text-[#FF5C1A] text-gray-700 disabled:opacity-30 disabled:hover:text-gray-700 font-bold text-xs rounded transition-colors"
+                      title="Decrease portion"
+                    >
+                      -
+                    </button>
+                    <span class="w-5 text-center text-xs font-bold text-gray-900">{{ item.portions || 1 }}</span>
+                    <button 
+                      type="button" 
+                      @click="incrementItemPortion(idx)" 
+                      :disabled="(item.portions || 1) >= 5"
+                      class="w-6 h-6 flex items-center justify-center bg-gray-50 hover:bg-orange-50 hover:text-[#FF5C1A] text-gray-700 disabled:opacity-30 font-bold text-xs rounded transition-colors"
+                      title="Increase portion"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <span class="text-xs font-black min-w-[50px] text-right" :class="item.category === 'Packaging' ? 'text-amber-800' : 'text-gray-900'">
                     ₦{{ Number(item.price || 0).toLocaleString() }}
                   </span>
                 </div>
@@ -1260,6 +1359,47 @@
                 v-model="customEditVendor"
                 placeholder="e.g. Tasty Delight or Mama-put Special"
                 class="w-full bg-[#FDFCFB] border border-[#E7E2DA] rounded-xl p-3 text-sm font-medium text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]"
+              />
+            </div>
+          </div>
+
+          <!-- Desired Portions & Preferred Time Settings -->
+          <div class="mt-4 pt-4 border-t border-gray-100 space-y-3.5">
+            <!-- Portions Selector -->
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="text-xs font-bold text-gray-700 flex items-center gap-1.5">
+                  <Utensils class="w-3.5 h-3.5 text-[#FF5C1A]" /> Desired Portions
+                </label>
+                <span class="text-xs font-black text-[#FF5C1A]">{{ editMealPortions }} {{ editMealPortions === 1 ? 'Portion' : 'Portions' }}</span>
+              </div>
+              <div class="grid grid-cols-4 gap-1.5">
+                <button 
+                  v-for="p in [1, 2, 3, 4]" 
+                  :key="p"
+                  type="button"
+                  @click="editMealPortions = p"
+                  :class="[
+                    'py-2 rounded-xl text-xs font-bold transition-all border text-center',
+                    editMealPortions === p 
+                      ? 'bg-gray-900 text-white border-gray-900 shadow-sm' 
+                      : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                  ]"
+                >
+                  {{ p }} {{ p === 1 ? 'portion' : 'portions' }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Preferred Delivery Time -->
+            <div>
+              <label class="text-xs font-bold text-gray-700 block mb-1.5 flex items-center gap-1.5">
+                <Clock class="w-3.5 h-3.5 text-[#FF5C1A]" /> Preferred Delivery Time
+              </label>
+              <input 
+                type="time" 
+                v-model="editMealPreferredTime"
+                class="w-full bg-[#FDFCFB] border border-[#E7E2DA] rounded-xl px-3 py-2.5 text-xs font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]"
               />
             </div>
           </div>
@@ -1514,7 +1654,8 @@ import {
   Download, ChevronLeft, RefreshCcw, Activity, AlertTriangle, Repeat,
   X, Search, Check, ShieldCheck, Sparkles, AlertCircle, Loader2,
   Flame, Dumbbell, Apple, Heart, Coffee, Edit2, Eye,
-  CreditCard, Landmark, Copy, CheckCheck, ArrowRight
+  CreditCard, Landmark, Copy, CheckCheck, ArrowRight,
+  Calendar, Clock, Lock
 } from 'lucide-vue-next';
 import { meal_planner_api } from '@/api_factory/modules/meal-planner';
 import { vendors_api } from '@/api_factory/modules/vendors';
@@ -1559,6 +1700,8 @@ const formattedFundAmount = computed({
 
 // Form States
 const budget = ref(10000);
+const cycleDays = ref(7);
+const customCycleDays = ref<number | null>(null);
 const dailyBudget = ref(Math.round(10000 / 7));
 const bufferAmount = ref(1000);
 const mealsPerDay = ref(2);
@@ -1595,7 +1738,12 @@ const selectedSwapItem = ref<any>(null);
 const customEditName = ref('');
 const customEditPrice = ref(1500);
 const customEditVendor = ref('');
+const editMealPortions = ref(1);
+const editMealPreferredTime = ref('12:30');
 const availableVendorItems = ref<any[]>([]);
+
+// In-Progress Kickoff Date State
+const kickoffDateStr = ref<string | null>(null);
 
 // Available Medical & Diet Options
 const medicalOptions = [
@@ -1619,6 +1767,59 @@ const commonDislikeChips = [
   'Salty food', 'Spicy pepper', 'Okra / Ogbono', 'Yam', 'Garri / Swallow'
 ];
 
+// Cycle Days Handlers
+const setCycleDays = (days: number) => {
+  cycleDays.value = Math.max(1, Math.min(30, days));
+  customCycleDays.value = null;
+  dailyBudget.value = Math.round(budget.value / cycleDays.value);
+};
+
+const onCustomCycleDaysInput = () => {
+  if (customCycleDays.value && customCycleDays.value >= 1) {
+    cycleDays.value = Math.min(30, Math.max(1, Math.round(customCycleDays.value)));
+    dailyBudget.value = Math.round(budget.value / cycleDays.value);
+  }
+};
+
+const formatDisplayTime = (timeStr?: string) => {
+  if (!timeStr) return '12:30 PM';
+  if (timeStr.includes(':')) {
+    const [hStr, mStr] = timeStr.split(':');
+    const h = parseInt(hStr, 10);
+    const m = parseInt(mStr || '0', 10);
+    if (isNaN(h)) return timeStr;
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    const hour12 = h % 12 === 0 ? 12 : h % 12;
+    return `${hour12}:${m.toString().padStart(2, '0')} ${ampm}`;
+  }
+  return timeStr;
+};
+
+// Past Days Locking Check
+const isDayPastOrKickedOff = (dayNumber: number) => {
+  if (!kickoffDateStr.value) {
+    try {
+      kickoffDateStr.value = localStorage.getItem('errandr_autopilot_kickoff') || null;
+    } catch {}
+  }
+  if (!kickoffDateStr.value) return false;
+
+  const [y, m, d] = kickoffDateStr.value.split('-').map(Number);
+  if (!y || !m || !d) return false;
+  
+  const targetDate = new Date(y, m - 1, d);
+  targetDate.setDate(targetDate.getDate() + (dayNumber - 1));
+  targetDate.setHours(23, 59, 59, 999);
+
+  const now = new Date();
+  return now.getTime() > targetDate.getTime();
+};
+
+const hasAnyPastDays = computed(() => {
+  if (!generatedPlan.value?.days) return false;
+  return generatedPlan.value.days.some((d: any, idx: number) => isDayPastOrKickedOff(d.day || idx + 1));
+});
+
 // Budget Money Formatting
 const formattedBudget = computed({
   get: () => {
@@ -1627,7 +1828,7 @@ const formattedBudget = computed({
   set: (val: string) => {
     const numeric = parseInt(val.replace(/[^\d]/g, ''), 10);
     budget.value = isNaN(numeric) ? 0 : numeric;
-    dailyBudget.value = Math.round(budget.value / 7);
+    dailyBudget.value = Math.round(budget.value / Math.max(1, cycleDays.value));
   }
 });
 
@@ -1638,7 +1839,7 @@ const formattedDailyBudget = computed({
   set: (val: string) => {
     const numeric = parseInt(val.replace(/[^\d]/g, ''), 10);
     dailyBudget.value = isNaN(numeric) ? 0 : numeric;
-    budget.value = dailyBudget.value * 7;
+    budget.value = dailyBudget.value * Math.max(1, cycleDays.value);
   }
 });
 
@@ -1742,12 +1943,76 @@ const mealBreakdownItems = computed(() => {
   const name = selectedMealForBreakdown.value.name || 'Local Meal';
   const price = selectedMealForBreakdown.value.price || 1000;
   const packagingFee = selectedMealForBreakdown.value.packagingFee || 150;
+  const portions = selectedMealForBreakdown.value.portions || 1;
   const foodPrice = Math.max(0, price - packagingFee);
-  return [
-    { name: name, category: 'Main Portion', portion: '1 full serving', calories: 450, price: foodPrice },
+  const unitPrice = Math.round(foodPrice / portions);
+  const fallbackItems = [
+    { 
+      name: name, 
+      category: 'Main Portion', 
+      portion: `${portions} full serving${portions > 1 ? 's' : ''}`, 
+      portions: portions,
+      calories: 450 * portions, 
+      price: foodPrice,
+      unitPrice: unitPrice 
+    },
     { name: 'Eco-grade Takeaway Pack', category: 'Packaging', portion: '1 container', calories: 0, price: packagingFee },
   ];
+  if (!selectedMealForBreakdown.value.breakdown) {
+    selectedMealForBreakdown.value.breakdown = { items: fallbackItems };
+  } else {
+    selectedMealForBreakdown.value.breakdown.items = fallbackItems;
+  }
+  return fallbackItems;
 });
+
+const incrementItemPortion = (idx: number) => {
+  if (!selectedMealForBreakdown.value || !mealBreakdownItems.value[idx]) return;
+  const item = mealBreakdownItems.value[idx];
+  if (item.category === 'Packaging') return;
+  const currentPortions = item.portions || 1;
+  if (currentPortions >= 5) return;
+  const unitPrice = item.unitPrice || Math.round(item.price / currentPortions);
+  item.unitPrice = unitPrice;
+  item.portions = currentPortions + 1;
+  item.price = Math.round(unitPrice * item.portions);
+  item.portion = `${item.portions} full serving${item.portions > 1 ? 's' : ''}`;
+  syncBreakdownUpdatesToMeal();
+};
+
+const decrementItemPortion = (idx: number) => {
+  if (!selectedMealForBreakdown.value || !mealBreakdownItems.value[idx]) return;
+  const item = mealBreakdownItems.value[idx];
+  if (item.category === 'Packaging') return;
+  const currentPortions = item.portions || 1;
+  if (currentPortions <= 1) return;
+  const unitPrice = item.unitPrice || Math.round(item.price / currentPortions);
+  item.unitPrice = unitPrice;
+  item.portions = currentPortions - 1;
+  item.price = Math.round(unitPrice * item.portions);
+  item.portion = `${item.portions} full serving${item.portions > 1 ? 's' : ''}`;
+  syncBreakdownUpdatesToMeal();
+};
+
+const syncBreakdownUpdatesToMeal = () => {
+  if (!selectedMealForBreakdown.value || !generatedPlan.value) return;
+  const itemsSum = mealBreakdownItems.value.reduce((sum: number, it: any) => sum + (it.price || 0), 0);
+  selectedMealForBreakdown.value.price = itemsSum;
+  const mainItem = mealBreakdownItems.value.find((it: any) => it.category !== 'Packaging');
+  if (mainItem && mainItem.portions) {
+    selectedMealForBreakdown.value.portions = mainItem.portions;
+  }
+
+  const dayIdx = Math.max(0, selectedDayForBreakdown.value - 1);
+  const day = generatedPlan.value.days[dayIdx];
+  if (day) {
+    const mealsSum = day.meals.reduce((sum: number, m: any) => sum + (Number(m.price) || 0), 0);
+    day.dailyCost = mealsSum + (day.deliveryFee || 350) + (day.serviceFee || 50);
+    day.totalCost = day.dailyCost;
+  }
+  generatedPlan.value.totalCost = generatedPlan.value.days.reduce((sum: number, d: any) => sum + d.dailyCost, 0);
+  generatedPlan.value.budgetDeficit = Math.max(0, generatedPlan.value.totalCost - budget.value);
+};
 
 const mealNutrition = computed(() => {
   if (selectedMealForBreakdown.value?.breakdown?.nutrition) {
@@ -1774,10 +2039,13 @@ const filteredAvailableItems = computed(() => {
 });
 
 const currentPreviewPrice = computed(() => {
+  const p = Math.max(1, editMealPortions.value || 1);
   if (editingMode.value === 'swap') {
-    return selectedSwapItem.value?.price || editingMeal.value?.price || 1500;
+    const base = selectedSwapItem.value?.price || (editingMeal.value?.price ? Math.max(0, editingMeal.value.price - 150) : 1500);
+    return (base * p) + 150;
   }
-  return customEditPrice.value || 1500;
+  const custom = customEditPrice.value || 1500;
+  return (custom * p) + 150;
 });
 
 // Robust Data Normalization
@@ -1798,6 +2066,8 @@ const normalizeIteration = (iter: any) => {
       const price = Number(m.estimatedCost ?? m.price ?? m.mealPrice ?? firstOpt.price ?? 0);
       const isCustom = Boolean(m.isCustom || firstOpt.category === 'custom' || firstOpt.product?._id === 'custom');
       const mealType = m.type || m.mealType || (mIdx === 0 ? 'breakfast' : mIdx === 1 ? 'lunch' : 'dinner');
+      const portions = Number(m.portions || 1);
+      const preferredTime = m.preferredTime || (mIdx === 0 ? '08:30' : mIdx === 1 ? '12:30' : '18:30');
 
       return {
         ...m,
@@ -1806,6 +2076,8 @@ const normalizeIteration = (iter: any) => {
         source: vendorName,
         logo: vendorLogo,
         price,
+        portions,
+        preferredTime,
         isCustom,
         packagingFee: m.packagingFee || 150,
         options: m.options || [],
@@ -1862,6 +2134,8 @@ const generatePlan = async () => {
       budget: budget.value,
       dailyBudget: dailyBudget.value,
       bufferAmount: bufferAmount.value,
+      cycleDays: cycleDays.value,
+      totalDays: cycleDays.value,
       mealsPerDay: mealsPerDay.value,
       vendors: selectedVendors.value,
       medicalConditions: medicalConditions.value,
@@ -1911,6 +2185,8 @@ const spinAgain = async () => {
       budget: budget.value,
       dailyBudget: dailyBudget.value,
       bufferAmount: bufferAmount.value,
+      cycleDays: cycleDays.value,
+      totalDays: cycleDays.value,
       mealsPerDay: mealsPerDay.value,
       vendors: selectedVendors.value,
       medicalConditions: medicalConditions.value,
@@ -1946,15 +2222,22 @@ const openMealBreakdown = (meal: any, dayNumber: number) => {
 
 // Edit Meal Interaction
 const openEditMeal = (day: any, dayIndex: number, meal: any, mealIndex: number) => {
+  const dayNum = day.day || dayIndex + 1;
+  if (isDayPastOrKickedOff(dayNum)) {
+    showToast('This day has already kicked off and cannot be edited to maintain order history.', 'warning', undefined, 'Day Locked');
+    return;
+  }
   editingDayIndex.value = dayIndex;
   editingMealIndex.value = mealIndex;
-  editingDayNumber.value = day.day || dayIndex + 1;
+  editingDayNumber.value = dayNum;
   editingMeal.value = meal;
   editingMode.value = 'swap';
   selectedSwapItem.value = null;
   customEditName.value = meal.name;
   customEditPrice.value = meal.price;
   customEditVendor.value = meal.source;
+  editMealPortions.value = meal.portions || 1;
+  editMealPreferredTime.value = meal.preferredTime || (mealIndex === 0 ? '08:30' : mealIndex === 1 ? '12:30' : '18:30');
   showEditModal.value = true;
 };
 
@@ -1979,34 +2262,80 @@ const saveMealEdit = () => {
   if (!day || !day.meals[editingMealIndex.value]) return;
 
   const currentMeal = day.meals[editingMealIndex.value];
+  const portions = Math.max(1, Math.min(5, editMealPortions.value || 1));
+  currentMeal.portions = portions;
+  currentMeal.preferredTime = editMealPreferredTime.value || '12:30';
 
   if (editingMode.value === 'swap' && selectedSwapItem.value) {
     const item = selectedSwapItem.value;
+    const baseFoodPrice = Number(item.price || 1500);
+    const packaging = 150;
+    const totalMealPrice = (baseFoodPrice * portions) + packaging;
     currentMeal.name = item.name;
-    currentMeal.price = item.price;
+    currentMeal.price = totalMealPrice;
     currentMeal.source = item.vendor?.storeName || 'Campus Vendor';
     currentMeal.logo = item.vendor?.logo || '';
     currentMeal.isCustom = false;
+    currentMeal.packagingFee = packaging;
     currentMeal.breakdown = {
       items: [
-        { name: item.name, category: 'Main Portion', portion: '1 plate', calories: 420 },
-        { name: 'Seasoned Protein / Stew', category: 'Protein', portion: '1 portion', calories: 230 },
-        { name: 'Steamed Greens', category: 'Fiber & Micronutrients', portion: '1 side', calories: 50 }
+        { 
+          name: item.name, 
+          category: 'Main Portion', 
+          portion: `${portions} portion${portions > 1 ? 's' : ''}`, 
+          portions: portions,
+          calories: 420 * portions, 
+          price: baseFoodPrice * portions,
+          unitPrice: baseFoodPrice
+        },
+        { name: 'Eco-grade Takeaway Pack', category: 'Packaging', portion: '1 container', calories: 0, price: packaging },
       ],
       nutrition: {
-        calories: 700,
-        protein: 32,
-        carbs: 80,
-        fats: 16,
-        fiber: 6,
+        calories: Math.round(700 * (1 + (portions - 1) * 0.7)),
+        protein: Math.round(32 * portions),
+        carbs: Math.round(80 * (1 + (portions - 1) * 0.7)),
+        fats: Math.round(16 * (1 + (portions - 1) * 0.7)),
+        fiber: 6 * portions,
         benefit: `Freshly prepared by ${item.vendor?.storeName || 'Campus Vendor'}, fueling campus stamina with high protein and clean energy.`
       }
     };
   } else if (editingMode.value === 'custom') {
+    const basePrice = Number(customEditPrice.value) || 1500;
+    const packaging = 150;
+    const totalMealPrice = (basePrice * portions) + packaging;
     currentMeal.name = customEditName.value || currentMeal.name;
-    currentMeal.price = Number(customEditPrice.value) || currentMeal.price;
+    currentMeal.price = totalMealPrice;
     currentMeal.source = customEditVendor.value || 'Custom Request';
     currentMeal.isCustom = true;
+    currentMeal.packagingFee = packaging;
+    currentMeal.breakdown = {
+      items: [
+        { 
+          name: currentMeal.name, 
+          category: 'Custom Dish', 
+          portion: `${portions} portion${portions > 1 ? 's' : ''}`, 
+          portions: portions,
+          calories: 450 * portions, 
+          price: basePrice * portions,
+          unitPrice: basePrice
+        },
+        { name: 'Eco-grade Takeaway Pack', category: 'Packaging', portion: '1 container', calories: 0, price: packaging },
+      ],
+      nutrition: {
+        calories: 650 * portions,
+        protein: 28 * portions,
+        carbs: 75 * portions,
+        fats: 18 * portions,
+        fiber: 6 * portions,
+        benefit: "Tailored to your customized campus errand request."
+      }
+    };
+  } else {
+    const packaging = currentMeal.packagingFee || 150;
+    const prevFoodPrice = Math.max(0, (currentMeal.price || 1500) - packaging);
+    const prevPortions = currentMeal.portions || 1;
+    const unitFoodPrice = prevFoodPrice / prevPortions;
+    currentMeal.price = Math.round(unitFoodPrice * portions) + packaging;
   }
 
   // 1. Recalculate Day Total Cost
@@ -2045,7 +2374,9 @@ const pushToAutopilot = () => {
   try {
     localStorage.setItem('errandr_autopilot_imported_plan', JSON.stringify({
       ...generatedPlan.value,
+      cycleDays: cycleDays.value,
       budget: budget.value,
+      dailyBudget: dailyBudget.value,
       mealsPerDay: mealsPerDay.value,
       selectedVendors: selectedVendors.value,
       medicalConditions: medicalConditions.value,
@@ -2143,13 +2474,19 @@ onMounted(async () => {
 
   // Restore saved meal plan from localStorage if user is returning or editing from Autopilot
   try {
+    kickoffDateStr.value = localStorage.getItem('errandr_autopilot_kickoff') || null;
     const savedPlan = localStorage.getItem('errandr_autopilot_imported_plan');
     if (savedPlan) {
       const parsed = JSON.parse(savedPlan);
       if (parsed) {
+        if (parsed.cycleDays) {
+          cycleDays.value = Number(parsed.cycleDays);
+        } else if (parsed.days && parsed.days.length) {
+          cycleDays.value = parsed.days.length;
+        }
         if (parsed.budget) {
           budget.value = Number(parsed.budget);
-          dailyBudget.value = parsed.dailyBudget ? Number(parsed.dailyBudget) : Math.round(Number(parsed.budget) / 7);
+          dailyBudget.value = parsed.dailyBudget ? Number(parsed.dailyBudget) : Math.round(Number(parsed.budget) / cycleDays.value);
         }
         if (parsed.bufferAmount !== undefined) bufferAmount.value = Number(parsed.bufferAmount);
         if (parsed.mealsPerDay) mealsPerDay.value = Number(parsed.mealsPerDay);

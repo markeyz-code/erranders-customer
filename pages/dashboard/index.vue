@@ -61,6 +61,7 @@
  <div class="relative w-32 h-32 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl rotate-12 flex items-center justify-center group-hover:rotate-6 transition-transform duration-500">
  <PackageSearch class="w-16 h-16 text-white drop-" stroke-width="1.5" />
  </div>
+ </div>
  </section>
 
   <!-- Barter Campus Trade Promo -->
