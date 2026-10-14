@@ -433,6 +433,11 @@
     :vendor="selectedVendorForShare" 
   />
 
+  <!-- Barter Campus Trade Advert Banner -->
+  <section class="max-w-7xl mx-auto px-4 lg:px-10 py-8 sm:py-12">
+    <CoreBarterAdBanner />
+  </section>
+
   <!-- How it works (Redesigned & Condensed) -->
   <section id="how-it-works" class="py-20 bg-white overflow-hidden border-t border-slate-100">
     <div class="max-w-7xl mx-auto px-4 lg:px-10">

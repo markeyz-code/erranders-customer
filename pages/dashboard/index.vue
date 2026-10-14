@@ -65,31 +65,7 @@
  </section>
 
   <!-- Barter Campus Trade Promo -->
-  <section class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0F172A] to-[#1E293B] p-4 md:p-5 flex flex-col md:flex-row items-center justify-between group shadow-sm text-white">
-    <div class="relative z-10 flex-1 max-w-xl text-center md:text-left">
-      <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-400/10 border border-amber-400/20 text-amber-400 rounded-lg ff-mono text-[10px] font-bold uppercase tracking-wider mb-3">
-        <span>🔄</span> Campus Marketplace &amp; Swaps
-      </div>
-      <h2 class="ff-display text-2xl md:text-3xl font-bold tracking-tight mb-2">
-        Decluttering or Moving? <span class="text-amber-400">Trade on Barter</span>
-      </h2>
-      <p class="text-xs md:text-sm text-slate-300 font-medium mb-4 md:mb-0 leading-relaxed">
-        Turn your old fan, textbooks, mattress, or fridge into cash, or swap for what you need with trusted students on campus.
-      </p>
-    </div>
-
-    <div class="relative z-10 w-full md:w-auto mt-4 md:mt-0 flex flex-col sm:flex-row items-center gap-2.5">
-      <a 
-        href="https://barter.erranders.org/" 
-        target="_blank" 
-        rel="noopener noreferrer" 
-        class="w-full md:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 bg-amber-400 text-slate-950 font-bold rounded-xl text-xs sm:text-sm hover:bg-amber-300 transition-all active:scale-95"
-      >
-        <span>Explore Barter</span>
-        <ArrowUpRight class="w-4 h-4" />
-      </a>
-    </div>
-  </section>
+  <CoreBarterAdBanner />
 
   <!-- Redeem Points Promo -->
   <section class="relative overflow-hidden rounded-2xl bg-[#FF5C1A] p-4 md:p-5 flex flex-col md:flex-row items-center justify-between group shadow-lg shadow-[#FF5C1A]/20">

@@ -1,7 +1,10 @@
 <template>
   <div class="min-h-screen pb-24 sm:pb-32 font-sans text-[#17150F] text-sm selection:bg-parentPrimary/15 selection:text-parentPrimary">
 
-    <main class="max-w-7xl mx-auto px-0 sm:px-4 pt-4 sm:pt-6 grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-8 items-start">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 pt-4 sm:pt-6 space-y-6">
+      <CoreBarterAdBanner />
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-8 items-start">
 
       <!-- ============ SIDEBAR: THE ORDER SLIP ============ -->
       <aside class="lg:col-span-4 w-full space-y-4 sm:space-y-6 print:hidden">
@@ -205,6 +208,7 @@
           </div>
         </div>
       </section>
+      </div>
     </main>
   </div>
 </template>

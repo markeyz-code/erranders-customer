@@ -1479,14 +1479,14 @@ const fetchPlatformSettings = async () => {
     if (res?.data) {
       const data = res.data.data || res.data
       platformBaseFee.value = data.baseFee ?? 350
-      platformConvenienceFee.value = data.convenienceFee ?? 50
+      platformConvenienceFee.value = data.convenienceFee ?? data.platformFee ?? 100
       platformProcessingFee.value = data.platformProcessingFee ?? 0
     }
   } catch (error) {
     console.error('Failed to fetch platform settings', error)
     // Fallbacks if API fails
     platformBaseFee.value = 350
-    platformConvenienceFee.value = 50
+    platformConvenienceFee.value = 100
   }
 }
 

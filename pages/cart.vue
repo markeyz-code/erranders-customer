@@ -1261,7 +1261,7 @@ const getGroupedCustomizations = (customizations: any[]) => {
 const deliveryMode = ref('room_delivery');
 const platformProcessingFee = ref(0);
 const platformServiceFeePercentage = ref(5);
-const platformConvenienceFee = ref(50);
+const platformConvenienceFee = ref(100);
 const platformBaseFee = ref(350);
 const platformRoomDeliveryFee = ref(350);
 const platformDropoffServiceFee = ref(300);
@@ -1272,7 +1272,7 @@ const fetchPlatformSettings = async () => {
     if (res?.data) {
       platformProcessingFee.value = res.data.platformProcessingFee ?? 0;
       platformServiceFeePercentage.value = res.data.platformServiceFeePercentage ?? 5;
-      platformConvenienceFee.value = res.data.convenienceFee ?? 50;
+      platformConvenienceFee.value = res.data.convenienceFee || res.data.platformFee || 100;
       platformBaseFee.value = res.data.baseFee ?? 350;
       platformRoomDeliveryFee.value = res.data.roomDeliveryFee ?? 350;
       platformDropoffServiceFee.value = res.data.dropoffServiceFee ?? 300;

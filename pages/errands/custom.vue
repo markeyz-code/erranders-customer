@@ -467,7 +467,7 @@
                   <div class="flex justify-between items-baseline pb-3 border-b-2 border-dashed border-[#D8D2C4]">
                     <span class="flex items-center gap-2 text-[#766A61]"><Layers class="w-3.5 h-3.5" /> Platform Fee</span>
                     <span class="flex-1 mx-2 border-b border-dashed border-[#D8D2C4]"></span>
-                    <span class="font-bold text-[#170D08]">₦50</span>
+                    <span class="font-bold text-[#170D08]">₦{{ formatMoney(platformFee) }}</span>
                   </div>
                 </div>
 
@@ -557,6 +557,7 @@ const isAuthModalOpen = ref(false)
 const justAuthenticated = ref(false)
 const failedPaymentReference = ref('')
 const minRunnerFee = ref(400)
+const platformFee = ref(100)
 const enableTransferFee = ref(false)
 
 const errandType = ref<'custom' | 'market'>('custom')
@@ -607,6 +608,9 @@ const fetchInitialData = async () => {
     const settings = settingsRes?.data || settingsRes
     if (settings?.minCustomErrandFee) {
       minRunnerFee.value = settings.minCustomErrandFee
+    }
+    if (settings?.convenienceFee || settings?.platformFee) {
+      platformFee.value = Number(settings.convenienceFee || settings.platformFee)
     }
     if (settings?.enableTransferFee !== undefined) {
       enableTransferFee.value = settings.enableTransferFee
@@ -993,7 +997,7 @@ const transferFee = computed(() => {
 const grandTotal = computed(() => {
   return (form.value.estimatedItemCost || 0) + 
          (form.value.runnerFee || 0) + 
-         transferFee.value + 50 // 50 NGN flat platform fee
+         transferFee.value + platformFee.value
 })
 
 const formatMoney = (amount: number) => {

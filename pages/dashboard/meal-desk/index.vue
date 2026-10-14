@@ -1,7 +1,11 @@
 <template>
   <div class="min-h-screen bg-[#FDFCFB]">
-    <main class="container mx-auto px-4 py-6 sm:py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
-      <!-- Left Column: Controls & Intelligence -->
+    <main class="container mx-auto px-4 py-6 sm:py-8 space-y-6">
+      <!-- Barter Campus Trade Advert -->
+      <CoreBarterAdBanner />
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Left Column: Controls & Intelligence -->
       <div class="lg:col-span-4 space-y-6">
         <!-- Input Card -->
         <div class="bg-white rounded-[24px] border border-[#E7E2DA] p-5 sm:p-6 shadow-sm relative overflow-hidden">
@@ -692,6 +696,7 @@
             Enter your weekly budget on the left, pick your favorite vendors or diet constraints, and click <strong>Optimize My Plan</strong>.
           </p>
         </div>
+      </div>
       </div>
     </main>
 
@@ -2051,7 +2056,7 @@ const syncBreakdownUpdatesToMeal = () => {
   const day = generatedPlan.value.days[dayIdx];
   if (day) {
     const mealsSum = day.meals.reduce((sum: number, m: any) => sum + (Number(m.price) || 0), 0);
-    day.dailyCost = mealsSum + (day.deliveryFee || 350) + (day.serviceFee || 50);
+    day.dailyCost = mealsSum + (day.deliveryFee || 350) + (day.serviceFee || 100);
     day.totalCost = day.dailyCost;
   }
   generatedPlan.value.totalCost = generatedPlan.value.days.reduce((sum: number, d: any) => sum + d.dailyCost, 0);
@@ -2100,7 +2105,7 @@ const normalizeIteration = (iter: any) => {
     const foodSubtotal = Number(d.foodSubtotal ?? 0);
     const packagingFee = Number(d.packagingFee ?? 0);
     const deliveryFee = Number(d.deliveryFee ?? 350);
-    const serviceFee = Number(d.serviceFee ?? 50);
+    const serviceFee = Number(d.serviceFee ?? 100);
 
     const meals = (d.meals || []).map((m: any, mIdx: number) => {
       const firstOpt = (m.options && m.options.length > 0) ? m.options[0] : {};
@@ -2423,7 +2428,7 @@ const recalculatePlanTotals = () => {
     }, 0);
     const packagingFee = mealsCount * 150;
     const deliveryFee = mealsCount > 0 ? Number(d.deliveryFee ?? 350) : 0;
-    const serviceFee = mealsCount > 0 ? Number(d.serviceFee ?? 50) : 0;
+    const serviceFee = mealsCount > 0 ? Number(d.serviceFee ?? 100) : 0;
 
     d.foodSubtotal = foodSub;
     d.packagingFee = packagingFee;

@@ -163,6 +163,31 @@ const currentAd = ref<{ type: 'vendor' | 'feature' | 'dispatcher' | 'custom', da
 let adInterval: NodeJS.Timeout;
 let autoCloseTimeout: NodeJS.Timeout;
 
+const DEFAULT_FALLBACK_ADS = [
+  {
+    id: 'ad-erranders-barter',
+    title: 'Trade Unused Items on Barter',
+    description: 'Swap textbooks, gadgets, calculators, and room appliances safely with students on campus.',
+    badgeText: '🔄 Erranders Barter',
+    imageUrl: 'https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?auto=format&fit=crop&w=800&q=80',
+    ctaText: 'Start Trading on Barter',
+    ctaLink: 'https://barter.erranders.org',
+    advertiserName: 'Erranders Barter',
+    isActive: true,
+  },
+  {
+    id: 'ad-waris-kitchen',
+    title: 'Waris Kitchen Weekend Special',
+    description: 'Smoky Jollof rice, peppered turkey & chilled Chapman delivered directly to your hostel block.',
+    badgeText: '🔥 20% Student Discount',
+    imageUrl: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80',
+    ctaText: 'Order from Waris',
+    ctaLink: '/vendors',
+    advertiserName: 'Waris Kitchen',
+    isActive: true,
+  }
+];
+
 // Default 15 minutes interval
 let AD_INTERVAL_MS = 15 * 60 * 1000;
 let advertConfig = {
@@ -170,8 +195,8 @@ let advertConfig = {
   intervalMinutes: 15,
   autoCloseSeconds: 0,
   contentType: 'custom',
-  customAd: null as any,
-  customAds: [] as any[]
+  customAd: DEFAULT_FALLBACK_ADS[0],
+  customAds: [...DEFAULT_FALLBACK_ADS]
 };
 
 // Sensitive routes where we shouldn't pop up an ad
@@ -181,11 +206,15 @@ const fetchAdvertConfig = async () => {
   try {
     const res = await GATEWAY_ENDPOINT_WITHOUT_VERSION.get('/api/v1/settings/advert/public');
     if (res.data) {
-      advertConfig = res.data;
+      advertConfig = {
+        ...res.data,
+        customAds: (res.data.customAds && res.data.customAds.length > 0) ? res.data.customAds : DEFAULT_FALLBACK_ADS,
+        customAd: res.data.customAd || DEFAULT_FALLBACK_ADS[0]
+      };
       AD_INTERVAL_MS = (advertConfig.intervalMinutes || 15) * 60 * 1000;
     }
   } catch (e) {
-    console.error('Failed to load global advert settings', e);
+    console.error('Failed to load global advert settings, using fallback', e);
   }
 };
 
