@@ -108,30 +108,37 @@
         </div>
 
         <!-- Variant 4: Custom Ad -->
-        <div v-else-if="currentAd.type === 'custom' && currentAd.data" class="relative cursor-pointer" @click="handleCta">
-          <div class="h-48 w-full bg-[#FF5C1A] relative overflow-hidden" v-if="currentAd.data.imageUrl">
+        <div v-else-if="currentAd.type === 'custom' && currentAd.data" class="relative cursor-pointer bg-white" @click="handleCta">
+          <div class="h-44 w-full bg-gradient-to-r from-orange-500 to-amber-500 relative overflow-hidden" v-if="currentAd.data.imageUrl">
             <img :src="currentAd.data.imageUrl" alt="Ad Banner" class="absolute inset-0 w-full h-full object-cover" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+            <div class="absolute bottom-3 left-4 right-4 flex items-center justify-between">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-white/95 text-[#FF5C1A] backdrop-blur-md shadow-sm">
+                {{ currentAd.data.badgeText || '🔥 Featured Deal' }}
+              </span>
+              <span v-if="currentAd.data.advertiserName" class="text-[10px] font-bold text-white/90 bg-black/50 px-2.5 py-0.5 rounded-full backdrop-blur-md">
+                {{ currentAd.data.advertiserName }}
+              </span>
+            </div>
           </div>
-          <div class="h-32 w-full bg-gradient-to-r from-purple-500 to-indigo-600 relative overflow-hidden" v-else>
+          <div class="h-28 w-full bg-gradient-to-r from-[#FF5C1A] to-amber-500 relative overflow-hidden p-4 flex flex-col justify-end" v-else>
             <div class="absolute inset-0 bg-white/10 mix-blend-overlay"></div>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-white text-[#FF5C1A] w-max shadow-sm">
+              {{ currentAd.data.badgeText || '🔥 Special Offer' }}
+            </span>
           </div>
           
-          <div class="p-4 bg-white text-center" :class="{ '-mt-10 relative z-10': currentAd.data.imageUrl }">
-            <div v-if="currentAd.data.imageUrl" class="bg-white rounded-2xl shadow-sm border border-gray-50 p-5">
-              <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ currentAd.data.title || 'Special Offer' }}</h3>
-              <p class="text-sm text-gray-500 mb-5">{{ currentAd.data.description }}</p>
-              <button class="w-full py-3 bg-[#FF5C1A] text-white font-bold rounded-xl shadow-sm border border-gray-50 hover:bg-orange-600 transition-all flex items-center justify-center gap-2">
-                {{ currentAd.data.ctaText || 'Learn More' }} <ExternalLink class="w-4 h-4" />
-              </button>
-            </div>
-            <div v-else>
-              <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ currentAd.data.title || 'Special Offer' }}</h3>
-              <p class="text-sm text-gray-500 mb-5">{{ currentAd.data.description }}</p>
-              <button class="w-full py-3 bg-[#FF5C1A] text-white font-bold rounded-xl shadow-sm border border-gray-50 hover:bg-orange-600 transition-all flex items-center justify-center gap-2">
-                {{ currentAd.data.ctaText || 'Learn More' }} <ExternalLink class="w-4 h-4" />
-              </button>
-            </div>
+          <div class="p-5 text-center">
+            <h3 class="text-xl sm:text-2xl font-black text-gray-900 mb-2 leading-tight">
+              {{ currentAd.data.title || 'Special Campus Offer' }}
+            </h3>
+            <p class="text-xs sm:text-sm text-gray-500 mb-5 leading-relaxed font-medium">
+              {{ currentAd.data.description }}
+            </p>
+            <button class="w-full py-3.5 bg-[#FF5C1A] text-white font-bold rounded-2xl shadow-lg shadow-orange-500/20 hover:bg-[#e65318] hover:shadow-orange-500/30 hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2 group">
+              <span>{{ currentAd.data.ctaText || 'Check It Out' }}</span>
+              <ArrowRight class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
           </div>
         </div>
 
@@ -146,7 +153,6 @@ import { X, ArrowRight, Box, Star, ExternalLink } from 'lucide-vue-next';
 import { useRoute, useRouter } from 'vue-router';
 import { useVendors } from '@/composables/modules/vendors';
 import { GATEWAY_ENDPOINT_WITH_AUTH, GATEWAY_ENDPOINT_WITHOUT_VERSION } from '@/api_factory/axios.config';
-import axios from 'axios';
 
 const route = useRoute();
 const router = useRouter();
@@ -163,8 +169,9 @@ let advertConfig = {
   enabled: true,
   intervalMinutes: 15,
   autoCloseSeconds: 0,
-  contentType: 'dynamic',
-  customAd: null as any
+  contentType: 'custom',
+  customAd: null as any,
+  customAds: [] as any[]
 };
 
 // Sensitive routes where we shouldn't pop up an ad
@@ -172,7 +179,6 @@ const SENSITIVE_ROUTES = ['cart', 'chat-id'];
 
 const fetchAdvertConfig = async () => {
   try {
-    // Attempt to fetch public advert config
     const res = await GATEWAY_ENDPOINT_WITHOUT_VERSION.get('/api/v1/settings/advert/public');
     if (res.data) {
       advertConfig = res.data;
@@ -194,44 +200,37 @@ const pickRandomAd = async () => {
     return;
   }
 
-  if (advertConfig.contentType === 'custom' && advertConfig.customAd) {
-    currentAd.value = { type: 'custom', data: advertConfig.customAd };
-  } else {
-    // Dynamic Mode
-    const rand = Math.floor(Math.random() * 3);
+  const activeCustomAds = (advertConfig.customAds || []).filter((a: any) => a.isActive !== false);
 
-    if (rand === 0) {
-      // Vendor Ad
-      if (!popularVendors.value.length) {
-        await fetchPopularVendors();
-      }
-      if (popularVendors.value.length > 0) {
-        const randomVendor = popularVendors.value[Math.floor(Math.random() * popularVendors.value.length)];
-        currentAd.value = { type: 'vendor', data: randomVendor };
-      } else {
-        currentAd.value = { type: 'feature' };
-      }
-    } else if (rand === 1) {
-      // Dispatcher Ad
-      try {
-        const res = await GATEWAY_ENDPOINT_WITH_AUTH.get('/erranders/available');
-        const erranders = res.data?.data || res.data || [];
-        if (erranders.length > 0) {
-          const randomErrander = erranders[Math.floor(Math.random() * erranders.length)];
-          currentAd.value = { type: 'dispatcher', data: randomErrander };
-        } else {
-          currentAd.value = { type: 'feature' };
-        }
-      } catch (e) {
-        currentAd.value = { type: 'feature' };
-      }
+  if (advertConfig.contentType === 'custom') {
+    if (activeCustomAds.length > 0) {
+      const randomAd = activeCustomAds[Math.floor(Math.random() * activeCustomAds.length)];
+      currentAd.value = { type: 'custom', data: randomAd };
+    } else if (advertConfig.customAd && advertConfig.customAd.title) {
+      currentAd.value = { type: 'custom', data: advertConfig.customAd };
     } else {
-      // Feature Ad
       currentAd.value = { type: 'feature' };
     }
+  } else if (advertConfig.contentType === 'hybrid') {
+    // 50% chance custom ad, 50% dynamic
+    const showCustom = Math.random() < 0.5 && activeCustomAds.length > 0;
+    if (showCustom) {
+      const randomAd = activeCustomAds[Math.floor(Math.random() * activeCustomAds.length)];
+      currentAd.value = { type: 'custom', data: randomAd };
+    } else {
+      await pickDynamicAd();
+    }
+  } else {
+    // Dynamic Mode
+    await pickDynamicAd();
   }
 
   isOpen.value = true;
+
+  // Track impression if it's a custom ad with an ID
+  if (currentAd.value.type === 'custom' && currentAd.value.data?.id) {
+    GATEWAY_ENDPOINT_WITHOUT_VERSION.post(`/api/v1/settings/advert/${currentAd.value.data.id}/impression`).catch(() => {});
+  }
   
   // Auto-close handling
   if (autoCloseTimeout) clearTimeout(autoCloseTimeout);
@@ -242,6 +241,40 @@ const pickRandomAd = async () => {
   }
 };
 
+const pickDynamicAd = async () => {
+  const rand = Math.floor(Math.random() * 3);
+
+  if (rand === 0) {
+    // Vendor Ad
+    if (!popularVendors.value.length) {
+      await fetchPopularVendors();
+    }
+    if (popularVendors.value.length > 0) {
+      const randomVendor = popularVendors.value[Math.floor(Math.random() * popularVendors.value.length)];
+      currentAd.value = { type: 'vendor', data: randomVendor };
+    } else {
+      currentAd.value = { type: 'feature' };
+    }
+  } else if (rand === 1) {
+    // Dispatcher Ad
+    try {
+      const res = await GATEWAY_ENDPOINT_WITH_AUTH.get('/erranders/available');
+      const erranders = res.data?.data || res.data || [];
+      if (erranders.length > 0) {
+        const randomErrander = erranders[Math.floor(Math.random() * erranders.length)];
+        currentAd.value = { type: 'dispatcher', data: randomErrander };
+      } else {
+        currentAd.value = { type: 'feature' };
+      }
+    } catch (e) {
+      currentAd.value = { type: 'feature' };
+    }
+  } else {
+    // Feature Ad
+    currentAd.value = { type: 'feature' };
+  }
+};
+
 const closeAd = () => {
   isOpen.value = false;
 };
@@ -249,8 +282,13 @@ const closeAd = () => {
 const handleCta = () => {
   isOpen.value = false;
   if (currentAd.value.type === 'custom' && currentAd.value.data) {
+    // Track click
+    if (currentAd.value.data.id) {
+      GATEWAY_ENDPOINT_WITHOUT_VERSION.post(`/api/v1/settings/advert/${currentAd.value.data.id}/click`).catch(() => {});
+    }
+
     const link = currentAd.value.data.ctaLink;
-    if (link.startsWith('http')) {
+    if (link && link.startsWith('http')) {
       window.open(link, '_blank');
     } else {
       router.push(link || '/');
