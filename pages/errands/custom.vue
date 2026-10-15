@@ -556,7 +556,7 @@ const isSubmitting = ref(false)
 const isAuthModalOpen = ref(false)
 const justAuthenticated = ref(false)
 const failedPaymentReference = ref('')
-const minRunnerFee = ref(400)
+const minRunnerFee = ref(300)
 const platformFee = ref(100)
 const enableTransferFee = ref(false)
 
@@ -602,12 +602,12 @@ const selectPool = (pool: any) => {
 
 const fetchInitialData = async () => {
   fetchPools()
-  // Fetch admin-configurable minimum runner fee
+  // Fetch admin-configurable minimum runner fee and platform fee
   try {
     const settingsRes = await orders_api.getCustomErrandSettings()
     const settings = settingsRes?.data || settingsRes
     if (settings?.minCustomErrandFee) {
-      minRunnerFee.value = settings.minCustomErrandFee
+      minRunnerFee.value = Number(settings.minCustomErrandFee)
     }
     if (settings?.convenienceFee || settings?.platformFee) {
       platformFee.value = Number(settings.convenienceFee || settings.platformFee)
@@ -627,10 +627,9 @@ watch(isLoggedIn, (newVal) => {
 })
 
 onMounted(() => {
+  fetchInitialData()
   if (!isLoggedIn.value) {
     isAuthModalOpen.value = true
-  } else {
-    fetchInitialData()
   }
 })
 

@@ -190,11 +190,11 @@
                       </div>
                       <div class="flex justify-between text-sm border-b border-gray-200 pb-3">
                         <span class="text-gray-600">Platform Convenience Fee</span>
-                        <span class="font-bold text-gray-900">₦50</span>
+                        <span class="font-bold text-gray-900">₦{{ formatMoney(platformFee) }}</span>
                       </div>
                       <div class="flex justify-between pt-1">
                         <span class="text-base font-bold text-gray-900">Due on Acceptance</span>
-                        <span class="text-xl font-extrabold text-parentPrimary">₦{{ formatMoney(form.runnerFee + 50) }}</span>
+                        <span class="text-xl font-extrabold text-parentPrimary">₦{{ formatMoney(form.runnerFee + platformFee) }}</span>
                       </div>
                     </div>
                   </div>
@@ -241,7 +241,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import {
   TransitionRoot,
   TransitionChild,
@@ -253,6 +253,7 @@ import { useCustomToast } from '@/composables/core/useCustomToast'
 import { useRouter } from 'vue-router'
 import { GATEWAY_ENDPOINT_WITH_AUTH as api } from '@/api_factory/axios.config'
 import { useUser } from '@/composables/modules/auth/user'
+import { orders_api } from '@/api_factory/modules/orders'
 
 const router = useRouter()
 
@@ -293,6 +294,24 @@ const form = ref({
   runnerFee: 0,
 })
 
+const minRunnerFee = ref(300)
+const platformFee = ref(100)
+
+onMounted(async () => {
+  try {
+    const settingsRes = await orders_api.getCustomErrandSettings()
+    const settings = settingsRes?.data || settingsRes
+    if (settings?.minCustomErrandFee) {
+      minRunnerFee.value = Number(settings.minCustomErrandFee)
+    }
+    if (settings?.convenienceFee || settings?.platformFee) {
+      platformFee.value = Number(settings.convenienceFee || settings.platformFee)
+    }
+  } catch (e) {
+    // Fallback gracefully to default
+  }
+})
+
 const isStep1Valid = computed(() => {
   return form.value.description.trim().length > 5 && 
          form.value.pickupLocation.trim().length > 2 && 
@@ -300,7 +319,7 @@ const isStep1Valid = computed(() => {
 })
 
 const isStep2Valid = computed(() => {
-  return form.value.runnerFee >= 200 // Minimum 200 NGN runner fee
+  return form.value.runnerFee >= minRunnerFee.value
 })
 
 const formatMoney = (amount: number) => {

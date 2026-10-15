@@ -1,4 +1,4 @@
-import { GATEWAY_ENDPOINT_WITH_AUTH } from '../axios.config';
+import { GATEWAY_ENDPOINT, GATEWAY_ENDPOINT_WITH_AUTH } from '../axios.config';
 
 export const orders_api = {
   getOrders: () => {
@@ -64,7 +64,7 @@ export const orders_api = {
   },
 
   getCustomErrandSettings: () => {
-    return GATEWAY_ENDPOINT_WITH_AUTH.get('/settings/errands/custom');
+    return GATEWAY_ENDPOINT.get('/settings/errands/custom');
   },
 
   getOpenPools: () => {
