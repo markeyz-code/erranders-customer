@@ -6,18 +6,18 @@
     ]"
   >
     <!-- Ambient Background Glows -->
-    <div class="absolute -right-16 -top-16 w-64 h-64 bg-amber-500/15 rounded-full blur-3xl pointer-events-none group-hover:bg-amber-500/25 transition-all duration-700"></div>
-    <div class="absolute -left-16 -bottom-16 w-64 h-64 bg-[#FF5C1A]/15 rounded-full blur-3xl pointer-events-none group-hover:bg-[#FF5C1A]/20 transition-all duration-700"></div>
+    <div class="absolute -right-16 -top-16 w-64 h-64 bg-[#FF5C1A]/15 rounded-full blur-3xl pointer-events-none group-hover:bg-[#FF5C1A]/25 transition-all duration-700"></div>
+    <div class="absolute -left-16 -bottom-16 w-64 h-64 bg-[#FF5C1A]/15 rounded-full blur-3xl pointer-events-none group-hover:bg-[#FF5C1A]/25 transition-all duration-700"></div>
     <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.04] pointer-events-none"></div>
 
     <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-6">
       <!-- Left Content -->
       <div class="flex-1 text-center lg:text-left space-y-3 max-w-2xl">
         <!-- Tag / Badge -->
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/25 text-amber-300 text-xs font-bold uppercase tracking-wider backdrop-blur-md">
-          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FF5C1A]/10 border border-[#FF5C1A]/25 text-[#FF7A3D] text-xs font-bold uppercase tracking-wider backdrop-blur-md">
+          <span class="w-2 h-2 rounded-full bg-[#FF5C1A] animate-pulse"></span>
           <span class="flex items-center gap-1.5">
-            <Repeat class="w-3.5 h-3.5 text-amber-400" />
+            <Repeat class="w-3.5 h-3.5 text-[#FF5C1A]" />
             Campus Marketplace &amp; Swaps
           </span>
         </div>
@@ -30,7 +30,7 @@
           ]"
         >
           Decluttering or Moving? 
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-orange-400">
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#FF8C55] via-[#FF5C1A] to-[#FF4500]">
             Trade on Barter
           </span>
         </h3>
@@ -52,7 +52,7 @@
             Escrow Protected
           </span>
           <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/5 border border-white/10">
-            <Sparkles class="w-3.5 h-3.5 text-amber-400" />
+            <Sparkles class="w-3.5 h-3.5 text-[#FF7A3D]" />
             Direct Student Deals
           </span>
           <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/5 border border-white/10">
@@ -85,7 +85,7 @@
           href="https://barter.erranders.org/" 
           target="_blank" 
           rel="noopener noreferrer" 
-          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black rounded-xl sm:rounded-2xl text-sm sm:text-base shadow-lg shadow-amber-500/20 hover:shadow-amber-500/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-200 group/btn"
+          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#FF5C1A] hover:bg-[#E54D12] text-white font-black rounded-xl sm:rounded-2xl text-sm sm:text-base shadow-lg shadow-[#FF5C1A]/25 hover:shadow-[#FF5C1A]/40 hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-200 group/btn"
         >
           <span>Explore Barter</span>
           <ArrowUpRight class="w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />

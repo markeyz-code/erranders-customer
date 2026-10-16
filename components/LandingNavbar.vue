@@ -171,14 +171,14 @@
                   </MenuItem>
 
                   <MenuItem v-slot="{ active }">
-                    <a href="https://barter.erranders.org/" target="_blank" rel="noopener noreferrer" :class="[active ? 'bg-amber-50 scale-95' : 'bg-amber-50/40 hover:bg-amber-50', 'group flex items-center gap-3 rounded-2xl p-3 col-span-2 transition-all border border-amber-200/50 text-left']">
-                      <div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-700">
+                    <a href="https://barter.erranders.org/" target="_blank" rel="noopener noreferrer" :class="[active ? 'bg-orange-50 scale-95' : 'bg-orange-50/40 hover:bg-orange-50', 'group flex items-center gap-3 rounded-2xl p-3 col-span-2 transition-all border border-orange-200/50 text-left']">
+                      <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-[#FF5C1A]">
                         <ArrowLeftRight class="w-4 h-4" />
                       </div>
                       <div class="flex-1">
                         <div class="flex items-center gap-1.5">
-                          <span class="block text-sm font-bold text-gray-900 group-hover:text-amber-700 transition-colors">Barter Campus Trade</span>
-                          <span class="text-[9px] bg-amber-400 text-slate-950 font-black px-1.5 py-0.2 rounded-full">NEW</span>
+                          <span class="block text-sm font-bold text-gray-900 group-hover:text-[#FF5C1A] transition-colors">Barter Campus Trade</span>
+                          <span class="text-[9px] bg-[#FF5C1A] text-white font-black px-1.5 py-0.2 rounded-full">NEW</span>
                         </div>
                         <span class="block text-[10px] text-gray-500 font-medium">Buy, sell &amp; swap student items</span>
                       </div>

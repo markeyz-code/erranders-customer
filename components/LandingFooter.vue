@@ -83,8 +83,8 @@
                 </a>
               </li>
               <li>
-                <a href="https://barter.erranders.org" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-2 text-slate-500 font-medium hover:text-amber-600 transition-colors">
-                  <div class="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-600 group-hover:scale-110 transition-transform">
+                <a href="https://barter.erranders.org" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-2 text-slate-500 font-medium hover:text-[#FF5C1A] transition-colors">
+                  <div class="w-8 h-8 rounded-lg bg-[#FF5C1A]/10 flex items-center justify-center text-[#FF5C1A] group-hover:scale-110 transition-transform">
                     <ArrowLeftRight class="w-4 h-4" />
                   </div>
                   Student Barter (Trade)
