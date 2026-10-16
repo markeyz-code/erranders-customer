@@ -16,9 +16,9 @@ export const useAuth = () => {
     try {
       const config = useRuntimeConfig();
       const firebaseConfig = {
-        apiKey: config.public.firebaseApiKey,
-        authDomain: config.public.firebaseAuthDomain,
-        projectId: config.public.firebaseProjectId,
+        apiKey: config.public.firebaseApiKey || 'AIzaSyBzYV1KzAMugqh2N0DvbTP7vr4f96j1Po4',
+        authDomain: config.public.firebaseAuthDomain || 'erranders-493fe.firebaseapp.com',
+        projectId: config.public.firebaseProjectId || 'erranders-493fe',
       };
 
       const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
@@ -115,9 +115,9 @@ export const useAuth = () => {
     try {
       const config = useRuntimeConfig();
       const firebaseConfig = {
-        apiKey: config.public.firebaseApiKey,
-        authDomain: config.public.firebaseAuthDomain,
-        projectId: config.public.firebaseProjectId,
+        apiKey: config.public.firebaseApiKey || 'AIzaSyBzYV1KzAMugqh2N0DvbTP7vr4f96j1Po4',
+        authDomain: config.public.firebaseAuthDomain || 'erranders-493fe.firebaseapp.com',
+        projectId: config.public.firebaseProjectId || 'erranders-493fe',
       };
 
       const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
