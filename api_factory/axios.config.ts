@@ -2,6 +2,7 @@ import axios, { type AxiosResponse } from "axios";
 import { useUser } from "@/composables/modules/auth/user";
 import { useCustomToast } from '@/composables/core/useCustomToast'
 import { useNetworkStatus } from '@/composables/core/useNetworkStatus'
+import { getSelectedInstitutionId } from '@/composables/useInstitution'
 // Lazy-init toast to avoid calling composable outside Vue setup context
 let _showToast: ReturnType<typeof useCustomToast>['showToast'] | null = null;
 const getToast = () => {
@@ -103,6 +104,15 @@ instanceArray.forEach((instance) => {
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    // Campus scoping. The same synchronous, Vue-free read as the token above, so
+    // it works in the browser and during SSR. With no campus selected we send NO
+    // header at all, which keeps the backend's existing unscoped
+    // (public/legacy) behaviour for every visitor who has not chosen one.
+    const institutionId = getSelectedInstitutionId();
+    if (institutionId && config.headers) {
+      config.headers['X-Institution-Id'] = institutionId;
+    }
     return config;
   });
 
@@ -163,7 +173,11 @@ instanceArray.forEach((instance) => {
       } else if (statusCodeStartsWith(err.response.status, 4)) {
         const isGroupOrderCheck = err.response.status === 404 && err.config?.url?.includes('/group-orders/');
         const isVendorCheck = err.response.status === 404 && err.config?.url?.includes('/vendors/');
-        if (err.response.data.message && !isGroupOrderCheck && !isVendorCheck) {
+        // Campus discovery and its light counts are best-effort: a campus the
+        // backend does not know about (or a failing count) must fall through to
+        // the normal site silently instead of shouting at every visitor.
+        const isCampusLookup = err.config?.url?.includes('/institutions');
+        if (err.response.data.message && !isGroupOrderCheck && !isVendorCheck && !isCampusLookup) {
           getToast()({
             title: "Error",
             message: err?.response?.data?.message || err?.response?.data?.error || "An error occured",
@@ -176,12 +190,15 @@ instanceArray.forEach((instance) => {
           ...err.response,
         };
       } else if (err.response.status === 500) {
-        getToast()({
-          title: "Error",
-          message: err?.response?.data?.message || err?.response?.data?.error || "An error occured",
-          toastType: "error",
-          duration: 3000
-        });
+        // Same carve-out as the 4xx branch above: a campus count is decoration.
+        if (!err.config?.url?.includes('/institutions')) {
+          getToast()({
+            title: "Error",
+            message: err?.response?.data?.message || err?.response?.data?.error || "An error occured",
+            toastType: "error",
+            duration: 3000
+          });
+        }
         return {
           type: "ERROR",
           ...err.response,

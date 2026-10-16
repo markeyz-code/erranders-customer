@@ -14,15 +14,34 @@
       <NuxtLayout class="z-10">
         <NuxtPage class="z-10" />
       </NuxtLayout>
-      
+
+      <!-- Campus scoping: the first-visit chooser, then the switching splash -->
+      <ClientOnly>
+        <CoreCampusPicker v-if="showCampusPicker" @close="closePicker" />
+      </ClientOnly>
+
       <CoreGlobalAdModal />
       <ChatWidget />
       <CoreWhatsAppWidget />
 
-      <CorePushNotificationPrompt />
+      <!--
+        Suppressed while the campus picker is open: on a first visit the push
+        prompt was rendering on top of the picker, asking for notifications
+        before the user had even chosen a campus.
+      -->
+      <CorePushNotificationPrompt v-if="!showCampusPicker" />
       <CoreCallOverlay />
       <RequirePhoneModal />
       <GenderSetupModal />
+
+      <!-- Sits above every other overlay: it owns the screen while switching -->
+      <ClientOnly>
+        <CoreCampusSwitchSplash
+          v-if="splashTarget"
+          :institution="splashTarget"
+          @finished="endCampusSwitch"
+        />
+      </ClientOnly>
     </template>
     
     <!-- Background Audio - Bottom Left -->
@@ -42,17 +61,56 @@ body {
 
 <script setup lang="ts">
 // Global app configuration
-import { ref, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { useRealtimeNotifications } from '@/composables/core/useRealtimeNotifications'
 import { useCart } from '@/composables/modules/cart'
 import { useStudentNotifications } from '@/composables/useStudentNotifications'
 import { useUser } from '@/composables/modules/auth/user'
 import { useWebRTC } from '@/composables/useWebRTC'
+import { useInstitution, isVendorSubdomainHost } from '@/composables/useInstitution'
 
 import { useAuth } from '@/composables/modules/auth'
 import { useMarketPoolStore } from '@/stores/marketPool'
 
 const isPlatformClosed = ref(false)
+
+const route = useRoute()
+const {
+  institutions,
+  hasChosen,
+  splashTarget,
+  pickerRequested,
+  restore,
+  loadInstitutions,
+  closePicker,
+  endCampusSwitch
+} = useInstitution()
+
+// Restore the persisted campus (cookie + localStorage) before the first scoped
+// request goes out, then warm the chooser's list in the background. The axios
+// interceptor reads the cookie synchronously, so the header is already correct
+// on the very first request of the page load.
+restore()
+loadInstitutions()
+
+// A vendor storefront subdomain belongs entirely to one vendor: never cover it.
+const onVendorSubdomain = ref(typeof window !== 'undefined' ? isVendorSubdomainHost() : false)
+
+const isAuthRoute = computed(() => route.path.startsWith('/auth'))
+
+/**
+ * The chooser is a first-visit overlay, so it only appears when the visitor has
+ * no campus AND the campus list actually loaded. An empty or failed list falls
+ * through to the normal site instead of trapping the visitor behind a broken
+ * overlay, and the auth routes are never blocked.
+ */
+const showCampusPicker = computed(() =>
+  (pickerRequested.value || !hasChosen.value) &&
+  institutions.value.length > 0 &&
+  !isAuthRoute.value &&
+  !onVendorSubdomain.value
+)
 
 const { initCart } = useCart()
 const marketPoolStore = useMarketPoolStore()
