@@ -101,7 +101,7 @@ const props = defineProps<{
   order: any | null
 }>()
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'reviewed'])
 
 const rating = ref(0)
 const hoverRating = ref(0)
@@ -128,20 +128,41 @@ const submitReview = async () => {
       review: review.value
     }
     
-    if (!props.order.hasRatedVendor) {
+    if (!props.order.hasRatedVendor && !props.order.vendorRating) {
       payload.vendorRating = rating.value
+      payload.vendorReview = review.value || ''
     }
     
-    if (props.order.errander && !props.order.hasRatedErrander) {
+    if (props.order.errander && !props.order.hasRatedErrander && !props.order.erranderRating) {
       payload.erranderRating = rating.value
+      payload.erranderReview = review.value || ''
     }
 
     await orders_api.rateOrder(props.order._id, payload)
+
+    // Mark order as rated in localStorage immediately to prevent repeat popups on login
+    if (typeof window !== 'undefined' && props.order?._id) {
+      try {
+        const rated = JSON.parse(localStorage.getItem('errandr_rated_orders') || '[]')
+        if (!rated.includes(props.order._id)) {
+          rated.push(props.order._id)
+          localStorage.setItem('errandr_rated_orders', JSON.stringify(rated))
+        }
+      } catch (_) {}
+    }
+
+    if (props.order) {
+      props.order.hasRatedVendor = true
+      props.order.hasRatedErrander = true
+      props.order.vendorRating = rating.value
+    }
+
     showToast({
       title: 'Review Submitted',
       message: 'Thank you for your feedback!',
       toastType: 'success'
     })
+    emit('reviewed', props.order._id)
     closeModal()
   } catch (error: any) {
     showToast({

@@ -69,8 +69,8 @@
             </span>
           </NuxtLink>
 
-          <!-- Fresha-style Menu Dropdown -->
-          <Menu as="div" class="relative">
+          <!-- Fresha-style Menu Dropdown (Desktop Only) -->
+          <Menu as="div" class="relative hidden md:block">
             <MenuButton class="flex items-center gap-2 rounded-full bg-white border border-gray-25 hover:shadow-sm border border-gray-50 hover:border-gray-300 transition-all px-4 py-2 focus:outline-none focus:ring-2 focus:ring-parentPrimary/20 ml-2">
               <span class="text-sm font-medium text-gray-900 hidden sm:block">Menu</span>
               <MenuIcon class="w-5 h-5 text-gray-900" />
@@ -90,33 +90,14 @@
                     {{ user.firstName?.[0] || user.email?.[0] }}
                   </div>
                   <div>
-                    <p class="text-sm font-bold text-gray-400 uppercase  mb-0.5">Signed in</p>
+                    <p class="text-sm font-bold text-gray-400 uppercase mb-0.5">Signed in</p>
                     <p class="text-sm font-black text-gray-900 truncate">{{ user.firstName }} {{ user.lastName }}</p>
                   </div>
                 </div>
                 
                 <div class="p-4 grid grid-cols-2 gap-2">
-                  <!-- Explore Section Commented Out -->
-                  <!-- 
-                  <div class="col-span-2 text-[10px] font-black text-gray-400 uppercase  mb-1 mt-1 px-2">Explore</div>
-                  
-                  <MenuItem v-slot="{ active }">
-                    <NuxtLink to="/" :class="[active ? 'bg-orange-50/50 scale-95' : 'bg-gray-50/50 hover:bg-gray-100/50', 'group flex flex-col items-center justify-center rounded-2xl p-4 transition-all']">
-                      <Home class="w-5 h-5 mb-2" :class="active ? 'text-parentPrimary' : 'text-gray-600'" />
-                      <span class="text-sm font-bold text-gray-700">Home</span>
-                    </NuxtLink>
-                  </MenuItem>
-                  
-                  <MenuItem v-slot="{ active }">
-                    <NuxtLink to="/faq" :class="[active ? 'bg-orange-50/50 scale-95' : 'bg-gray-50/50 hover:bg-gray-100/50', 'group flex flex-col items-center justify-center rounded-2xl p-4 transition-all']">
-                      <Info class="w-5 h-5 mb-2" :class="active ? 'text-parentPrimary' : 'text-gray-600'" />
-                      <span class="text-sm font-bold text-gray-700">FAQ</span>
-                    </NuxtLink>
-                  </MenuItem> 
-                  -->
-
                   <!-- Services Section -->
-                  <div class="col-span-2 text-[10px] font-black text-gray-400 uppercase  mb-1 mt-3 px-2">Services</div>
+                  <div class="col-span-2 text-[10px] font-black text-gray-400 uppercase mb-1 mt-3 px-2">Services</div>
 
                   <MenuItem v-slot="{ active }">
                     <NuxtLink to="/errands/custom" :class="[active ? 'bg-orange-50 scale-95' : 'bg-orange-50/30 hover:bg-orange-50', 'group flex items-center gap-3 rounded-2xl p-3 col-span-2 transition-all border border-orange-100/50']">
@@ -186,7 +167,7 @@
                   </MenuItem>
 
                   <!-- Partners & Actions -->
-                  <div class="col-span-2 text-[10px] font-black text-gray-400 uppercase  mb-1 mt-3 px-2">Partner with us</div>
+                  <div class="col-span-2 text-[10px] font-black text-gray-400 uppercase mb-1 mt-3 px-2">Partner with us</div>
                   
                   <MenuItem v-slot="{ active }">
                     <a href="https://vendor.erranders.org/auth/register" :class="[active ? 'bg-gray-900 text-white scale-95' : 'bg-gray-800 text-white hover:bg-gray-900', 'group flex items-center justify-center gap-2 rounded-2xl p-3 transition-all shadow-sm']">
@@ -241,12 +222,368 @@
             </Transition>
           </Menu>
 
+          <!-- Mobile Menu Trigger Button (Mobile Only: md:hidden) -->
+          <button 
+            type="button"
+            @click="isMobileMenuOpen = true"
+            class="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-white border border-gray-200/90 hover:border-gray-300 shadow-xs active:scale-90 transition-transform text-gray-900 ml-1 focus:outline-none"
+            aria-label="Open Mobile Menu"
+          >
+            <MenuIcon class="w-5 h-5 text-gray-900" />
+          </button>
+
         </div>
       </div>
 
-
-
     </div>
+
+    <!-- Full-Screen Mobile Menu Drawer (Teleported to Body) -->
+    <Teleport to="body">
+      <Transition
+        enter-active-class="transition-all duration-300 ease-out"
+        enter-from-class="opacity-0 -translate-y-2 scale-[0.99]"
+        enter-to-class="opacity-100 translate-y-0 scale-100"
+        leave-active-class="transition-all duration-200 ease-in"
+        leave-from-class="opacity-100 translate-y-0 scale-100"
+        leave-to-class="opacity-0 -translate-y-2 scale-[0.99]"
+      >
+        <div 
+          v-if="isMobileMenuOpen"
+          class="fixed inset-0 z-[120] bg-[#FAF8F5] flex flex-col h-[100dvh] w-screen overflow-hidden text-gray-900 selection:bg-[#FF5C1A]/15 selection:text-[#FF5C1A]"
+        >
+          <!-- Top Header Row -->
+          <div class="px-5 py-3.5 border-b border-[#E7E2DA]/90 bg-white/90 backdrop-blur-xl flex items-center justify-between shrink-0">
+            <NuxtLink to="/" @click="closeMobileMenu" class="flex items-center gap-2 group">
+              <img src="@/assets/img/logo-light.png" alt="Errander Logo" class="h-7 w-auto object-contain" />
+              <span class="text-[9.5px] font-bold text-[#FF5C1A] tracking-wider px-2 py-0.5 rounded-full bg-orange-50 border border-orange-200/70 uppercase">STUDENT</span>
+            </NuxtLink>
+
+            <div class="flex items-center gap-2">
+              <NuxtLink 
+                to="/cart" 
+                @click="closeMobileMenu" 
+                class="relative w-10 h-10 rounded-full bg-white border border-[#E7E2DA] flex items-center justify-center text-gray-900 shadow-xs active:scale-95 transition-transform"
+                aria-label="View Cart"
+              >
+                <ShoppingCart class="w-4.5 h-4.5" />
+                <span v-if="cartItemCount > 0" class="absolute -top-1 -right-1 bg-parentPrimary text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                  {{ cartItemCount }}
+                </span>
+              </NuxtLink>
+
+              <button 
+                type="button"
+                @click="closeMobileMenu" 
+                class="w-10 h-10 rounded-full bg-white border border-[#E7E2DA] flex items-center justify-center text-gray-800 shadow-xs hover:border-gray-400 active:scale-90 transition-all"
+                aria-label="Close Menu"
+              >
+                <X class="w-5 h-5 text-gray-800" />
+              </button>
+            </div>
+          </div>
+
+          <!-- Main Scrollable Navigation Area -->
+          <div class="flex-1 overflow-y-auto px-5 py-5 space-y-6 overscroll-contain">
+            
+            <!-- User Profile / ID Badge (When Logged In) -->
+            <div v-if="user" class="rounded-2xl bg-white border border-[#E7E2DA] p-4 shadow-xs">
+              <div class="flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="w-11 h-11 rounded-xl bg-[#171310] text-white flex items-center justify-center font-bold text-base uppercase shrink-0 shadow-inner">
+                    {{ user.firstName?.[0] || user.email?.[0] }}
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-xs text-gray-500 font-semibold">Signed in as</p>
+                    <p class="text-sm font-bold text-gray-900 truncate">{{ user.firstName }} {{ user.lastName }}</p>
+                  </div>
+                </div>
+                <NuxtLink 
+                  to="/dashboard" 
+                  @click="closeMobileMenu"
+                  class="shrink-0 px-3 py-1.5 text-xs font-bold text-[#FF5C1A] hover:bg-orange-50 rounded-lg transition-colors flex items-center gap-1 border border-orange-200/50"
+                >
+                  Dashboard
+                  <ChevronRight class="w-3.5 h-3.5" />
+                </NuxtLink>
+              </div>
+
+              <!-- Streak & Rewards Badges -->
+              <div v-if="user.currentStreak > 0 || user.freeDeliveryTokens > 0" class="flex items-center gap-2 mt-3 pt-3 border-t border-dashed border-[#E7E2DA]">
+                <div v-if="user.currentStreak > 0" class="flex items-center gap-1.5 px-2.5 py-1 bg-orange-50 border border-orange-200/60 rounded-full text-xs font-bold text-orange-700">
+                  <span>🔥</span>
+                  <span>{{ user.currentStreak }} Wk Streak</span>
+                </div>
+                <div v-if="user.freeDeliveryTokens > 0" class="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-200/60 rounded-full text-xs font-bold text-emerald-700">
+                  <span>🎟</span>
+                  <span>{{ user.freeDeliveryTokens }} Delivery Tokens</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Guest Welcome Banner (When Not Logged In) -->
+            <div v-else class="rounded-2xl bg-gradient-to-br from-orange-500/10 via-amber-50 to-white border border-orange-200/70 p-4 shadow-xs relative overflow-hidden">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-orange-100 text-[10px] font-bold text-parentPrimary mb-2 border border-orange-200/50">
+                    <Sparkles class="w-3 h-3" />
+                    <span>CAMPUS LIFE SIMPLIFIED</span>
+                  </div>
+                  <h3 class="text-base font-extrabold text-gray-900 leading-snug">Everything you need, delivered on campus.</h3>
+                  <p class="text-xs text-gray-600 mt-1 leading-relaxed">Order food, request custom errands, or swap gear with students safely.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Spotlight Creative Actions ("Simple but Creative") -->
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between px-1">
+                <span class="text-[11px] font-extrabold text-gray-400 uppercase tracking-wider">Spotlight Services</span>
+                <span class="text-[10px] font-bold text-[#FF5C1A]">Tap to launch</span>
+              </div>
+
+              <!-- 1. Request Custom Errand -->
+              <NuxtLink 
+                to="/errands/custom" 
+                @click="closeMobileMenu"
+                class="block p-4 rounded-2xl bg-[#171310] text-white shadow-sm active:scale-[0.98] transition-all relative overflow-hidden group"
+              >
+                <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-parentPrimary/20 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="flex items-start justify-between gap-3 relative z-10">
+                  <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-parentPrimary text-white flex items-center justify-center shrink-0 shadow-md">
+                      <Zap class="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-1.5">
+                        <span class="text-sm font-bold text-white">Request Custom Errand</span>
+                        <span class="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-white/20 text-white">Instant</span>
+                      </div>
+                      <p class="text-xs text-white/70 mt-0.5 leading-snug">Hostel drops, off-campus pickups, laundry & printing</p>
+                    </div>
+                  </div>
+                  <div class="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-white shrink-0 group-hover:translate-x-0.5 transition-transform">
+                    <ArrowRight class="w-3.5 h-3.5" />
+                  </div>
+                </div>
+              </NuxtLink>
+
+              <!-- 2. Meal Autopilot -->
+              <NuxtLink 
+                to="/dashboard/recurring-orders" 
+                @click="closeMobileMenu"
+                class="block p-4 rounded-2xl bg-white border border-orange-200/80 shadow-xs active:scale-[0.98] transition-all relative overflow-hidden group hover:border-[#FF5C1A]/50"
+              >
+                <div class="flex items-start justify-between gap-3">
+                  <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-orange-50 text-parentPrimary border border-orange-100 flex items-center justify-center shrink-0">
+                      <Repeat class="w-5 h-5" />
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-1.5">
+                        <span class="text-sm font-bold text-gray-900">Meal Autopilot</span>
+                        <span class="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-orange-100 text-parentPrimary">Weekly</span>
+                      </div>
+                      <p class="text-xs text-gray-500 mt-0.5 leading-snug">Set your daily lunches and dinners on auto-schedule</p>
+                    </div>
+                  </div>
+                  <div class="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 shrink-0 group-hover:translate-x-0.5 transition-transform">
+                    <ArrowRight class="w-3.5 h-3.5" />
+                  </div>
+                </div>
+              </NuxtLink>
+
+              <!-- 3. Barter Campus Trade -->
+              <a 
+                href="https://barter.erranders.org/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                @click="closeMobileMenu"
+                class="block p-4 rounded-2xl bg-gradient-to-br from-amber-50/70 to-orange-50/40 border border-orange-200/70 shadow-xs active:scale-[0.98] transition-all relative overflow-hidden group"
+              >
+                <div class="flex items-start justify-between gap-3">
+                  <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-orange-100 text-[#FF5C1A] flex items-center justify-center shrink-0">
+                      <ArrowLeftRight class="w-5 h-5" />
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-1.5">
+                        <span class="text-sm font-bold text-gray-900">Barter Campus Trade</span>
+                        <span class="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-[#FF5C1A] text-white">NEW</span>
+                      </div>
+                      <p class="text-xs text-gray-600 mt-0.5 leading-snug">Buy, sell & swap student gadgets, dorm gear & books</p>
+                    </div>
+                  </div>
+                  <div class="w-7 h-7 rounded-full bg-white/80 border border-orange-200/60 flex items-center justify-center text-orange-600 shrink-0 group-hover:translate-x-0.5 transition-transform">
+                    <ArrowRight class="w-3.5 h-3.5" />
+                  </div>
+                </div>
+              </a>
+            </div>
+
+            <!-- Core Activity Grid (2x2) -->
+            <div class="space-y-2.5">
+              <span class="text-[11px] font-extrabold text-gray-400 uppercase tracking-wider px-1 block">Campus Essentials</span>
+              <div class="grid grid-cols-2 gap-2.5">
+                
+                <!-- Track Orders -->
+                <button 
+                  type="button"
+                  @click="openOrderModalFromMobile" 
+                  class="p-3.5 rounded-xl bg-white border border-[#E7E2DA] hover:border-gray-400 text-left transition-all active:scale-95 shadow-xs flex flex-col justify-between"
+                >
+                  <div class="w-8 h-8 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-700 mb-2">
+                    <Package class="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span class="block text-xs font-bold text-gray-900">Track Orders</span>
+                    <span class="block text-[10px] text-gray-500 font-medium mt-0.5">Live order statuses</span>
+                  </div>
+                </button>
+
+                <!-- Bookings -->
+                <button 
+                  type="button"
+                  @click="openBookingModalFromMobile" 
+                  class="p-3.5 rounded-xl bg-white border border-[#E7E2DA] hover:border-gray-400 text-left transition-all active:scale-95 shadow-xs flex flex-col justify-between"
+                >
+                  <div class="w-8 h-8 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-700 mb-2">
+                    <Calendar class="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span class="block text-xs font-bold text-gray-900">Bookings</span>
+                    <span class="block text-[10px] text-gray-500 font-medium mt-0.5">Services & slots</span>
+                  </div>
+                </button>
+
+                <!-- Group Orders -->
+                <NuxtLink 
+                  to="/dashboard/group-orders" 
+                  @click="closeMobileMenu"
+                  class="p-3.5 rounded-xl bg-white border border-[#E7E2DA] hover:border-gray-400 text-left transition-all active:scale-95 shadow-xs flex flex-col justify-between"
+                >
+                  <div class="w-8 h-8 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-700 mb-2">
+                    <Users class="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span class="block text-xs font-bold text-gray-900">Group Orders</span>
+                    <span class="block text-[10px] text-gray-500 font-medium mt-0.5">Pool with flatmates</span>
+                  </div>
+                </NuxtLink>
+
+                <!-- Market Pool -->
+                <NuxtLink 
+                  to="/market-pool" 
+                  @click="closeMobileMenu"
+                  class="p-3.5 rounded-xl bg-white border border-[#E7E2DA] hover:border-gray-400 text-left transition-all active:scale-95 shadow-xs flex flex-col justify-between"
+                >
+                  <div class="w-8 h-8 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-700 mb-2">
+                    <ShoppingBag class="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span class="block text-xs font-bold text-gray-900">Market Pool</span>
+                    <span class="block text-[10px] text-gray-500 font-medium mt-0.5">Bulk price drops</span>
+                  </div>
+                </NuxtLink>
+
+              </div>
+            </div>
+
+            <!-- Partner With Erranders -->
+            <div class="space-y-2.5">
+              <span class="text-[11px] font-extrabold text-gray-400 uppercase tracking-wider px-1 block">Partner With Erranders</span>
+              <div class="grid grid-cols-2 gap-2.5">
+                <a 
+                  href="https://vendor.erranders.org/auth/register" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  @click="closeMobileMenu"
+                  class="p-3 rounded-xl bg-white border border-[#E7E2DA] hover:border-gray-400 transition-all flex items-center gap-2.5 active:scale-95 shadow-xs"
+                >
+                  <div class="w-8 h-8 rounded-lg bg-gray-900 text-white flex items-center justify-center shrink-0">
+                    <Store class="w-4 h-4" />
+                  </div>
+                  <div class="min-w-0">
+                    <span class="block text-xs font-bold text-gray-900 truncate">Become Vendor</span>
+                    <span class="block text-[10px] text-gray-500">Sell to students</span>
+                  </div>
+                </a>
+
+                <a 
+                  href="https://dispatch.erranders.org/auth/register" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  @click="closeMobileMenu"
+                  class="p-3 rounded-xl bg-white border border-[#E7E2DA] hover:border-gray-400 transition-all flex items-center gap-2.5 active:scale-95 shadow-xs"
+                >
+                  <div class="w-8 h-8 rounded-lg bg-gray-900 text-white flex items-center justify-center shrink-0">
+                    <Bike class="w-4 h-4" />
+                  </div>
+                  <div class="min-w-0">
+                    <span class="block text-xs font-bold text-gray-900 truncate">Errand Ninja</span>
+                    <span class="block text-[10px] text-gray-500">Deliver & earn</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <!-- Quick Links Footer -->
+            <div class="pt-2 pb-1 border-t border-[#E7E2DA]/80 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-semibold text-gray-500">
+              <NuxtLink to="/faq" @click="closeMobileMenu" class="hover:text-gray-900 transition-colors">FAQ</NuxtLink>
+              <span class="text-gray-300">·</span>
+              <NuxtLink to="/about" @click="closeMobileMenu" class="hover:text-gray-900 transition-colors">About Us</NuxtLink>
+              <span class="text-gray-300">·</span>
+              <NuxtLink to="/contact" @click="closeMobileMenu" class="hover:text-gray-900 transition-colors">Contact</NuxtLink>
+              <span class="text-gray-300">·</span>
+              <NuxtLink to="/terms" @click="closeMobileMenu" class="hover:text-gray-900 transition-colors">Terms & Privacy</NuxtLink>
+            </div>
+
+          </div>
+
+          <!-- Bottom Sticky Auth Bar -->
+          <div class="p-4 bg-white/95 backdrop-blur-xl border-t border-[#E7E2DA] shrink-0">
+            <template v-if="!user">
+              <div class="grid grid-cols-2 gap-3">
+                <NuxtLink 
+                  to="/auth/login" 
+                  @click="closeMobileMenu"
+                  class="py-3 px-4 rounded-xl border border-gray-300 text-center text-sm font-bold text-gray-900 bg-white hover:bg-gray-50 active:scale-95 transition-all shadow-xs flex items-center justify-center"
+                >
+                  Log In
+                </NuxtLink>
+                <NuxtLink 
+                  to="/auth/register" 
+                  @click="closeMobileMenu"
+                  class="py-3 px-4 rounded-xl text-center text-sm font-bold text-white bg-parentPrimary hover:bg-orange-600 active:scale-95 transition-all shadow-sm flex items-center justify-center"
+                >
+                  Create Account
+                </NuxtLink>
+              </div>
+            </template>
+            <template v-else>
+              <div class="grid grid-cols-2 gap-3">
+                <NuxtLink 
+                  to="/dashboard" 
+                  @click="closeMobileMenu"
+                  class="py-3 px-4 rounded-xl text-center text-sm font-bold text-white bg-parentPrimary hover:bg-orange-600 active:scale-95 transition-all shadow-sm flex items-center justify-center gap-2"
+                >
+                  <LayoutDashboard class="w-4 h-4" />
+                  Dashboard
+                </NuxtLink>
+                <button 
+                  @click="handleLogoutFromMobile"
+                  class="py-3 px-4 rounded-xl border border-rose-200 text-center text-sm font-bold text-rose-600 bg-rose-50/50 hover:bg-rose-50 active:scale-95 transition-all flex items-center justify-center gap-2"
+                >
+                  <LogOut class="w-4 h-4" />
+                  Log Out
+                </button>
+              </div>
+            </template>
+          </div>
+
+        </div>
+      </Transition>
+    </Teleport>
+
     <CoreManageBookingModal :isOpen="isBookingModalOpen" @close="isBookingModalOpen = false" />
     <CoreManageOrderModal :isOpen="isOrderModalOpen" @close="isOrderModalOpen = false" />
     <CoreLogoutModal :isOpen="isLogoutModalOpen" @close="isLogoutModalOpen = false" />
@@ -254,16 +591,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import { useUser } from "@/composables/modules/auth/user"
 import { useCart } from "@/composables/modules/cart"
-import { Home, User, LogOut, Menu as MenuIcon, Filter, ChevronDown, ShoppingCart, Info, Zap, Package, Calendar, Store, Bike, LayoutDashboard, Repeat, Users, ShoppingBag, ArrowLeftRight } from 'lucide-vue-next'
+import { 
+  Home, User, LogOut, Menu as MenuIcon, Filter, ChevronDown, ShoppingCart, 
+  Info, Zap, Package, Calendar, Store, Bike, LayoutDashboard, Repeat, Users, 
+  ShoppingBag, ArrowLeftRight, X, ChevronRight, ArrowRight, Sparkles
+} from 'lucide-vue-next'
 import { useRoute } from 'vue-router'
 import { useGlobalFilter } from '@/composables/core/useGlobalFilter'
 
 const isBookingModalOpen = ref(false)
 const isOrderModalOpen = ref(false)
+const isMobileMenuOpen = ref(false)
 const scrolled = ref(false)
 
 const $route = useRoute()
@@ -289,6 +631,37 @@ const handleLogout = () => {
   isLogoutModalOpen.value = true
 }
 
+const closeMobileMenu = () => {
+  isMobileMenuOpen.value = false
+}
+
+const openBookingModalFromMobile = () => {
+  closeMobileMenu()
+  isBookingModalOpen.value = true
+}
+
+const openOrderModalFromMobile = () => {
+  closeMobileMenu()
+  isOrderModalOpen.value = true
+}
+
+const handleLogoutFromMobile = () => {
+  closeMobileMenu()
+  handleLogout()
+}
+
+// Lock body scrolling when mobile full-screen menu is open
+watch(isMobileMenuOpen, (isOpen) => {
+  if (typeof document !== 'undefined') {
+    document.body.style.overflow = isOpen ? 'hidden' : ''
+  }
+})
+
+// Close mobile menu on page route change
+watch(() => $route.fullPath, () => {
+  isMobileMenuOpen.value = false
+})
+
 const handleScroll = () => {
   scrolled.value = window.scrollY > 20
 }
@@ -300,6 +673,9 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+  if (typeof document !== 'undefined') {
+    document.body.style.overflow = ''
+  }
 })
 </script>
 

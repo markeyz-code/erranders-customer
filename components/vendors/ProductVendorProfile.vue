@@ -1,163 +1,5 @@
 <template>
   <div class="min-h-screen bg-white" v-if="vendor" :style="vendor.brandColor ? { '--color-parent-primary': vendor.brandColor } : {}">
-    <!-- MINI MART LAYOUT -->
-    <template v-if="isMiniMart">
-      <div class="max-w-2xl mx-auto p-4 md:p-4 pb-8 pt-8">
-        <!-- Header -->
-        <div class="flex items-center gap-3 mb-6">
-          <button @click="router.back()" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center border border-gray-50 hover:bg-gray-100 transition-all">
-            <ArrowLeft class="w-5 h-5 text-gray-900" />
-          </button>
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full overflow-hidden border border-gray-50 bg-white shrink-0">
-              <video v-if="vendor.logo && vendor.logo.match(/\.(mp4|webm|ogg|mov)$/i)" :src="vendor.logo" class="w-full h-full object-cover" autoplay loop muted playsinline></video>
-              <img v-else :src="vendor.logo || '/placeholder-store.jpg'" class="w-full h-full object-cover" />
-            </div>
-            <div>
-              <h2 class="text-base font-bold text-gray-900 leading-tight">{{ toTitleCase(vendor.storeName) }}</h2>
-              <p class="text-sm text-gray-500 font-medium">Mini Mart</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Search Bar -->
-        <div class="relative mb-6">
-          <Search class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-          <input 
-            v-model="searchQuery" 
-            type="text" 
-            :placeholder="`Search ${vendor?.storeName || 'Store'}`"
-            class="w-full bg-gray-100 text-gray-900 border-none rounded-xl pl-12 pr-4 py-3.5 focus:ring-1 focus:ring-gray-200 outline-none placeholder-gray-500"
-          />
-        </div>
-
-        <!-- Bundles -->
-        <div class="mb-8" v-if="packs.length > 0">
-          <h3 class="text-gray-900 font-bold mb-3 text-[17px]">Bundles</h3>
-          <div class="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
-            <div 
-              v-for="pack in packs" 
-              :key="pack._id"
-              @click="openProductModal(pack)"
-              class="relative bg-gray-50 border border-gray-50 rounded-xl p-4 min-w-[200px] shrink-0 cursor-pointer hover:bg-gray-100 transition-colors flex flex-col justify-between overflow-hidden"
-              :class="{ 'opacity-50 grayscale pointer-events-none': isProductOutOfStock(pack) }"
-            >
-              <!-- Promo Badge -->
-              <div v-if="pack.isPrepaidByPlatform" class="absolute top-0 right-0 z-10 px-2 py-1 bg-indigo-500 text-white rounded-bl-lg shadow-sm text-[9px] font-bold uppercase ">
-                Promo
-              </div>
-              
-              <div>
-                <h4 class="font-bold text-gray-900 mb-1 text-[15px] pr-10">{{ pack.name }}</h4>
-                <p class="text-sm text-gray-500 mb-2">{{ pack.description || 'Bundle items' }}</p>
-              </div>
-              <div class="text-sm font-bold text-gray-900 mt-auto flex items-center justify-between">
-                <span>₦{{ (pack.bundlePrice || pack.price || 0).toLocaleString() }}</span>
-                <span v-if="isProductOutOfStock(pack)" class="text-[10px] font-bold text-rose-500 uppercase tracking-wider bg-rose-50 px-2 py-1 rounded">Out of stock</span>
-                <span v-else-if="pack.trackStock && pack.stockQuantity <= 5" class="text-[9px] font-bold text-amber-500 bg-amber-50 px-1.5 py-0.5 rounded">{{ pack.stockQuantity }} left</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Top picks -->
-        <div class="mb-8" v-if="topPicks.length > 0">
-          <h3 class="text-gray-900 font-bold mb-3 text-[17px]">Top picks</h3>
-          <div class="flex flex-col">
-            <div 
-              v-for="product in topPicks" 
-              :key="'top-' + product._id"
-              @click="openProductModal(product)"
-              class="flex items-center justify-between py-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors px-2"
-              :class="{ 'opacity-50 grayscale pointer-events-none': isProductOutOfStock(product) }"
-            >
-              <div class="flex flex-col">
-                <div class="flex items-center gap-2 mb-0.5">
-                  <span class="font-bold text-gray-900 text-[15px]">{{ product.name }}</span>
-                  <span v-if="product.isPrepaidByPlatform" class="px-1.5 py-0.5 bg-indigo-50 text-indigo-600 border border-indigo-100 rounded text-[9px] font-bold uppercase tracking-wider shrink-0">Promo</span>
-                </div>
-                <span class="font-bold text-gray-500 text-[15px]">₦{{ (product.discountPrice || product.pricePerPortion || product.price || 0).toLocaleString() }}</span>
-              </div>
-              
-              <div @click.stop class="flex items-center gap-2">
-                <div v-if="getProductCount(product._id) > 0" class="flex items-center gap-3 bg-gray-100 rounded-full px-2 py-1">
-                  <button @click="removeFromCart(product._id)" class="text-gray-500 hover:text-gray-900 w-6 h-6 flex justify-center items-center">
-                    <Minus class="w-4 h-4" />
-                  </button>
-                  <span class="font-bold text-gray-900 text-sm w-4 text-center">{{ getProductCount(product._id) }}</span>
-                  <button @click="quickAddToCart(product)" class="text-parentPrimary hover:text-green-700 w-6 h-6 flex justify-center items-center">
-                    <Plus class="w-4 h-4" />
-                  </button>
-                </div>
-                <button v-else @click="quickAddToCart(product)" class="bg-gray-100 hover:bg-gray-200 text-parentPrimary rounded-full w-8 h-8 flex items-center justify-center transition-colors">
-                  <Plus class="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Full store toggle -->
-        <button @click="showFullStore = !showFullStore" class="flex items-center gap-2 text-blue-400 font-medium text-[15px] mb-8 hover:text-blue-300 transition-colors">
-          See full store <ChevronDown class="w-4 h-4 transition-transform" :class="{ 'rotate-180': showFullStore }" />
-        </button>
-        
-        <!-- Full store -->
-        <div v-if="showFullStore" class="mb-8">
-          <div v-for="cat in categories" :key="cat" class="mb-6">
-            <h3 class="text-gray-500 font-bold mb-2 text-sm uppercase  px-2" v-if="groupedProducts[cat] && groupedProducts[cat].length > 0">{{ cat }}</h3>
-            <div class="flex flex-col">
-              <div 
-                v-for="product in groupedProducts[cat]" 
-                :key="product._id"
-                @click="openProductModal(product)"
-                class="flex items-center justify-between py-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors px-2"
-                :class="{ 'opacity-50 grayscale pointer-events-none': isProductOutOfStock(product) }"
-              >
-                <div class="flex flex-col">
-                  <div class="flex items-center gap-2 mb-0.5">
-                    <span class="font-bold text-gray-900 text-[15px]">{{ product.name }}</span>
-                    <span v-if="product.isPrepaidByPlatform" class="px-1.5 py-0.5 bg-indigo-50 text-indigo-600 border border-indigo-100 rounded text-[9px] font-bold uppercase tracking-wider shrink-0">Promo</span>
-                  </div>
-                  <span class="font-bold text-gray-500 text-[15px]">₦{{ (product.discountPrice || product.pricePerPortion || product.price || 0).toLocaleString() }}</span>
-                </div>
-
-                <div @click.stop class="flex items-center gap-2">
-                  <div v-if="getProductCount(product._id) > 0" class="flex items-center gap-3 bg-gray-100 rounded-full px-2 py-1">
-                    <button @click="removeFromCart(product._id)" class="text-gray-500 hover:text-gray-900 w-6 h-6 flex justify-center items-center">
-                      <Minus class="w-4 h-4" />
-                    </button>
-                    <span class="font-bold text-gray-900 text-sm w-4 text-center">{{ getProductCount(product._id) }}</span>
-                    <button @click="quickAddToCart(product)" class="text-parentPrimary hover:text-green-700 w-6 h-6 flex justify-center items-center">
-                      <Plus class="w-4 h-4" />
-                    </button>
-                  </div>
-                  <button v-else @click="quickAddToCart(product)" class="bg-gray-100 hover:bg-gray-200 text-parentPrimary rounded-full w-8 h-8 flex items-center justify-center transition-colors">
-                    <Plus class="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Anything else -->
-        <div class="mt-4 px-2">
-          <h3 class="text-gray-900 font-bold mb-3 text-[17px]">Anything else?</h3>
-          <textarea 
-            v-model="anythingElseNote"
-            rows="2"
-            placeholder="Tell the vendor what else to grab"
-            class="w-full bg-gray-100 text-gray-900 border-none rounded-xl px-4 py-3.5 focus:ring-1 focus:ring-gray-200 outline-none placeholder-gray-500 resize-none"
-          ></textarea>
-        </div>
-
-        <!-- Spacer for Sticky Cart -->
-        <div class="h-40 w-full shrink-0"></div>
-      </div>
-    </template>
-
-    <template v-else>
     <!-- Collapsed Sticky Header (appears on scroll) -->
     <header 
       class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-b border-gray-100 transition-all duration-500"
@@ -165,7 +7,7 @@
     >
       <div class="max-w-[1400px] mx-auto flex items-center justify-between px-4 md:px-4 py-3">
         <div class="flex items-center gap-3">
-          <button @click="router.back()" class="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-50 hover:bg-gray-100 transition-all">
+          <button @click="handleBack()" class="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-50 hover:bg-gray-100 transition-all">
             <ArrowLeft class="w-4 h-4 text-gray-900" />
           </button>
           <div class="flex items-center gap-2.5">
@@ -241,7 +83,7 @@
         
         <!-- Top Navigation -->
         <div class="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-4 md:px-5 pt-safe-top pb-4 md:pb-6 mt-4 md:mt-6">
-          <button @click="router.back()" class="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-xl flex items-center justify-center border border-white/20 text-white hover:bg-white/20 transition-all active:scale-95">
+          <button @click="handleBack()" class="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-xl flex items-center justify-center border border-white/20 text-white hover:bg-white/20 transition-all active:scale-95">
             <ArrowLeft class="w-4 h-4" />
           </button>
           <div class="flex items-center gap-2">
@@ -722,6 +564,13 @@
 
             </section>
             </template>
+
+            <!-- Empty state when vendor has no items listed -->
+            <div v-if="!menuLoading && categories.length === 0 && topPicks.length === 0 && packs.length === 0" class="py-16 text-center bg-gray-50/60 rounded-2xl border border-dashed border-gray-200 p-8 my-6">
+              <div class="w-14 h-14 bg-white shadow-sm border border-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">🏪</div>
+              <h3 class="text-base font-bold text-gray-900 mb-1">Catalog Coming Soon</h3>
+              <p class="text-sm text-gray-500 max-w-sm mx-auto">This vendor has not added any items yet. Check back shortly!</p>
+            </div>
           </div>
 
 
@@ -977,7 +826,6 @@
         </template>
       </div>
     </div>
-    </template>
 
     <!-- Media Lightbox Modal -->
     <MediaLightbox 
@@ -1770,12 +1618,22 @@ const showGlobalCartModal = ref(false);
 const props = defineProps<{ vendor: any }>();
 const vendor = computed(() => props.vendor);
 
+const handleBack = () => {
+  if (process.client && window.history.length > 1) {
+    router.back();
+  } else {
+    router.push('/');
+  }
+};
+
 const isFoodVendor = computed(() => {
+  const vType = (vendor.value?.vendorType || '').toLowerCase();
   const type = (vendor.value?.businessType || vendor.value?.storeType || '').toLowerCase();
   const category = (vendor.value?.category || '').toLowerCase();
   
-  const foodCategories = ['restaurant', 'eatery', 'snacks', 'drinks', 'bakery', 'food'];
-  return foodCategories.includes(category) || type === 'food' || type === 'restaurant';
+  if (vType === 'restaurant' || vType === 'mini-mart') return true;
+  const foodCategories = ['restaurant', 'eatery', 'snacks', 'drinks', 'bakery', 'food', 'mini-mart', 'groceries', 'provisions'];
+  return foodCategories.includes(category) || type === 'food' || type === 'restaurant' || type === 'mini-mart';
 });
 
 const isMiniMart = computed(() => {
@@ -2191,7 +2049,8 @@ const removeFromCart = (product: any) => {
   const packId = vendorCart.activePackId;
   const pack = vendorCart.packs.find(p => p.id === packId);
   if (!pack) return;
-  const itemIndex = pack.items.findIndex(i => i.productId === product._id);
+  const targetId = typeof product === 'string' ? product : product?._id;
+  const itemIndex = pack.items.findIndex(i => i.productId === targetId);
   if (itemIndex > -1) {
     const item = pack.items[itemIndex];
     if (item.quantity > 1) {
@@ -2486,10 +2345,17 @@ onMounted(async () => {
   menuLoading.value = true;
   try {
     const paramId = route.params.id as string;
-    let productsRes, topPicksRes, packsRes;
+    let productsRes: any = { data: [] };
+    let topPicksRes: any = { data: [] };
+    let packsRes: any = { data: [] };
+
     if (isFoodVendor.value) {
-      productsRes = await menu_items_api.getByVendor(vendor.value._id);
-      topPicksRes = await menu_items_api.getTopPicks(vendor.value._id);
+      try {
+        productsRes = await menu_items_api.getByVendor(vendor.value._id);
+        topPicksRes = await menu_items_api.getTopPicks(vendor.value._id);
+      } catch (e) {
+        console.error('Failed to fetch menu items', e);
+      }
       
       try {
         const addOnsRes = await menu_items_api.getAddOns(vendor.value._id);
@@ -2521,11 +2387,43 @@ onMounted(async () => {
       } catch (e) {
         console.error('Failed to fetch packs', e);
       }
+
+      // Fallback: If no products found via menu_items_api, try products_api
+      if (!productsRes?.data || productsRes.data.length === 0) {
+        try {
+          const fallbackRes = await products_api.getByVendor(vendor.value._id);
+          if (fallbackRes?.data && fallbackRes.data.length > 0) {
+            productsRes = fallbackRes;
+            const fbTopPicks = await products_api.getTopPicks(vendor.value._id);
+            if (fbTopPicks?.data) topPicksRes = fbTopPicks;
+            const fbPacks = await products_api.getPacks(vendor.value._id);
+            if (fbPacks?.data) packsRes = fbPacks;
+          }
+        } catch (_) {}
+      }
       
     } else {
-      productsRes = await products_api.getByVendor(vendor.value._id);
-      topPicksRes = await products_api.getTopPicks(vendor.value._id);
-      packsRes = await products_api.getPacks(vendor.value._id);
+      try {
+        productsRes = await products_api.getByVendor(vendor.value._id);
+        topPicksRes = await products_api.getTopPicks(vendor.value._id);
+        packsRes = await products_api.getPacks(vendor.value._id);
+      } catch (e) {
+        console.error('Failed to fetch products', e);
+      }
+
+      // Fallback: If no products found via products_api, try menu_items_api
+      if (!productsRes?.data || productsRes.data.length === 0) {
+        try {
+          const fallbackRes = await menu_items_api.getByVendor(vendor.value._id);
+          if (fallbackRes?.data && fallbackRes.data.length > 0) {
+            productsRes = fallbackRes;
+            const fbTopPicks = await menu_items_api.getTopPicks(vendor.value._id);
+            if (fbTopPicks?.data) topPicksRes = fbTopPicks;
+            const fbPacks = await menu_items_api.getPacks(vendor.value._id);
+            if (fbPacks?.data) packsRes = fbPacks;
+          }
+        } catch (_) {}
+      }
     }
     products.value = productsRes.data || [];
     topPicks.value = topPicksRes.data || [];
@@ -2579,29 +2477,8 @@ onMounted(async () => {
       }
     }
   } catch (e) {
-    console.error('API Error in Detail page, using MOCK data', e);
-    vendor.value = {
-      _id: route.params.id,
-      storeName: 'Mavise Restaurant (Demo)',
-      rating: 4.8,
-      totalRatings: 1250,
-      about: 'Authentic flavors, delivered fast.',
-      description: 'Mavise brings you the best of local and continental cuisine with a focus on freshness and speed.',
-      availability: { Mon: '24/7', Tue: '24/7', Wed: '24/7', Thu: '24/7', Fri: '24/7', Sat: '24/7', Sun: '24/7' },
-      logo: 'https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=200&q=80',
-      banner: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200',
-      banners: [
-        { title: 'Selling Hot Moi Moi', description: '5$ discount on sales', image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200', isActive: true, products: ['p1', 'p2'], endAt: new Date(Date.now() + 1000 * 60 * 60 * 4) },
-        { title: 'Student Night', description: 'Late night snacks for study sessions.', image: 'https://images.unsplash.com/photo-1543362906-acfc16c67564?w=1200', isActive: true, endAt: new Date(Date.now() + 1000 * 60 * 25) }
-      ]
-    };
-    products.value = [
-      { _id: 'p1', name: 'Jollof Rice Special', price: 2500, discountPrice: 2000, discountPercentage: 20, category: 'Main Dishes', image: 'https://images.unsplash.com/photo-1567051752256-66a8361e72a1?w=400' },
-      { _id: 'p2', name: 'Chicken Suya', price: 1500, category: 'Snacks', image: 'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=400' },
-      { _id: 'p3', name: 'Zobo Drink', price: 500, category: 'Beverages', image: 'https://images.unsplash.com/photo-1544380903-5339f408272a?w=400' }
-    ];
-    // categories are now computed dynamically
-    activeCategory.value = 'Main Dishes';
+    console.error('API Error in Detail page', e);
+    products.value = products.value.length ? products.value : [];
   } finally {
     menuLoading.value = false;
   }

@@ -65,7 +65,7 @@
       <!-- Right Action & Showcase -->
       <div class="w-full lg:w-auto flex flex-col sm:flex-row items-center justify-center gap-3 shrink-0">
         <!-- Floating category preview cards (visible on wider screens) -->
-        <div v-if="!compact" class="hidden xl:flex items-center gap-2 mr-2">
+        <!-- <div v-if="!compact" class="hidden xl:flex items-center gap-2 mr-2">
           <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 text-center backdrop-blur-sm transform -rotate-3 hover:rotate-0 transition-transform">
             <span class="text-xl block mb-0.5">📚</span>
             <span class="text-[10px] font-bold text-slate-300">Books</span>
@@ -78,14 +78,14 @@
             <span class="text-xl block mb-0.5">❄️</span>
             <span class="text-[10px] font-bold text-slate-300">Dorm</span>
           </div>
-        </div>
+        </div> -->
 
         <!-- Primary CTA -->
         <a 
           href="https://barter.erranders.org/" 
           target="_blank" 
           rel="noopener noreferrer" 
-          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#FF5C1A] hover:bg-[#E54D12] text-white font-black rounded-xl sm:rounded-2xl text-sm sm:text-base shadow-lg shadow-[#FF5C1A]/25 hover:shadow-[#FF5C1A]/40 hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-200 group/btn"
+          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#FF5C1A] hover:bg-[#E54D12] text-white font-black rounded-xl sm:rounded-2xl text-sm sm:text-base shadow-lg shadow-[#FF5C1A]/25 hover:shadow-[#FF5C1A]/40 hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-200 group/btn"
         >
           <span>Explore Barter</span>
           <ArrowUpRight class="w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />

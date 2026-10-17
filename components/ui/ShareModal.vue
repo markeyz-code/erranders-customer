@@ -103,30 +103,13 @@ const shareUrl = computed(() => {
   
   if (!vendorIdOrSlug) return window.location.href
   
-  // If we're already on the vendor's subdomain, just use the current origin
-  if (host.startsWith(vendorIdOrSlug + '.')) {
-    return `${protocol}//${host}/`
-  }
-
-  // Vercel app or localhost, default to path-based sharing to avoid broken subdomains locally
-  if (host.includes('vercel.app') || host.includes('localhost')) {
+  // Dev / localhost
+  if (host.includes('localhost') || host.includes('127.0.0.1')) {
     return `${protocol}//${host}/vendors/${vendorIdOrSlug}`
   }
   
-  // Production custom domain (e.g., erranders.org)
-  const parts = window.location.hostname.split('.')
-  let baseHost = host
-  
-  // Strip existing subdomain if any to find the root domain
-  if (parts.length >= 3 && !['www', 'student', 'vendor'].includes(parts[0])) {
-    const port = window.location.port ? `:${window.location.port}` : ''
-    baseHost = parts.slice(1).join('.') + port
-  } else if (parts[0] === 'www' || parts[0] === 'student' || parts[0] === 'vendor') {
-    const port = window.location.port ? `:${window.location.port}` : ''
-    baseHost = parts.slice(1).join('.') + port
-  }
-  
-  return `${protocol}//${vendorIdOrSlug}.${baseHost}/`
+  // Production canonical link with 100% valid SSL across all devices
+  return `https://www.erranders.org/vendors/${vendorIdOrSlug}`
 })
 
 const shareText = computed(() => `Check out ${props.vendor?.storeName} on Errandr!`)

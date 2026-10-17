@@ -75,21 +75,43 @@ const fetchVendorData = async () => {
   
   loading.value = true;
   try {
-    let vendorRes;
-    if (paramId.match(/^[0-9a-fA-F]{24}$/)) {
-      vendorRes = await vendors_api.getById(paramId);
-    } else {
-      vendorRes = await vendors_api.getBySubdomain(paramId);
+    let vendorRes: any = null;
+    const isObjectId = /^[0-9a-fA-F]{24}$/.test(paramId);
+    
+    // Primary lookup
+    try {
+      vendorRes = isObjectId 
+        ? await vendors_api.getById(paramId) 
+        : await vendors_api.getBySubdomain(paramId);
+    } catch (_) {}
+
+    // Fallback lookup if primary returned error or not found
+    if (!vendorRes?.data || vendorRes?.type === 'ERROR' || vendorRes?.data?.error) {
+      try {
+        vendorRes = isObjectId
+          ? await vendors_api.getBySubdomain(paramId)
+          : await vendors_api.getById(paramId);
+      } catch (_) {}
     }
     
-    // Ensure we don't treat an error payload as a valid vendor
     if (vendorRes?.type === 'ERROR' || !vendorRes?.data || vendorRes?.data?.error) {
       vendor.value = null;
     } else {
       vendor.value = vendorRes.data;
+      // Auto-align campus if vendor carries an institution and caller has none or different
+      if (vendor.value?.institution && process.client) {
+        try {
+          const instId = typeof vendor.value.institution === 'object' 
+            ? vendor.value.institution._id 
+            : vendor.value.institution;
+          if (instId) {
+            document.cookie = `errandr_institution=${encodeURIComponent(instId)}; max-age=31536000; path=/; SameSite=Lax`;
+          }
+        } catch (_) {}
+      }
     }
   } catch (e) {
-    console.error('Failed to fetch vendor routing logic', e);
+    console.error('Failed to fetch vendor data', e);
     vendor.value = null;
   } finally {
     loading.value = false;

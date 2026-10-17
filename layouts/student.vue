@@ -408,7 +408,8 @@
     <ReviewOrderModal
       :isOpen="reviewOrderModalOpen"
       :order="reviewOrder"
-      @close="reviewOrderModalOpen = false"
+      @close="handleOrderReviewClosed"
+      @reviewed="handleOrderReviewed"
     />
     <CoreWhatsAppWidget />
   </div>
@@ -595,6 +596,38 @@ watch(mode, (newMode) => {
   }
 })
 
+const handleOrderReviewed = (orderId?: string) => {
+  reviewOrderModalOpen.value = false
+  if (orderId && typeof window !== 'undefined') {
+    try {
+      const rated = JSON.parse(localStorage.getItem('errandr_rated_orders') || '[]')
+      if (!rated.includes(orderId)) {
+        rated.push(orderId)
+        localStorage.setItem('errandr_rated_orders', JSON.stringify(rated))
+      }
+    } catch (_) {}
+  }
+  if (reviewOrder.value) {
+    reviewOrder.value.hasRatedVendor = true
+    reviewOrder.value.hasRatedErrander = true
+    reviewOrder.value = null
+  }
+}
+
+const handleOrderReviewClosed = () => {
+  reviewOrderModalOpen.value = false
+  if (reviewOrder.value?._id && typeof window !== 'undefined') {
+    try {
+      const dismissed = JSON.parse(localStorage.getItem('errandr_dismissed_rating_orders') || '[]')
+      if (!dismissed.includes(reviewOrder.value._id)) {
+        dismissed.push(reviewOrder.value._id)
+        localStorage.setItem('errandr_dismissed_rating_orders', JSON.stringify(dismissed))
+      }
+    } catch (_) {}
+  }
+  reviewOrder.value = null
+}
+
 const checkOrders = () => {
   // 1. Check for Pending Orders (Abandoned Cart)
   const pending = studentOrders.value.find((o: any) => 
@@ -607,11 +640,37 @@ const checkOrders = () => {
   }
   
   // 2. Check for Recently Delivered Orders (Unrated)
-  const delivered = studentOrders.value.find((o: any) => 
-    o.type !== 'custom_errand' &&
-    (o.status === 'delivered' || o.status === 'picked_up' || o.status === 'DELIVERED' || o.status === 'COMPLETED') && 
-    (!o.hasRatedVendor || (o.errander && !o.hasRatedErrander))
-  )
+  const getIgnoredOrderIds = (): string[] => {
+    if (typeof window === 'undefined') return []
+    try {
+      const rated = JSON.parse(localStorage.getItem('errandr_rated_orders') || '[]')
+      const dismissed = JSON.parse(localStorage.getItem('errandr_dismissed_rating_orders') || '[]')
+      return [...(Array.isArray(rated) ? rated : []), ...(Array.isArray(dismissed) ? dismissed : [])]
+    } catch (_) {
+      return []
+    }
+  }
+
+  const ignoredIds = getIgnoredOrderIds()
+
+  const delivered = studentOrders.value.find((o: any) => {
+    if (o.type === 'custom_errand') return false
+    if (!o._id || ignoredIds.includes(o._id)) return false
+    
+    // Only genuinely completed/delivered orders (picked_up is still in transit!)
+    const isDelivered = o.status === 'delivered' || o.status === 'DELIVERED' || o.status === 'COMPLETED'
+    if (!isDelivered) return false
+
+    // If vendor has already been rated, do not prompt again
+    if (o.hasRatedVendor || o.hasRatedErrander || o.vendorRating || o.rating || o.erranderRating) return false
+
+    // Freshness check: only prompt for orders delivered within the last 3 days
+    const orderTime = new Date(o.updatedAt || o.createdAt || 0).getTime()
+    const threeDaysAgo = Date.now() - (3 * 24 * 60 * 60 * 1000)
+    if (orderTime && orderTime < threeDaysAgo) return false
+
+    return true
+  })
   if (delivered && !pendingOrderModalOpen.value && route.path !== `/dashboard/orders/${delivered._id}` && !reviewOrderModalOpen.value) {
     reviewOrder.value = delivered
     reviewOrderModalOpen.value = true
