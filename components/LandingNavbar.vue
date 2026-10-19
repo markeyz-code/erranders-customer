@@ -152,7 +152,7 @@
                   </MenuItem>
 
                   <MenuItem v-slot="{ active }">
-                    <a href="https://barter.erranders.org/" target="_blank" rel="noopener noreferrer" :class="[active ? 'bg-orange-50 scale-95' : 'bg-orange-50/40 hover:bg-orange-50', 'group flex items-center gap-3 rounded-2xl p-3 col-span-2 transition-all border border-orange-200/50 text-left']">
+                    <a href="https://decluttered.erranders.org/" target="_blank" rel="noopener noreferrer" :class="[active ? 'bg-orange-50 scale-95' : 'bg-orange-50/40 hover:bg-orange-50', 'group flex items-center gap-3 rounded-2xl p-3 col-span-2 transition-all border border-orange-200/50 text-left']">
                       <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-[#FF5C1A]">
                         <ArrowLeftRight class="w-4 h-4" />
                       </div>
@@ -394,7 +394,7 @@
 
               <!-- 3. Barter Campus Trade -->
               <a 
-                href="https://barter.erranders.org/" 
+                href="https://decluttered.erranders.org/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 @click="closeMobileMenu"

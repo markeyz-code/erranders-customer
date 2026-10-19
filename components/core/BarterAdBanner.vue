@@ -82,7 +82,7 @@
 
         <!-- Primary CTA -->
         <a 
-          href="https://barter.erranders.org/" 
+          href="https://decluttered.erranders.org/" 
           target="_blank" 
           rel="noopener noreferrer" 
           class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#FF5C1A] hover:bg-[#E54D12] text-white font-black rounded-xl sm:rounded-2xl text-sm sm:text-base shadow-lg shadow-[#FF5C1A]/25 hover:shadow-[#FF5C1A]/40 hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-200 group/btn"

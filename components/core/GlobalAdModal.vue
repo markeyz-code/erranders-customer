@@ -171,7 +171,7 @@ const DEFAULT_FALLBACK_ADS = [
     badgeText: '🔄 Erranders Barter',
     imageUrl: 'https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?auto=format&fit=crop&w=800&q=80',
     ctaText: 'Start Trading on Barter',
-    ctaLink: 'https://barter.erranders.org',
+    ctaLink: 'https://decluttered.erranders.org',
     advertiserName: 'Erranders Barter',
     isActive: true,
   },

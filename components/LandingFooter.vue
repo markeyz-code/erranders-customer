@@ -9,7 +9,7 @@
       <div class="mb-24 flex flex-col md:flex-row md:items-end justify-between gap-10">
         <div class="min-h-[160px]">
           <h2 class="text-6xl md:text-8xl font-medium text-slate-900 tracking-tighter leading-[0.9]">
-            {{ dynamicHeading }}<span class="text-slate-800">?</span><span class="animate-pulse text-parentPrimary font-light ml-1">|</span> <br/> <span class="text-parentPrimary">Let's fix that.</span>
+            {{ dynamicHeading }}<span class="text-slate-800">?</span><span class="animate-pulse text-parentPrimary font-light ml-1">|</span> <br/> <span class="text-parentPrimary">Errand it.</span>
           </h2>
         </div>
         <NuxtLink to="/vendors" class="inline-flex flex justify-center items-center items-center gap-4 px-10 py-3 bg-parentPrimary text-white rounded-full font-medium text-lg shadow-[0_20px_50px_rgba(255,92,26,0.3)] hover:scale-105 transition-transform group">
@@ -83,7 +83,7 @@
                 </a>
               </li>
               <li>
-                <a href="https://barter.erranders.org" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-2 text-slate-500 font-medium hover:text-[#FF5C1A] transition-colors">
+                <a href="https://decluttered.erranders.org" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-2 text-slate-500 font-medium hover:text-[#FF5C1A] transition-colors">
                   <div class="w-8 h-8 rounded-lg bg-[#FF5C1A]/10 flex items-center justify-center text-[#FF5C1A] group-hover:scale-110 transition-transform">
                     <ArrowLeftRight class="w-4 h-4" />
                   </div>
