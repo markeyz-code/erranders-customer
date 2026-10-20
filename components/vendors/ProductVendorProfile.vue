@@ -2288,7 +2288,14 @@ const confirmStartGroupOrder = async () => {
 };
 
 const copyInviteLink = () => {
-  const link = `${window.location.origin}/vendors/${route.params.id}?group=${activeCode.value}`;
+  const host = window.location.host;
+  const subdomain = vendor.value?.subdomain;
+  let link = '';
+  if (subdomain && !host.includes('localhost') && !host.includes('127.0.0.1')) {
+    link = `https://${subdomain}.erranders.org?group=${activeCode.value}`;
+  } else {
+    link = `${window.location.origin}/vendors/${route.params.id}?group=${activeCode.value}`;
+  }
   navigator.clipboard.writeText(link);
   showToast('Invite link copied to clipboard!', 'success');
 };

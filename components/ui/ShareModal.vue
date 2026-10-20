@@ -99,17 +99,23 @@ const shareUrl = computed(() => {
   
   const host = window.location.host
   const protocol = window.location.protocol
-  const vendorIdOrSlug = props.vendor?.subdomain || props.vendor?._id
+  const subdomain = props.vendor?.subdomain
+  const vendorId = props.vendor?._id
   
-  if (!vendorIdOrSlug) return window.location.href
+  if (!subdomain && !vendorId) return window.location.href
   
   // Dev / localhost
   if (host.includes('localhost') || host.includes('127.0.0.1')) {
-    return `${protocol}//${host}/vendors/${vendorIdOrSlug}`
+    return `${protocol}//${host}/vendors/${subdomain || vendorId}`
   }
   
-  // Production canonical link with 100% valid SSL across all devices
-  return `https://www.erranders.org/vendors/${vendorIdOrSlug}`
+  // Production unique domain format: {vendor business name}.erranders.org
+  if (subdomain) {
+    return `https://${subdomain}.erranders.org`
+  }
+  
+  // Fallback to path if subdomain is absent
+  return `https://www.erranders.org/vendors/${vendorId}`
 })
 
 const shareText = computed(() => `Check out ${props.vendor?.storeName} on Errandr!`)
