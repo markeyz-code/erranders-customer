@@ -485,7 +485,7 @@
                        <span class="text-gray-400 text-sm">Rider Fee</span>
                        <span class="text-gray-900 font-bold text-sm">₦{{ order.deliveryFee?.toLocaleString() }}</span>
                      </div>
-                     <div class="flex justify-between items-center">
+                     <div v-if="order.serviceFee && order.serviceFee > 0" class="flex justify-between items-center">
                        <span class="text-gray-400 text-sm">Service Fee</span>
                        <span class="text-gray-900 font-bold text-sm">₦{{ (order.serviceFee || 0)?.toLocaleString() }}</span>
                      </div>
