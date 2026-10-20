@@ -189,12 +189,12 @@
                         <span class="font-bold text-gray-900">₦{{ formatMoney(form.runnerFee) }}</span>
                       </div>
                       <div class="flex justify-between text-sm border-b border-gray-200 pb-3">
-                        <span class="text-gray-600">Platform Convenience Fee</span>
-                        <span class="font-bold text-gray-900">₦{{ formatMoney(platformFee) }}</span>
+                        <span class="text-gray-600">Service Charge</span>
+                        <span class="font-bold text-gray-900">₦{{ formatMoney(serviceCharge) }}</span>
                       </div>
                       <div class="flex justify-between pt-1">
                         <span class="text-base font-bold text-gray-900">Due on Acceptance</span>
-                        <span class="text-xl font-extrabold text-parentPrimary">₦{{ formatMoney(form.runnerFee + platformFee) }}</span>
+                        <span class="text-xl font-extrabold text-parentPrimary">₦{{ formatMoney(form.runnerFee + serviceCharge) }}</span>
                       </div>
                     </div>
                   </div>
@@ -295,7 +295,13 @@ const form = ref({
 })
 
 const minRunnerFee = ref(300)
-const platformFee = ref(100)
+const customCommissionPercentage = ref(20)
+
+const serviceCharge = computed(() => {
+  const pct = Number(customCommissionPercentage.value) || 20
+  const runner = Number(form.value.runnerFee) || 0
+  return Math.round(runner * (pct / 100))
+})
 
 onMounted(async () => {
   try {
@@ -304,8 +310,8 @@ onMounted(async () => {
     if (settings?.minCustomErrandFee) {
       minRunnerFee.value = Number(settings.minCustomErrandFee)
     }
-    if (settings?.convenienceFee || settings?.platformFee) {
-      platformFee.value = Number(settings.convenienceFee || settings.platformFee)
+    if (settings?.customErrandCommissionPercentage != null && !isNaN(Number(settings.customErrandCommissionPercentage))) {
+      customCommissionPercentage.value = Number(settings.customErrandCommissionPercentage)
     }
   } catch (e) {
     // Fallback gracefully to default

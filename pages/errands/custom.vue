@@ -467,14 +467,12 @@
                     <span class="font-bold text-[#170D08]">₦{{ transferFee }}</span>
                   </div>
                   -->
-                  <!-- Custom errand does not have a fixed platform fee (platform fee is 20% commission taken from runner fee based on negotiation) -->
-                  <!--
                   <div class="flex justify-between items-baseline pb-3 border-b-2 border-dashed border-[#D8D2C4]">
-                    <span class="flex items-center gap-2 text-[#766A61]"><Layers class="w-3.5 h-3.5" /> Platform Fee</span>
+                    <span class="flex items-center gap-2 text-[#766A61]"><Layers class="w-3.5 h-3.5" /> Service Charge</span>
                     <span class="flex-1 mx-2 border-b border-dashed border-[#D8D2C4]"></span>
-                    <span class="font-bold text-[#170D08]">₦{{ formatMoney(platformFee) }}</span>
+                    <span class="font-bold text-[#170D08]">₦{{ formatMoney(serviceCharge) }}</span>
                   </div>
-                  -->
+                 
                 </div>
 
                 <div class="rounded-sm p-4 flex justify-between items-center -rotate-[0.6deg] border-[3px] border-[#FF5C1A]">
@@ -563,9 +561,15 @@ const isAuthModalOpen = ref(false)
 const justAuthenticated = ref(false)
 const failedPaymentReference = ref('')
 const minRunnerFee = ref(300)
-// Custom errand does not have a fixed platform fee or transfer fee (platform fee is commission off negotiated amount)
-const platformFee = ref(0)
+const customCommissionPercentage = ref(20)
 const enableTransferFee = ref(false)
+
+// Service charge is dynamically calculated as the admin-configured percentage of the runner fee
+const serviceCharge = computed(() => {
+  const pct = Number(customCommissionPercentage.value) || 20
+  const runner = Number(form.value.runnerFee) || 0
+  return Math.round(runner * (pct / 100))
+})
 
 const errandType = ref<'custom' | 'market'>('custom')
 const isRecording = ref(false)
@@ -609,15 +613,16 @@ const selectPool = (pool: any) => {
 
 const fetchInitialData = async () => {
   fetchPools()
-  // Fetch admin-configurable minimum runner fee
+  // Fetch admin-configurable minimum runner fee and custom errand commission percentage
   try {
     const settingsRes = await orders_api.getCustomErrandSettings()
     const settings = settingsRes?.data || settingsRes
     if (settings?.minCustomErrandFee) {
       minRunnerFee.value = Number(settings.minCustomErrandFee)
     }
-    // Custom errand has no fixed platform fee or transfer fee
-    platformFee.value = 0
+    if (settings?.customErrandCommissionPercentage != null && !isNaN(Number(settings.customErrandCommissionPercentage))) {
+      customCommissionPercentage.value = Number(settings.customErrandCommissionPercentage)
+    }
     enableTransferFee.value = false
   } catch (e) {
     console.error('Failed to fetch custom errand settings:', e)
@@ -991,10 +996,9 @@ const isStep2Valid = computed(() => {
 // Transfer fee commented out / disabled for custom errands
 const transferFee = computed(() => 0)
 
-// Custom errand does not charge a fixed platform fee or transfer fee; 
-// Erranders take is the admin-configured commission (e.g. 20%) deducted from runner fee
+// Service charge is dynamically rendered as customErrandCommissionPercentage / 100 of the negotiated runner fee
 const grandTotal = computed(() => {
-  return (form.value.estimatedItemCost || 0) + (form.value.runnerFee || 0)
+  return (form.value.estimatedItemCost || 0) + (form.value.runnerFee || 0) + serviceCharge.value
 })
 
 const formatMoney = (amount: number) => {
