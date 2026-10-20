@@ -604,7 +604,7 @@
     :order-id="order._id"
   />
 
-  <!-- Fund Wallet Modal -->
+  <!-- Fund Wallet Modal (Direct in-page topup without redirecting away) -->
   <Teleport to="body">
     <Transition
       enter-active-class="transition-opacity duration-300"
@@ -614,29 +614,114 @@
       leave-from-class="opacity-100"
       leave-to-class="opacity-0"
     >
-      <div v-if="isFundModalOpen" class="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" @click.self="isFundModalOpen = false">
-        <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-xl relative animate-zoom-in">
-          <button @click="isFundModalOpen = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-900">
-            <X class="w-5 h-5" />
-          </button>
-          
-          <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mb-4 mx-auto">
-            <CreditCard class="w-6 h-6 text-[#FF5C1A]" />
+      <div v-if="isFundModalOpen" class="fixed inset-0 z-[120] bg-black/60 backdrop-blur-sm" @click="isFundModalOpen = false"></div>
+    </Transition>
+    <Transition
+      enter-active-class="transition-all duration-300 ease-out"
+      enter-from-class="translate-y-full md:translate-y-0 md:scale-95 md:opacity-0"
+      enter-to-class="translate-y-0 md:scale-100 md:opacity-100"
+      leave-active-class="transition-all duration-200 ease-in"
+      leave-from-class="translate-y-0 md:scale-100 md:opacity-100"
+      leave-to-class="translate-y-full md:translate-y-0 md:scale-95 md:opacity-0"
+    >
+      <div v-if="isFundModalOpen" class="fixed inset-x-0 bottom-0 md:inset-0 md:flex md:items-center md:justify-center md:p-4 z-[121]">
+        <div class="bg-white w-full md:max-w-md rounded-t-[2rem] md:rounded-2xl overflow-hidden shadow-2xl border border-gray-100 animate-zoom-in">
+          <!-- Header with dark brand gradient accent -->
+          <div class="relative bg-gray-900 px-5 py-5 text-center overflow-hidden">
+            <div class="absolute top-0 right-0 w-36 h-36 bg-[#FF5C1A]/20 rounded-full blur-[50px] -mr-12 -mt-12"></div>
+            <div class="absolute bottom-0 left-0 w-32 h-32 bg-emerald-500/15 rounded-full blur-[40px] -ml-12 -mb-12"></div>
+            
+            <!-- Mobile handle bar -->
+            <div class="w-10 h-1 bg-white/20 rounded-full mx-auto mb-3 md:hidden"></div>
+            
+            <button @click="isFundModalOpen = false" class="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-xl transition-colors">
+              <X class="w-4 h-4 text-white/60" />
+            </button>
+            
+            <div class="relative z-10">
+              <div class="w-12 h-12 bg-[#FF5C1A]/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-2 border border-[#FF5C1A]/30">
+                <CreditCard class="w-6 h-6 text-[#FF5C1A]" />
+              </div>
+              <h3 class="text-lg font-bold text-white tracking-tight mb-0.5">Fund Your Wallet</h3>
+              <p class="text-xs text-white/60">Top up directly to secure your errand escrow</p>
+            </div>
           </div>
-          
-          <h3 class="text-lg font-bold text-center mb-2">Fund Your Wallet</h3>
-          <p class="text-sm text-gray-600 text-center mb-6">
-            You need <strong class="text-gray-900">₦{{ (fundAmountNeeded || 0).toLocaleString() }}</strong> more to pay for this errand. Fund your wallet now to proceed.
-          </p>
 
-          <button
-            @click="initiateWalletTopup"
-            :disabled="isInitializingPayment"
-            class="w-full bg-[#FF5C1A] text-white font-bold py-3 rounded-xl hover:bg-[#e6511a] transition-all flex justify-center items-center gap-2"
-          >
-            <Loader2 v-if="isInitializingPayment" class="w-4 h-4 animate-spin" />
-            <span>Fund ₦{{ (fundAmountNeeded || 0).toLocaleString() }}</span>
-          </button>
+          <!-- Body -->
+          <div class="p-5 space-y-4">
+            <!-- Amount Input -->
+            <div>
+              <div class="flex items-center justify-between mb-1.5 pl-1">
+                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Amount to Fund</label>
+                <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md">
+                  Deficit: ₦{{ (fundAmountNeeded || 0).toLocaleString() }}
+                </span>
+              </div>
+              <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-bold text-gray-400">₦</span>
+                <input 
+                  v-model="formattedTopupAmount"
+                  type="text"
+                  placeholder="0"
+                  class="w-full bg-gray-50 border border-gray-200 focus:border-[#FF5C1A] focus:bg-white rounded-xl py-3.5 pl-10 pr-4 text-2xl font-bold text-gray-900 transition-all outline-none"
+                />
+              </div>
+            </div>
+
+            <!-- Quick Amounts -->
+            <div class="grid grid-cols-4 gap-2">
+              <button 
+                type="button"
+                @click="customTopupAmount = fundAmountNeeded"
+                :class="customTopupAmount === fundAmountNeeded ? 'bg-[#FF5C1A] text-white border-[#FF5C1A] shadow-sm' : 'bg-gray-50 text-gray-700 border-gray-200 hover:border-[#FF5C1A]/40'"
+                class="py-2 px-1 rounded-xl text-xs font-bold transition-all border text-center truncate"
+              >
+                Exact
+              </button>
+              <button 
+                v-for="amt in [500, 1000, 2000]" 
+                :key="amt"
+                type="button"
+                @click="customTopupAmount = amt"
+                :class="customTopupAmount === amt ? 'bg-[#FF5C1A] text-white border-[#FF5C1A] shadow-sm' : 'bg-gray-50 text-gray-700 border-gray-200 hover:border-[#FF5C1A]/40'"
+                class="py-2 px-1 rounded-xl text-xs font-bold transition-all border text-center"
+              >
+                ₦{{ amt >= 1000 ? (amt / 1000) + 'k' : amt }}
+              </button>
+            </div>
+
+            <!-- Balances Breakdown -->
+            <div class="bg-gray-50 rounded-xl p-3.5 space-y-2 border border-gray-100 text-xs font-medium">
+              <div class="flex items-center justify-between text-gray-500">
+                <span>Current Balance</span>
+                <span class="font-bold text-gray-800">₦{{ (balance || 0).toLocaleString() }}</span>
+              </div>
+              <div class="flex items-center justify-between text-gray-500">
+                <span>Total Escrow Required</span>
+                <span class="font-bold text-gray-800">₦{{ (order?.total || 0).toLocaleString() }}</span>
+              </div>
+              <div v-if="customTopupAmount > 0" class="pt-2 border-t border-gray-200 flex items-center justify-between text-emerald-600 font-bold">
+                <span>Balance After Funding</span>
+                <span>₦{{ ((balance || 0) + Number(customTopupAmount || 0)).toLocaleString() }}</span>
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <button 
+              @click="initiateDirectWalletTopup"
+              :disabled="isInitializingTopup || customTopupAmount < 50"
+              class="w-full py-3.5 bg-[#FF5C1A] text-white font-bold rounded-xl text-sm hover:bg-[#e6511a] disabled:opacity-40 transition-all shadow-md shadow-[#FF5C1A]/20 flex items-center justify-center gap-2 active:scale-[0.98]"
+            >
+              <Loader2 v-if="isInitializingTopup" class="w-4 h-4 animate-spin" />
+              <span v-else>Fund ₦{{ (customTopupAmount || 0).toLocaleString() }} & Pay</span>
+              <ArrowRight v-if="!isInitializingTopup" class="w-4 h-4" />
+            </button>
+
+            <!-- Reassurance Note -->
+            <p class="text-[10px] text-gray-400 text-center font-medium">
+              🔒 Powered by Paystack. Funds will credit instantly and complete this order.
+            </p>
+          </div>
         </div>
       </div>
     </Transition>
@@ -1098,23 +1183,42 @@ onMounted(async () => {
     
     checkAutoOpenChat();
 
-    if (route.query.reference && (order.value?.status === 'awaiting_payment' || route.query.trxref)) {
-       try {
-         // Any order in awaiting_payment with a reference needs payForCustomErrand to confirm
-         if (order.value?.status === 'awaiting_payment') {
-           await api.post(`/orders/${order.value?._id}/custom/pay`, { paymentReference: route.query.reference });
-         } else {
-           await verifyPayment(route.query.reference as string);
-         }
-         showToast({ title: 'Payment Successful', message: 'Payment confirmed! Your order is being processed.', toastType: 'success' });
-       } catch (e: any) {
-         console.error('Payment verification error:', e);
-         // Try the other method as fallback
+    if (route.query.reference && (order.value?.status === 'awaiting_payment' || route.query.trxref || route.query.wallet_topup)) {
+       const isWalletReturn = route.query.wallet_topup === 'true' || 
+         (typeof window !== 'undefined' && localStorage.getItem('pending_order_autopay') === (order.value?._id || route.params.id));
+
+       if (isWalletReturn) {
          try {
            await verifyPayment(route.query.reference as string);
-           showToast({ title: 'Payment Successful', message: 'Payment confirmed!', toastType: 'success' });
-         } catch (e2) {
-           console.error('Fallback verification also failed:', e2);
+           showToast({ title: 'Wallet Funded! 💳', message: 'Funds credited successfully. Completing escrow payment...', toastType: 'success' });
+           await fetchWallet();
+           if (typeof window !== 'undefined') {
+             localStorage.removeItem('pending_order_autopay');
+           }
+           if (order.value?.status === 'awaiting_payment') {
+             await payForErrandWithWallet();
+           }
+         } catch (e: any) {
+           console.error('Wallet return verification error:', e);
+         }
+       } else {
+         try {
+           // Any order in awaiting_payment with a reference needs payForCustomErrand to confirm
+           if (order.value?.status === 'awaiting_payment') {
+             await api.post(`/orders/${order.value?._id}/custom/pay`, { paymentReference: route.query.reference });
+           } else {
+             await verifyPayment(route.query.reference as string);
+           }
+           showToast({ title: 'Payment Successful', message: 'Payment confirmed! Your order is being processed.', toastType: 'success' });
+         } catch (e: any) {
+           console.error('Payment verification error:', e);
+           // Try the other method as fallback
+           try {
+             await verifyPayment(route.query.reference as string);
+             showToast({ title: 'Payment Successful', message: 'Payment confirmed!', toastType: 'success' });
+           } catch (e2) {
+             console.error('Fallback verification also failed:', e2);
+           }
          }
        }
        // Reload order to get updated status
@@ -1123,6 +1227,8 @@ onMounted(async () => {
        const url = new URL(window.location.href);
        url.searchParams.delete('reference');
        url.searchParams.delete('trxref');
+       url.searchParams.delete('wallet_topup');
+       url.searchParams.delete('order_id');
        window.history.replaceState({}, '', url.toString());
     }
   } catch (e) {
@@ -1373,10 +1479,10 @@ const resolveSubstitute = async (accept: boolean) => {
     if (opt) {
       const diff = getSubstitutePriceDiff(opt.price);
       if (diff > 0 && balance.value < diff) {
-        showToast({ title: 'Insufficient Funds', message: 'Redirecting to fund your wallet...', toastType: 'info' });
         fundAmountNeeded.value = diff - balance.value;
+        customTopupAmount.value = fundAmountNeeded.value;
         showSubstituteReviewModal.value = false;
-        initiateWalletTopup(); 
+        isFundModalOpen.value = true;
         return;
       }
     }
@@ -1415,8 +1521,10 @@ const isPayingTopup = ref(false);
 
 const payTopup = async () => {
   if (balance.value < topupAmount.value) {
-     showToast({ title: 'Insufficient Funds', message: 'Please fund your wallet first.', toastType: 'error' });
-     initiateWalletTopup(); // Reuse the same flow
+     fundAmountNeeded.value = topupAmount.value - balance.value;
+     customTopupAmount.value = fundAmountNeeded.value;
+     showTopupModal.value = false;
+     isFundModalOpen.value = true;
      return;
   }
   isPayingTopup.value = true;
@@ -1436,25 +1544,60 @@ const payTopup = async () => {
 
 const isFundModalOpen = ref(false);
 const fundAmountNeeded = ref(0);
+const customTopupAmount = ref(0);
+const isInitializingTopup = ref(false);
 
-const initiateWalletTopup = async () => {
+const formattedTopupAmount = computed({
+  get: () => customTopupAmount.value ? customTopupAmount.value.toLocaleString() : '',
+  set: (val: string) => {
+    const raw = val.replace(/[^\d]/g, '');
+    customTopupAmount.value = raw ? parseInt(raw, 10) : 0;
+  }
+});
+
+const initiateDirectWalletTopup = async () => {
+  if (customTopupAmount.value < 50) {
+    showToast({ title: 'Invalid Amount', message: 'Minimum funding amount is ₦50', toastType: 'error' });
+    return;
+  }
+  isInitializingTopup.value = true;
   try {
-    // Redirect to wallet with topup query param so it automatically triggers Paystack and returns here
-    router.push({
-      path: '/dashboard/wallet',
-      query: {
-        topup: fundAmountNeeded.value.toString(),
-        redirect: `/dashboard/orders/${route.params.id}`
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('pending_order_autopay', order.value?._id || (route.params.id as string));
+    }
+    const currentOrigin = window.location.origin;
+    const currentPath = window.location.pathname;
+    const data = await initializePayment({
+      amount: customTopupAmount.value,
+      email: user.value?.email,
+      callback_url: `${currentOrigin}${currentPath}?wallet_topup=true&order_id=${order.value?._id || route.params.id}`,
+      metadata: {
+        type: 'wallet_topup',
+        userId: user.value?._id,
+        orderId: order.value?._id || route.params.id,
+        autoPay: true
       }
     });
-  } catch (e) {
-    showToast({ title: 'Error', message: 'Could not initiate top-up', toastType: 'error' });
+
+    const authUrl = data?.data?.authorization_url || data?.authorization_url;
+    if (authUrl) {
+      window.location.href = authUrl;
+    } else {
+      throw new Error('Could not get payment authorization URL');
+    }
+  } catch (e: any) {
+    showToast({ title: 'Top-up Error', message: e.message || 'Failed to initialize payment', toastType: 'error' });
+  } finally {
+    isInitializingTopup.value = false;
   }
 };
 
 const payForErrandWithWallet = async () => {
-  if (balance.value < order.value.total) {
-    fundAmountNeeded.value = order.value.total - balance.value;
+  const orderTotal = Number(order.value?.total || 0);
+  const currentBalance = Number(balance.value || 0);
+  if (currentBalance < orderTotal) {
+    fundAmountNeeded.value = orderTotal - currentBalance;
+    customTopupAmount.value = fundAmountNeeded.value;
     isFundModalOpen.value = true;
     return;
   }
@@ -1462,8 +1605,8 @@ const payForErrandWithWallet = async () => {
   isPayingWithWallet.value = true;
   try {
     const res = await payWithWallet(order.value._id);
-    showToast({ title: 'Payment Successful', message: 'Errand paid via wallet successfully!', toastType: 'success' });
-    order.value = res; // update order from response
+    showToast({ title: 'Payment Successful', message: 'Errand escrow paid via wallet successfully!', toastType: 'success' });
+    order.value = res?.data || res;
     
     // Auto-refresh user balance
     try {
