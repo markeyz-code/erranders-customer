@@ -31,7 +31,7 @@
         >
           Decluttering or Moving? 
           <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#FF8C55] via-[#FF5C1A] to-[#FF4500]">
-            Trade on Barter
+            Trade on Decluttered By Erranders
           </span>
         </h3>
 

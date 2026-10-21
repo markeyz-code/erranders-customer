@@ -29,46 +29,24 @@
       ></div>
     </Teleport>
 
-    <!-- Hero Section -->
-    <section 
-      class="relative pt-44 pb-16 md:pt-40 lg:pt-48 lg:pb-24 overflow-visible bg-gradient-to-b from-slate-50/80 via-white to-white border-b border-slate-100"
+    <!-- Network-wide hero: same design as Erranders For Business and Declutter. -->
+    <HeroStage
+      title="Erranders"
+      :lines="[
+        'Order food from the vendor next door',
+        'Book a barber, a tutor or a mover',
+        'Get it delivered to your hostel door',
+        'Every campus hustle, one place',
+      ]"
+      subtitle="Campus services, delivery and student vendors in one place. Order from the people closest to you."
+      eyebrow="Now on campus"
+      eyebrow-href="/vendors"
+      primary-label="Browse vendors"
+      primary-to="/vendors"
+      secondary-label="Sell something"
+      secondary-to="/sell"
     >
-      <!-- Soft Minimalist Grid Dot Overlay -->
-      <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1.5px,transparent_1.5px)] [background-size:24px_24px] opacity-70 z-0 pointer-events-none"></div>
-
-      <div class="max-w-7xl mx-auto sm:px-4  relative text-center" :class="showSuggestions ? 'z-[9999]' : 'z-10'">
-        <div class="max-w-3xl mx-auto space-y-6">
-          
-          <!-- Badge -->
-          <NuxtLink to="/vendors" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-parentPrimary/5 border border-parentPrimary/10 text-parentPrimary text-sm font-medium -[0.2em] hover:bg-parentPrimary/10 transition-colors">
-            <Zap class="w-3.5 h-3.5 fill-current" /> Campus Services & Delivery, Redefined
-          </NuxtLink>
-          
-          <!-- Rotating Hero Heading (Optimized Size) -->
-          <div class="relative h-[120px] md:h-[180px] lg:h-[220px] overflow-hidden flex items-center justify-center">
-            <TransitionGroup name="hero-slide" tag="div" class="w-full">
-              <h1 
-                :key="currentHeadingIndex"
-                class="absolute inset-0 flex flex-col items-center justify-center text-3xl md:text-5xl lg:text-6xl font-extrabold -tighter leading-[1.1] text-gray-900 px-4 font-onest"
-              >
-                <div class="max-w-max mx-auto text-center" v-html="heroHeadings[currentHeadingIndex].text"></div>
-                <!-- <div class="inline-flex items-center gap-2 mt-3 px-3 py-1 rounded-full bg-gray-50 border border-gray-50 shadow-sm transition-all duration-500">
-                  <span class="w-1.5 h-1.5 rounded-full bg-parentPrimary animate-pulse"></span>
-                  <span class="text-sm md:text-sm font-medium -[0.2em]  text-gray-400">
-                    {{ heroHeadings[currentHeadingIndex].lang }}
-                  </span>
-                </div> -->
-              </h1>
-            </TransitionGroup>
-          </div>
-
-          <!-- Rotating Slang Subtitle -->
-          <div class="h-8 overflow-hidden text-sm md:text-lg font-bold text-gray-400 -tight flex items-center justify-center">
-             <span :key="currentSlangIndex" class="animate-vertical-marquee">{{ slangSlogans[currentSlangIndex] }}</span>
-          </div>
-
-          <!-- Search Bar -->
-          <!-- Search Bar Redesign -->
+<!-- Search Bar Redesign -->
           <div 
             class="mt-10 max-w-3xl mx-auto group relative transition-all duration-700 w-full px-4 sm:px-0"
             style="isolation: isolate;"
@@ -352,9 +330,7 @@
           </div>
 
           <!-- Removed Global Filters Bar (Moved to LandingNavbar.vue) -->
-        </div>
-      </div>
-    </section>
+    </HeroStage>
 
 
 
@@ -1023,6 +999,14 @@ const handlePromoClick = async (promo: any) => {
   // If promo has a link to a specific product (format: product:ID)
   if (promo.link && promo.link.startsWith('product:')) {
     const productId = promo.link.split(':')[1];
+
+/**
+ * Plain-text lines for the shared hero.
+ *
+ * The original headings carried markup and emoji; the network-wide hero renders text, so
+ * they are stripped here rather than inline in the template.
+ */
+
     try {
       const res = await products_api.getProduct(productId);
       const product = res.data?.data || res.data;
