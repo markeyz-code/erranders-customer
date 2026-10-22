@@ -58,6 +58,8 @@
                   :src="vendor.banner || vendor.image || vendor.logo || 'https://images.unsplash.com/photo-1547592180-85f173990554?w=600&h=400&fit=crop'"
                   class="w-full h-full object-cover grayscale opacity-50"
                   alt="Vendor Banner"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div class="absolute inset-0 bg-black/60 z-10 flex flex-col items-center justify-center">
                   <Lock class="w-10 h-10 text-white mb-2" />
@@ -78,6 +80,8 @@
                   :src="vendor.banner || vendor.image || vendor.logo || 'https://images.unsplash.com/photo-1547592180-85f173990554?w=600&h=400&fit=crop'"
                   class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
                   alt="Vendor Banner"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </template>

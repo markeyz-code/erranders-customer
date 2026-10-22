@@ -43,7 +43,8 @@ export const useRealtimeSocket = () => {
 
     socket.value = io(`${baseUrl}/realtime`, {
       path: '/socket.io/',
-      transports: ['polling'],
+      transports: ['websocket', 'polling'],
+      upgrade: true,
       auth: authPayload,
     })
 
@@ -77,13 +78,35 @@ export const useRealtimeSocket = () => {
     isConnecting.value = false
   }
 
-  const emitWithAck = <T = any>(event: string, payload: any): Promise<T> => {
+  const emitWithAck = <T = any>(event: string, payload: any, timeoutMs = 4000): Promise<T> => {
     return new Promise((resolve) => {
-      if (!socket.value) {
+      if (!socket.value || !socket.value.connected) {
         resolve(undefined as T)
         return
       }
-      socket.value.emit(event, payload, (response: T) => resolve(response))
+
+      let timer: any = null
+      let done = false
+
+      const doneCallback = (response: T) => {
+        if (done) return
+        done = true
+        if (timer) clearTimeout(timer)
+        resolve(response)
+      }
+
+      timer = setTimeout(() => {
+        if (done) return
+        done = true
+        resolve(undefined as T)
+      }, timeoutMs)
+
+      try {
+        socket.value.emit(event, payload, doneCallback)
+      } catch {
+        if (timer) clearTimeout(timer)
+        resolve(undefined as T)
+      }
     })
   }
 

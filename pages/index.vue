@@ -824,20 +824,16 @@ const fetchVendors = async () => {
       queryParams.search = globalFilter.value;
     }
 
-    const [recRes, trendRes, newRes, topRes] = await Promise.all([
-      vendors_api.getAll({ ...queryParams, sortBy: 'recommended' }),
+    const [trendRes, newRes] = await Promise.all([
       vendors_api.getAll({ ...queryParams, sortBy: 'trending' }),
-      vendors_api.getAll({ ...queryParams, sortBy: 'newest' }),
-      vendors_api.getAll({ ...queryParams, sortBy: 'rating' })
+      vendors_api.getAll({ ...queryParams, sortBy: 'newest' })
     ])
     
-    recommendedVendors.value = recRes.data?.vendors || recRes.data?.data?.vendors || recRes.data || []
     trendingVendors.value = trendRes.data?.vendors || trendRes.data?.data?.vendors || trendRes.data || []
     newVendors.value = newRes.data?.vendors || newRes.data?.data?.vendors || newRes.data || []
-    topRatedVendors.value = topRes.data?.vendors || topRes.data?.data?.vendors || topRes.data || []
     
     // Combine for promotions fallback
-    vendors.value = [...recommendedVendors.value, ...trendingVendors.value, ...newVendors.value, ...topRatedVendors.value]
+    vendors.value = [...trendingVendors.value, ...newVendors.value]
   } catch (e) {
     console.error('Failed to fetch vendors:', e)
   } finally {
@@ -985,12 +981,7 @@ const quickTags = [
 
 const heroVisuals = [hero1, hero14, hero12, hero2]
 
-const startSlangRotation = () => {
-  setInterval(() => {
-    currentSlangIndex.value = (currentSlangIndex.value + 1) % slangSlogans.length
-    currentHeadingIndex.value = (currentHeadingIndex.value + 1) % heroHeadings.length
-  }, 4000)
-}
+
 
 const handlePromoClick = async (promo: any) => {
   // If promo has a link to a specific product (format: product:ID)
@@ -1065,14 +1056,13 @@ const handleShareVendor = (vendor: any) => {
 };
 
 onMounted(() => {
- window.addEventListener('scroll', handleScroll)
- fetchVendors()
- fetchSuggestions()
- startSlangRotation()
- if (user.value) {
-   fetchFavorites()
-   fetchBookAgain()
- }
+  window.addEventListener('scroll', handleScroll)
+  fetchVendors()
+  fetchSuggestions()
+  if (user.value) {
+    fetchFavorites()
+    fetchBookAgain()
+  }
 })
 
 onUnmounted(() => {

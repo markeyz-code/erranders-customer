@@ -47,6 +47,19 @@ export const useDirectChat = (currentUserId: string, targetUserId: string, servi
   };
 
   const sendMessage = (text: string, type: 'text' | 'image' | 'voice' = 'text', attachment?: string) => {
+    const tempId = `temp_${Date.now()}`;
+    const optimisticMsg: Message = {
+      _id: tempId,
+      senderId: currentUserId,
+      receiverId: targetUserId,
+      message: text,
+      content: text,
+      messageType: type,
+      attachment,
+      createdAt: new Date().toISOString()
+    };
+    messages.value.push(optimisticMsg);
+
     emit('sendMessage', {
       roomId,
       roomType: 'direct',
@@ -106,6 +119,15 @@ export const useDirectChat = (currentUserId: string, targetUserId: string, servi
       const isRelevantService = msgServiceId === currentServiceIdStr;
 
       if (isRelevantUser && isRelevantService) {
+        // Match and replace optimistic message
+        if (sId === cId) {
+          const pendingIdx = messages.value.findIndex(m => m._id?.startsWith('temp_') && m.message === message.message);
+          if (pendingIdx !== -1) {
+            messages.value[pendingIdx] = message;
+            return;
+          }
+        }
+
         if (!message._id || !messages.value.some(m => m._id === message._id)) {
           messages.value.push(message);
         }

@@ -6,8 +6,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch } from 'vue';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
 
 const props = defineProps<{
   mapboxToken: string;
@@ -16,10 +14,11 @@ const props = defineProps<{
 }>();
 
 const mapContainer = ref<HTMLElement | null>(null);
-let map: mapboxgl.Map | null = null;
-let erranderMarker: mapboxgl.Marker | null = null;
-let pickupMarker: mapboxgl.Marker | null = null;
-let dropoffMarker: mapboxgl.Marker | null = null;
+let mapboxgl: any = null;
+let map: any = null;
+let erranderMarker: any = null;
+let pickupMarker: any = null;
+let dropoffMarker: any = null;
 
 // Parse coordinates from string "lat,lng" or standard object
 const parseCoords = (locStr: string): [number, number] | null => {
@@ -113,7 +112,20 @@ const fitBoundsToMarkers = () => {
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
+  if (!mapContainer.value) return;
+
+  try {
+    const [{ default: importedMapboxgl }] = await Promise.all([
+      import('mapbox-gl'),
+      import('mapbox-gl/dist/mapbox-gl.css')
+    ]);
+    mapboxgl = importedMapboxgl;
+  } catch (err) {
+    console.error('Failed to load Mapbox library', err);
+    return;
+  }
+
   if (!mapContainer.value) return;
 
   mapboxgl.accessToken = props.mapboxToken;

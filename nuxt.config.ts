@@ -75,14 +75,27 @@ export default defineNuxtConfig({
         { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
         { rel: "manifest", href: "/site.webmanifest" }
       ],
-      script: [
-        { src: "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js", type: "text/javascript" },
-      ],
+      script: [],
     },
   },
 
   build: {
     transpile: ["lucide-vue-next", "vue3-emoji-picker"],
+  },
+
+  vite: {
+    build: {
+      chunkSizeWarningLimit: 800,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules/firebase')) {
+              return 'firebase-vendor';
+            }
+          }
+        }
+      }
+    }
   },
 
   css: ["/assets/css/main.css", "/assets/font/stylesheet.css"],
