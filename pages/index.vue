@@ -197,10 +197,8 @@
 </Transition>
             </div>
 
-            <!-- Filters Row -->
             <div class="flex flex-wrap items-center justify-center gap-2 md:gap-3 mt-4 relative z-10">
-              <!-- Category Pill -->
-              <div class="relative" ref="categoryDropdownRef">
+              <!-- <div class="relative" ref="categoryDropdownRef">
                 <div 
                   @click="showCategoryDropdown = !showCategoryDropdown"
                   class="bg-white/80 backdrop-blur-sm border border-gray-50 rounded-full px-4 py-2 shadow-sm flex items-center gap-2 hover:border-parentPrimary/50 hover:bg-white cursor-pointer transition-all h-10"
@@ -212,7 +210,6 @@
                   <ChevronDown class="w-3.5 h-3.5 text-gray-400 transition-transform ml-0.5" :class="{ 'rotate-180': showCategoryDropdown }" />
                 </div>
                 
-                <!-- Category Dropdown -->
                 <Transition name="fade-up">
                   <div v-if="showCategoryDropdown" class="absolute top-full left-0 sm:left-1/2 sm:-translate-x-1/2 mt-2 bg-white border border-gray-50 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] z-[80] overflow-hidden max-h-[300px] overflow-y-auto w-56">
                     <button 
@@ -235,7 +232,7 @@
                     </button>
                   </div>
                 </Transition>
-              </div>
+              </div> -->
 
               <!-- Location Pill (Commented out as per request) -->
               <!--

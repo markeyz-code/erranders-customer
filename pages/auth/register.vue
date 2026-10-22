@@ -22,7 +22,7 @@
           type="button" 
           @click="handleGoogleSignUp" 
           :disabled="firebaseLoading" 
-          class="w-full py-4 px-5 bg-white hover:bg-gray-50 text-gray-900 border-2 border-gray-200 hover:border-gray-300 rounded-2xl flex items-center justify-center gap-3.5 font-bold text-sm sm:text-base transition-all shadow-sm active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed group"
+          class="w-full py-4 px-5 bg-white hover:bg-gray-50 text-gray-900 border border-gray-50 hover:border-gray-100 rounded-2xl flex items-center justify-center gap-3.5 font-bold text-sm sm:text-base transition-all shadow-sm active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed group"
         >
           <Loader2 v-if="firebaseLoading" class="animate-spin w-5 h-5 text-[#FF5C1A]" />
           <svg v-else class="w-5 h-5 shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">

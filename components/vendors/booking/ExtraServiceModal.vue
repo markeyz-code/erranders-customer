@@ -17,7 +17,7 @@
             v-for="(extra, idx) in service.extras" 
             :key="idx"
             @click="$emit('add', extra)"
-            class="w-full flex items-center text-left justify-between p-4 rounded-xl border-[0.5px] border-gray-100 hover:border-gray-300 transition-all bg-white group cursor-pointer"
+            class="w-full flex items-center text-left justify-between p-4 rounded-xl border-[0.5px] border-gray-50 hover:border-gray-100 transition-all bg-white group cursor-pointer"
           >
             <div>
               <p class="font-bold text-gray-900">{{ extra.name }}</p>

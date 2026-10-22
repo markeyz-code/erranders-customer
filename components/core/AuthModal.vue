@@ -39,7 +39,7 @@
                     <img src="@/assets/img/logo-light.png" class="w-auto h-10" alt="Errandr" />
                   </div>
                 </NuxtLink>
-                <DialogTitle as="h1" class="text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">
+                <DialogTitle as="h1" class="text-3xl font-extrabold text-gray-900 mb-3 tracking-tight">
                   Welcome back
                 </DialogTitle>
                 <p class="text-gray-500 text-lg">Sign in to complete your order and track deliveries</p>

@@ -554,22 +554,22 @@
             </div>
 
             <!-- Core Activity Grid (2x2) -->
-            <div class="space-y-2.5">
+            <div class="space-y-1.5">
               <span class="text-[11px] font-extrabold text-gray-400 uppercase tracking-wider px-1 block">Campus Essentials</span>
-              <div class="grid grid-cols-2 gap-2.5">
+              <div class="grid grid-cols-2 gap-2">
                 
                 <!-- Track Orders -->
                 <button 
                   type="button"
                   @click="openOrderModalFromMobile" 
-                  class="p-3.5 rounded-xl bg-white border border-[#E7E2DA] hover:border-gray-400 text-left transition-all active:scale-95 shadow-xs flex flex-col justify-between"
+                  class="p-2.5 rounded-xl bg-white border border-[#E7E2DA] hover:border-[#FF5C1A]/40 text-left transition-all active:scale-95 shadow-2xs flex items-center gap-2.5 group"
                 >
-                  <div class="w-8 h-8 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-700 mb-2">
-                    <Package class="w-4 h-4" />
+                  <div class="w-7 h-7 rounded-lg bg-orange-50 border border-orange-100/80 flex items-center justify-center text-[#FF5C1A] shrink-0 group-hover:scale-105 transition-transform">
+                    <Package class="w-3.5 h-3.5" />
                   </div>
-                  <div>
-                    <span class="block text-xs font-bold text-gray-900">Track Orders</span>
-                    <span class="block text-[10px] text-gray-500 font-medium mt-0.5">Live order statuses</span>
+                  <div class="min-w-0 flex-1">
+                    <span class="block text-xs font-bold text-gray-900 truncate group-hover:text-[#FF5C1A] transition-colors">Track Orders</span>
+                    <span class="block text-[10px] text-gray-500 font-medium truncate">Live status</span>
                   </div>
                 </button>
 
@@ -577,14 +577,14 @@
                 <button 
                   type="button"
                   @click="openBookingModalFromMobile" 
-                  class="p-3.5 rounded-xl bg-white border border-[#E7E2DA] hover:border-gray-400 text-left transition-all active:scale-95 shadow-xs flex flex-col justify-between"
+                  class="p-2.5 rounded-xl bg-white border border-[#E7E2DA] hover:border-[#FF5C1A]/40 text-left transition-all active:scale-95 shadow-2xs flex items-center gap-2.5 group"
                 >
-                  <div class="w-8 h-8 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-700 mb-2">
-                    <Calendar class="w-4 h-4" />
+                  <div class="w-7 h-7 rounded-lg bg-purple-50 border border-purple-100/80 flex items-center justify-center text-purple-700 shrink-0 group-hover:scale-105 transition-transform">
+                    <Calendar class="w-3.5 h-3.5" />
                   </div>
-                  <div>
-                    <span class="block text-xs font-bold text-gray-900">Bookings</span>
-                    <span class="block text-[10px] text-gray-500 font-medium mt-0.5">Services & slots</span>
+                  <div class="min-w-0 flex-1">
+                    <span class="block text-xs font-bold text-gray-900 truncate group-hover:text-purple-700 transition-colors">Bookings</span>
+                    <span class="block text-[10px] text-gray-500 font-medium truncate">Services & slots</span>
                   </div>
                 </button>
 
@@ -592,14 +592,14 @@
                 <NuxtLink 
                   to="/dashboard/group-orders" 
                   @click="closeMobileMenu"
-                  class="p-3.5 rounded-xl bg-white border border-[#E7E2DA] hover:border-gray-400 text-left transition-all active:scale-95 shadow-xs flex flex-col justify-between"
+                  class="p-2.5 rounded-xl bg-white border border-[#E7E2DA] hover:border-[#FF5C1A]/40 text-left transition-all active:scale-95 shadow-2xs flex items-center gap-2.5 group"
                 >
-                  <div class="w-8 h-8 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-700 mb-2">
-                    <Users class="w-4 h-4" />
+                  <div class="w-7 h-7 rounded-lg bg-blue-50 border border-blue-100/80 flex items-center justify-center text-blue-600 shrink-0 group-hover:scale-105 transition-transform">
+                    <Users class="w-3.5 h-3.5" />
                   </div>
-                  <div>
-                    <span class="block text-xs font-bold text-gray-900">Group Orders</span>
-                    <span class="block text-[10px] text-gray-500 font-medium mt-0.5">Pool with flatmates</span>
+                  <div class="min-w-0 flex-1">
+                    <span class="block text-xs font-bold text-gray-900 truncate group-hover:text-blue-600 transition-colors">Group Orders</span>
+                    <span class="block text-[10px] text-gray-500 font-medium truncate">Pool with friends</span>
                   </div>
                 </NuxtLink>
 
@@ -607,14 +607,14 @@
                 <NuxtLink 
                   to="/market-pool" 
                   @click="closeMobileMenu"
-                  class="p-3.5 rounded-xl bg-white border border-[#E7E2DA] hover:border-gray-400 text-left transition-all active:scale-95 shadow-xs flex flex-col justify-between"
+                  class="p-2.5 rounded-xl bg-white border border-[#E7E2DA] hover:border-[#FF5C1A]/40 text-left transition-all active:scale-95 shadow-2xs flex items-center gap-2.5 group"
                 >
-                  <div class="w-8 h-8 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-700 mb-2">
-                    <ShoppingBag class="w-4 h-4" />
+                  <div class="w-7 h-7 rounded-lg bg-emerald-50 border border-emerald-100/80 flex items-center justify-center text-emerald-600 shrink-0 group-hover:scale-105 transition-transform">
+                    <ShoppingBag class="w-3.5 h-3.5" />
                   </div>
-                  <div>
-                    <span class="block text-xs font-bold text-gray-900">Market Pool</span>
-                    <span class="block text-[10px] text-gray-500 font-medium mt-0.5">Bulk price drops</span>
+                  <div class="min-w-0 flex-1">
+                    <span class="block text-xs font-bold text-gray-900 truncate group-hover:text-emerald-600 transition-colors">Market Pool</span>
+                    <span class="block text-[10px] text-gray-500 font-medium truncate">Bulk price drops</span>
                   </div>
                 </NuxtLink>
 

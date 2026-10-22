@@ -1,5 +1,5 @@
 <template>
-  <section class="relative border-b border-slate-100 min-h-[calc(100dvh-3.5rem)] flex flex-col justify-center px-4 sm:px-6 lg:px-8 py-12 sm:py-16 overflow-hidden bg-gradient-to-b from-slate-50/70 via-white to-white">
+  <section class="relative border-b border-slate-100 min-h-[calc(100dvh-3.5rem)] flex flex-col justify-start sm:justify-center px-4 sm:px-6 lg:px-8 pt-28 pb-12 sm:pt-36 sm:pb-16 md:pt-40 md:pb-20 overflow-hidden bg-gradient-to-b from-slate-50/70 via-white to-white">
     <!-- Organic shapes, defined once and reused as clip paths. -->
     <svg class="absolute h-0 w-0 overflow-hidden" aria-hidden="true">
       <defs>
@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <div class="relative z-10 mx-auto w-full max-w-5xl text-center space-y-6">
+    <div class="relative z-10 mx-auto w-full mt-6 max-w-5xl text-center space-y-6">
       <!-- Dynamic Multilingual Rotating Content with Slow Fade-in / Fade-out -->
       <div class="min-h-[200px] sm:min-h-[220px] md:min-h-[240px] flex flex-col justify-center items-center">
         <Transition name="slow-fade" mode="out-in">

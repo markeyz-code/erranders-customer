@@ -259,7 +259,7 @@
  <div class="flex-1 min-w-0">
  <div class="flex justify-between items-start mb-1">
  <div>
- <p class="text-sm font-bold text-gray-900 truncate tracking-tight">{{ item.name }}</p>
+ <p class="text-sm font-bold text-gray-900 truncate tracking-tight">{{ getItemDisplayName(item) }}</p>
  <p v-if="item.customizations?.length" class="text-[10px] font-medium text-gray-400 mt-0.5">Base: ₦{{ item.price?.toLocaleString() }}</p>
  </div>
  <p class="text-sm font-bold text-gray-900 shrink-0">₦{{ item.price?.toLocaleString() }} <span class="text-gray-400 ml-0.5">×{{ item.quantity }}</span></p>
@@ -267,7 +267,7 @@
  
  <div v-if="item.customizations?.length" class="mt-1.5 mb-2 pl-2 border-l-2 border-gray-100 space-y-1">
  <p v-for="(c, cIdx) in getGroupedCustomizations(item.customizations)" :key="cIdx" class="text-[10px] font-medium text-gray-500 flex justify-between">
- <span class="truncate pr-2">{{ c.quantity > 1 ? c.quantity + 'x ' : '' }}{{ c.name }}</span>
+ <span class="truncate pr-2">• {{ c.quantity > 1 ? c.quantity + 'x ' : '' }}{{ formatCustomizationLabel(c) }}</span>
  <span v-if="c.price > 0" class="text-gray-400 shrink-0">+₦{{ c.price.toLocaleString() }}</span>
  </p>
  </div>
@@ -289,7 +289,7 @@
  <div class="flex-1 min-w-0">
  <div class="flex justify-between items-start mb-1">
  <div>
- <p class="text-sm font-bold text-gray-900 truncate tracking-tight">{{ item.name }}</p>
+ <p class="text-sm font-bold text-gray-900 truncate tracking-tight">{{ getItemDisplayName(item) }}</p>
  <p v-if="item.customizations?.length" class="text-[10px] font-medium text-gray-400 mt-0.5">Base: ₦{{ item.price?.toLocaleString() }}</p>
  </div>
  <p class="text-sm font-bold text-gray-900 shrink-0">₦{{ item.price?.toLocaleString() }} <span class="text-gray-400 ml-0.5">×{{ item.quantity }}</span></p>
@@ -297,7 +297,7 @@
  
  <div v-if="item.customizations?.length" class="mt-1.5 mb-2 pl-2 border-l-2 border-gray-100 space-y-1">
  <p v-for="(c, cIdx) in getGroupedCustomizations(item.customizations)" :key="cIdx" class="text-[10px] font-medium text-gray-500 flex justify-between">
- <span class="truncate pr-2">{{ c.quantity > 1 ? c.quantity + 'x ' : '' }}{{ c.name }}</span>
+ <span class="truncate pr-2">• {{ c.quantity > 1 ? c.quantity + 'x ' : '' }}{{ formatCustomizationLabel(c) }}</span>
  <span v-if="c.price > 0" class="text-gray-400 shrink-0">+₦{{ c.price.toLocaleString() }}</span>
  </p>
  </div>
@@ -879,18 +879,74 @@ const route = useRoute();
 const router = useRouter();
 const { confirm } = useConfirmModal();
 
+const getItemDisplayName = (item: any): string => {
+  if (!item?.name) return '';
+  const rawName = item.name.trim();
+  if (!item.customizations?.length) return rawName;
+
+  const isBread = /bread/i.test(rawName);
+  const colorCust = item.customizations.find((c: any) => 
+    /color/i.test(c.selected || '') || 
+    /^(brown|white|wheat)$/i.test(c.name?.trim() || '')
+  );
+  const sizeCust = item.customizations.find((c: any) => 
+    /size|price|portion/i.test(c.selected || '') ||
+    (/^\d+$/.test(c.name?.trim() || '') && Number(c.name) >= 100)
+  );
+
+  if (isBread && (colorCust || sizeCust)) {
+    const details: string[] = [];
+    if (colorCust) details.push(colorCust.name.trim());
+    if (sizeCust) {
+      const val = sizeCust.name.trim();
+      details.push(/^\d+$/.test(val) ? `₦${Number(val).toLocaleString()} Loaf` : val);
+    }
+    return `${rawName} (${details.join(' · ')})`;
+  }
+
+  return rawName;
+};
+
+const formatCustomizationLabel = (custom: any): string => {
+  if (!custom) return '';
+  const name = String(custom.name || '').trim();
+  const selected = String(custom.selected || '').trim();
+
+  if (/size/i.test(selected) && /^\d+$/.test(name)) {
+    return `${selected}: ₦${Number(name).toLocaleString()} Loaf`;
+  }
+
+  if (/^\d+$/.test(name) && Number(name) >= 50) {
+    if (selected) {
+      return `${selected}: ₦${Number(name).toLocaleString()}`;
+    }
+    return `Size: ₦${Number(name).toLocaleString()}`;
+  }
+
+  if (/color|type|flavor|protein|variant/i.test(selected)) {
+    return `${selected}: ${name}`;
+  }
+
+  if (selected && !/^(add-on|add-ons|extra|extras|customization|customizations)$/i.test(selected) && selected.toLowerCase() !== name.toLowerCase()) {
+    return `${selected}: ${name}`;
+  }
+
+  return name;
+};
+
 const getGroupedCustomizations = (customizations: any[]) => {
- if (!customizations) return [];
- const grouped: Record<string, any> = {};
- customizations.forEach(c => {
- if (grouped[c.name]) {
- grouped[c.name].quantity += 1;
- grouped[c.name].price += c.price;
- } else {
- grouped[c.name] = { ...c, quantity: 1 };
- }
- });
- return Object.values(grouped);
+  if (!customizations) return [];
+  const grouped: Record<string, any> = {};
+  customizations.forEach(c => {
+    const key = `${c.selected || ''}_${c.name}`;
+    if (grouped[key]) {
+      grouped[key].quantity += 1;
+      grouped[key].price += c.price;
+    } else {
+      grouped[key] = { ...c, quantity: 1 };
+    }
+  });
+  return Object.values(grouped);
 };
 const order = ref<any>(null);
 const loading = ref(true);

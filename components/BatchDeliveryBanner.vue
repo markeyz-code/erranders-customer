@@ -1,63 +1,132 @@
 <template>
-  <Transition name="slam-in">
-    <div
-      v-if="status?.isActive"
-      class="batch-banner"
-      :class="{ dismissed: isDismissing }"
+  <Transition name="toast-slide">
+    <aside
+      v-if="status?.isActive && !isDismissed"
+      class="batch-toast-wrapper"
+      :class="{ 'is-dismissing': isDismissing }"
+      role="region"
+      aria-label="Batch Delivery Window"
     >
-      <!-- Animated border glow -->
-      <div class="border-beam" />
+      <div class="batch-toast-card">
+        <!-- Ambient top radiant accent -->
+        <div class="toast-shimmer-top" />
 
-      <div class="banner-inner">
-        <!-- LEFT: Icon + Status pill -->
-        <div class="banner-left">
-          <div class="icon-pod">
-            <Rocket class="rocket-icon" />
-            <span class="icon-ring" />
+        <div class="toast-content" @click="handleCardClick">
+          <!-- Left: Rocket Icon Pod -->
+          <div class="toast-icon-pod" title="Fast Batch Delivery">
+            <Rocket class="toast-rocket" />
+            <span class="icon-pulse-ring" />
           </div>
 
-          <div class="status-text">
-            <div class="live-chip">
-              <span class="live-dot" />
-              LIVE
+          <!-- Middle: Status & Message -->
+          <div class="toast-details">
+            <div class="toast-badge-row">
+              <span class="live-indicator">
+                <span class="live-dot" />
+                <span class="live-label">LIVE</span>
+              </span>
+              <span class="time-chip">
+                <Clock class="time-chip-icon" />
+                <span>Until {{ displayTime }}</span>
+              </span>
+              <span class="dispatch-chip">Priority Dispatch</span>
             </div>
-            <p class="headline">{{ status.message }}</p>
-            <p class="subline">
-              Until <strong>{{ status.end || '10:00' }}</strong>
-              &nbsp;·&nbsp; Priority Dispatch
-            </p>
-          </div>
-        </div>
 
-        <!-- RIGHT: CTA + Dismiss -->
-        <div class="banner-right">
-          <button class="cta-btn" @click="scrollToVendors">
-            <span>Plan My Day</span>
-            <ArrowRight class="btn-arrow" />
-          </button>
-          <button class="dismiss-btn" @click="dismiss" aria-label="Dismiss">
-            <X class="x-icon" />
-          </button>
+            <div class="toast-text-row">
+              <span class="toast-title">{{ displayTitle }}</span>
+              <span class="toast-subtext">· Fast campus delivery</span>
+            </div>
+          </div>
+
+          <!-- Right: Actions (CTA + Dismiss) -->
+          <div class="toast-actions">
+            <button
+              type="button"
+              class="toast-cta-button"
+              @click.stop="scrollToVendors"
+              aria-label="Plan My Day"
+            >
+              <span>Plan Day</span>
+              <ArrowRight class="cta-arrow-icon" />
+            </button>
+
+            <button
+              type="button"
+              class="toast-close-button"
+              @click.stop="dismiss"
+              aria-label="Close notification and do not show again"
+              title="Don't show again"
+            >
+              <X class="close-x-icon" />
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </aside>
   </Transition>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { Rocket, X, ArrowRight } from 'lucide-vue-next';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { Rocket, X, ArrowRight, Clock } from 'lucide-vue-next';
 import { orders_api } from '@/api_factory/modules/orders';
+
+const DISMISS_KEY = 'errandr_morning_batch_toast_closed_v1';
 
 const status = ref<any>(null);
 const isDismissed = ref(false);
 const isDismissing = ref(false);
+let intervalId: any = null;
+
+const displayTitle = computed(() => {
+  if (status.value?.type === 'morning') return 'Morning Batch Delivery';
+  if (status.value?.type === 'afternoon') return 'Afternoon Batch Delivery';
+  return 'Batch Delivery Active';
+});
+
+const displayTime = computed(() => {
+  const endTime = status.value?.end;
+  if (!endTime) return '10:00 AM';
+  const parts = endTime.split(':');
+  if (parts.length >= 2) {
+    const hour = parseInt(parts[0], 10);
+    const minute = parts[1];
+    if (!isNaN(hour)) {
+      const ampm = hour >= 12 ? 'PM' : 'AM';
+      const displayHour = hour % 12 || 12;
+      return `${displayHour}:${minute} ${ampm}`;
+    }
+  }
+  return endTime;
+});
+
+const isAlreadyDismissed = (): boolean => {
+  try {
+    if (typeof window !== 'undefined') {
+      // Secret developer reset param (?reset_batch=1) to clear dismissal if needed during testing
+      if (new URLSearchParams(window.location.search).has('reset_batch')) {
+        localStorage.removeItem(DISMISS_KEY);
+        return false;
+      }
+      return localStorage.getItem(DISMISS_KEY) === 'true';
+    }
+  } catch (e) {
+    return false;
+  }
+  return false;
+};
 
 const checkStatus = async () => {
-  if (isDismissed.value) return;
+  if (isDismissed.value || isAlreadyDismissed()) {
+    isDismissed.value = true;
+    return;
+  }
+
   try {
     const res = await orders_api.getBatchStatus();
-    if (res?.data) status.value = res.data;
+    if (res?.data) {
+      status.value = res.data;
+    }
   } catch (e) {
     console.error('Failed to fetch batch status', e);
   }
@@ -65,345 +134,412 @@ const checkStatus = async () => {
 
 const dismiss = () => {
   isDismissing.value = true;
+  try {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(DISMISS_KEY, 'true');
+    }
+  } catch (e) {
+    console.warn('Unable to persist batch toast dismissal', e);
+  }
+
   setTimeout(() => {
-    if (status.value) status.value.isActive = false;
     isDismissed.value = true;
+    if (status.value) {
+      status.value.isActive = false;
+    }
     isDismissing.value = false;
-  }, 400);
+  }, 320);
 };
 
-const scrollToVendors = () => navigateTo('/vendors');
+const scrollToVendors = () => {
+  navigateTo('/vendors');
+};
+
+const handleCardClick = () => {
+  scrollToVendors();
+};
 
 onMounted(() => {
+  if (isAlreadyDismissed()) {
+    isDismissed.value = true;
+    return;
+  }
+
   checkStatus();
-  setInterval(checkStatus, 5 * 60 * 1000);
+  intervalId = setInterval(checkStatus, 5 * 60 * 1000);
+});
+
+onUnmounted(() => {
+  if (intervalId) {
+    clearInterval(intervalId);
+    intervalId = null;
+  }
 });
 </script>
 
 <style scoped>
-/* ─── Layout ─────────────────────────────────────────────── */
-.batch-banner {
+/* ─── Floating Toast Wrapper ─────────────────────────────── */
+.batch-toast-wrapper {
   position: fixed;
-  top: 0;
+  top: max(14px, env(safe-area-inset-top, 14px));
   left: 0;
   right: 0;
-  z-index: 100;
-  padding: 10px 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 12px;
+  z-index: 9999;
   pointer-events: none;
 }
 
-.banner-inner {
+/* ─── Card Design ────────────────────────────────────────── */
+.batch-toast-card {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 10px 12px 10px 10px;
-  border-radius: 20px;
-  background: #0a0a0f;
-  border: 1px solid rgba(255,255,255,0.08);
+  width: 100%;
+  max-width: 540px;
   pointer-events: auto;
+  border-radius: 18px;
+  background: rgba(14, 16, 22, 0.92);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    0 16px 36px -8px rgba(0, 0, 0, 0.55),
+    0 0 20px -2px rgba(249, 115, 22, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
   overflow: hidden;
-
-  /* subtle inner light */
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.06),
-    0 24px 48px -8px rgba(0,0,0,0.5);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
-/* ─── Animated border beam ───────────────────────────────── */
-.border-beam {
+.batch-toast-card:hover {
+  border-color: rgba(249, 115, 22, 0.35);
+  box-shadow: 
+    0 20px 42px -8px rgba(0, 0, 0, 0.65),
+    0 0 28px -2px rgba(249, 115, 22, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* ─── Top Glow Accent ────────────────────────────────────── */
+.toast-shimmer-top {
   position: absolute;
-  inset: -1px;
-  border-radius: 21px;
-  background: conic-gradient(
-    from var(--beam-angle, 0deg),
-    transparent 0deg,
-    #f97316 60deg,
-    #fb923c 90deg,
-    transparent 120deg
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  padding: 1px;
-  animation: beam-spin 4s linear infinite;
-  opacity: 0.6;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent 0%, rgba(249, 115, 22, 0.8) 50%, rgba(251, 146, 60, 0.9) 70%, transparent 100%);
   pointer-events: none;
 }
 
-@property --beam-angle {
-  syntax: '<angle>';
-  inherits: false;
-  initial-value: 0deg;
-}
-
-@keyframes beam-spin {
-  to { --beam-angle: 360deg; }
-}
-
-/* ─── Left section ───────────────────────────────────────── */
-.banner-left {
+/* ─── Inner Content ──────────────────────────────────────── */
+.toast-content {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  padding: 9px 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ─── Icon Pod ───────────────────────────────────────────── */
+.toast-icon-pod {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ff5c1a 0%, #ea580c 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.toast-rocket {
+  width: 19px;
+  height: 19px;
+  color: #ffffff;
+  animation: rocket-sway 3s ease-in-out infinite;
+}
+
+.icon-pulse-ring {
+  position: absolute;
+  inset: -3px;
+  border-radius: 15px;
+  border: 1px solid rgba(249, 115, 22, 0.4);
+  animation: pulse-grow 2.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes rocket-sway {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-2px) rotate(-6deg); }
+}
+
+@keyframes pulse-grow {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 0.2; transform: scale(1.14); }
+}
+
+/* ─── Details Section ────────────────────────────────────── */
+.toast-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   min-width: 0;
   flex: 1;
 }
 
-/* Icon pod */
-.icon-pod {
-  position: relative;
-  flex-shrink: 0;
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+.toast-badge-row {
   display: flex;
   align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 0 1px rgba(249,115,22,0.3), 0 8px 16px -4px rgba(249,115,22,0.4);
+  gap: 6px;
+  flex-wrap: nowrap;
 }
 
-.rocket-icon {
-  width: 20px;
-  height: 20px;
-  color: #fff;
-  animation: float 2.5s ease-in-out infinite;
-}
-
-.icon-ring {
-  position: absolute;
-  inset: -4px;
-  border-radius: 18px;
-  border: 1px solid rgba(249,115,22,0.25);
-  animation: ring-pulse 2.5s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-3px) rotate(-8deg); }
-}
-
-@keyframes ring-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.3; transform: scale(1.15); }
-}
-
-/* Status text */
-.status-text {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.live-chip {
+.live-indicator {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  background: rgba(16,185,129,0.12);
-  border: 1px solid rgba(16,185,129,0.25);
+  gap: 4px;
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.35);
   border-radius: 100px;
-  padding: 2px 8px 2px 5px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: #10b981;
-  width: fit-content;
-  margin-bottom: 2px;
+  padding: 1.5px 6px;
+  color: #34d399;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1;
 }
 
 .live-dot {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: #10b981;
-  animation: dot-blink 1.4s ease-in-out infinite;
+  box-shadow: 0 0 6px #10b981;
+  animation: dot-glow 1.5s ease-in-out infinite;
   flex-shrink: 0;
 }
 
-@keyframes dot-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.2; }
+@keyframes dot-glow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.85); }
 }
 
-.headline {
-  margin: 0;
-  font-size: 13px;
+.time-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3.5px;
+  font-size: 11px;
   font-weight: 600;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.7);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.time-chip-icon {
+  width: 12px;
+  height: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+}
+
+.dispatch-chip {
+  display: inline-flex;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #ff8a4c;
+  background: rgba(255, 92, 26, 0.12);
+  border: 1px solid rgba(255, 92, 26, 0.25);
+  padding: 1.5px 6px;
+  border-radius: 100px;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.toast-text-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+}
+
+.toast-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.toast-subtext {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.45);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 1.3;
 }
 
-.subline {
-  margin: 0;
-  font-size: 11px;
-  color: rgba(255,255,255,0.4);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 1.4;
-}
-
-.subline strong {
-  color: rgba(255,255,255,0.7);
-  font-weight: 600;
-}
-
-/* ─── Right section ──────────────────────────────────────── */
-.banner-right {
+/* ─── Actions ────────────────────────────────────────────── */
+.toast-actions {
   display: flex;
   align-items: center;
   gap: 6px;
   flex-shrink: 0;
 }
 
-/* CTA */
-.cta-btn {
+.toast-cta-button {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-  border: none;
-  color: #fff;
+  gap: 5px;
+  padding: 7px 12px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, #ff5c1a 0%, #ea580c 100%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #ffffff;
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   cursor: pointer;
   white-space: nowrap;
-  box-shadow: 0 4px 12px -2px rgba(249,115,22,0.5);
+  box-shadow: 0 4px 12px -2px rgba(249, 115, 22, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.cta-btn:hover {
-  transform: scale(1.04);
-  box-shadow: 0 6px 20px -2px rgba(249,115,22,0.65);
+.toast-cta-button:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 16px -2px rgba(249, 115, 22, 0.65);
 }
 
-.cta-btn:active {
+.toast-cta-button:active {
   transform: scale(0.97);
 }
 
-.btn-arrow {
+.cta-arrow-icon {
   width: 13px;
   height: 13px;
-  flex-shrink: 0;
+  transition: transform 0.2s ease;
 }
 
-/* Dismiss */
-.dismiss-btn {
+.toast-cta-button:hover .cta-arrow-icon {
+  transform: translateX(2px);
+}
+
+.toast-close-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   border-radius: 9px;
-  border: 1px solid rgba(255,255,255,0.08);
-  background: transparent;
-  color: rgba(255,255,255,0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.4);
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: all 0.15s ease;
   flex-shrink: 0;
 }
 
-.dismiss-btn:hover {
-  background: rgba(255,255,255,0.08);
-  color: rgba(255,255,255,0.8);
+.toast-close-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
-.x-icon {
+.close-x-icon {
   width: 13px;
   height: 13px;
 }
 
-/* ─── Transitions ────────────────────────────────────────── */
-.slam-in-enter-active {
-  transition: all 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+/* ─── Responsive Adjustments ─────────────────────────────── */
+@media (max-width: 480px) {
+  .batch-toast-wrapper {
+    padding: 0 10px;
+  }
+
+  .toast-content {
+    gap: 10px;
+    padding: 8px 10px;
+  }
+
+  .toast-icon-pod {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+  }
+
+  .toast-rocket {
+    width: 17px;
+    height: 17px;
+  }
+
+  .toast-title {
+    font-size: 12.5px;
+  }
+
+  .toast-subtext {
+    display: none;
+  }
+
+  .dispatch-chip {
+    display: none;
+  }
+
+  .toast-cta-button {
+    padding: 6px 10px;
+    font-size: 11.5px;
+    border-radius: 9px;
+  }
+
+  .toast-close-button {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+  }
 }
-.slam-in-leave-active {
+
+@media (max-width: 350px) {
+  .time-chip {
+    font-size: 10px;
+  }
+  
+  .toast-cta-button span {
+    display: none;
+  }
+  
+  .toast-cta-button {
+    padding: 6px 8px;
+  }
+}
+
+/* ─── Transitions ────────────────────────────────────────── */
+.toast-slide-enter-active {
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toast-slide-leave-active {
   transition: all 0.35s cubic-bezier(0.4, 0, 1, 1);
 }
-.slam-in-enter-from {
-  transform: translateY(-110%) scale(0.92);
+
+.toast-slide-enter-from {
   opacity: 0;
+  transform: translateY(-28px) scale(0.95);
   filter: blur(4px);
 }
-.slam-in-leave-to {
-  transform: translateY(-24px) scale(0.96);
+
+.toast-slide-leave-to {
   opacity: 0;
+  transform: translateY(-24px) scale(0.96);
   filter: blur(2px);
 }
 
-.batch-banner.dismissed .banner-inner {
+.batch-toast-wrapper.is-dismissing .batch-toast-card {
   opacity: 0;
-  transform: scale(0.95);
-  transition: all 0.35s ease;
-}
-
-/* ─── Mobile ─────────────────────────────────────────────── */
-@media (max-width: 520px) {
-  .batch-banner {
-    padding: 8px;
-  }
-
-  .banner-inner {
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 10px 10px 10px 10px;
-    border-radius: 16px;
-  }
-
-  .banner-left {
-    /* takes full width on mobile, right section goes below */
-    flex: 1 1 100%;
-  }
-
-  .banner-right {
-    flex: 1 1 100%;
-    /* CTA stretches, dismiss floats right */
-    justify-content: space-between;
-  }
-
-  .cta-btn {
-    flex: 1;
-    justify-content: center;
-    padding: 10px 14px;
-    font-size: 13px;
-  }
-
-  .dismiss-btn {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
-  }
-
-  .x-icon {
-    width: 15px;
-    height: 15px;
-  }
-
-  .headline {
-    font-size: 13px;
-  }
-
-  .icon-pod {
-    width: 40px;
-    height: 40px;
-    border-radius: 13px;
-  }
-}
-
-@media (max-width: 360px) {
-  .subline {
-    display: none;
-  }
+  transform: scale(0.92) translateY(-10px);
+  transition: all 0.32s cubic-bezier(0.4, 0, 1, 1);
 }
 </style>
