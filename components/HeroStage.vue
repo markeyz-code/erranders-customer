@@ -19,46 +19,6 @@
     <div class="pointer-events-none absolute inset-0 overflow-hidden">
       <div class="absolute -top-32 -left-32 w-96 h-96 bg-[#FF5C1A]/10 rounded-full blur-3xl pointer-events-none"></div>
       <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>
-      <!-- ═══ DESKTOP-ONLY FLOATING ORGANIC HERO IMAGES (Strictly hidden on Mobile) ═══ -->
-      <!-- Card 1: Top Right Floating Photo (Student receiving hot food delivery in hostel) -->
-      <div class="hidden lg:block absolute top-12 right-4 xl:right-12 z-20 group cursor-pointer transition-all duration-500 hover:scale-105">
-        <div class="relative w-44 h-44 xl:w-52 xl:h-52 drop-shadow-2xl">
-          <div class="w-full h-full overflow-hidden rounded-[2.5rem] border-4 border-white shadow-xl bg-slate-100">
-            <img
-              src="/img/hero_student_delivery.jpg"
-              alt="Student receiving food delivery in hostel"
-              class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-115"
-            />
-          </div>
-          <!-- Cute Top Badge -->
-          <div class="absolute -top-3 -right-2 px-2.5 py-1 rounded-full bg-[#FF5C1A] text-white text-[10px] font-black shadow-md flex items-center gap-1">
-            <span>🛵</span> Doorstep Delivery
-          </div>
-          <!-- Micro Caption Pill -->
-          <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap px-3.5 py-1.5 bg-white/95 backdrop-blur-md rounded-full border border-slate-200/90 shadow-md text-xs font-black text-slate-800 flex items-center gap-1.5 transition-transform group-hover:scale-105">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>🍲 Jollof Pack Delivered</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 2: Bottom Left Floating Photo (You Stay, We Run) -->
-      <div class="hidden lg:block absolute bottom-8 left-4 xl:left-12 z-20 group cursor-pointer transition-all duration-500 hover:scale-105">
-        <div class="relative w-36 h-36 xl:w-44 xl:h-44 drop-shadow-xl">
-          <div class="w-full h-full overflow-hidden rounded-[2.2rem] border-3 border-white shadow-lg bg-slate-100">
-            <img
-              src="/img/hero_student_delivery.jpg"
-              alt="You Stay, We Run on campus"
-              class="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-110"
-            />
-          </div>
-          <!-- Micro Caption Pill -->
-          <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1 bg-white/95 backdrop-blur-md rounded-full border border-slate-200/90 shadow-md text-[11px] font-black text-slate-800 flex items-center gap-1.5">
-            <span class="text-amber-500">✨</span>
-            <span>You Stay, We Run</span>
-          </div>
-        </div>
-      </div>
 
       <div class="hidden lg:block">
         <div class="absolute left-[5%] top-[16%] h-24 w-24 bg-[#FF5C1A]/15 [clip-path:url(#hero-flower-12)] animate-[float_7s_ease-in-out_infinite]" />
@@ -69,114 +29,30 @@
     </div>
 
     <div class="relative z-10 mx-auto w-full max-w-5xl text-center space-y-6">
-      <!-- Top Eyebrow: Relatable Campus Hook + Language Selector -->
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
-        <div class="inline-flex items-center gap-2 rounded-full border border-[#FF5C1A]/25 bg-[#FF5C1A]/10 px-4 py-1.5 text-xs font-bold text-[#FF5C1A] shadow-2xs">
-          <span class="h-2 w-2 animate-pulse rounded-full bg-[#FF5C1A]" />
-          <span>The sun is outside fighting everybody? 😭☀️ Omo, rest!</span>
-          <span class="hidden md:inline text-slate-400 font-mono">•</span>
-          <span class="hidden md:inline font-black text-slate-900">YOU STAY, WE RUN 🧡</span>
-        </div>
+      <!-- Dynamic Multilingual Rotating Content with Slow Fade-in / Fade-out -->
+      <div class="min-h-[200px] sm:min-h-[220px] md:min-h-[240px] flex flex-col justify-center items-center">
+        <Transition name="slow-fade" mode="out-in">
+          <div :key="currentPhraseIndex" class="space-y-4 max-w-4xl mx-auto flex flex-col items-center">
+            <!-- Top Eyebrow Badge (Relatable Hook) -->
+            <div class="inline-flex items-center gap-2 rounded-full border border-[#FF5C1A]/25 bg-[#FF5C1A]/10 px-4 py-1.5 text-xs font-bold text-[#FF5C1A] shadow-2xs">
+              <span class="h-2 w-2 animate-pulse rounded-full bg-[#FF5C1A]" />
+              <span>{{ currentMessage.eyebrow }}</span>
+            </div>
 
-        <!-- Interactive Multilingual Tabs -->
-        <div class="flex items-center gap-1 bg-slate-100/90 p-1 rounded-full border border-slate-200/80 backdrop-blur-xs">
-          <button
-            v-for="lang in languageOptions"
-            :key="lang.id"
-            @click="selectLanguage(lang.id)"
-            :class="[
-              activeLangFilter === lang.id
-                ? 'bg-slate-900 text-white shadow-xs font-bold'
-                : 'text-slate-600 hover:text-slate-900 font-semibold hover:bg-white/60'
-            ]"
-            class="px-2.5 py-1 rounded-full text-[11px] sm:text-xs transition-all flex items-center gap-1 cursor-pointer"
-          >
-            <span>{{ lang.flag }}</span>
-            <span>{{ lang.label }}</span>
-          </button>
-        </div>
-      </div>
+            <!-- Bolder Main Headline (Changes across languages and campus slang) -->
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black leading-[1.12] tracking-tight text-slate-900 max-w-4xl mx-auto">
+              {{ currentMessage.headlinePrefix }}
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#FF5C1A] via-amber-500 to-[#FF4500] block sm:inline">
+                {{ currentMessage.headlineHighlight }}
+              </span>
+            </h1>
 
-      <!-- Main Headline: Student Relatable Question & Solution -->
-      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black leading-[1.08] tracking-tight text-slate-900 max-w-4xl mx-auto">
-        Why stress yourself on campus?
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#FF5C1A] via-amber-500 to-[#FF4500] block sm:inline">
-          Just Errand It! 🛵💨
-        </span>
-      </h1>
-
-      <!-- Dynamic Typewriter Showcase Box -->
-      <div class="max-w-3xl mx-auto py-1">
-        <!-- Live Badges: Language + Feature Indicator -->
-        <div class="flex flex-wrap items-center justify-center gap-2 mb-2.5">
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border shadow-2xs" :class="currentPhrase.badgeClass">
-            <span>{{ currentPhrase.flag }}</span>
-            <span class="uppercase tracking-wider font-mono text-[10px]">{{ currentPhrase.lang }}</span>
-          </span>
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800 border border-slate-200">
-            <span>{{ currentPhrase.icon }}</span>
-            <span>{{ currentPhrase.feature }}</span>
-          </span>
-        </div>
-
-        <!-- Question Prompt -->
-        <p class="text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-wider mb-1">
-          👀 {{ currentPhrase.question }}
-        </p>
-
-        <!-- Typed Answer Text -->
-        <div class="min-h-[4rem] sm:min-h-[3.5rem] flex items-center justify-center px-4">
-          <p class="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-800 tracking-tight font-heading leading-snug">
-            <span>{{ typedText }}</span>
-            <span class="inline-block w-0.5 sm:w-1 h-6 sm:h-7 bg-[#FF5C1A] ml-1.5 animate-pulse align-middle"></span>
-          </p>
-        </div>
-      </div>
-
-      <!-- Feature Pill Quick Links -->
-      <div class="flex flex-wrap items-center justify-center gap-2 max-w-3xl mx-auto pt-1">
-        <NuxtLink
-          to="/vendors"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-orange-50/80 hover:bg-orange-100/90 text-orange-800 border border-orange-200/80 text-xs font-bold transition-all hover:scale-105"
-        >
-          <span>🛵</span>
-          <span>Normal Errands</span>
-        </NuxtLink>
-        <NuxtLink
-          to="/errands/custom"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50/80 hover:bg-indigo-100/90 text-indigo-800 border border-indigo-200/80 text-xs font-bold transition-all hover:scale-105"
-        >
-          <span>🤝</span>
-          <span>Custom Errands</span>
-        </NuxtLink>
-        <NuxtLink
-          to="/orders/group"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50/80 hover:bg-emerald-100/90 text-emerald-800 border border-emerald-200/80 text-xs font-bold transition-all hover:scale-105"
-        >
-          <span>👥</span>
-          <span>Group Orders (Split Fee)</span>
-        </NuxtLink>
-        <NuxtLink
-          to="/meal-desk"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50/80 hover:bg-amber-100/90 text-amber-800 border border-amber-200/80 text-xs font-bold transition-all hover:scale-105"
-        >
-          <span>🍱</span>
-          <span>Meal Desk</span>
-        </NuxtLink>
-        <NuxtLink
-          to="/meal-schedule"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-50/80 hover:bg-purple-100/90 text-purple-800 border border-purple-200/80 text-xs font-bold transition-all hover:scale-105"
-        >
-          <span>⏰</span>
-          <span>Meal Schedule</span>
-        </NuxtLink>
-        <NuxtLink
-          to="/declutter"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 text-xs font-bold transition-all hover:scale-105"
-        >
-          <span>✨</span>
-          <span>Declutter Room</span>
-        </NuxtLink>
+            <!-- Cute Marketing Catch Text (Changes smoothly with headline) -->
+            <p class="text-base sm:text-xl md:text-2xl font-bold text-slate-600 tracking-tight leading-relaxed max-w-3xl mx-auto">
+              {{ currentMessage.subtext }}
+            </p>
+          </div>
+        </Transition>
       </div>
 
       <!-- Quick Action CTA Buttons -->
@@ -201,26 +77,6 @@
 
       <!-- Slot for Search Bar, Omnibox, Suggestions & Filter tabs -->
       <slot />
-
-      <!-- Trust Social Proof -->
-      <div class="mt-8 pt-6 border-t border-slate-200/70 max-w-4xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-        <div class="p-2">
-          <p class="text-lg sm:text-xl font-black text-slate-900 font-mono tracking-tight">15 - 25 Mins</p>
-          <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Hostel Door Delivery</p>
-        </div>
-        <div class="p-2">
-          <p class="text-lg sm:text-xl font-black text-[#FF5C1A] font-mono tracking-tight">Active Ninjas</p>
-          <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Ready on Every Campus</p>
-        </div>
-        <div class="p-2">
-          <p class="text-lg sm:text-xl font-black text-emerald-600 font-mono tracking-tight">₦0 Queue</p>
-          <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Skip Long Cafeteria Lines</p>
-        </div>
-        <div class="p-2">
-          <p class="text-lg sm:text-xl font-black text-slate-900 font-mono tracking-tight">50% Split Fee</p>
-          <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">With Group Orders</p>
-        </div>
-      </div>
     </div>
   </section>
 </template>
@@ -259,274 +115,106 @@ withDefaults(
   },
 );
 
-interface StudentPhrase {
-  question: string;
-  answer: string;
-  lang: 'Pidgin' | 'Yorùbá' | 'Igbo' | 'Hausa';
-  feature: 'Normal Errands' | 'Custom Errands' | 'Group Orders' | 'Meal Desk' | 'Meal Schedule';
-  flag: string;
-  badgeClass: string;
-  icon: string;
+interface HeroMessage {
+  eyebrow: string;
+  headlinePrefix: string;
+  headlineHighlight: string;
+  subtext: string;
 }
 
-const languageOptions = [
-  { id: 'all', label: 'All Vibes', flag: '🔥' },
-  { id: 'Pidgin', label: 'Pidgin', flag: '🇳🇬' },
-  { id: 'Yorùbá', label: 'Yorùbá', flag: '🟢' },
-  { id: 'Igbo', label: 'Igbo', flag: '🟡' },
-  { id: 'Hausa', label: 'Hausa', flag: '🔵' },
-];
-
-const activeLangFilter = ref<'all' | 'Pidgin' | 'Yorùbá' | 'Igbo' | 'Hausa'>('all');
-
-const studentPhrases: StudentPhrase[] = [
-  // Pidgin
+const heroMessages: HeroMessage[] = [
+  // 1. Pidgin (Campus Heat / Chill)
   {
-    question: "Sun dey fight everybody outside? 😭☀️",
-    answer: "Omo, rest! You stay, we run — hot food & pickups to your hostel door! 🛵💨",
-    lang: "Pidgin",
-    feature: "Normal Errands",
-    flag: "🇳🇬",
-    badgeClass: "bg-emerald-50 text-emerald-800 border-emerald-200/80",
-    icon: "🛵",
+    eyebrow: 'The sun is outside fighting everybody? 😭☀️ Omo, rest!',
+    headlinePrefix: 'Sun dey bake everybody outside?',
+    headlineHighlight: 'Omo, Rest & Just Errand It! 🛵💨',
+    subtext: 'You stay cool in your hostel, we run the trek — hot food, cold drinks & packages delivered to your room! 🧡',
   },
+  // 2. Campus Slang (Downstairs Trek / Urgent Items)
   {
-    question: "Why bother coming downstairs to pick up an item? 🏃🏽‍♂️",
-    answer: "Just Errand It! Ninjas dey run custom errands anywhere on campus! 🤝",
-    lang: "Pidgin",
-    feature: "Custom Errands",
-    flag: "🇳🇬",
-    badgeClass: "bg-emerald-50 text-emerald-800 border-emerald-200/80",
-    icon: "🤝",
+    eyebrow: 'Why bother trekking downstairs to pick up anything? 📦🚪',
+    headlinePrefix: 'Trek downstairs under this sun?',
+    headlineHighlight: 'Just Errand It to Your Door! 🏃🏽‍♂️✨',
+    subtext: 'Some errands can wait, but that urgent package or warm meal? Errand Ninjas deliver straight to your floor.',
   },
+  // 3. Yorùbá (Comfort & Doorstep Service)
   {
-    question: "Delivery fee dey choke you and your roommates? 😩",
-    answer: "Order together with Group Orders & split delivery fee sharp-sharp! 👥",
-    lang: "Pidgin",
-    feature: "Group Orders",
-    flag: "🇳🇬",
-    badgeClass: "bg-emerald-50 text-emerald-800 border-emerald-200/80",
-    icon: "👥",
+    eyebrow: 'Oòrùn ń jó gbogbo èèyàn níta campus? ☀️',
+    headlinePrefix: 'Kí ló dé tí wàá fi fìyà jẹ ara ẹ?',
+    headlineHighlight: 'Jókòó, Kàn Errand It! 🛵💨',
+    subtext: 'Má ṣe yọ ara ẹ lẹ́nu rárá. Ìwọ fọkàn balẹ̀ sínú hostel, àwọn Ninjas wa yóò gbé oúnjẹ dídùn dé bá ẹ!',
   },
+  // 4. Campus Slang (8am Lecture Hunger / Meal Schedule)
   {
-    question: "Tired of queuing for 45 minutes at campus cafeteria? 🍱",
-    answer: "Use Meal Desk: pre-order your favorite meal, pickup or delivered hot! 😋",
-    lang: "Pidgin",
-    feature: "Meal Desk",
-    flag: "🇳🇬",
-    badgeClass: "bg-emerald-50 text-emerald-800 border-emerald-200/80",
-    icon: "🍱",
+    eyebrow: 'Entering 8am class on an empty stomach? Never again! ⏰🍱',
+    headlinePrefix: 'Hungry for 8am lecture?',
+    headlineHighlight: 'Auto-pilot with Meal Schedule! ⚡😋',
+    subtext: 'Schedule breakfast and lunch ahead of time. Hot meals arrive right on cue before your first lecture starts.',
   },
+  // 5. Igbo (Rest & Rapid Errands)
   {
-    question: "Entering 8am class on an empty stomach? 😭",
-    answer: "Set Meal Schedule! Auto-pilot your daily breakfast & lunch without stress! ⏰",
-    lang: "Pidgin",
-    feature: "Meal Schedule",
-    flag: "🇳🇬",
-    badgeClass: "bg-emerald-50 text-emerald-800 border-emerald-200/80",
-    icon: "⏰",
+    eyebrow: 'Anwụ na-eti mmadụ niile na campus taa? ☀️',
+    headlinePrefix: 'Gịnị mere ị ga-eji gbaa ọsọ n\'anwụ?',
+    headlineHighlight: 'Nọrọ Hostel, Just Errand It! 🛵✨',
+    subtext: 'Nwanne, zuru ike na hostel! Anyị ga-agbara gị ọsọ weta nri ụtọ na ngwugwu ọbụla bịarute gị aka.',
   },
-
-  // Yorùbá
+  // 6. Pidgin (Roommates / Group Orders)
   {
-    question: "Oòrùn ń jó gbogbo èèyàn níta campus? ☀️",
-    answer: "Omo, má ṣe yọ ara ẹ lẹ́nu! Ìwọ jókòó sínú yàrá, Erranders ó sáré fún ẹ! 🧡",
-    lang: "Yorùbá",
-    feature: "Normal Errands",
-    flag: "🟢",
-    badgeClass: "bg-amber-50 text-amber-800 border-amber-200/80",
-    icon: "🛵",
+    eyebrow: 'Delivery fee dey choke you and your roommates? 😩',
+    headlinePrefix: 'Why pay solo delivery fee?',
+    headlineHighlight: 'Split Am With Group Orders! 👥🍕',
+    subtext: 'Team up with your roomies or course mates, order together from your favorite vendors, and divide the cost sharp-sharp!',
   },
+  // 7. Hausa (Peace of Mind & Hot Meals)
   {
-    question: "Kí ló dé tí wàá fi sọ̀kalẹ̀ láti gba nǹkan ní hostel? 🚪",
-    answer: "Kàn 'Errand It'! Àwọn Ninjas wa yóò gbé Custom Errand ẹ wá sí ẹnu-ọ̀nà! 🤝",
-    lang: "Yorùbá",
-    feature: "Custom Errands",
-    flag: "🟢",
-    badgeClass: "bg-amber-50 text-amber-800 border-amber-200/80",
-    icon: "🤝",
+    eyebrow: 'Rana tana kona mutane a harabar makaranta? ☀️',
+    headlinePrefix: 'Kada ka wahalar da kanka a waje,',
+    headlineHighlight: 'Kawai Errand It! 🛵💨',
+    subtext: 'Huta a daki lafiya! Ninjas zasu kawo maka abinci mai dumi da dukkan kayan bukata har kofar dakinka.',
   },
+  // 8. Campus Relatable (The Classic Erranders Promise)
   {
-    question: "Ṣé ìwọ àti àwọn roommates ẹ fẹ́ jẹun pọ̀? 🥘",
-    answer: "Lo Group Orders kí ẹ pín owó delivery kù sí pẹ́tẹ́pẹ́tẹ́! 👥",
-    lang: "Yorùbá",
-    feature: "Group Orders",
-    flag: "🟢",
-    badgeClass: "bg-amber-50 text-amber-800 border-amber-200/80",
-    icon: "👥",
-  },
-  {
-    question: "Báwo l’o ṣe máa jẹun láìsí wàhálà queue lórí campus? 🍱",
-    answer: "Meal Desk wà fún ẹ: oúnjẹ dídùn tó ń jò, lẹ́sẹ̀kẹsẹ̀ láìsí delay! ✨",
-    lang: "Yorùbá",
-    feature: "Meal Desk",
-    flag: "🟢",
-    badgeClass: "bg-amber-50 text-amber-800 border-amber-200/80",
-    icon: "🍱",
-  },
-  {
-    question: "Ṣé o fẹ́ kí oúnjẹ rẹ dé kíákíá kí kíláàsì tó bẹ̀rẹ̀? ⏰",
-    answer: "Ṣètò Meal Schedule rẹ, jẹun bí ọba lojoojúmọ́ láìsí ìkùnà! 👑",
-    lang: "Yorùbá",
-    feature: "Meal Schedule",
-    flag: "🟢",
-    badgeClass: "bg-amber-50 text-amber-800 border-amber-200/80",
-    icon: "⏰",
-  },
-
-  // Igbo
-  {
-    question: "Anwụ na-eti mmadụ niile na campus taa? ☀️",
-    answer: "Nwanne, nọrọ na hostel zuru ike! Anyị ga-agbara gị ọsọ weta nri ụtọ! 🛵💨",
-    lang: "Igbo",
-    feature: "Normal Errands",
-    flag: "🟡",
-    badgeClass: "bg-purple-50 text-purple-800 border-purple-200/80",
-    icon: "🛵",
-  },
-  {
-    question: "Gịnị mere ị ga-eji rịdata steepụ iji buru ngwugwu? 📦",
-    answer: "Kọwaa Custom Errand gi, Errand Ninja ga-aga ebe ọbụla zụtara gị ya! 🤝",
-    lang: "Igbo",
-    feature: "Custom Errands",
-    flag: "🟡",
-    badgeClass: "bg-purple-50 text-purple-800 border-purple-200/80",
-    icon: "🤝",
-  },
-  {
-    question: "Gị na ndị roommates gị chọrọ ịchekwa ego delivery? 💰",
-    answer: "Jiri Group Orders tụkọta ọnụ, wee kewaa ego n'ụzọ dị mfe! 👥",
-    lang: "Igbo",
-    feature: "Group Orders",
-    flag: "🟡",
-    badgeClass: "bg-purple-50 text-purple-800 border-purple-200/80",
-    icon: "👥",
-  },
-  {
-    question: "Ikwụ n'ahịrị nri na cafeteria na-agwụ gị ike? 🍱",
-    answer: "Pịa Meal Desk: hazie nri gị ozugbo, buru ya n'enweghị igbu oge! 😋",
-    lang: "Igbo",
-    feature: "Meal Desk",
-    flag: "🟡",
-    badgeClass: "bg-purple-50 text-purple-800 border-purple-200/80",
-    icon: "🍱",
-  },
-  {
-    question: "Iji afọ efu aga klaasị 8am kacha ewute mmadụ? ⏰",
-    answer: "Hazie Meal Schedule gị taa, ka nri na-erute gị n'oge oge ọbụla! 🚀",
-    lang: "Igbo",
-    feature: "Meal Schedule",
-    flag: "🟡",
-    badgeClass: "bg-purple-50 text-purple-800 border-purple-200/80",
-    icon: "⏰",
-  },
-
-  // Hausa
-  {
-    question: "Rana tana kona mutane a waje sosai? ☀️",
-    answer: "Huta a daki, Erranders zasu yi maka hidimar abinci da kaya har kofa! 🛵💨",
-    lang: "Hausa",
-    feature: "Normal Errands",
-    flag: "🔵",
-    badgeClass: "bg-blue-50 text-blue-800 border-blue-200/80",
-    icon: "🛵",
-  },
-  {
-    question: "Me zai sa ka wahalar da kanka saukowa kasa? 🏃🏽‍♂️",
-    answer: "Kawai 'Errand It'! Ninja zai je ko ina a makaranta ko gari ya siyo maka! 🤝",
-    lang: "Hausa",
-    feature: "Custom Errands",
-    flag: "🔵",
-    badgeClass: "bg-blue-50 text-blue-800 border-blue-200/80",
-    icon: "🤝",
-  },
-  {
-    question: "Kuna so ku rage kudin aikawa tare da abokan daki? 👥",
-    answer: "Ku hada Group Orders, kowa ya biya 'yan canji kadan a saukake! 💰",
-    lang: "Hausa",
-    feature: "Group Orders",
-    flag: "🔵",
-    badgeClass: "bg-blue-50 text-blue-800 border-blue-200/80",
-    icon: "👥",
-  },
-  {
-    question: "Gajiya da dogon layi a cafeteria na makaranta? 🍱",
-    answer: "Yi amfani da Meal Desk: karbi abincinka mai dumi ba tare da jira ba! ✨",
-    lang: "Hausa",
-    feature: "Meal Desk",
-    flag: "🔵",
-    badgeClass: "bg-blue-50 text-blue-800 border-blue-200/80",
-    icon: "🍱",
-  },
-  {
-    question: "Kar ka taba shiga aji da yunwa da sassafe! ⏰",
-    answer: "Saita Meal Schedule dinka, a kawo maka karin kumallo a kan lokaci! 🌟",
-    lang: "Hausa",
-    feature: "Meal Schedule",
-    flag: "🔵",
-    badgeClass: "bg-blue-50 text-blue-800 border-blue-200/80",
-    icon: "⏰",
+    eyebrow: 'Why trek from New Hall to Gate under scorching sun? 🏃🏽‍♂️🔥',
+    headlinePrefix: 'Why stress yourself on campus?',
+    headlineHighlight: 'Just Errand It! 🛵💨',
+    subtext: 'From cafeteria meals to boutique items, pharmacy runs, and market pickups — consider it handled with speed.',
   },
 ];
-
-const activePhrases = computed(() => {
-  if (activeLangFilter.value === 'all') return studentPhrases;
-  return studentPhrases.filter(p => p.lang === activeLangFilter.value);
-});
 
 const currentPhraseIndex = ref(0);
-const typedText = ref('');
-const isDeleting = ref(false);
-let typewriterTimeout: any = null;
+let rotationInterval: ReturnType<typeof setInterval> | null = null;
 
-const currentPhrase = computed<StudentPhrase>(() => {
-  const list = activePhrases.value;
-  return list[currentPhraseIndex.value % list.length] || studentPhrases[0];
+const currentMessage = computed<HeroMessage>(() => {
+  return heroMessages[currentPhraseIndex.value % heroMessages.length];
 });
 
-const selectLanguage = (langId: any) => {
-  activeLangFilter.value = langId;
-  currentPhraseIndex.value = 0;
-  typedText.value = '';
-  isDeleting.value = false;
-  if (typewriterTimeout) clearTimeout(typewriterTimeout);
-  runTypewriter();
-};
-
-const runTypewriter = () => {
-  const phrase = currentPhrase.value.answer;
-  const currentLength = typedText.value.length;
-
-  if (!isDeleting.value) {
-    if (currentLength < phrase.length) {
-      typedText.value = phrase.slice(0, currentLength + 1);
-      typewriterTimeout = setTimeout(runTypewriter, 32);
-    } else {
-      typewriterTimeout = setTimeout(() => {
-        isDeleting.value = true;
-        runTypewriter();
-      }, 2500);
-    }
-  } else {
-    if (currentLength > 0) {
-      typedText.value = phrase.slice(0, currentLength - 1);
-      typewriterTimeout = setTimeout(runTypewriter, 18);
-    } else {
-      isDeleting.value = false;
-      currentPhraseIndex.value = (currentPhraseIndex.value + 1) % activePhrases.value.length;
-      typewriterTimeout = setTimeout(runTypewriter, 350);
-    }
-  }
-};
-
 onMounted(() => {
-  runTypewriter();
+  rotationInterval = setInterval(() => {
+    currentPhraseIndex.value = (currentPhraseIndex.value + 1) % heroMessages.length;
+  }, 5000);
 });
 
 onBeforeUnmount(() => {
-  if (typewriterTimeout) {
-    clearTimeout(typewriterTimeout);
-    typewriterTimeout = null;
+  if (rotationInterval) {
+    clearInterval(rotationInterval);
+    rotationInterval = null;
   }
 });
 </script>
+
+<style scoped>
+.slow-fade-enter-active,
+.slow-fade-leave-active {
+  transition: opacity 0.85s ease-in-out, transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slow-fade-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.slow-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+</style>
