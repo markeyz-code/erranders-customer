@@ -10,10 +10,149 @@
   >
     <div class="max-w-7xl mx-auto px-4 lg:px-10">
       <div class="flex justify-between items-center">
-        <!-- Logo -->
-        <NuxtLink to="/" class="flex items-center gap-3 group">
-          <img src="@/assets/img/logo-light.png" alt="Errander Logo" class="h-8 lg:h-8 w-auto object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3" />
-        </NuxtLink>
+        <!-- Logo & Features Dropdown -->
+        <div class="flex items-center gap-3 sm:gap-6">
+          <NuxtLink to="/" class="flex items-center gap-3 group">
+            <img src="@/assets/img/logo-light.png" alt="Errander Logo" class="h-8 lg:h-8 w-auto object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3" />
+          </NuxtLink>
+
+          <!-- Features Dropdown (Desktop) -->
+          <Menu as="div" class="relative hidden md:block">
+            <MenuButton class="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-gray-800 hover:text-parentPrimary bg-gray-50/90 hover:bg-orange-50/80 border border-gray-200/80 hover:border-orange-200 rounded-full transition-all focus:outline-none cursor-pointer shadow-2xs">
+              <Sparkles class="w-3.5 h-3.5 text-parentPrimary" />
+              <span>Features</span>
+              <ChevronDown class="w-3.5 h-3.5 text-gray-400 group-hover:text-parentPrimary transition-transform" />
+            </MenuButton>
+
+            <Transition
+              enter-active-class="transition duration-200 ease-out"
+              enter-from-class="transform scale-95 opacity-0 -translate-y-1"
+              enter-to-class="transform scale-100 opacity-100 translate-y-0"
+              leave-active-class="transition duration-150 ease-in"
+              leave-from-class="transform scale-100 opacity-100 translate-y-0"
+              leave-to-class="transform scale-95 opacity-0 -translate-y-1"
+            >
+              <MenuItems class="absolute left-0 mt-3 w-80 sm:w-96 origin-top-left rounded-3xl bg-white/95 backdrop-blur-2xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.18)] border border-gray-100 p-3 focus:outline-none z-[100] divide-y divide-gray-100/60">
+                <div class="px-3 py-2 flex items-center justify-between">
+                  <p class="text-[10px] font-black uppercase tracking-wider text-gray-400">Student Platform Features</p>
+                  <span class="text-[9px] font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full">ALL SERVICES</span>
+                </div>
+
+                <div class="p-1.5 space-y-1 max-h-[75vh] overflow-y-auto">
+                  <!-- Custom Errands -->
+                  <MenuItem v-slot="{ active }">
+                    <NuxtLink to="/errands/custom" :class="[active ? 'bg-orange-50/80 scale-[0.99]' : 'hover:bg-gray-50', 'flex items-center gap-3 p-2.5 rounded-2xl transition-all group']">
+                      <div class="w-9 h-9 rounded-xl bg-orange-100 text-parentPrimary flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                        <Zap class="w-4 h-4" />
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2">
+                          <span class="text-xs font-bold text-gray-900 group-hover:text-parentPrimary transition-colors">Custom Errands</span>
+                          <span class="text-[9px] font-bold text-orange-700 bg-orange-100/70 px-1.5 py-0.2 rounded-full">POPULAR</span>
+                        </div>
+                        <p class="text-[11px] text-gray-500 truncate mt-0.5">Pickups, deliveries, shopping & custom runs</p>
+                      </div>
+                    </NuxtLink>
+                  </MenuItem>
+
+                  <!-- Meal Autopilot -->
+                  <MenuItem v-slot="{ active }">
+                    <NuxtLink to="/dashboard/recurring-orders" :class="[active ? 'bg-purple-50/80 scale-[0.99]' : 'hover:bg-gray-50', 'flex items-center gap-3 p-2.5 rounded-2xl transition-all group']">
+                      <div class="w-9 h-9 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                        <Repeat class="w-4 h-4" />
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2">
+                          <span class="text-xs font-bold text-gray-900 group-hover:text-purple-700 transition-colors">Meal Autopilot</span>
+                          <span class="text-[9px] font-bold text-purple-700 bg-purple-100/70 px-1.5 py-0.2 rounded-full">AUTOMATED</span>
+                        </div>
+                        <p class="text-[11px] text-gray-500 truncate mt-0.5">Automate daily breakfast & lunch delivery</p>
+                      </div>
+                    </NuxtLink>
+                  </MenuItem>
+
+                  <!-- Food & Vendors -->
+                  <MenuItem v-slot="{ active }">
+                    <NuxtLink to="/vendors" :class="[active ? 'bg-amber-50/80 scale-[0.99]' : 'hover:bg-gray-50', 'flex items-center gap-3 p-2.5 rounded-2xl transition-all group']">
+                      <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                        <Store class="w-4 h-4" />
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2">
+                          <span class="text-xs font-bold text-gray-900 group-hover:text-amber-700 transition-colors">Food & Campus Vendors</span>
+                        </div>
+                        <p class="text-[11px] text-gray-500 truncate mt-0.5">Cafeteria food, meals, snacks & drinks</p>
+                      </div>
+                    </NuxtLink>
+                  </MenuItem>
+
+                  <!-- Group Orders -->
+                  <MenuItem v-slot="{ active }">
+                    <NuxtLink to="/dashboard/group-orders" :class="[active ? 'bg-emerald-50/80 scale-[0.99]' : 'hover:bg-gray-50', 'flex items-center gap-3 p-2.5 rounded-2xl transition-all group']">
+                      <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                        <Users class="w-4 h-4" />
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2">
+                          <span class="text-xs font-bold text-gray-900 group-hover:text-emerald-700 transition-colors">Group Orders</span>
+                          <span class="text-[9px] font-bold text-emerald-700 bg-emerald-100/70 px-1.5 py-0.2 rounded-full">SPLIT FEE</span>
+                        </div>
+                        <p class="text-[11px] text-gray-500 truncate mt-0.5">Order together with roomies & split delivery</p>
+                      </div>
+                    </NuxtLink>
+                  </MenuItem>
+
+                  <!-- Wholesale Market Pool -->
+                  <MenuItem v-slot="{ active }">
+                    <NuxtLink to="/market-pool" :class="[active ? 'bg-blue-50/80 scale-[0.99]' : 'hover:bg-gray-50', 'flex items-center gap-3 p-2.5 rounded-2xl transition-all group']">
+                      <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                        <ShoppingBag class="w-4 h-4" />
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2">
+                          <span class="text-xs font-bold text-gray-900 group-hover:text-blue-700 transition-colors">Wholesale Market Pool</span>
+                          <span class="text-[9px] font-bold text-blue-700 bg-blue-100/70 px-1.5 py-0.2 rounded-full">SAVE 40%</span>
+                        </div>
+                        <p class="text-[11px] text-gray-500 truncate mt-0.5">Bulk staples & groceries at direct prices</p>
+                      </div>
+                    </NuxtLink>
+                  </MenuItem>
+
+                  <!-- Campus Services & Bookings -->
+                  <MenuItem v-slot="{ active }">
+                    <button type="button" @click="isBookingModalOpen = true" :class="[active ? 'bg-teal-50/80 scale-[0.99]' : 'hover:bg-gray-50', 'w-full text-left flex items-center gap-3 p-2.5 rounded-2xl transition-all group']">
+                      <div class="w-9 h-9 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                        <Calendar class="w-4 h-4" />
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2">
+                          <span class="text-xs font-bold text-gray-900 group-hover:text-teal-700 transition-colors">Campus Services</span>
+                        </div>
+                        <p class="text-[11px] text-gray-500 truncate mt-0.5">Barbers, tutors, laundry, movers & more</p>
+                      </div>
+                    </button>
+                  </MenuItem>
+
+                  <!-- Barter Campus Trade -->
+                  <MenuItem v-slot="{ active }">
+                    <a href="https://decluttered.erranders.org/" target="_blank" rel="noopener noreferrer" :class="[active ? 'bg-rose-50/80 scale-[0.99]' : 'hover:bg-gray-50', 'flex items-center gap-3 p-2.5 rounded-2xl transition-all group']">
+                      <div class="w-9 h-9 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                        <ArrowLeftRight class="w-4 h-4" />
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2">
+                          <span class="text-xs font-bold text-gray-900 group-hover:text-rose-700 transition-colors">Barter & Declutter</span>
+                          <span class="text-[9px] font-bold text-rose-700 bg-rose-100/70 px-1.5 py-0.2 rounded-full">NEW</span>
+                        </div>
+                        <p class="text-[11px] text-gray-500 truncate mt-0.5">Buy, sell & swap pre-owned student gear</p>
+                      </div>
+                    </a>
+                  </MenuItem>
+                </div>
+              </MenuItems>
+            </Transition>
+          </Menu>
+        </div>
         
         <!-- Actions & Menu -->
         <div class="flex items-center gap-2 md:gap-4">
@@ -21,13 +160,10 @@
           <div class="hidden md:flex items-center gap-3">
             <template v-if="!user">
               <!-- Manage Buttons for Guests -->
-              <!-- <NuxtLink to="/errands/custom" class="px-5 py-2 text-sm font-bold text-white bg-parentPrimary hover:bg-orange-600 transition-colors rounded-full shadow-sm border border-gray-50 hover:shadow-sm whitespace-nowrap">
-                Request Custom Errand
-              </NuxtLink> -->
-              <!-- <NuxtLink to="/dashboard/recurring-orders" class="px-5 py-2 text-sm font-bold text-parentPrimary bg-orange-50 hover:bg-orange-100 transition-colors rounded-full shadow-sm border border-orange-200 hover:shadow-sm whitespace-nowrap flex items-center gap-1.5">
+              <NuxtLink to="/dashboard/recurring-orders" class="px-5 py-2 text-sm font-bold text-parentPrimary bg-orange-50 hover:bg-orange-100 transition-colors rounded-full shadow-sm border border-orange-200 hover:shadow-sm whitespace-nowrap flex items-center gap-1.5">
                 <Repeat class="w-4 h-4" />
                 Meal Autopilot
-              </NuxtLink> -->
+              </NuxtLink>
               <div class="w-px h-4 bg-gray-300 mx-2"></div>
               <NuxtLink to="/auth/login" class="px-5 py-2 text-sm font-medium text-gray-900 hover:text-parentPrimary transition-colors rounded-full hover:bg-gray-50 whitespace-nowrap">
                 Log In
@@ -37,9 +173,6 @@
               </NuxtLink>
             </template>
             <template v-else>
-              <NuxtLink to="/errands/custom" class="px-5 py-2 text-sm font-bold text-white bg-parentPrimary hover:bg-orange-600 transition-colors rounded-full shadow-sm border border-gray-50 hover:shadow-sm whitespace-nowrap">
-                Request Custom Errand
-              </NuxtLink>
               <NuxtLink to="/dashboard/recurring-orders" class="px-5 py-2 text-sm font-bold text-parentPrimary bg-orange-50 hover:bg-orange-100 transition-colors rounded-full shadow-sm border border-orange-200 hover:shadow-sm whitespace-nowrap flex items-center gap-1.5">
                 <Repeat class="w-4 h-4" />
                 Meal Autopilot

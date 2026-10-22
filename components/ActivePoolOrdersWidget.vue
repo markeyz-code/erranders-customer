@@ -21,7 +21,7 @@
         <button 
           @click="dismiss"
           class="bg-white/15 hover:bg-white/25 text-white p-2 rounded-lg transition-all active:scale-90 flex-shrink-0"
-          title="Dismiss"
+          title="Dismiss permanently"
         >
           <X class="w-4 h-4" />
         </button>
@@ -35,7 +35,7 @@ import { ref, onMounted } from 'vue'
 import { Package, ArrowRight, X } from 'lucide-vue-next'
 import { GATEWAY_ENDPOINT_WITH_AUTH as api } from '@/api_factory/axios.config'
 
-const DISMISS_KEY = 'market_pool_banner_dismissed'
+const DISMISS_KEY = 'market_pool_banner_closed_permanently'
 
 const activeOrders = ref([])
 const dismissed = ref(false)
@@ -43,21 +43,21 @@ const dismissed = ref(false)
 const dismiss = () => {
   dismissed.value = true
   try {
-    sessionStorage.setItem(DISMISS_KEY, 'true')
+    localStorage.setItem(DISMISS_KEY, 'true')
   } catch (e) {
-    // sessionStorage may not be available
+    // localStorage may not be available in SSR or restrictive environments
   }
 }
 
 onMounted(async () => {
-  // Check if already dismissed this session
+  // If user has closed it once, do not open up again
   try {
-    if (sessionStorage.getItem(DISMISS_KEY) === 'true') {
+    if (localStorage.getItem(DISMISS_KEY) === 'true') {
       dismissed.value = true
       return
     }
   } catch (e) {
-    // sessionStorage may not be available
+    // localStorage may not be available
   }
 
   try {
