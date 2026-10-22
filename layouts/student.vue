@@ -3,6 +3,8 @@
     <!-- <CorePromoBanner /> -->
     <FullScreenLoader></FullScreenLoader>
     <Toast ref="toastRef"></Toast>
+    <!-- Mounted at the layout so a call reaches the user wherever they are. -->
+    <CallOverlay />
 
     <!-- Desktop Sidebar: ID Badge -->
     <aside class="hidden lg:flex flex-col w-72 h-[calc(100vh-2rem)] fixed left-4 top-4 bottom-4 z-50">

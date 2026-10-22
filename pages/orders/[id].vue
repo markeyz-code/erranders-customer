@@ -206,12 +206,18 @@
       </div>
     </div>
     
-    <div class="flex gap-2 mt-2">
-      <a 
+    <div class="flex flex-col gap-2 mt-2">
+      <!-- In-app call first: it keeps the number private and records the call on the order. -->
+      <CallButtons
+        :order-id="order._id"
+        :to-user-id="order.errander?._id"
+        :name="order.errander?.firstName"
+      />
+      <a
         :href="'tel:' + (order.errander?.phoneNumber || order.errander?.phone || '')"
-        class="flex-1 py-2.5 bg-white border border-blue-200 text-blue-700 rounded-lg text-sm font-bold hover:bg-blue-50 transition-all flex items-center justify-center gap-1.5"
+        class="py-2.5 bg-white border border-blue-200 text-blue-700 rounded-lg text-sm font-bold hover:bg-blue-50 transition-all flex items-center justify-center gap-1.5"
       >
-        <Phone class="w-3.5 h-3.5" /> Call Rider
+        <Phone class="w-3.5 h-3.5" /> Call Rider's phone
       </a>
       <button 
         @click="approveReconciliation"
