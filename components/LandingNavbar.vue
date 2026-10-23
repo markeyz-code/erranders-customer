@@ -18,10 +18,10 @@
 
           <!-- Features Dropdown (Desktop) -->
           <Menu as="div" class="relative hidden md:block">
-            <MenuButton class="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-gray-800 hover:text-parentPrimary bg-gray-50/90 hover:bg-orange-50/80 border border-gray-200/80 hover:border-orange-200 rounded-full transition-all focus:outline-none cursor-pointer shadow-2xs">
-              <Sparkles class="w-3.5 h-3.5 text-parentPrimary" />
+            <MenuButton class="group flex cursor-pointer items-center gap-1.5 rounded-full border border-gray-200/80 bg-gray-50/90 px-3.5 py-1.5 text-xs font-bold text-gray-800 shadow-2xs transition-all hover:-translate-y-0.5 hover:border-orange-200 hover:bg-orange-50/80 hover:text-parentPrimary hover:shadow-sm focus:outline-none data-[headlessui-state=open]:border-orange-200 data-[headlessui-state=open]:bg-orange-50 data-[headlessui-state=open]:text-parentPrimary">
+              <Sparkles class="h-3.5 w-3.5 text-parentPrimary" />
               <span>Features</span>
-              <ChevronDown class="w-3.5 h-3.5 text-gray-400 group-hover:text-parentPrimary transition-transform" />
+              <ChevronDown class="h-3.5 w-3.5 text-gray-400 transition-transform duration-200 group-data-[headlessui-state=open]:rotate-180" />
             </MenuButton>
 
             <Transition
@@ -32,13 +32,15 @@
               leave-from-class="transform scale-100 opacity-100 translate-y-0"
               leave-to-class="transform scale-95 opacity-0 -translate-y-1"
             >
-              <MenuItems class="absolute left-0 mt-3 w-80 sm:w-96 origin-top-left rounded-3xl bg-white/95 backdrop-blur-2xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.18)] border border-gray-100 p-3 focus:outline-none z-[100] divide-y divide-gray-100/60">
-                <div class="px-3 py-2 flex items-center justify-between">
+              <MenuItems class="absolute left-1/2 mt-3 w-[22rem] origin-top -translate-x-1/2 rounded-2xl border border-gray-100 bg-white shadow-[0_20px_50px_-12px_rgba(15,23,42,0.18)] focus:outline-none z-[100]">
+                <!-- Caret: ties the panel to the button that opened it. -->
+                <div class="absolute -top-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 rounded-[3px] border-l border-t border-gray-100 bg-white"></div>
+                <div class="relative px-4 py-3 flex items-center justify-between">
                   <p class="text-[10px] font-black uppercase tracking-wider text-gray-400">Student Platform Features</p>
                   <span class="text-[9px] font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full">ALL SERVICES</span>
                 </div>
 
-                <div class="p-1.5 space-y-1 max-h-[75vh] overflow-y-auto">
+                <div class="relative max-h-[70vh] space-y-0.5 overflow-y-auto p-2">
                   <!-- Custom Errands -->
                   <MenuItem v-slot="{ active }">
                     <NuxtLink to="/errands/custom" :class="[active ? 'bg-orange-50/80 scale-[0.99]' : 'hover:bg-gray-50', 'flex items-center gap-3 p-2.5 rounded-2xl transition-all group']">
@@ -160,9 +162,13 @@
           <div class="hidden md:flex items-center gap-3">
             <template v-if="!user">
               <!-- Manage Buttons for Guests -->
-              <NuxtLink to="/dashboard/recurring-orders" class="px-5 py-2 text-sm font-bold text-parentPrimary bg-orange-50 hover:bg-orange-100 transition-colors rounded-full shadow-sm border border-orange-200 hover:shadow-sm whitespace-nowrap flex items-center gap-1.5">
-                <Repeat class="w-4 h-4" />
-                Meal Autopilot
+              <NuxtLink
+                to="/dashboard/recurring-orders"
+                title="Meal Autopilot"
+                aria-label="Meal Autopilot"
+                class="group flex h-9 w-9 items-center justify-center rounded-full border border-orange-200 bg-orange-50 text-parentPrimary transition-all hover:-translate-y-0.5 hover:bg-orange-100 hover:shadow-sm"
+              >
+                <Repeat class="h-4 w-4 transition-transform group-hover:rotate-180" />
               </NuxtLink>
               <div class="w-px h-4 bg-gray-300 mx-2"></div>
               <NuxtLink to="/auth/login" class="px-5 py-2 text-sm font-medium text-gray-900 hover:text-parentPrimary transition-colors rounded-full hover:bg-gray-50 whitespace-nowrap">
@@ -173,9 +179,13 @@
               </NuxtLink>
             </template>
             <template v-else>
-              <NuxtLink to="/dashboard/recurring-orders" class="px-5 py-2 text-sm font-bold text-parentPrimary bg-orange-50 hover:bg-orange-100 transition-colors rounded-full shadow-sm border border-orange-200 hover:shadow-sm whitespace-nowrap flex items-center gap-1.5">
-                <Repeat class="w-4 h-4" />
-                Meal Autopilot
+              <NuxtLink
+                to="/dashboard/recurring-orders"
+                title="Meal Autopilot"
+                aria-label="Meal Autopilot"
+                class="group flex h-9 w-9 items-center justify-center rounded-full border border-orange-200 bg-orange-50 text-parentPrimary transition-all hover:-translate-y-0.5 hover:bg-orange-100 hover:shadow-sm"
+              >
+                <Repeat class="h-4 w-4 transition-transform group-hover:rotate-180" />
               </NuxtLink>
               <div class="w-px h-4 bg-gray-300 mx-2"></div>
               
