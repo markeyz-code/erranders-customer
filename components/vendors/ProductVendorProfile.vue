@@ -2070,14 +2070,53 @@ const addToCart = (product: any) => {
     return;
   }
   
+  // Add-ons the vendor included free with this item. The rule lives on the item, not on
+  // the add-on, so the sauce still costs money when ordered on its own.
+  const freeRules = (product.freeAddOns || []).map((rule: any) => ({
+    groupId: String(rule.groupId?._id || rule.groupId || ''),
+    optionName: rule.optionName,
+    maxFree: rule.maxFree ?? 1,
+  }));
+  const freeUsed: Record<string, number> = {};
+
   const customItems: any[] = [];
-  Object.values(selectedCustomizations.value).forEach(group => {
-    Object.values(group).forEach((item: any) => {
+  Object.entries(selectedCustomizations.value).forEach(([groupId, group]) => {
+    Object.values(group as Record<string, any>).forEach((item: any) => {
+      const rule = freeRules.find(
+        (r: any) => r.groupId === String(groupId) && r.optionName === item.name,
+      );
+
       for (let i = 0; i < item.quantity; i++) {
-        customItems.push({ name: item.name, price: item.price, selected: item.groupName });
+        const key = `${groupId}|${item.name}`;
+        const used = freeUsed[key] || 0;
+        // Cap by maxFree so two plates do not hand over two free sauces.
+        const included = Boolean(rule) && used < rule.maxFree;
+        if (included) freeUsed[key] = used + 1;
+
+        customItems.push({
+          name: included ? `${item.name} (included)` : item.name,
+          price: included ? 0 : item.price,
+          selected: item.groupName,
+        });
       }
     });
   });
+
+  // Buying the item on its own still includes what the vendor made free — Ofada rice
+  // comes with sauce whether or not the customer thinks to tick it.
+  for (const rule of freeRules) {
+    const key = `${rule.groupId}|${rule.optionName}`;
+    const used = freeUsed[key] || 0;
+    while (used < rule.maxFree) {
+      customItems.push({
+        name: `${rule.optionName} (included)`,
+        price: 0,
+        selected: 'Included',
+      });
+      freeUsed[key] = (freeUsed[key] || 0) + 1;
+      break;
+    }
+  }
 
   if (editingCartItem.value) {
     const { vendorId, packId, itemIndex, quantity } = editingCartItem.value;
