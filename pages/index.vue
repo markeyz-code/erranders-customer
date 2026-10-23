@@ -24,13 +24,14 @@
     <Teleport to="body">
       <div 
         v-if="showSuggestions"
-        class="fixed inset-0 bg-transparent z-[9998]"
+        class="fixed inset-0 bg-transparent z-[30]"
         @click="showSuggestions = false"
       ></div>
     </Teleport>
 
     <!-- Network-wide hero: same design as Erranders For Business and Declutter. -->
     <HeroStage
+      :is-elevated="showSuggestions"
       title="Erranders"
       :lines="[
         'Order food from the vendor next door',
@@ -49,8 +50,7 @@
 <!-- Search Bar Redesign -->
           <div 
             class="mt-10 max-w-3xl mx-auto group relative transition-all duration-700 w-full px-4 sm:px-0"
-            style="isolation: isolate;"
-            :class="showSuggestions ? 'z-[200]' : 'z-20'"
+            :class="showSuggestions ? 'z-50' : 'z-20'"
           >
             <!-- Search Input Wrapper -->
             <div class="relative z-[70]">
@@ -80,7 +80,7 @@
            <Transition name="fade-up">
   <div
     v-if="showSuggestions && (heroSearchSuggestions.length > 0 || isSearching || hasSearched || timeOfDaySuggestions.length > 0)"
-    class="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-lg shadow-gray-900/5 overflow-hidden z-[75]"
+    class="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-2xl shadow-gray-900/10 overflow-hidden z-[100]"
   >
     <div class="px-4 py-3 border-b border-gray-50 flex justify-between items-center">
       <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">
