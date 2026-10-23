@@ -80,16 +80,27 @@
            <Transition name="fade-up">
   <div
     v-if="showSuggestions && (heroSearchSuggestions.length > 0 || isSearching || hasSearched || timeOfDaySuggestions.length > 0)"
-    class="absolute top-full left-0 right-0 mt-4 bg-white border border-gray-25 rounded-[2rem] shadow-[0_20px_60px_rgba(0,0,0,0.08)] overflow-hidden z-[75] p-2"
+    class="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-lg shadow-gray-900/5 overflow-hidden z-[75]"
   >
-    <div class="px-4 py-4 border-b border-gray-50 flex justify-between items-center">
-      <span class="text-sm font-medium text-gray-400 tracking-tight">
-        {{ heroSearchQuery ? 'Matching Results' : `Suggested for ${suggestionTimeText}` }}
+    <div class="px-4 py-3 border-b border-gray-50 flex justify-between items-center">
+      <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">
+        {{ heroSearchQuery ? 'Results' : suggestionTimeText }}
       </span>
-      <div v-if="isSearching" class="w-4 h-4 border border-parentPrimary border-t-transparent rounded-full animate-spin"></div>
+      <div class="flex items-center gap-2">
+        <div v-if="isSearching" class="w-3.5 h-3.5 border border-parentPrimary border-t-transparent rounded-full animate-spin"></div>
+        <button
+          v-else
+          type="button"
+          aria-label="Close search results"
+          class="p-1 rounded-full text-gray-300 hover:text-gray-600 hover:bg-gray-50 transition-colors"
+          @mousedown.prevent="showSuggestions = false"
+        >
+          <X class="w-4 h-4" />
+        </button>
+      </div>
     </div>
 
-    <div class="max-h-[350px] overflow-y-auto hide-scrollbar space-y-1 mt-1">
+    <div class="max-h-[60vh] overflow-y-auto">
 
       <!-- Search results -->
       <div
@@ -117,34 +128,25 @@
 
       <div
         v-if="!isSearching && hasSearched && heroSearchSuggestions.length === 0"
-        class="m-2"
+        class="px-6 py-10 text-center"
       >
-        <div class="flex items-center gap-4 px-5 py-5 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-          <!-- Empty State Icon -->
-          <div class="relative flex-shrink-0 w-12 h-12 rounded-2xl bg-white border border-gray-50 flex items-center justify-center shadow-sm text-gray-400">
-            <SearchX class="w-5 h-5" />
-          </div>
-
-          <div class="flex-1 min-w-0">
-            <p class="text-sm font-medium text-gray-900 mb-0.5 truncate">
-              No results for "{{ heroSearchQuery }}"
-            </p>
-            <p class="text-sm font-medium text-gray-500 leading-relaxed mb-3">
-              We couldn't find what you were looking for. Try a different search!
-            </p>
-            <!-- Suggestion tags -->
-            <div class="flex flex-wrap gap-1.5">
-              <button
-                v-for="tag in ['Rice & Stew', 'Sharwama', 'Pepper Soup', 'Amala', 'Fried Rice']"
-                :key="tag"
-                @click="heroSearchQuery = tag; fetchSuggestions()"
-                class="px-3 py-1 text-[11px] font-bold bg-white border border-gray-50 rounded-full text-gray-500 hover:border-parentPrimary/30 hover:text-parentPrimary hover:bg-parentPrimary/5 transition-all active:scale-95"
-              >
-                {{ tag }}
-              </button>
-            </div>
-          </div>
+        <SearchX class="mx-auto h-5 w-5 text-gray-300" />
+        <p class="mt-3 text-sm font-semibold text-gray-900">
+          No results for &ldquo;{{ heroSearchQuery }}&rdquo;
+        </p>
+        <p class="mt-1 text-sm text-gray-500">Try a different word, or pick one of these:</p>
+        <div class="mt-4 flex flex-wrap justify-center gap-2">
+          <button
+            v-for="tag in ['Rice & Stew', 'Sharwama', 'Pepper Soup', 'Amala']"
+            :key="tag"
+            type="button"
+            @click="heroSearchQuery = tag; fetchSuggestions()"
+            class="rounded-full bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
+          >
+            {{ tag }}
+          </button>
         </div>
+      </div>
 
         <!-- Time-of-day fallback suggestions -->
         <div v-if="timeOfDaySuggestions.length > 0" class="mt-3">
@@ -193,7 +195,6 @@
       </div>
 
     </div>
-  </div>
 </Transition>
             </div>
 
