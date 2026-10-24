@@ -296,11 +296,10 @@ const form = ref({
 
 const minRunnerFee = ref(300)
 const customCommissionPercentage = ref(20)
+const customCustomerFee = ref(100)
 
 const serviceCharge = computed(() => {
-  const pct = Number(customCommissionPercentage.value) || 20
-  const runner = Number(form.value.runnerFee) || 0
-  return Math.round(runner * (pct / 100))
+  return Number(customCustomerFee.value || 100)
 })
 
 onMounted(async () => {
@@ -312,6 +311,11 @@ onMounted(async () => {
     }
     if (settings?.customErrandCommissionPercentage != null && !isNaN(Number(settings.customErrandCommissionPercentage))) {
       customCommissionPercentage.value = Number(settings.customErrandCommissionPercentage)
+    }
+    if (settings?.customErrandCustomerFee != null && !isNaN(Number(settings.customErrandCustomerFee))) {
+      customCustomerFee.value = Number(settings.customErrandCustomerFee)
+    } else if (settings?.convenienceFee != null && !isNaN(Number(settings.convenienceFee))) {
+      customCustomerFee.value = Number(settings.convenienceFee)
     }
   } catch (e) {
     // Fallback gracefully to default

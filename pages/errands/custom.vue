@@ -562,13 +562,12 @@ const justAuthenticated = ref(false)
 const failedPaymentReference = ref('')
 const minRunnerFee = ref(300)
 const customCommissionPercentage = ref(20)
+const customCustomerFee = ref(100)
 const enableTransferFee = ref(false)
 
-// Service charge is dynamically calculated as the admin-configured percentage of the runner fee
+// Customer pays a fixed platform service fee specially for custom errands
 const serviceCharge = computed(() => {
-  const pct = Number(customCommissionPercentage.value) || 20
-  const runner = Number(form.value.runnerFee) || 0
-  return Math.round(runner * (pct / 100))
+  return Number(customCustomerFee.value || 100)
 })
 
 const errandType = ref<'custom' | 'market'>('custom')
@@ -613,7 +612,7 @@ const selectPool = (pool: any) => {
 
 const fetchInitialData = async () => {
   fetchPools()
-  // Fetch admin-configurable minimum runner fee and custom errand commission percentage
+  // Fetch admin-configurable minimum runner fee and custom errand fees
   try {
     const settingsRes = await orders_api.getCustomErrandSettings()
     const settings = settingsRes?.data || settingsRes
@@ -622,6 +621,11 @@ const fetchInitialData = async () => {
     }
     if (settings?.customErrandCommissionPercentage != null && !isNaN(Number(settings.customErrandCommissionPercentage))) {
       customCommissionPercentage.value = Number(settings.customErrandCommissionPercentage)
+    }
+    if (settings?.customErrandCustomerFee != null && !isNaN(Number(settings.customErrandCustomerFee))) {
+      customCustomerFee.value = Number(settings.customErrandCustomerFee)
+    } else if (settings?.convenienceFee != null && !isNaN(Number(settings.convenienceFee))) {
+      customCustomerFee.value = Number(settings.convenienceFee)
     }
     enableTransferFee.value = false
   } catch (e) {
