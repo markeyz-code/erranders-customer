@@ -83,8 +83,11 @@
               <span :class="getStatusBadge(order.status)" class="sm:hidden text-[9px] font-medium uppercase px-2 py-0.5 rounded-md border shrink-0">
                 {{ formatStatus(order.status) }}
               </span>
+              <span v-if="order.deliveryPin && !['delivered', 'cancelled'].includes(order.status)" class="bg-[#FF5C1A]/10 text-[#FF5C1A] border border-[#FF5C1A]/30 text-[10px] font-black px-2 py-0.5 rounded-md shrink-0">
+                PIN: {{ order.deliveryPin }}
+              </span>
             </div>
-            <p class="text-[11px] font-bold text-gray-500 truncate">{{ order.vendor?.storeName || 'Custom Errand' }}</p>
+            <p class="text-[11px] font-bold text-gray-500 truncate">{{ order.vendor?.storeName || (order.type === 'custom_errand' ? 'Custom Errand' : 'Errand') }}</p>
           </div>
         </div>
 
@@ -94,6 +97,9 @@
         </div>
 
         <div class="shrink-0 flex items-center gap-2">
+          <span v-if="order.deliveryPin && !['delivered', 'cancelled'].includes(order.status)" class="hidden sm:inline-flex items-center gap-1 bg-gray-900 text-[#FF5C1A] text-[11px] font-black px-2.5 py-1 rounded-md tracking-wider">
+            🔑 PIN: {{ order.deliveryPin }}
+          </span>
           <span :class="getStatusBadge(order.status)" class="hidden sm:block text-[9px] font-medium uppercase px-2.5 py-1 rounded-md border">
             {{ formatStatus(order.status) }}
           </span>
@@ -140,13 +146,34 @@
             </div>
 
             <!-- Body -->
-            <div class="p-4 space-y-6 max-h-[60vh] md:max-h-none overflow-y-auto">
+            <div class="p-4 space-y-4 max-h-[60vh] md:max-h-none overflow-y-auto">
+              <!-- Security PIN Card (Instantly visible upon opening order) -->
+              <div v-if="selectedOrder.deliveryPin && !['delivered', 'cancelled'].includes(selectedOrder.status)" class="bg-gradient-to-r from-gray-900 via-gray-900 to-[#1f1612] rounded-2xl p-4 text-white border-2 border-[#FF5C1A]/50 flex items-center justify-between shadow-md">
+                <div>
+                  <div class="flex items-center gap-1.5 text-[10px] font-bold text-[#FF5C1A] uppercase tracking-wider mb-1">
+                    <ShieldCheck class="w-3.5 h-3.5" /> Security Delivery PIN
+                  </div>
+                  <div class="flex items-center gap-1.5">
+                    <span v-for="(digit, idx) in (selectedOrder.deliveryPin || '').split('')" :key="idx" class="w-8 h-10 rounded-lg bg-black/60 text-[#FF5C1A] text-xl font-black flex items-center justify-center border border-white/10 shadow-inner">
+                      {{ digit }}
+                    </span>
+                  </div>
+                  <p class="text-[10px] text-gray-300 font-medium mt-1">Give this code to your rider upon arrival</p>
+                </div>
+                <button 
+                  @click.stop="copyPin(selectedOrder.deliveryPin)" 
+                  class="px-3.5 py-2.5 bg-white/10 hover:bg-white/20 active:scale-95 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1 border border-white/10"
+                >
+                  <Copy class="w-3.5 h-3.5" /> Copy
+                </button>
+              </div>
+
               <div class="bg-gray-50 rounded-2xl p-5 space-y-4 border border-gray-50">
                 <div class="flex items-center gap-3">
                   <div class="w-8 h-8 rounded-xl bg-white border border-gray-50 flex items-center justify-center text-sm shrink-0">🏪</div>
                   <div class="flex-1 min-w-0">
-                    <p class="text-[9px] font-bold uppercase tracking-wider text-gray-400">Vendor</p>
-                    <p class="text-sm font-medium text-gray-900 truncate">{{ selectedOrder.vendor?.storeName || 'Unknown Vendor' }}</p>
+                    <p class="text-[9px] font-bold uppercase tracking-wider text-gray-400">Vendor / Request</p>
+                    <p class="text-sm font-medium text-gray-900 truncate">{{ selectedOrder.vendor?.storeName || (selectedOrder.type === 'custom_errand' ? 'Custom Errand' : 'Errand') }}</p>
                   </div>
                 </div>
                 
@@ -169,13 +196,6 @@
                 >
                   Track Errand <ArrowRight class="w-3.5 h-3.5" />
                 </button>
-
-                <!-- <button
-                  @click="handleReorder(selectedOrder)"
-                  class="w-full py-3.5 bg-white text-gray-900 rounded-xl text-sm font-medium uppercase tracking-wider border border-gray-25 hover:bg-gray-50 transition-all flex items-center justify-center gap-2 active:scale-95"
-                >
-                  Order Again
-                </button> -->
                 
                 <button
                   v-if="['pending', 'confirmed'].includes(selectedOrder.status)"
@@ -194,7 +214,7 @@
 </template>
 
 <script setup lang="ts">
-import { ClipboardList, ChevronRight, Search, ArrowRight, X } from 'lucide-vue-next';
+import { ClipboardList, ChevronRight, Search, ArrowRight, X, ShieldCheck, Copy } from 'lucide-vue-next';
 import { useStudentOrders } from '@/composables/modules/orders';
 import { exam_mode_api } from '@/api_factory/modules/exam-mode';
 import { useCustomToast } from '@/composables/core/useCustomToast';
@@ -206,6 +226,12 @@ definePageMeta({
 
 const { loading, orders, fetchOrders, cancelOrder } = useStudentOrders();
 const { pushToast } = useCustomToast();
+
+const copyPin = (pin: string) => {
+  if (!pin) return;
+  navigator.clipboard.writeText(pin);
+  pushToast({ title: 'PIN Copied!', message: 'Give this 4-digit code to your Errand Ninja.', toastType: 'success' });
+};
 
 const searchQuery = ref('');
 const activeFilter = ref('all');

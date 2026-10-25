@@ -54,8 +54,62 @@
       <!-- Main Content -->
       <div class="space-y-5">
 
+             <!-- PROMINENT SECURITY DELIVERY PIN (Always visible at the top of active orders) -->
+             <div 
+               v-if="order.deliveryPin && order.status !== 'cancelled' && order.status !== 'delivered'" 
+               class="relative overflow-hidden bg-gradient-to-br from-[#171310] via-gray-900 to-[#2A1810] text-white rounded-2xl md:rounded-3xl p-5 md:p-6 shadow-xl border-2 border-[#FF5C1A]/50 mb-6 animate-fade-in"
+             >
+               <div class="absolute -right-16 -top-16 w-48 h-48 bg-[#FF5C1A]/20 rounded-full blur-3xl pointer-events-none"></div>
+
+               <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
+                 <div class="space-y-1.5 flex-1">
+                   <div class="inline-flex items-center gap-2 bg-[#FF5C1A] text-white text-[11px] font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+                     <ShieldCheck class="w-3.5 h-3.5" /> Security Verification PIN
+                   </div>
+                   <h3 class="text-xl md:text-2xl font-black tracking-tight text-white mt-1">
+                     Give this 4-digit code to your Errand Ninja
+                   </h3>
+                   <p class="text-xs md:text-sm text-gray-300 font-medium max-w-lg leading-relaxed">
+                     Your rider will ask for this code upon arrival with your {{ order.type === 'custom_errand' ? 'items' : 'order' }} to finalize and hand over delivery.
+                   </p>
+                 </div>
+
+                 <!-- 4-Digit PIN Display -->
+                 <div class="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+                   <div class="flex items-center gap-2">
+                     <div 
+                       v-for="(digit, idx) in (order.deliveryPin || '0000').split('')" 
+                       :key="idx" 
+                       class="w-12 h-16 sm:w-14 sm:h-16 rounded-xl bg-black/70 border border-white/20 flex items-center justify-center text-3xl font-black text-[#FF5C1A] shadow-inner tracking-tight"
+                     >
+                       {{ digit }}
+                     </div>
+                   </div>
+
+                   <div class="flex sm:flex-col gap-2 w-full sm:w-auto">
+                     <button 
+                       @click="copyVerificationCode" 
+                       class="flex-1 sm:flex-initial px-4 py-2.5 bg-white/10 hover:bg-white/20 active:scale-95 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 border border-white/10 shadow-sm"
+                     >
+                       <Copy class="w-3.5 h-3.5" />
+                       <span>Copy Code</span>
+                     </button>
+
+                     <button 
+                       @click="resendPinSms"
+                       :disabled="isResendingPin"
+                       class="flex-1 sm:flex-initial px-4 py-2.5 bg-[#FF5C1A] hover:bg-[#e6511a] active:scale-95 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm disabled:opacity-50"
+                     >
+                       <Loader2 v-if="isResendingPin" class="w-3.5 h-3.5 animate-spin" />
+                       <span v-else>📲 SMS to Phone</span>
+                     </button>
+                   </div>
+                 </div>
+               </div>
+             </div>
+
              <!-- Status Communication Banners -->
-             <div v-if="order.type !== 'custom_errand' && order.status !== 'pending' && order.status !== 'delivered' && order.status !== 'cancelled'" class="animate-fade-in">
+             <div v-if="order.status !== 'pending' && order.status !== 'delivered' && order.status !== 'cancelled'" class="animate-fade-in">
                 <!-- Vendor ready, no errander yet -->
                 <div v-if="!order.errander && order.status === 'ready_for_pickup'" class="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex gap-4 items-start shadow-sm mb-4">
                   <div class="w-10 h-10 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center shrink-0">
@@ -942,6 +996,39 @@
     </div>
   </div>
 
+  <!-- Mobile Sticky PIN Bar (Pinned at bottom of viewport for instant access on phone) -->
+  <div 
+    v-if="order?.deliveryPin && ['confirmed', 'preparing', 'ready_for_pickup', 'picked_up', 'in_transit', 'interception_in_progress'].includes(order.status)" 
+    class="fixed bottom-4 left-4 right-4 z-40 md:hidden bg-gray-900/95 backdrop-blur-md text-white p-3.5 rounded-2xl shadow-2xl border-2 border-[#FF5C1A]/60 flex items-center justify-between animate-slide-up"
+  >
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-[#FF5C1A] flex items-center justify-center text-white font-black text-base shadow-sm shrink-0">
+        🔑
+      </div>
+      <div>
+        <p class="text-[9px] font-black text-gray-300 uppercase tracking-wider leading-none mb-1">Delivery PIN for Rider</p>
+        <div class="flex items-center gap-1">
+          <span 
+            v-for="(digit, idx) in (order.deliveryPin || '').split('')" 
+            :key="idx" 
+            class="px-2 py-0.5 rounded-lg bg-black/70 text-[#FF5C1A] font-black text-lg tracking-wider border border-white/10"
+          >
+            {{ digit }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="flex items-center gap-1.5">
+      <button 
+        @click="copyVerificationCode" 
+        class="px-3 py-2 bg-white/15 hover:bg-white/25 active:scale-95 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1"
+      >
+        <Copy class="w-3.5 h-3.5" />
+        <span>Copy</span>
+      </button>
+    </div>
+  </div>
+
 </template>
 <script setup lang="ts">
 import {
@@ -1676,6 +1763,28 @@ const copyVerificationCode = async () => {
   }
 };
 
+const isResendingPin = ref(false);
+const resendPinSms = async () => {
+  if (!order.value?._id || isResendingPin.value) return;
+  isResendingPin.value = true;
+  try {
+    await api.post(`/orders/${order.value._id}/resend-delivery-pin`);
+    showToast({
+      title: 'PIN Sent!',
+      message: 'Your 4-digit Delivery PIN has been sent to your phone via SMS.',
+      toastType: 'success'
+    });
+  } catch (e: any) {
+    showToast({
+      title: 'Notice',
+      message: e?.response?.data?.message || 'Could not send SMS. Please view the code directly on this screen.',
+      toastType: 'info'
+    });
+  } finally {
+    isResendingPin.value = false;
+  }
+};
+
 const showArrivalModal = ref(false);
 const hasSeenArrivalModal = ref(false);
 
@@ -1690,7 +1799,7 @@ const copyVerificationCodeAndClose = async () => {
 };
 
 watch(() => order.value?.status, (newStatus) => {
-  if (newStatus === 'in_transit' && !hasSeenArrivalModal.value) {
+  if (['in_transit', 'picked_up'].includes(newStatus) && !hasSeenArrivalModal.value) {
     showArrivalModal.value = true;
   }
 }, { immediate: true });

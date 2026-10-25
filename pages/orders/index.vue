@@ -101,16 +101,20 @@
  </div>
 
  <!-- Status & Action -->
- <div class="flex items-center justify-between md:justify-end gap-4 border-t md:border-t-0 pt-4 md:pt-0">
+ <div class="flex items-center justify-between md:justify-end gap-3 border-t md:border-t-0 pt-4 md:pt-0">
+ <div v-if="order.deliveryPin && !['delivered', 'cancelled'].includes(order.status)" class="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-950 text-[#FF5C1A] rounded-xl text-xs font-black border border-gray-800 shadow-sm shrink-0">
+ <ShieldCheck class="w-3.5 h-3.5" />
+ <span>PIN: {{ order.deliveryPin }}</span>
+ </div>
  <div :class="[
- 'px-4 py-1.5 rounded-full text-sm font-medium border',
+ 'px-4 py-1.5 rounded-full text-xs font-bold border',
  getStatusClass(order.status)
  ]">
- {{ order.status?.replace('_', ' ') }}
+ {{ order.status?.replace(/_/g, ' ') }}
  </div>
  <NuxtLink 
  :to="`/orders/${order._id}`"
- class="w-10 h-10 bg-gray-50 text-gray-900 rounded-xl flex items-center justify-center border border-gray-50 hover:bg-gray-900 hover:text-white hover:border-gray-25transition-all"
+ class="w-10 h-10 bg-gray-50 text-gray-900 rounded-xl flex items-center justify-center border border-gray-50 hover:bg-gray-900 hover:text-white hover:border-gray-25 transition-all shrink-0"
  >
  <ChevronRight class="w-4 h-4" />
  </NuxtLink>
@@ -125,7 +129,7 @@
 <script setup lang="ts">
 import { 
  ArrowLeft, ShoppingBag, ChevronRight, Clock, 
- CheckCircle2, Package, Truck, AlertCircle 
+ CheckCircle2, Package, Truck, AlertCircle, ShieldCheck
 } from 'lucide-vue-next';
 import { useStudentOrders } from '@/composables/modules/orders';
 import { ref, computed, onMounted } from 'vue';

@@ -16,6 +16,62 @@
  </div>
  </header>
 
+ <!-- Active Orders & Delivery Verification PIN Alert -->
+ <section v-if="activeOrdersWithPin.length > 0" class="space-y-3">
+ <div 
+ v-for="activeOrder in activeOrdersWithPin" 
+ :key="activeOrder._id"
+ class="relative overflow-hidden bg-gradient-to-r from-gray-950 via-gray-900 to-[#2A1810] text-white rounded-2xl p-4 md:p-5 border-2 border-[#FF5C1A] shadow-xl animate-fade-in"
+ >
+ <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+ <div class="space-y-1">
+ <div class="flex items-center gap-2">
+ <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+ <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FF5C1A] text-white text-[10px] font-black uppercase tracking-wider">
+ <ShieldCheck class="w-3.5 h-3.5" /> Delivery Verification PIN
+ </span>
+ <span class="text-xs font-bold text-gray-400 capitalize">
+ {{ activeOrder.type === 'custom_errand' ? 'Custom Errand' : 'Food Order' }} • {{ activeOrder.status?.replace(/_/g, ' ') }}
+ </span>
+ </div>
+ <p class="text-xs text-gray-300 font-medium">
+ Give this 4-digit code to your Errand Ninja upon arrival:
+ </p>
+ </div>
+
+ <div class="flex items-center gap-3">
+ <div class="flex items-center gap-1.5">
+ <span 
+ v-for="(digit, idx) in (activeOrder.deliveryPin || '').split('')" 
+ :key="idx" 
+ class="w-10 h-12 rounded-xl bg-black/80 border border-white/20 flex items-center justify-center text-2xl font-black text-[#FF5C1A] shadow-inner"
+ >
+ {{ digit }}
+ </span>
+ </div>
+
+ <div class="flex items-center gap-2">
+ <button 
+ @click.stop="copyPin(activeOrder.deliveryPin)" 
+ class="px-3 py-2.5 bg-white/10 hover:bg-white/20 active:scale-95 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1 border border-white/10"
+ title="Copy PIN"
+ >
+ <Copy class="w-3.5 h-3.5" />
+ <span class="hidden sm:inline">Copy</span>
+ </button>
+ <NuxtLink 
+ :to="`/dashboard/orders/${activeOrder._id}`" 
+ class="px-4 py-2.5 bg-[#FF5C1A] hover:bg-[#e6511a] active:scale-95 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-md shadow-[#FF5C1A]/20"
+ >
+ <span>Track Errand</span>
+ <ArrowRight class="w-3.5 h-3.5" />
+ </NuxtLink>
+ </div>
+ </div>
+ </div>
+ </div>
+ </section>
+
  <!-- Quick Stats: manifest tiles -->
  <section class="grid grid-cols-2 lg:grid-cols-4 gap-3">
  <div v-for="stat in quickStats" :key="stat.label"
@@ -255,7 +311,8 @@
 import { useAuth } from '@/composables/modules/auth';
 import { useLandingPage } from '@/composables/modules/landing';
 import { useUser } from '@/composables/modules/auth/user';
-import { MapPin, Search, ArrowRight, ArrowUpRight, PackageSearch, Tag, Star, Clock, Heart, Users, UtensilsCrossed, ShoppingCart, ShieldCheck, Trophy, Flame, BarChart3, RefreshCw, WifiOff, MoonStar, Rocket, Lock, Package, Coins } from 'lucide-vue-next';
+import { useStudentOrders } from '@/composables/modules/orders';
+import { MapPin, Search, ArrowRight, ArrowUpRight, PackageSearch, Tag, Star, Clock, Heart, Users, UtensilsCrossed, ShoppingCart, ShieldCheck, Trophy, Flame, BarChart3, RefreshCw, WifiOff, MoonStar, Rocket, Lock, Package, Coins, Copy } from 'lucide-vue-next';
 import { onMounted, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCustomToast } from '@/composables/core/useCustomToast';
@@ -269,10 +326,25 @@ const router = useRouter();
 const { user } = useUser();
 const { fetchProfile } = useAuth();
 const { loading, onlineVendors, fetchError, fetchHomeData } = useLandingPage();
+const { orders: studentOrders, fetchOrders } = useStudentOrders();
 const { showToast } = useCustomToast();
 
+const activeOrdersWithPin = computed(() => {
+  return (studentOrders.value || []).filter((o: any) => o.deliveryPin && !['delivered', 'cancelled'].includes(o.status));
+});
+
+const copyPin = async (pin: string) => {
+  if (!pin) return;
+  try {
+    await navigator.clipboard.writeText(pin);
+    showToast({ title: 'Copied!', message: 'Delivery PIN copied to clipboard.', toastType: 'success' });
+  } catch (err) {
+    showToast({ title: 'Failed', message: 'Could not copy PIN.', toastType: 'error' });
+  }
+};
+
 onMounted(async () => {
-  await fetchProfile();
+  await Promise.allSettled([fetchProfile(), fetchOrders()]);
 });
 
 const searchQuery = ref('');
