@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen w-full flex flex-col items-center justify-center bg-white overflow-hidden py-8 px-4 sm:px-4 lg:px-5">
     <!-- Form Card -->
-    <div class="w-full max-w-sm flex flex-col justify-center px-0 sm:px-4 py-8 bg-white sm:rounded-[2rem] relative z-10 my-8">
+    <div class="w-full max-w-lg flex flex-col justify-center px-0 sm:px-4 py-8 bg-white sm:rounded-[2rem] relative z-10 my-8">
       <div class="mb-6 text-center flex flex-col items-center">
         <NuxtLink to="/auth/forgot-password" class="inline-flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-900 transition-colors mb-6 group self-start absolute top-8 left-8 sm:static sm:mb-8 sm:self-center">
           <ArrowLeft class="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
@@ -16,7 +16,7 @@
         <p class="text-gray-500 text-lg">We sent a verification code to <span class="font-semibold text-gray-900">{{ email }}</span></p>
       </div>
 
-      <form @submit.prevent="handleVerify" class="space-y-8 max-w-sm">
+      <form @submit.prevent="handleVerify" class="space-y-8 max-w-lg">
         <div class="space-y-4">
           <label class="text-sm font-bold text-gray-700 ml-1">reset code</label>
           <UiOtpInput v-model="otp" @complete="handleVerify" />

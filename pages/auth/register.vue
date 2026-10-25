@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen w-full flex flex-col items-center justify-center bg-white overflow-hidden py-8 px-4 sm:px-4 lg:px-5">
     <!-- Form Card -->
-    <div class="w-full max-w-sm flex flex-col justify-center px-0 sm:px-4 py-8 bg-white sm:rounded-[2rem] relative z-10 my-8">
+    <div class="w-full max-w-lg flex flex-col justify-center px-0 sm:px-4 py-8 bg-white sm:rounded-[2rem] relative z-10 my-8">
       <div class="mb-6 text-center flex flex-col items-center">
         <NuxtLink to="/" class="flex items-center gap-2 mb-8 inline-block group">
           <div class="flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -12,7 +12,7 @@
         <p class="text-gray-500 text-sm sm:text-base">Join the campus delivery community</p>
       </div>
 
-      <form @submit.prevent="handleRegister" class="space-y-4 max-w-sm w-full mb-6">
+      <form @submit.prevent="handleRegister" class="space-y-4 max-w-lg w-full mb-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <UiAnimatedInput v-model="form.firstName" type="text" label="First name" required />
           <UiAnimatedInput v-model="form.lastName" type="text" label="Last name" required />
@@ -45,7 +45,7 @@
         <div class="flex-1 h-px bg-gray-100" />
       </div>
 
-      <div class="max-w-sm w-full mt-2">
+      <div class="max-w-lg w-full mt-2">
         <button 
           type="button" 
           @click="handleGoogleSignUp" 

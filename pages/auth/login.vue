@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen w-full flex flex-col items-center justify-center bg-white overflow-hidden py-8 px-4 sm:px-4 lg:px-5">
     <!-- Form Card -->
-    <div class="w-full max-w-sm flex flex-col justify-center px-0 sm:px-4 py-8 bg-white sm:rounded-[2rem] relative z-10 my-8">
+    <div class="w-full max-w-lg flex flex-col justify-center px-0 sm:px-4 py-8 bg-white sm:rounded-[2rem] relative z-10 my-8">
       <div class="mb-6 text-center flex flex-col items-center">
         <NuxtLink to="/" class="flex items-center gap-2 mb-8 inline-block group">
           <div class="flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -12,7 +12,7 @@
         <p class="text-gray-500 text-sm sm:text-base">Sign in to order your favorites and track deliveries</p>
       </div>
 
-      <form @submit.prevent="handleLogin" class="space-y-4 max-w-sm w-full">
+      <form @submit.prevent="handleLogin" class="space-y-4 max-w-lg w-full">
         <UiAnimatedInput v-model="email" type="email" label="Email" required />
         <UiAnimatedInput v-model="password" type="password" label="Password" required />
         
@@ -34,7 +34,7 @@
         </button>
       </form>
 
-      <div class="max-w-sm w-full mt-6">
+      <div class="max-w-lg w-full mt-6">
         <div class="flex items-center gap-3 mb-6">
           <div class="flex-1 h-px bg-gray-100" />
           <span class="text-xs text-gray-400 font-bold uppercase tracking-wider">or</span>
