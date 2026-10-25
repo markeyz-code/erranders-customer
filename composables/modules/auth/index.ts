@@ -238,16 +238,26 @@ export const useAuth = () => {
   const register = async (payload: any, options: { redirect?: boolean } = { redirect: true }) => {
     loading.value = true;
     try {
+      payload.role = 'student';
       const res = await auth_api.register(payload);
+      const responseData = res.data?.data || res.data;
+      const userData = responseData?.user;
+      const tokenValue = responseData?.token;
+      
+      if (userData && tokenValue) {
+        setUser(userData);
+        setToken(tokenValue);
+      }
+
       showToast({
         title: "Account Created!",
-        message: "We've sent a verification code to your email.",
+        message: responseData?.message || "Welcome to Erranders! 🎉",
         toastType: "success",
       });
       if (options.redirect) {
-        navigateTo(`/auth/verify-email?email=${encodeURIComponent(payload.email)}`);
+        navigateTo('/dashboard');
       }
-      return res.data;
+      return responseData;
     } catch (e: any) {
       throw e;
     } finally {
