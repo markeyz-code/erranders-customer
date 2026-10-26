@@ -2,8 +2,8 @@
   <div class="w-full py-8 overflow-hidden bg-white">
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex items-center justify-between mb-4">
-        <h2 class="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-500 tracking-tight flex items-center gap-2 drop-shadow-sm">
-          <span class="text-2xl drop-shadow-none">✨</span> <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-500">Exam Combo</span> <span class="text-2xl drop-shadow-none">📚</span>
+        <h2 class="text-xl md:text-2xl font-black text-[#FF5C1A] tracking-tight flex items-center gap-2 drop-shadow-sm">
+          <span class="text-2xl drop-shadow-none">✨</span> <span>Exam Combo</span> <span class="text-2xl drop-shadow-none">📚</span>
         </h2>
         <div class="flex items-center gap-2">
           <button 
@@ -61,7 +61,7 @@
           <div v-if="promo.slotsLeft !== undefined" class="absolute top-0 left-0 right-0 z-20 py-1.5 bg-red-600 text-white shadow-md text-[11px] md:text-sm font-black uppercase tracking-[0.2em] flex items-center justify-center animate-pulse border-b-2 border-red-800">
             🚨 HURRY! ONLY {{ promo.slotsLeft }} LEFT!
           </div>
-          <div v-else class="absolute top-3 right-3 z-20 px-2.5 py-1 bg-gradient-to-r from-red-500 to-rose-600 text-white rounded-full shadow-md text-[10px] font-extrabold uppercase  flex items-center gap-1">
+          <div v-else class="absolute top-3 right-3 z-20 px-2.5 py-1 bg-[#FF5C1A] text-white rounded-full shadow-md text-[10px] font-extrabold uppercase flex items-center gap-1">
             <Tag class="w-3 h-3" />
             Promo
           </div>
@@ -88,7 +88,7 @@
           </div>
 
           <!-- Content -->
-          <div class="p-4 flex flex-col flex-1 bg-gradient-to-b from-white to-red-50/30">
+          <div class="p-4 flex flex-col flex-1 bg-white">
             <h3 class="font-bold text-gray-900 text-base md:text-lg mb-1 line-clamp-1 group-hover:text-red-600 transition-colors">{{ promo.name }}</h3>
             <p class="text-sm text-gray-600 mb-3 line-clamp-2 min-h-[32px] font-medium">{{ promo.description || 'Special combo deal!' }}</p>
             

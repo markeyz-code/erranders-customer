@@ -7,7 +7,7 @@
   <ActivePoolOrdersWidget />
  
  <!-- Birthday Banner -->
- <div v-if="isBirthday" class="bg-gradient-to-r from-[#FF5C1A] to-[#E54D12] text-white py-3 px-4 text-center shadow-sm border border-gray-50 relative z-[51]">
+ <div v-if="isBirthday" class="bg-[#FF5C1A] text-white py-3 px-4 text-center shadow-sm border border-gray-50 relative z-[51]">
    <div class="max-w-7xl mx-auto flex items-center justify-center gap-2 animate-bounce">
      <span class="text-xl">🎂</span>
      <p class="text-sm md:text-base font-bold tracking-wide">
@@ -440,7 +440,7 @@
   </section>
 
   <!-- Meal Autopilot Section -->
-  <section class="py-20 bg-gradient-to-br from-orange-50/50 to-white overflow-hidden border-t border-slate-100 relative">
+  <section class="py-20 bg-white overflow-hidden border-t border-slate-100 relative">
     <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1.5px,transparent_1.5px)] [background-size:24px_24px] opacity-50 z-0 pointer-events-none"></div>
     <div class="max-w-7xl mx-auto px-4 lg:px-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
       <!-- Left: Text -->
@@ -539,7 +539,7 @@
   </section>  
 
   <!-- CTA Section — Light Theme -->
-  <section class="relative py-20 overflow-hidden bg-gradient-to-b from-slate-50/80 via-white to-white border-t border-slate-100">
+  <section class="relative py-20 overflow-hidden bg-white border-t border-slate-100">
     <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1.5px,transparent_1.5px)] [background-size:24px_24px] opacity-70 z-0 pointer-events-none"></div>
     <div class="max-w-3xl mx-auto px-4 lg:px-10 relative z-10 text-center space-y-6">
       <h2 class="text-4xl md:text-5xl font-medium text-slate-900 -tighter leading-tight">

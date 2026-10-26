@@ -1,7 +1,7 @@
 <template>
   <div 
     :class="[
-      'relative overflow-hidden rounded-2xl md:rounded-3xl bg-gradient-to-br from-[#0B0F19] via-[#131D31] to-[#1E293B] border border-slate-800 shadow-xl text-white group transition-all duration-300',
+      'relative overflow-hidden rounded-2xl md:rounded-3xl bg-[#0B0F19] border border-slate-800 shadow-xl text-white group transition-all duration-300',
       compact ? 'p-4 sm:p-5' : 'p-5 sm:p-7 md:p-8'
     ]"
   >
@@ -30,7 +30,7 @@
           ]"
         >
           Decluttering or Moving? 
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#FF8C55] via-[#FF5C1A] to-[#FF4500]">
+          <span class="text-[#FF5C1A]">
             Trade on Decluttered By Erranders
           </span>
         </h3>

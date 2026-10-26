@@ -2,7 +2,7 @@
   <section
     :class="[
       isElevated ? 'z-40' : 'z-20',
-      'relative border-b border-slate-100 min-h-[calc(100dvh-3.5rem)] flex flex-col justify-start sm:justify-center px-4 sm:px-6 lg:px-8 pt-28 pb-12 sm:pt-36 sm:pb-16 md:pt-40 md:pb-20 overflow-visible bg-gradient-to-b from-slate-50/70 via-white to-white'
+      'relative border-b border-slate-100 min-h-[calc(100dvh-3.5rem)] flex flex-col justify-start sm:justify-center px-4 sm:px-6 lg:px-8 pt-28 pb-12 sm:pt-36 sm:pb-16 md:pt-40 md:pb-20 overflow-visible bg-white'
     ]"
   >
     <!-- Organic shapes, defined once and reused as clip paths. -->
@@ -47,7 +47,7 @@
             <!-- Bolder Main Headline (Changes across languages and campus slang) -->
             <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black leading-[1.12] tracking-tight text-slate-900 max-w-4xl mx-auto">
               {{ currentMessage.headlinePrefix }}
-              <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#FF5C1A] via-amber-500 to-[#FF4500] block sm:inline">
+              <span class="text-[#FF5C1A] block sm:inline">
                 {{ currentMessage.headlineHighlight }}
               </span>
             </h1>

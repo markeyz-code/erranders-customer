@@ -1,6 +1,6 @@
 <template>
   <div v-if="campaigns.length > 0" class="fixed bottom-0 left-0 right-0 z-[100] flex flex-col shadow-[0_-4px_20px_rgba(0,0,0,0.15)]">
-    <div v-for="pool in campaigns" :key="pool.campaign._id" class="bg-gradient-to-r from-[#FF5C1A] to-[#E54D12] text-white border-t border-[#D8450F] overflow-hidden relative">
+    <div v-for="pool in campaigns" :key="pool.campaign._id" class="bg-[#FF5C1A] text-white border-t border-[#D8450F] overflow-hidden relative">
     <div class="max-w-7xl mx-auto px-4 py-2 sm:py-2.5 flex flex-col md:flex-row items-center gap-3">
       
       <!-- CTA Section -->
@@ -27,7 +27,7 @@
       <div class="flex-1 overflow-hidden w-full relative group hidden sm:block h-[45px]">
         <!-- Mask for smooth fade edges -->
         <div class="absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-[#FF5C1A] to-transparent z-10"></div>
-        <div class="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-[#E54D12] to-transparent z-10"></div>
+        <div class="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-[#FF5C1A] to-transparent z-10"></div>
         
         <div class="flex items-center gap-2.5 animate-carousel hover:[animation-play-state:paused] min-w-max absolute top-1/2 -translate-y-1/2">
           <!-- Render items twice for seamless loop -->
@@ -59,7 +59,7 @@
     <Teleport to="body">
       <div v-if="showInfoModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center sm:p-6 animate-fade-in" @click="showInfoModal = false">
         <div class="bg-white w-full h-full sm:h-auto sm:max-h-[90vh] sm:rounded-3xl sm:max-w-lg shadow-2xl overflow-hidden relative flex flex-col" @click.stop>
-          <div class="bg-gradient-to-r from-[#FF5C1A] to-[#E54D12] px-6 py-8 text-center text-white relative shrink-0">
+          <div class="bg-[#FF5C1A] px-6 py-8 text-center text-white relative shrink-0">
             <button @click="showInfoModal = false" class="absolute top-4 right-4 p-2 bg-white/20 hover:bg-white/30 rounded-full transition-colors">
               <X class="w-5 h-5" />
             </button>
