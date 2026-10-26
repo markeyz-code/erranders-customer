@@ -83,7 +83,7 @@
               <span :class="getStatusBadge(order.status)" class="sm:hidden text-[9px] font-medium uppercase px-2 py-0.5 rounded-md border shrink-0">
                 {{ formatStatus(order.status) }}
               </span>
-              <span v-if="order.deliveryPin && !['delivered', 'cancelled'].includes(order.status)" class="bg-[#FF5C1A]/10 text-[#FF5C1A] border border-[#FF5C1A]/30 text-[10px] font-black px-2 py-0.5 rounded-md shrink-0">
+              <span v-if="isDeliveryPinActive(order)" class="bg-[#FF5C1A]/10 text-[#FF5C1A] border border-[#FF5C1A]/30 text-[10px] font-black px-2 py-0.5 rounded-md shrink-0">
                 PIN: {{ order.deliveryPin }}
               </span>
             </div>
@@ -97,7 +97,7 @@
         </div>
 
         <div class="shrink-0 flex items-center gap-2">
-          <span v-if="order.deliveryPin && !['delivered', 'cancelled'].includes(order.status)" class="hidden sm:inline-flex items-center gap-1 bg-gray-900 text-[#FF5C1A] text-[11px] font-black px-2.5 py-1 rounded-md tracking-wider">
+          <span v-if="isDeliveryPinActive(order)" class="hidden sm:inline-flex items-center gap-1 bg-gray-900 text-[#FF5C1A] text-[11px] font-black px-2.5 py-1 rounded-md tracking-wider">
             🔑 PIN: {{ order.deliveryPin }}
           </span>
           <span :class="getStatusBadge(order.status)" class="hidden sm:block text-[9px] font-medium uppercase px-2.5 py-1 rounded-md border">
@@ -147,8 +147,8 @@
 
             <!-- Body -->
             <div class="p-4 space-y-4 max-h-[60vh] md:max-h-none overflow-y-auto">
-              <!-- Security PIN Card (Instantly visible upon opening order) -->
-              <div v-if="selectedOrder.deliveryPin && !['delivered', 'cancelled'].includes(selectedOrder.status)" class="bg-gradient-to-r from-gray-900 via-gray-900 to-[#1f1612] rounded-2xl p-4 text-white border-2 border-[#FF5C1A]/50 flex items-center justify-between shadow-md">
+              <!-- Security PIN Card (Instantly visible upon opening active order) -->
+              <div v-if="isDeliveryPinActive(selectedOrder)" class="bg-gradient-to-r from-gray-900 via-gray-900 to-[#1f1612] rounded-2xl p-4 text-white border-2 border-[#FF5C1A]/50 flex items-center justify-between shadow-md">
                 <div>
                   <div class="flex items-center gap-1.5 text-[10px] font-bold text-[#FF5C1A] uppercase tracking-wider mb-1">
                     <ShieldCheck class="w-3.5 h-3.5" /> Security Delivery PIN
@@ -231,6 +231,15 @@ const copyPin = (pin: string) => {
   if (!pin) return;
   navigator.clipboard.writeText(pin);
   pushToast({ title: 'PIN Copied!', message: 'Give this 4-digit code to your Errand Ninja.', toastType: 'success' });
+};
+
+const isDeliveryPinActive = (order: any) => {
+  if (!order?.deliveryPin) return false;
+  const status = String(order.status || '').toLowerCase();
+  const validStatuses = ['confirmed', 'preparing', 'ready_for_pickup', 'picked_up', 'in_transit', 'interception_in_progress'];
+  const invalidStatuses = ['awaiting_payment', 'awaiting_payment_confirmation', 'pending', 'negotiating', 'draft', 'delivered', 'cancelled', 'refunded', 'disputed', 'failed'];
+  if (invalidStatuses.includes(status)) return false;
+  return validStatuses.includes(status);
 };
 
 const searchQuery = ref('');

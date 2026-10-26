@@ -56,7 +56,7 @@
 
              <!-- PROMINENT SECURITY DELIVERY PIN (Always visible at the top of active orders) -->
              <div 
-               v-if="order.deliveryPin && order.status !== 'cancelled' && order.status !== 'delivered'" 
+               v-if="order.deliveryPin && ['confirmed', 'preparing', 'ready_for_pickup', 'picked_up', 'in_transit', 'interception_in_progress'].includes(order.status) && !['awaiting_payment', 'awaiting_payment_confirmation', 'negotiating'].includes(order.status)" 
                class="relative overflow-hidden bg-gradient-to-br from-[#171310] via-gray-900 to-[#2A1810] text-white rounded-2xl md:rounded-3xl p-5 md:p-6 shadow-xl border-2 border-[#FF5C1A]/50 mb-6 animate-fade-in"
              >
                <div class="absolute -right-16 -top-16 w-48 h-48 bg-[#FF5C1A]/20 rounded-full blur-3xl pointer-events-none"></div>

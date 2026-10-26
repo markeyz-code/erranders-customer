@@ -102,7 +102,7 @@
 
  <!-- Status & Action -->
  <div class="flex items-center justify-between md:justify-end gap-3 border-t md:border-t-0 pt-4 md:pt-0">
- <div v-if="order.deliveryPin && !['delivered', 'cancelled'].includes(order.status)" class="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-950 text-[#FF5C1A] rounded-xl text-xs font-black border border-gray-800 shadow-sm shrink-0">
+ <div v-if="order.deliveryPin && ['confirmed', 'preparing', 'ready_for_pickup', 'picked_up', 'in_transit', 'interception_in_progress'].includes(order.status) && !['awaiting_payment', 'awaiting_payment_confirmation', 'negotiating'].includes(order.status)" class="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-950 text-[#FF5C1A] rounded-xl text-xs font-black border border-gray-800 shadow-sm shrink-0">
  <ShieldCheck class="w-3.5 h-3.5" />
  <span>PIN: {{ order.deliveryPin }}</span>
  </div>

@@ -50,7 +50,7 @@
  <div v-else-if="order" class="space-y-4 md:space-y-6">
  <!-- PROMINENT SECURITY DELIVERY PIN (Always visible at top of active orders) -->
  <div 
- v-if="order.deliveryPin && order.status !== 'cancelled' && order.status !== 'delivered'" 
+ v-if="order.deliveryPin && ['confirmed', 'preparing', 'ready_for_pickup', 'picked_up', 'in_transit', 'interception_in_progress'].includes(order.status) && !['awaiting_payment', 'awaiting_payment_confirmation', 'negotiating'].includes(order.status)" 
  class="relative overflow-hidden bg-gradient-to-br from-[#171310] via-gray-900 to-[#2A1810] text-white rounded-2xl md:rounded-3xl p-5 md:p-6 shadow-xl border-2 border-[#FF5C1A]/50 mb-6 animate-fade-in"
  >
  <div class="absolute -right-16 -top-16 w-48 h-48 bg-[#FF5C1A]/20 rounded-full blur-3xl pointer-events-none"></div>
@@ -920,7 +920,7 @@
 
  <!-- Sticky Floating Mobile PIN Bar (Guarantees customer never loses PIN on small screens) -->
  <div 
-   v-if="order && order.deliveryPin && order.status !== 'cancelled' && order.status !== 'delivered'" 
+   v-if="order && order.deliveryPin && ['confirmed', 'preparing', 'ready_for_pickup', 'picked_up', 'in_transit', 'interception_in_progress'].includes(order.status) && !['awaiting_payment', 'awaiting_payment_confirmation', 'negotiating'].includes(order.status)" 
    class="fixed bottom-0 inset-x-0 z-40 bg-gray-950/95 backdrop-blur-md border-t-2 border-[#FF5C1A] px-4 py-3 sm:hidden flex items-center justify-between shadow-2xl animate-slide-up"
  >
    <div class="flex items-center gap-2.5">

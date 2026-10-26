@@ -72,6 +72,37 @@
  </div>
  </section>
 
+ <!-- Awaiting Payment Alert: Prompts to pay instead of showing a delivery PIN -->
+ <section v-else-if="awaitingPaymentOrders.length > 0" class="space-y-3">
+ <div 
+ v-for="unpaidOrder in awaitingPaymentOrders" 
+ :key="unpaidOrder._id"
+ class="relative overflow-hidden bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 md:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-fade-in"
+ >
+ <div class="space-y-1">
+ <div class="flex items-center gap-2">
+ <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-800 text-[10px] font-black uppercase tracking-wider">
+ 💳 Payment Required
+ </span>
+ <span class="text-xs font-bold text-amber-800 capitalize">
+ {{ unpaidOrder.type === 'custom_errand' ? 'Custom Errand' : 'Order' }} • Awaiting Payment
+ </span>
+ </div>
+ <p class="text-xs text-amber-900/80 font-medium">
+ Complete payment for #{{ unpaidOrder.orderNumber || unpaidOrder._id?.slice(-6) }} so an Errand Ninja can be dispatched.
+ </p>
+ </div>
+
+ <NuxtLink 
+ :to="`/dashboard/orders/${unpaidOrder._id}`" 
+ class="px-4 py-2.5 bg-[#FF5C1A] hover:bg-[#e6511a] text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-md shadow-[#FF5C1A]/20 shrink-0"
+ >
+ <span>Complete Payment</span>
+ <ArrowRight class="w-3.5 h-3.5" />
+ </NuxtLink>
+ </div>
+ </section>
+
  <!-- Quick Stats: manifest tiles -->
  <section class="grid grid-cols-2 lg:grid-cols-4 gap-3">
  <div v-for="stat in quickStats" :key="stat.label"
@@ -330,7 +361,27 @@ const { orders: studentOrders, fetchOrders } = useStudentOrders();
 const { showToast } = useCustomToast();
 
 const activeOrdersWithPin = computed(() => {
-  return (studentOrders.value || []).filter((o: any) => o.deliveryPin && !['delivered', 'cancelled'].includes(o.status));
+  const activeDeliveryStatuses = ['picked_up', 'in_transit', 'ready_for_pickup', 'confirmed', 'preparing', 'interception_in_progress'];
+  const excludedStatuses = ['awaiting_payment', 'awaiting_payment_confirmation', 'pending', 'negotiating', 'draft', 'delivered', 'cancelled', 'refunded', 'disputed', 'failed'];
+
+  return (studentOrders.value || [])
+    .filter((o: any) => {
+      if (!o.deliveryPin) return false;
+      const status = String(o.status || '').toLowerCase();
+      if (excludedStatuses.includes(status)) return false;
+      if (o.paymentStatus && ['pending', 'failed'].includes(String(o.paymentStatus).toLowerCase()) && status === 'awaiting_payment') return false;
+      return activeDeliveryStatuses.includes(status);
+    })
+    .slice(0, 1); // Aggressively show at most 1 primary active delivery card to prevent page stacking
+});
+
+const awaitingPaymentOrders = computed(() => {
+  return (studentOrders.value || [])
+    .filter((o: any) => {
+      const status = String(o.status || '').toLowerCase();
+      return ['awaiting_payment', 'awaiting_payment_confirmation'].includes(status);
+    })
+    .slice(0, 1); // Show at most 1 payment prompt
 });
 
 const copyPin = async (pin: string) => {
