@@ -7,7 +7,7 @@ import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, signInWithPopup, getRedirectResult, signInWithRedirect } from 'firebase/auth';
 
 export const useAuth = () => {
-  const { setUser, setToken, logOut } = useUser();
+  const { setUser, setToken, setRefreshToken, logOut } = useUser();
   const { showToast } = useCustomToast();
   const loading = ref(false);
   const firebaseLoading = ref(false);
@@ -39,6 +39,7 @@ export const useAuth = () => {
         if (userData && tokenValue) {
           setUser(userData);
           setToken(tokenValue);
+          if (responseData?.refreshToken) setRefreshToken(responseData.refreshToken);
           
           if (!userData.phone) {
             showToast({
@@ -85,6 +86,7 @@ export const useAuth = () => {
       
       setUser(userData);
       setToken(tokenValue);
+      if (responseData?.refreshToken) setRefreshToken(responseData.refreshToken);
       
       showToast({
         title: "Welcome Back!",
@@ -156,6 +158,7 @@ export const useAuth = () => {
       
       setUser(userData);
       setToken(tokenValue);
+      if (responseData?.refreshToken) setRefreshToken(responseData.refreshToken);
       
       showToast({
         title: "Welcome Back!",
@@ -214,6 +217,7 @@ export const useAuth = () => {
       
       setUser(userData);
       setToken(tokenValue);
+      if (responseData?.refreshToken) setRefreshToken(responseData.refreshToken);
       
       showToast({
         title: "Guest Session Created",
@@ -247,6 +251,7 @@ export const useAuth = () => {
       if (userData && tokenValue) {
         setUser(userData);
         setToken(tokenValue);
+        if (responseData?.refreshToken) setRefreshToken(responseData.refreshToken);
       }
 
       showToast({
@@ -270,7 +275,7 @@ export const useAuth = () => {
       const res = await auth_api.getProfile();
       setUser(res.data);
     } catch (e) {
-      logOut();
+      console.warn('Could not fetch user profile:', e);
     }
   };
 
@@ -283,6 +288,7 @@ export const useAuth = () => {
       if (responseData?.token && responseData?.user) {
         setUser(responseData.user);
         setToken(responseData.token);
+        if (responseData?.refreshToken) setRefreshToken(responseData.refreshToken);
       }
 
       showToast({

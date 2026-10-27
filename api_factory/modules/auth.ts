@@ -44,4 +44,8 @@ export const auth_api = {
   changePassword: (payload: any) => {
     return GATEWAY_ENDPOINT_WITH_AUTH.post('/auth/change-password', payload);
   },
+
+  refreshToken: (refreshToken: string) => {
+    return GATEWAY_ENDPOINT.post('/auth/refresh', { refreshToken });
+  },
 };

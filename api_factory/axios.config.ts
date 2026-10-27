@@ -90,12 +90,14 @@ instanceArray.forEach((instance) => {
       const match = document.cookie.match(new RegExp('(^| )errandr_token=([^;]+)'));
       if (match) {
         token = match[2];
+      } else if (typeof localStorage !== 'undefined') {
+        token = localStorage.getItem('token') || localStorage.getItem('errandr_token') || '';
       }
     } else {
       // Fallback for SSR/Node if needed
       try {
         const { token: userToken } = useUser();
-        token = userToken.value;
+        token = userToken.value || '';
       } catch (e) {
         // ignore
       }
@@ -120,9 +122,7 @@ instanceArray.forEach((instance) => {
     (response: CustomAxiosResponse) => {
       return response;
     },
-    (err: any) => {
-      const { logOut } = useUser();
-      
+    async (err: any) => {
       // Check for timeout or network connection error (which includes CORS errors in browsers)
       if (err.code === 'ECONNABORTED' || err.message?.includes('timeout') || err.message?.includes('Network Error') || typeof err.response === "undefined") {
         try {
@@ -149,15 +149,51 @@ instanceArray.forEach((instance) => {
         };
       }
       if (err.response.status === 401) {
-        console.log(err.response.data.error)
-        
+        const originalRequest = err.config;
+
+        // Attempt transparent token refresh if we have a refresh token and haven't tried yet
+        if (originalRequest && !originalRequest._retry && typeof window !== 'undefined') {
+          originalRequest._retry = true;
+          let refreshToken = '';
+          const match = document.cookie.match(new RegExp('(^| )errandr_refresh_token=([^;]+)'));
+          if (match) {
+            refreshToken = match[2];
+          } else if (typeof localStorage !== 'undefined') {
+            refreshToken = localStorage.getItem('refreshToken') || localStorage.getItem('errandr_refresh_token') || '';
+          }
+
+          if (refreshToken) {
+            try {
+              const res = await axios.post(`${$GATEWAY_ENDPOINT}/auth/refresh`, { refreshToken });
+              const resData = res.data?.data || res.data;
+              const newToken = resData?.token;
+              const newRefresh = resData?.refreshToken;
+              const newUser = resData?.user;
+
+              if (newToken) {
+                const { setToken, setRefreshToken, setUser } = useUser();
+                setToken(newToken);
+                if (newRefresh) setRefreshToken(newRefresh);
+                if (newUser) setUser(newUser);
+
+                originalRequest.headers = originalRequest.headers || {};
+                originalRequest.headers.Authorization = `Bearer ${newToken}`;
+                return instance(originalRequest);
+              }
+            } catch (refreshErr) {
+              console.warn('Student token refresh attempt failed:', refreshErr);
+            }
+          }
+        }
+
         const publicPaths = ['/dashboard', '/vendors', '/search', '/', '/auth/login', '/auth/register', '/cart', '/errands/custom'];
         const isPublicPath = typeof window !== 'undefined' && 
           (publicPaths.includes(window.location.pathname) || window.location.pathname.startsWith('/vendors/'));
         
-        logOut(isPublicPath ? false : true);
-        
+        // NEVER log the user out if they are on a public page or viewing public resources
         if (!isPublicPath) {
+          const { logOut } = useUser();
+          logOut(true);
           getToast()({
             title: "Session Expired",
             message: "Please login to continue",
