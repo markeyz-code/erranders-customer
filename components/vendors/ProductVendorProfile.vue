@@ -1560,6 +1560,31 @@
         </div>
       </Transition>
     </Teleport>
+
+    <!-- Service providers are booked, not browsed. A shop grid of products is the wrong
+         shape for a fumigation crew, so the page states how it works and gives one action. -->
+    <div
+      v-if="isServiceVendor"
+      class="fixed inset-x-0 bottom-0 z-40 border-t border-gray-100 bg-white/95 px-4 py-3 pb-safe backdrop-blur-xl md:hidden"
+    >
+      <div class="flex items-center gap-3">
+        <div class="min-w-0 flex-1">
+          <p class="truncate text-sm font-bold text-gray-900">
+            {{ isMobileService ? 'We come to you' : 'Book an appointment' }}
+          </p>
+          <p class="truncate text-[11px] font-medium text-gray-500">
+            {{ isMobileService ? 'Booked and paid in the app, then we visit your room.' : 'Choose a time that suits you.' }}
+          </p>
+        </div>
+        <button
+          type="button"
+          class="shrink-0 rounded-full bg-[#FF5C1A] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#E54D12] active:scale-95"
+          @click="scrollToBooking"
+        >
+          Book
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Loading State -->
@@ -1912,6 +1937,17 @@ const vendorCategoryLabel = computed(() => {
   if (category) return toTitleCase(category.replace(/_/g, ' '));
   return isServiceVendor.value ? 'Service provider' : 'Campus vendor';
 });
+
+// Sends the customer to whatever this vendor actually sells: services if they have them,
+// otherwise the first section of the page.
+const scrollToBooking = () => {
+  if (typeof document === 'undefined') return;
+  const target =
+    document.getElementById('vendor-services') ||
+    document.getElementById('vendor-products') ||
+    document.querySelector('main');
+  target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
 
 const hasMultipleMedia = (product: any) => {
   if (!product) return false;
