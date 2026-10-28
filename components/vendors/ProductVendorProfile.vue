@@ -1148,7 +1148,12 @@
               </button>
               <div class="absolute bottom-4 left-6 right-6">
                 <h2 class="text-xl font-medium text-white tracking-tight">{{ toTitleCase(vendor.storeName) }}</h2>
-                <p class="text-sm font-bold text-white/70 mt-1">{{ vendor.category || 'Restaurant' }}</p>
+                <p class="text-sm font-bold text-white/70 mt-1 flex items-center gap-2">
+                  {{ vendorCategoryLabel }}
+                  <span v-if="isMobileService" class="rounded-full bg-white/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+                    Comes to you
+                  </span>
+                </p>
               </div>
             </div>
             <!-- Info -->
@@ -1895,6 +1900,18 @@ const saveVendorNote = () => {
   cart.vendorNotes.value[props.vendor._id] = tempVendorNote.value;
   showVendorNoteModal.value = false;
 };
+
+// A service provider is not a restaurant with an empty menu. Driving the label from
+// businessType stops an unset category defaulting to the word "Restaurant".
+const isServiceVendor = computed(() => props.vendor?.businessType === 'service_provider');
+const isMobileService = computed(
+  () => isServiceVendor.value && props.vendor?.serviceLocation === 'mobile_operator',
+);
+const vendorCategoryLabel = computed(() => {
+  const category = String(props.vendor?.category || '').trim();
+  if (category) return toTitleCase(category.replace(/_/g, ' '));
+  return isServiceVendor.value ? 'Service provider' : 'Campus vendor';
+});
 
 const hasMultipleMedia = (product: any) => {
   if (!product) return false;
