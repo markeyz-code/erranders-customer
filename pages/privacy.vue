@@ -56,8 +56,8 @@ useHead({
 const privacySections = [
   {
     icon: Database,
-    title: "Information We Collect",
-    content: "We collect information you provide directly to us, such as when you create or modify your account, request on-demand services, contact customer support, or otherwise communicate with us. This information may include: name, email, phone number, postal address, profile picture, payment method, items requested (for delivery services), and other information you choose to provide."
+    title: "Data Controller & Information We Collect",
+    content: "ERRANDERS COMPANY LIMITED is the data controller for personal data collected across the Erranders platform. We collect information you provide directly to us, such as when you create or modify your account, request on-demand services, contact customer support, or otherwise communicate with us. This information may include: name, email, phone number, postal address, profile picture, payment method, items requested (for delivery services), and other information you choose to provide."
   },
   {
     icon: Zap,

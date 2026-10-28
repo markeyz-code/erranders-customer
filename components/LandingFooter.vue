@@ -97,9 +97,14 @@
 
       <!-- Bottom Bar -->
       <div class="py-5 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6">
-        <p class="text-slate-400 font-bold tracking-tight">
-          &copy; {{ new Date().getFullYear() }} Errander Inc. Delivering happiness.
-        </p>
+        <div class="space-y-1">
+          <p class="text-slate-500 font-bold tracking-tight">
+            &copy; {{ new Date().getFullYear() }} ERRANDERS COMPANY LIMITED. All rights reserved.
+          </p>
+          <p class="text-xs text-slate-400 font-medium">
+            Erranders is owned and operated by ERRANDERS COMPANY LIMITED.
+          </p>
+        </div>
         <div class="flex items-center gap-6">
           <a href="https://www.instagram.com/erranders.official1/">
             <img src="@/assets/img/instagram.jpeg" class="h-6 object-contain rounded-lg transition-all cursor-pointer"/>

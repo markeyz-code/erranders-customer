@@ -83,8 +83,18 @@
             <p class="text-lg text-gray-500 font-bold leading-relaxed">Currently scaling from the CMUL campus to universities across Nigeria. Our core team is based in the heart of Lagos innovation.</p>
             <div class="space-y-4">
               <div class="flex items-center gap-4 text-gray-900 font-medium">
-                <MapPin class="w-5 h-5 text-parentPrimary" />
-                38, Immam memudu Coker, Lagos.
+                <MapPin class="w-5 h-5 text-parentPrimary shrink-0" />
+                <span>38, Immam memudu Coker, Lagos, Nigeria.</span>
+              </div>
+            </div>
+
+            <!-- Corporate / Legal Verification Box -->
+            <div class="pt-6 border-t border-gray-100 space-y-2.5 text-sm">
+              <p class="font-bold text-gray-900 uppercase tracking-wider text-xs text-parentPrimary">Corporate Information</p>
+              <div class="space-y-1 text-gray-600 font-medium">
+                <p><span class="font-bold text-gray-900">Legal Business Name:</span> ERRANDERS COMPANY LIMITED</p>
+                <p><span class="font-bold text-gray-900">Registered Office:</span> 38, Immam memudu Coker, Lagos, Nigeria</p>
+                <p><span class="font-bold text-gray-900">Official Inquiries:</span> <a href="mailto:support@erranders.org" class="text-parentPrimary font-bold hover:underline">support@erranders.org</a></p>
               </div>
             </div>
           </div>
