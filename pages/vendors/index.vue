@@ -193,7 +193,7 @@
               <!-- HEART ICON -->
               <button
                 @click.stop="toggleFavoriteVendor(vendor)"
-                class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm shadow-sm flex items-center justify-center text-gray-400 hover:text-rose-500 hover:bg-white transition-all hover:scale-110"
+                class="absolute top-2 right-2 w-11 h-11 rounded-full bg-white/90 backdrop-blur-sm shadow-sm flex items-center justify-center text-gray-400 hover:text-rose-500 hover:bg-white transition-all active:scale-95"
                 :class="isVendorFavorited(vendor._id) ? 'text-rose-500' : ''"
               >
                 <Heart :class="['w-4 h-4', isVendorFavorited(vendor._id) ? 'fill-current' : '']" />

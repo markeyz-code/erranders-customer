@@ -74,10 +74,10 @@
           </div>
           <!-- If future / upcoming: editable -->
           <template v-else>
-            <button @click.stop="$emit('edit', order)" class="w-8 h-8 rounded-full bg-gray-50 hover:bg-parentPrimary/10 text-gray-400 hover:text-parentPrimary flex items-center justify-center transition-colors border border-gray-50 hover:border-parentPrimary/20 shadow-sm" title="Edit Automation">
+            <button @click.stop="$emit('edit', order)" class="w-10 h-10 rounded-full bg-gray-50 hover:bg-parentPrimary/10 text-gray-400 hover:text-parentPrimary flex items-center justify-center transition-colors border border-gray-50 hover:border-parentPrimary/20 shadow-sm" title="Edit Automation">
               <Edit2 class="w-4 h-4"/>
             </button>
-            <button @click.stop="$emit('delete', order._id)" class="w-8 h-8 rounded-full bg-gray-50 hover:bg-rose-50 text-gray-400 hover:text-rose-500 flex items-center justify-center transition-colors border border-gray-50 hover:border-rose-100 shadow-sm" title="Delete Automation">
+            <button @click.stop="$emit('delete', order._id)" class="w-10 h-10 rounded-full bg-gray-50 hover:bg-rose-50 text-gray-400 hover:text-rose-500 flex items-center justify-center transition-colors border border-gray-50 hover:border-rose-100 shadow-sm" title="Delete Automation">
               <Trash2 class="w-4 h-4"/>
             </button>
           </template>

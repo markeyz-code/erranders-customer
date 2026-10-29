@@ -5,7 +5,7 @@
         
         <div class="p-4 border-b border-gray-100 flex items-center justify-between">
           <h2 class="text-lg font-bold text-gray-900">Join Waitlist</h2>
-          <button @click="$emit('close')" class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-gray-100">
+          <button @click="$emit('close')" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-gray-100">
             <X class="w-4 h-4" />
           </button>
         </div>

@@ -235,7 +235,7 @@
     <div class="bg-white w-full md:w-[480px] rounded-t-3xl md:rounded-3xl border-[0.5px] border-gray-100 flex flex-col max-h-[85vh] animate-slide-up-modal">
       <div class="p-4 border-b-[0.5px] border-gray-100 flex items-center justify-between shrink-0">
         <h2 class="text-base font-bold text-gray-900">Reschedule Booking</h2>
-        <button @click="showRescheduleModal = false" class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors">
+        <button @click="showRescheduleModal = false" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors">
           <X class="w-4 h-4" />
         </button>
       </div>
