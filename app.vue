@@ -55,7 +55,10 @@
 
 <style>
 body {
-  font-family: 'Roobert PRO', sans-serif;
+  /* 'Roobert PRO' was never loaded by any @font-face or font link, so the whole app
+     rendered in the browser's default sans-serif. Use the self-hosted Onest that the
+     font stylesheet actually provides. */
+  font-family: var(--font-family, 'Onest', sans-serif);
 }
 </style>
 

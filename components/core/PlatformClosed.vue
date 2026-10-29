@@ -68,7 +68,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  font-family: 'Roobert PRO', 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-family, 'Onest'), 'Inter', system-ui, -apple-system, sans-serif;
   background-color: #ffffff !important;
 }
 

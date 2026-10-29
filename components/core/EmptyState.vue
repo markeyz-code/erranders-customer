@@ -36,6 +36,6 @@ defineEmits(['action']);
 }
 
 .font-display {
-  font-family: 'Roobert PRO', sans-serif;
+  font-family: var(--font-family, 'Onest', sans-serif);
 }
 </style>
