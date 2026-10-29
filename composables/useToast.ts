@@ -27,7 +27,16 @@ export const useToast = () => {
     action?: () => void,
     title?: string,
   ) => {
-    // The same failure arriving twice in a row is one problem, not two.
+    // Only one error on screen at a time.
+    //
+    // Matching on the message was not enough: six failing endpoints produce six different
+    // messages, so an outage still stacked six cards. A user cannot act on any of them
+    // individually — the cause is the same — so the newest error replaces the last.
+    if (type === 'error') {
+      toasts.value = toasts.value.filter((t) => t.type !== 'error')
+    }
+
+    // The same message arriving again is one problem, not two.
     const duplicate = toasts.value.find((t) => t.message === message && t.type === type)
     if (duplicate) return
 
