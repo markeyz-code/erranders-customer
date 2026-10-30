@@ -3,6 +3,8 @@ import { useCustomToast } from '@/composables/core/useCustomToast'
 import { useRealtimeSocket } from '@/composables/core/useRealtimeSocket'
 import { useNotifications } from '@/composables/modules/notifications/useNotifications'
 
+import { useUser } from '@/composables/modules/auth/user'
+
 const LISTENERS_KEY = 'realtime_notification_listeners'
 
 const playSound = (path: string) => {
@@ -17,19 +19,32 @@ const playSound = (path: string) => {
   }
 }
 
-const playNotificationSound = () => playSound('/sounds/new_notification.m4a')
+const playNotificationSound = () => playSound('/sounds/notification.wav')
 const playOrderAcceptedSound = () => playSound('/sounds/order_accepted.m4a')
 const playOrderStatusUpdateSound = () => playSound('/sounds/order_status_update.m4a')
 const playCounterOfferSound = () => playSound('/sounds/counter_offer.m4a')
 
-if (typeof document !== 'undefined') {
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
   const unlockAudio = () => {
-    const audio = new Audio('/sounds/new_notification.m4a')
-    audio.volume = 0;
-    audio.play().catch(() => {});
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (AudioCtx) {
+        const ctx = new AudioCtx();
+        if (ctx.state === 'suspended') {
+          ctx.resume();
+        }
+        const buffer = ctx.createBuffer(1, 1, 22050);
+        const source = ctx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(ctx.destination);
+        source.start(0);
+      }
+    } catch (_) {}
     document.removeEventListener('click', unlockAudio);
+    document.removeEventListener('touchstart', unlockAudio);
   };
-  document.addEventListener('click', unlockAudio);
+  document.addEventListener('click', unlockAudio, { once: true });
+  document.addEventListener('touchstart', unlockAudio, { once: true });
 }
 
 const playPingAlertSound = () => {
@@ -43,10 +58,22 @@ export const useRealtimeNotifications = () => {
   const { showToast } = useCustomToast()
   const { socket, connectSocket } = useRealtimeSocket()
   const { addNotification } = useNotifications()
+  const { user } = useUser()
   const listenersAttached = useState<boolean>(LISTENERS_KEY, () => false)
 
   const handleNotification = (payload: any) => {
     if (!payload) return
+
+    // Ignore phantom clear-toast events or empty payloads
+    if (payload.type === 'CLEAR_ORDER_TOASTS') return
+    if (!payload.title && !payload.body && !payload.message && payload.type !== 'PING_NOTIFICATION') return
+
+    // Ensure notification is intended for this user if target IDs are present
+    const currentUserId = user.value?._id || user.value?.id
+    const targetUserId = payload.userId || payload.customerId || payload.data?.customerId || payload.data?.userId
+    if (targetUserId && currentUserId && targetUserId.toString() !== currentUserId.toString()) {
+      return
+    }
 
     // Special aggressive handling for PING_NOTIFICATION
     if (payload.type === 'PING_NOTIFICATION') {
@@ -113,8 +140,7 @@ export const useRealtimeNotifications = () => {
   const handleAudit = (payload: any) => {
     if (!payload) return
 
-    playNotificationSound()
-
+    // Do not play audible notifications for background audit logs
     showToast({
       title: payload.action ? `Audit: ${payload.action}` : 'Audit Update',
       message: payload.description || 'A new audit log was recorded',
