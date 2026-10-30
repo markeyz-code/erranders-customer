@@ -1421,18 +1421,22 @@ const validatePromo = async () => {
     const isGroupOrderQuery = (groupOrder.value && !!groupId.value) ? 'true' : 'false';
     const locType = isWithinLuth.value ? 'inside_campus' : 'outside_campus';
     const isCustomErrandQuery = 'false';
+    const isPreOrderQuery = isPreOrderCart.value ? 'true' : 'false';
+    const orderTypeQuery = 'marketplace';
+
+    const promoQuery = `code=${encodeURIComponent(promoCodeInput.value.trim())}&subtotal=${currentSubtotal.value}&vendorId=${firstVendorId}&isGroupOrder=${isGroupOrderQuery}&locationType=${locType}&isCustomErrand=${isCustomErrandQuery}&isScheduled=${isPreOrderQuery}&isPreOrder=${isPreOrderQuery}&orderType=${orderTypeQuery}`;
 
     // Step 1: Call preview endpoint first to get eligibility details
     isPreviewingPromo.value = true;
-    const previewRes = await api.get(`/promo-codes/preview?code=${encodeURIComponent(promoCodeInput.value.trim())}&subtotal=${currentSubtotal.value}&vendorId=${firstVendorId}&isGroupOrder=${isGroupOrderQuery}&locationType=${locType}&isCustomErrand=${isCustomErrandQuery}`) as any;
-    isPreviewingPromo.value = false; console.log("PROMO DEBUG FINISHED", promoPreview.value);
+    const previewRes = await api.get(`/promo-codes/preview?${promoQuery}`) as any;
+    isPreviewingPromo.value = false;
 
     if (previewRes?.data) {
       promoPreview.value = previewRes.data;
 
       // Step 2: If eligible, auto-apply via validate endpoint
       if (previewRes.data.eligibility?.isEligible) {
-        const res = await api.get(`/promo-codes/validate?code=${encodeURIComponent(promoCodeInput.value.trim())}&subtotal=${currentSubtotal.value}&vendorId=${firstVendorId}&isGroupOrder=${isGroupOrderQuery}&locationType=${locType}&isCustomErrand=${isCustomErrandQuery}`) as any;
+        const res = await api.get(`/promo-codes/validate?${promoQuery}`) as any;
         
         if (res?.data && !res?.data?.error) {
           promoCodeObj.value = res.data;
@@ -1442,13 +1446,15 @@ const validatePromo = async () => {
         // Show why it's not eligible
         const reasons: string[] = [];
         const elig = previewRes.data.eligibility;
-        if (!elig.isActive) reasons.push('This promo code is not active');
+        if (!elig.isActive) reasons.push('This promo code is currently disabled or inactive');
         if (elig.isExpired) reasons.push('This promo code has expired');
-        if (!elig.minAmountMet) reasons.push(`Minimum order of ₦${previewRes.data.promo?.minOrderAmount || 0} not met`);
-        if (elig.usageLimitReached) reasons.push('Usage limit has been reached');
-        if (!elig.vendorAllowed) reasons.push('Not valid for this vendor');
-        if (!elig.userAllowed) reasons.push('Not valid for your account');
-        if (!elig.orderTypeAllowed) reasons.push('Not valid for this order type');
+        if (!elig.minAmountMet) reasons.push(`Minimum order amount of ₦${(previewRes.data.promo?.minOrderAmount || 0).toLocaleString()} not met`);
+        if (elig.usageLimitReached) reasons.push('Global redemption limit for this promo code has been reached');
+        if (elig.userRedemptionsMet === false) reasons.push('You have already used this promo code the maximum allowed number of times');
+        if (elig.newUsersOnlyMet === false) reasons.push('This promo code is only valid for new customers on their first order');
+        if (!elig.vendorAllowed) reasons.push('This promo code is not valid for this vendor store');
+        if (!elig.userAllowed) reasons.push('This promo code is exclusive and not applicable to your account');
+        if (!elig.orderTypeAllowed) reasons.push('This promo code is not applicable for this fulfillment or order type');
         showToast({ title: 'Code Not Eligible', message: reasons[0] || 'This promo code cannot be applied.', toastType: 'error' });
       }
     }
