@@ -122,17 +122,18 @@
 
                   <!-- Campus Services & Bookings -->
                   <MenuItem v-slot="{ active }">
-                    <button type="button" @click="isBookingModalOpen = true" :class="[active ? 'bg-teal-50/80 scale-[0.99]' : 'hover:bg-gray-50', 'w-full text-left flex items-center gap-3 p-2.5 rounded-2xl transition-all group']">
+                    <NuxtLink to="/?tab=services" :class="[active ? 'bg-teal-50/80 scale-[0.99]' : 'hover:bg-gray-50', 'w-full text-left flex items-center gap-3 p-2.5 rounded-2xl transition-all group']">
                       <div class="w-9 h-9 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
                         <Calendar class="w-4 h-4" />
                       </div>
                       <div class="flex-1 min-w-0">
                         <div class="flex items-center gap-2">
                           <span class="text-xs font-bold text-gray-900 group-hover:text-teal-700 transition-colors">Campus Services</span>
+                          <span class="text-[9px] font-bold text-teal-700 bg-teal-100/70 px-1.5 py-0.2 rounded-full">BOOKING</span>
                         </div>
                         <p class="text-[11px] text-gray-500 truncate mt-0.5">Barbers, tutors, laundry, movers & more</p>
                       </div>
-                    </button>
+                    </NuxtLink>
                   </MenuItem>
 
                   <!-- Barter Campus Trade -->

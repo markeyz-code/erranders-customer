@@ -4,6 +4,40 @@
 
     <div class="max-w-[1400px] mx-auto px-4 md:px-4 pt-6 pb-32 animate-fade-in">
       
+      <!-- Top Switcher: Stores vs Services -->
+      <div class="flex items-center justify-start gap-2 mb-6 border-b border-slate-100 pb-4">
+        <button
+          type="button"
+          @click="activeDirectoryTab = 'stores'"
+          class="px-5 py-2.5 rounded-full text-xs sm:text-sm font-black transition-all flex items-center gap-2 cursor-pointer"
+          :class="activeDirectoryTab === 'stores' ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'"
+        >
+          <Store class="w-4 h-4" />
+          <span>Campus Stores ({{ filteredVendors.length }})</span>
+        </button>
+
+        <button
+          type="button"
+          @click="activeDirectoryTab = 'services'"
+          class="px-5 py-2.5 rounded-full text-xs sm:text-sm font-black transition-all flex items-center gap-2 cursor-pointer relative"
+          :class="activeDirectoryTab === 'services' ? 'bg-[#FF5C1A] text-white shadow-sm shadow-[#FF5C1A]/20' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'"
+        >
+          <Sparkles class="w-4 h-4" />
+          <span>Services &amp; Skills</span>
+          <span
+            class="px-1.5 py-0.2 rounded-full text-[9px] font-black uppercase tracking-wider"
+            :class="activeDirectoryTab === 'services' ? 'bg-white text-[#FF5C1A]' : 'bg-[#FF5C1A] text-white'"
+          >
+            PRO
+          </span>
+        </button>
+      </div>
+
+      <!-- Services View -->
+      <ServicesShowcase v-if="activeDirectoryTab === 'services'" />
+
+      <!-- Stores View -->
+      <div v-else>
       <!-- Top Header Row -->
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
@@ -275,11 +309,8 @@
             class="inline-flex items-center px-4 py-2.5 bg-gray-100 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-200 transition-colors active:scale-95"
           >
             Go Home
-          </NuxtLink>
-        </div>
       </div>
-
-    </div>
+      </div>
 
     <!-- Closed Store Modal -->
     <VendorClosedModal 
@@ -400,14 +431,15 @@
 
 <script setup lang="ts">
 
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { useRoute, useHead } from '#imports';
-import { Search, Tag, Clock, Star, Heart, Filter, X, Share2, Bell, SlidersHorizontal, ChevronDown, Lock } from 'lucide-vue-next';
+import { Search, Tag, Clock, Star, Heart, Filter, X, Share2, Bell, SlidersHorizontal, ChevronDown, Lock, Store, Sparkles } from 'lucide-vue-next';
 import { onClickOutside } from '@vueuse/core';
 import VendorNotifyModal from '@/components/vendors/VendorNotifyModal.vue';
 import { useFavorites } from '@/composables/modules/favorites';
 import UiSelectInput from '@/components/ui/SelectInput.vue';
 import VendorClosedModal from '@/components/VendorClosedModal.vue';
+import ServicesShowcase from '@/components/services/ServicesShowcase.vue';
 
 import { useGlobalFilter } from '@/composables/core/useGlobalFilter';
 
@@ -416,6 +448,12 @@ definePageMeta({
 })
 
 const route = useRoute();
+const activeDirectoryTab = ref<'stores' | 'services'>((route.query.tab as string) === 'services' ? 'services' : 'stores');
+
+watch(() => route.query.tab, (t) => {
+  if (t === 'services') activeDirectoryTab.value = 'services';
+  else if (t === 'stores') activeDirectoryTab.value = 'stores';
+});
 const { globalFilter, setFilter, globalFiltersList } = useGlobalFilter();
 
 const loading = ref(true);

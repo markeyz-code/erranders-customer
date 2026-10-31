@@ -330,14 +330,44 @@
           <!-- Removed Global Filters Bar (Moved to LandingNavbar.vue) -->
     </HeroStage>
 
+    <!-- ── Discovery Tabs Switcher (Food & Stores vs Campus Services) ── -->
+    <div id="marketplace-tabs" class="max-w-7xl mx-auto px-4 lg:px-10 pt-8 pb-4">
+      <div class="flex items-center justify-center">
+        <div class="inline-flex p-1.5 rounded-full bg-slate-100 border border-slate-200/80 shadow-inner">
+          <button
+            type="button"
+            @click="landingTab = 'stores'"
+            class="px-5 sm:px-8 py-2.5 rounded-full text-xs sm:text-sm font-black transition-all flex items-center gap-2 cursor-pointer"
+            :class="landingTab === 'stores' ? 'bg-white text-slate-900 shadow-md scale-102' : 'text-slate-500 hover:text-slate-900'"
+          >
+            <Store class="w-4 h-4 text-[#FF5C1A]" />
+            <span>Food &amp; Campus Stores</span>
+          </button>
 
+          <button
+            type="button"
+            @click="landingTab = 'services'"
+            class="px-5 sm:px-8 py-2.5 rounded-full text-xs sm:text-sm font-black transition-all flex items-center gap-2 cursor-pointer relative"
+            :class="landingTab === 'services' ? 'bg-[#FF5C1A] text-white shadow-md shadow-[#FF5C1A]/25 scale-102' : 'text-slate-500 hover:text-slate-900'"
+          >
+            <Sparkles class="w-4 h-4" />
+            <span>Campus Services</span>
+            <span
+              class="px-1.5 py-0.2 rounded-full text-[9px] font-black uppercase tracking-wider"
+              :class="landingTab === 'services' ? 'bg-white text-[#FF5C1A]' : 'bg-[#FF5C1A] text-white'"
+            >
+              New
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
 
+    <!-- Tab 2: Campus Services View -->
+    <ServicesShowcase v-if="landingTab === 'services'" />
 
-
-
-  <!-- Promo Carousel -->
-  <!-- <CorePromoCarousel @open-closed-modal="navigateToVendor" /> -->
-
+    <!-- Tab 1: Food & Stores Carousels View -->
+    <div v-else class="space-y-2">
   <!-- Book Again -->
   <VendorGroupCarousel
     v-if="user && bookAgainVendors.length > 0"
@@ -391,6 +421,8 @@
     @notify="handleNotifyVendor"
     @share-vendor="handleShareVendor"
   />
+  <!-- Stores Carousels End -->
+    </div>
 
  <!-- Vendor Closed Modal -->
  <VendorClosedModal 
@@ -615,9 +647,18 @@ useHead({
 })
 
 import { useCart } from '@/composables/modules/cart';
+import ServicesShowcase from '@/components/services/ServicesShowcase.vue';
+
+const route = useRoute()
+const router = useRouter()
+const landingTab = ref<'stores' | 'services'>((route.query.tab as string) === 'services' ? 'services' : 'stores')
+
+watch(() => route.query.tab, (newTab) => {
+  if (newTab === 'services') landingTab.value = 'services';
+  else if (newTab === 'stores') landingTab.value = 'stores';
+});
 
 const scrolled = ref(false)
-const router = useRouter()
 const showMobileMenu = ref(false)
 
 const { user, isLoggedIn, logOut } = useUser();

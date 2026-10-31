@@ -6,7 +6,9 @@
     </div>
   </div>
   <template v-else-if="vendor">
-    <div v-if="vendor.businessType === 'hybrid'" class="bg-white">
+    <!-- Custom Branded Storefront (if configured via Page Designer) -->
+    <CustomStorefront v-if="vendor.pageBlocks && vendor.pageBlocks.length > 0" :vendor="vendor" />
+    <div v-else-if="vendor.businessType === 'hybrid'" class="bg-white">
       <!-- Hybrid Toggle -->
       <div class="fixed top-0 inset-x-0 z-[60] bg-white/90 backdrop-blur-md border-b border-gray-100 px-4 py-3 flex gap-2 justify-center shadow-sm">
         <button 
@@ -61,6 +63,7 @@ import { useHead } from '#imports';
 import { vendors_api } from '@/api_factory/modules/vendors';
 import ProductVendorProfile from '@/components/vendors/ProductVendorProfile.vue';
 import ServiceVendorProfile from '@/components/vendors/ServiceVendorProfile.vue';
+import CustomStorefront from '@/components/vendors/CustomStorefront.vue';
 
 definePageMeta({ layout: 'default' });
 
