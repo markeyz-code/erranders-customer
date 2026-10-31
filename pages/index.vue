@@ -47,7 +47,38 @@
       secondary-label="Sell something"
       secondary-to="/sell"
     >
-<!-- Search Bar Redesign -->
+          <!-- Hero Quick Tab Switcher: Food & Stores vs Campus Services -->
+          <div class="flex items-center justify-center mt-6 -mb-4 relative z-20">
+            <div class="inline-flex p-1 rounded-full bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-md">
+              <button
+                type="button"
+                @click="landingTab = 'stores'"
+                class="px-5 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-black transition-all flex items-center gap-2 cursor-pointer"
+                :class="landingTab === 'stores' ? 'bg-[#FF5C1A] text-white shadow-sm scale-[1.02]' : 'text-slate-600 hover:text-slate-900'"
+              >
+                <Store class="w-4 h-4" />
+                <span>Food &amp; Stores</span>
+              </button>
+
+              <button
+                type="button"
+                @click="landingTab = 'services'"
+                class="px-5 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-black transition-all flex items-center gap-2 cursor-pointer relative"
+                :class="landingTab === 'services' ? 'bg-[#FF5C1A] text-white shadow-sm scale-[1.02]' : 'text-slate-600 hover:text-slate-900'"
+              >
+                <Sparkles class="w-4 h-4" />
+                <span>Campus Services</span>
+                <span
+                  class="px-1.5 py-0.2 rounded-full text-[9px] font-black uppercase tracking-wider"
+                  :class="landingTab === 'services' ? 'bg-white text-[#FF5C1A]' : 'bg-[#FF5C1A] text-white'"
+                >
+                  New
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Search Bar Redesign -->
           <div 
             class="mt-10 max-w-3xl mx-auto group relative transition-all duration-700 w-full px-4 sm:px-0"
             :class="showSuggestions ? 'z-50' : 'z-20'"
@@ -66,7 +97,7 @@
                 @keyup.enter="handleHeroSearch"
                 @focus="showSuggestions = true"
                 @blur="handleSearchBlur"
-                placeholder="Search vendor name, meals, groceries..." 
+                :placeholder="landingTab === 'services' ? 'Search campus services, barbers, tutors, movers, laundry...' : 'Search vendor name, meals, groceries...'" 
                 class="w-full bg-transparent border-none outline-none text-base md:text-lg font-medium text-gray-900 placeholder:text-gray-400 px-2 min-w-0 relative z-10"
               />
               <button 

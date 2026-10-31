@@ -155,6 +155,16 @@
               </MenuItems>
             </Transition>
           </Menu>
+
+          <!-- Campus Services Direct Tab (Desktop) -->
+          <NuxtLink
+            to="/?tab=services"
+            class="hidden md:flex cursor-pointer items-center gap-1.5 rounded-full border border-teal-200/90 bg-teal-50/90 px-3.5 py-1.5 text-xs font-bold text-teal-800 shadow-2xs transition-all hover:-translate-y-0.5 hover:bg-teal-100 hover:text-teal-900 hover:shadow-sm"
+          >
+            <Calendar class="h-3.5 w-3.5 text-teal-600" />
+            <span>Campus Services</span>
+            <span class="px-1.5 py-0.2 rounded-full text-[9px] font-black uppercase bg-teal-600 text-white">New</span>
+          </NuxtLink>
         </div>
         
         <!-- Actions & Menu -->

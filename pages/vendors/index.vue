@@ -309,8 +309,11 @@
             class="inline-flex items-center px-4 py-2.5 bg-gray-100 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-200 transition-colors active:scale-95"
           >
             Go Home
+          </NuxtLink>
+        </div>
       </div>
-      </div>
+    </div>
+  </div>
 
     <!-- Closed Store Modal -->
     <VendorClosedModal 
