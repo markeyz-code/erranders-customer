@@ -97,6 +97,10 @@ export const useDirectChat = (currentUserId: string, targetUserId: string, servi
       handleIncomingMessage(message);
     });
 
+    on('messageConfirmed', (message: any) => {
+      handleIncomingMessage(message);
+    });
+
     on('chat:user-typing', (data: { userId: string, isTyping: boolean, roomId: string }) => {
       if (data.roomId === roomId && data.userId === targetUserId) {
         isTyping.value = data.isTyping;
@@ -116,14 +120,25 @@ export const useDirectChat = (currentUserId: string, targetUserId: string, servi
       
       const msgServiceId = String(message.serviceId || message.service?._id || message.service || '');
       const currentServiceIdStr = String(serviceId || '');
-      const isRelevantService = msgServiceId === currentServiceIdStr;
+      const isRelevantService = 
+        !currentServiceIdStr || 
+        currentServiceIdStr === 'general' || 
+        !msgServiceId || 
+        msgServiceId === 'general' || 
+        msgServiceId === currentServiceIdStr;
 
       if (isRelevantUser && isRelevantService) {
         // Match and replace optimistic message
         if (sId === cId) {
-          const pendingIdx = messages.value.findIndex(m => m._id?.startsWith('temp_') && m.message === message.message);
+          const pendingIdx = messages.value.findIndex(
+            m => (m._id?.startsWith('temp_') || m._id === message.tempId) && (m.message === message.message || m.content === message.content)
+          );
           if (pendingIdx !== -1) {
-            messages.value[pendingIdx] = message;
+            messages.value[pendingIdx] = {
+              ...messages.value[pendingIdx],
+              ...message,
+              _id: message._id || messages.value[pendingIdx]._id
+            };
             return;
           }
         }

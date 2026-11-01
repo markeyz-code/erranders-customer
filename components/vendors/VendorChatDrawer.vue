@@ -97,7 +97,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, nextTick, onMounted, onUnmounted, computed } from 'vue';
+import { ref, watch, nextTick, onMounted, onUnmounted, computed, shallowRef } from 'vue';
 import { ArrowLeft, Send, Loader2, MessageSquare, CheckCheck } from 'lucide-vue-next';
 import { useDirectChat } from '@/composables/useDirectChat';
 import { useUser } from '@/composables/modules/auth/user';
@@ -119,13 +119,13 @@ const currentUserId = computed(() => user.value?._id || '');
 
 const newMessage = ref('');
 const sending = ref(false);
-const loading = ref(false);
 const inputRef = ref<HTMLTextAreaElement | null>(null);
 const messagesContainer = ref<HTMLElement | null>(null);
 
-let chatTracker: any = null;
-const messages = ref<any[]>([]);
-const isTyping = ref(false);
+const chatTracker = shallowRef<ReturnType<typeof useDirectChat> | null>(null);
+const messages = computed(() => chatTracker.value?.messages.value || []);
+const loading = computed(() => chatTracker.value?.loading.value ?? false);
+const isTyping = computed(() => chatTracker.value?.isTyping.value ?? false);
 
 const vendorInitials = computed(() => {
   if (!props.vendorName) return 'V';
@@ -160,12 +160,12 @@ const adjustHeight = () => {
 };
 
 const submitMessage = async () => {
-  if (!newMessage.value.trim() || !chatTracker) return;
+  if (!newMessage.value.trim() || !chatTracker.value) return;
   sending.value = true;
 
   const text = newMessage.value.trim();
 
-  chatTracker.sendMessage(text);
+  chatTracker.value.sendMessage(text);
   newMessage.value = '';
   sending.value = false;
 
@@ -179,13 +179,11 @@ const submitMessage = async () => {
 const initChat = async () => {
   if (!currentUserId.value || !props.vendorOwnerId) return;
   
-  loading.value = true;
-  chatTracker = useDirectChat(currentUserId.value, props.vendorOwnerId, props.serviceId);
-  chatTracker.setupListeners();
+  const tracker = useDirectChat(currentUserId.value, props.vendorOwnerId, props.serviceId);
+  chatTracker.value = tracker;
+  tracker.setupListeners();
   
-  await chatTracker.fetchMessages();
-  messages.value = chatTracker.messages.value;
-  loading.value = false;
+  await tracker.fetchMessages();
 
   // Prefill if provided
   if (props.prefillMessage) {
@@ -200,25 +198,13 @@ const initChat = async () => {
   inputRef.value?.focus();
 };
 
-// Watch for external messages arriving
-watch(() => chatTracker?.messages?.value, (newVal) => {
-  if (newVal) {
-    messages.value = newVal;
-    scrollToBottom();
-  }
-}, { deep: true });
-
-watch(() => chatTracker?.isTyping?.value, (val) => {
-  isTyping.value = !!val;
-});
-
 watch(() => messages.value.length, () => {
   scrollToBottom();
 });
 
-// Init when opened
-watch(() => props.isOpen, async (val) => {
-  if (val) {
+// Init when opened or parameters change
+watch(() => [props.isOpen, props.vendorOwnerId, props.serviceId], async ([open]) => {
+  if (open) {
     await initChat();
   }
 }, { immediate: true });

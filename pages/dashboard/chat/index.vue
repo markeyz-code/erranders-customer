@@ -139,7 +139,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick, watch } from 'vue';
+import { ref, computed, shallowRef, onMounted, nextTick, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Search, MessageSquareOff, MessageCircle, MoreVertical, Paperclip, Send } from 'lucide-vue-next';
 import { GATEWAY_ENDPOINT_WITH_AUTH as api } from '@/api_factory/axios.config';
@@ -162,9 +162,9 @@ const conversations = ref<any[]>([]);
 const messageInput = ref('');
 const chatAreaRef = ref<HTMLElement | null>(null);
 
-let activeChatTracker: any = null;
-const messages = ref<any[]>([]);
-const isMessagesLoading = ref(false);
+const activeChatTracker = shallowRef<ReturnType<typeof useDirectChat> | null>(null);
+const messages = computed(() => activeChatTracker.value?.messages.value || []);
+const isMessagesLoading = computed(() => activeChatTracker.value?.loading.value ?? false);
 
 const isMe = (senderId: string) => {
   return senderId === user.value?._id;
@@ -199,14 +199,12 @@ const selectConversation = async (conv: any) => {
     router.replace({ query: {} });
   }
 
-  isMessagesLoading.value = true;
-  activeChatTracker = useDirectChat(user.value?._id as string, conv.user?._id);
-  activeChatTracker.setupListeners();
+  const tracker = useDirectChat(user.value?._id as string, conv.user?._id, conv.service?._id);
+  activeChatTracker.value = tracker;
+  tracker.setupListeners();
   
   // Connect and load
-  await activeChatTracker.fetchMessages();
-  messages.value = activeChatTracker.messages.value;
-  isMessagesLoading.value = false;
+  await tracker.fetchMessages();
   
   scrollToBottom();
 };
@@ -215,35 +213,16 @@ watch(() => messages.value.length, () => {
   scrollToBottom();
 });
 
-// Update the external activeChatTracker's messages array watch
-watch(() => activeChatTracker?.messages?.value, (newVal) => {
-  if (newVal) {
-    messages.value = newVal;
-    scrollToBottom();
-  }
-}, { deep: true });
-
-
 const handleSendMessage = () => {
-  if (!messageInput.value.trim() || !activeChatTracker) return;
-  activeChatTracker.sendMessage(messageInput.value);
-  
-  // Optimistically add to local UI
-  messages.value.push({
-    _id: Date.now().toString(),
-    senderId: user.value?._id,
-    receiverId: activeConversation.value.user._id,
-    message: messageInput.value,
-    createdAt: new Date().toISOString()
-  });
-  
+  if (!messageInput.value.trim() || !activeChatTracker.value) return;
+  activeChatTracker.value.sendMessage(messageInput.value);
   messageInput.value = '';
   scrollToBottom();
 };
 
 const handleTyping = () => {
-  if (activeChatTracker) {
-    activeChatTracker.sendTyping();
+  if (activeChatTracker.value) {
+    activeChatTracker.value.sendTyping();
   }
 };
 
