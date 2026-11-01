@@ -249,13 +249,18 @@
         </h4>
         <p class="text-sm text-blue-700 mt-1">The rider reported spending <strong>₦{{ order.actualItemCost?.toLocaleString() }}</strong>.</p>
         
-        <div v-if="order.actualItemCost > order.customDetails?.estimatedItemCost" class="mt-2 p-2 bg-amber-50 border border-amber-200 rounded-lg text-[11px] text-amber-800 font-medium">
-          <p>⚠️ Price is higher than your estimate.</p>
-          <p class="mt-1 font-bold">Please approve quickly or the rider will cancel this item to save time!</p>
+        <div v-if="order.actualItemCost > ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0))" class="mt-2 p-2.5 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-900 font-medium">
+          <p class="font-bold">⚠️ Price is higher than your deposit + buffer.</p>
+          <p class="mt-0.5">Please approve quickly so your Ninja can deliver your items without delay!</p>
+        </div>
+        <div v-else-if="order.actualItemCost > (order.customDetails?.estimatedItemCost || 0)" class="mt-2 p-2.5 bg-emerald-50 border border-emerald-200 rounded-lg text-xs text-emerald-900 font-medium">
+          <p class="font-bold text-emerald-950">🛡️ Covered by your Smart Safety Buffer</p>
+          <p class="mt-0.5">The price was slightly higher than your estimate, but is completely covered by your prepaid buffer. No extra payment required!</p>
         </div>
 
-        <p v-if="order.refundAmount > 0" class="text-[11px] font-bold text-emerald-600 mt-1">
-          You will be refunded ₦{{ order.refundAmount.toLocaleString() }} to your wallet.
+        <p v-if="order.refundAmount > 0" class="text-xs font-bold text-emerald-700 mt-2 flex items-center justify-between bg-emerald-100/60 p-2 rounded-lg">
+          <span>💵 Unused change to be refunded to your wallet:</span>
+          <span>₦{{ order.refundAmount.toLocaleString() }}</span>
         </p>
       </div>
     </div>

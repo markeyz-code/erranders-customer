@@ -278,6 +278,70 @@
                   </div>
              </div>
 
+             <!-- RECONCILIATION & SAFETY BUFFER STATUS -->
+             <div v-if="order.reconciliationStatus && order.reconciliationStatus !== 'not_applicable'" class="mb-4">
+                <!-- Submitted: Needs review -->
+                <div v-if="order.reconciliationStatus === 'submitted'" class="p-5 rounded-2xl bg-blue-50/90 border border-blue-200 space-y-3">
+                  <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 text-lg shrink-0">
+                      🧾
+                    </div>
+                    <div class="flex-1">
+                      <h4 class="text-sm font-bold text-blue-950 flex justify-between items-center">
+                        Actual Receipt Review
+                        <span class="text-[10px] font-bold bg-blue-200 text-blue-900 px-2 py-0.5 rounded-full">
+                          Awaiting Confirmation
+                        </span>
+                      </h4>
+                      <p class="text-sm text-blue-800 mt-1">
+                        Your Ninja reported spending <strong>₦{{ order.actualItemCost?.toLocaleString() }}</strong> at the vendor.
+                      </p>
+
+                      <!-- Buffer coverage feedback -->
+                      <div v-if="order.actualItemCost > ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0))" class="mt-2 p-2.5 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-900 font-medium">
+                        <p class="font-bold">⚠️ Price is higher than estimate + buffer</p>
+                        <p class="mt-0.5">Please approve to authorize the small difference so the rider can deliver immediately.</p>
+                      </div>
+                      <div v-else-if="order.actualItemCost > (order.customDetails?.estimatedItemCost || 0)" class="mt-2 p-2.5 bg-emerald-50 border border-emerald-200 rounded-lg text-xs text-emerald-900 font-medium">
+                        <p class="font-bold text-emerald-950">🛡️ Fully Covered by Safety Buffer</p>
+                        <p class="mt-0.5">The item cost was slightly higher than your estimate, but is completely covered by your ₦{{ order.customDetails?.itemCostBuffer?.toLocaleString() }} buffer! No extra payment required.</p>
+                      </div>
+                      <div v-if="order.refundAmount > 0" class="mt-2 p-2.5 bg-emerald-100/70 border border-emerald-300 rounded-lg text-xs text-emerald-900 font-bold flex items-center justify-between">
+                        <span>💵 Unused change to be refunded to your wallet:</span>
+                        <span class="text-sm font-black text-emerald-700">₦{{ order.refundAmount?.toLocaleString() }}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col sm:flex-row gap-2.5 pt-2">
+                    <button 
+                      @click="approveReconciliation"
+                      :disabled="isApprovingReconciliation"
+                      class="flex-1 py-3 bg-[#FF5C1A] text-white rounded-xl text-sm font-bold hover:bg-[#E04B12] disabled:opacity-50 transition-all flex items-center justify-center gap-2 shadow-sm"
+                    >
+                      <Loader2 v-if="isApprovingReconciliation" class="w-4 h-4 animate-spin" />
+                      <span v-else>👍 Confirm & Proceed</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Approved -->
+                <div v-else-if="order.reconciliationStatus === 'approved'" class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0 font-bold">
+                      ✓
+                    </div>
+                    <div>
+                      <p class="text-xs text-emerald-700 font-medium uppercase tracking-wider">Purchase Reconciled</p>
+                      <p class="text-sm font-bold text-emerald-950">Receipt: ₦{{ order.actualItemCost?.toLocaleString() }}</p>
+                    </div>
+                  </div>
+                  <span v-if="order.refundAmount > 0" class="text-xs font-bold bg-emerald-200 text-emerald-900 px-2.5 py-1 rounded-full">
+                    Refunded ₦{{ order.refundAmount?.toLocaleString() }}
+                  </span>
+                </div>
+             </div>
+
              <!--
                Bento cluster: every card below is a natural-height block inside a
                CSS multi-column flow. The browser packs each one into whichever

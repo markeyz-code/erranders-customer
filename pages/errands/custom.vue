@@ -376,6 +376,12 @@
                         class="w-full bg-transparent outline-none py-2 text-xl font-sans font-bold border-b-2 border-dashed border-[#D8D2C4] focus:border-b-[3px] focus:border-b-[#FF5C1A] focus:border-solid text-[#170D08] transition-colors"
                       />
                     </div>
+                    <div v-if="form.estimatedItemCost > 0" class="flex items-start gap-2 mt-2 px-3 py-2 bg-emerald-50 border border-dashed border-emerald-300 rounded-sm">
+                      <ShieldCheck class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                      <p class="text-xs text-emerald-800 font-medium leading-relaxed">
+                        <strong class="font-bold text-emerald-900">+₦{{ formatMoney(safetyBuffer) }} Refundable Safety Buffer</strong> added. Your Ninja buys directly in 1 trip; any unused change is automatically refunded to your wallet!
+                      </p>
+                    </div>
                   </div>
 
                   <div class="space-y-1.5">
@@ -454,6 +460,15 @@
                     <span class="flex-1 mx-2 border-b border-dashed border-[#D8D2C4]"></span>
                     <span class="font-bold text-[#170D08]">₦{{ formatMoney(form.estimatedItemCost) }}</span>
                   </div>
+                  <div v-if="safetyBuffer > 0" class="flex justify-between items-baseline">
+                    <span class="flex items-center gap-1.5 text-emerald-700">
+                      <ShieldCheck class="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Smart Safety Buffer</span>
+                      <span class="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-1.5 py-0.2 rounded">100% Refundable</span>
+                    </span>
+                    <span class="flex-1 mx-2 border-b border-dashed border-[#D8D2C4]"></span>
+                    <span class="font-bold text-emerald-700">₦{{ formatMoney(safetyBuffer) }}</span>
+                  </div>
                   <div class="flex justify-between items-baseline pb-3 border-b-2 border-dashed border-[#D8D2C4]">
                     <span class="flex items-center gap-2 text-[#766A61]"><Target class="w-3.5 h-3.5" /> Runner Fee</span>
                     <span class="flex-1 mx-2 border-b border-dashed border-[#D8D2C4]"></span>
@@ -478,9 +493,16 @@
                 <div class="rounded-sm p-4 flex justify-between items-center -rotate-[0.6deg] border-[3px] border-[#FF5C1A]">
                   <div>
                     <p class="font-sans text-sm font-bold   text-[#FF5C1A]">Amount Due</p>
-                    <p class="text-sm mt-0.5 text-[#766A61]">Paid securely via Paystack</p>
+                    <p class="text-sm mt-0.5 text-[#766A61]">Held securely in Escrow</p>
                   </div>
                   <span class="font-sans text-3xl font-bold tracking-tight text-[#FF5C1A]">₦{{ formatMoney(grandTotal) }}</span>
+                </div>
+
+                <div v-if="safetyBuffer > 0" class="rounded-sm p-3.5 bg-emerald-50 border border-dashed border-emerald-300 text-[12px] text-emerald-900 leading-relaxed flex gap-2.5">
+                  <ShieldCheck class="w-4 h-4 shrink-0 text-emerald-600 mt-0.5" />
+                  <p>
+                    <strong class="font-bold text-emerald-950">Single-Trip Escrow Guarantee:</strong> The safety buffer empowers your Ninja to purchase without making two trips. If the actual vendor receipt is lower, the leftover change is automatically refunded to your wallet upon delivery!
+                  </p>
                 </div>
 
                 <div class="rounded-sm p-4 flex gap-3 text-[13px] leading-relaxed bg-[#3E6B52]/6 border border-dashed border-[#3E6B52]/35 text-[#170D08]">
@@ -1000,9 +1022,15 @@ const isStep2Valid = computed(() => {
 // Transfer fee commented out / disabled for custom errands
 const transferFee = computed(() => 0)
 
+// Smart safety buffer (10% with min ₦300 floor when item cost > 0)
+const safetyBuffer = computed(() => {
+  const cost = form.value.estimatedItemCost || 0
+  return cost > 0 ? Math.max(300, Math.round(cost * 0.1)) : 0
+})
+
 // Service charge is dynamically rendered as customErrandCommissionPercentage / 100 of the negotiated runner fee
 const grandTotal = computed(() => {
-  return (form.value.estimatedItemCost || 0) + (form.value.runnerFee || 0) + serviceCharge.value
+  return (form.value.estimatedItemCost || 0) + safetyBuffer.value + (form.value.runnerFee || 0) + serviceCharge.value
 })
 
 const formatMoney = (amount: number) => {
@@ -1062,6 +1090,7 @@ const buildErrandPayload = async () => {
     attachedImages: uploadedImageUrls.length > 0 ? uploadedImageUrls : undefined,
     attachedVoiceNote: uploadedVoiceNoteUrl || undefined,
     estimatedItemCost: form.value.estimatedItemCost || 0,
+    itemCostBuffer: safetyBuffer.value,
     runnerFee: form.value.runnerFee,
     urgency: 'standard',
     intendedPoolId: selectedPoolId.value || undefined,
