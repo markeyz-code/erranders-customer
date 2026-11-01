@@ -48,28 +48,28 @@
       secondary-to="/sell"
     >
           <!-- Hero Quick Tab Switcher: Food & Stores vs Campus Services -->
-          <div class="flex items-center justify-center mt-6 -mb-4 relative z-20">
-            <div class="inline-flex p-1 rounded-full bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-md">
+          <div id="marketplace-tabs" class="flex items-center justify-center mt-6 -mb-4 relative z-20">
+            <div class="inline-flex items-center p-1 sm:p-1.5 rounded-full bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-md flex-nowrap shrink-0 max-w-full overflow-x-auto no-scrollbar">
               <button
                 type="button"
                 @click="landingTab = 'stores'"
-                class="px-5 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-black transition-all flex items-center gap-2 cursor-pointer"
+                class="px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-black transition-all flex items-center gap-1.5 sm:gap-2 cursor-pointer whitespace-nowrap shrink-0 select-none"
                 :class="landingTab === 'stores' ? 'bg-[#FF5C1A] text-white shadow-sm scale-[1.02]' : 'text-slate-600 hover:text-slate-900'"
               >
-                <Store class="w-4 h-4" />
-                <span>Food &amp; Stores</span>
+                <Store class="w-4 h-4 shrink-0" />
+                <span class="whitespace-nowrap">Food &amp; Stores</span>
               </button>
 
               <button
                 type="button"
                 @click="landingTab = 'services'"
-                class="px-5 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-black transition-all flex items-center gap-2 cursor-pointer relative"
+                class="px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-black transition-all flex items-center gap-1.5 sm:gap-2 cursor-pointer relative whitespace-nowrap shrink-0 select-none"
                 :class="landingTab === 'services' ? 'bg-[#FF5C1A] text-white shadow-sm scale-[1.02]' : 'text-slate-600 hover:text-slate-900'"
               >
-                <Sparkles class="w-4 h-4" />
-                <span>Campus Services</span>
+                <Sparkles class="w-4 h-4 shrink-0" />
+                <span class="whitespace-nowrap">Campus Services</span>
                 <span
-                  class="px-1.5 py-0.2 rounded-full text-[9px] font-black uppercase tracking-wider"
+                  class="px-1.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider whitespace-nowrap shrink-0"
                   :class="landingTab === 'services' ? 'bg-white text-[#FF5C1A]' : 'bg-[#FF5C1A] text-white'"
                 >
                   New
@@ -361,38 +361,6 @@
           <!-- Removed Global Filters Bar (Moved to LandingNavbar.vue) -->
     </HeroStage>
 
-    <!-- ── Discovery Tabs Switcher (Food & Stores vs Campus Services) ── -->
-    <div id="marketplace-tabs" class="max-w-7xl mx-auto px-4 lg:px-10 pt-8 pb-4">
-      <div class="flex items-center justify-center">
-        <div class="inline-flex p-1.5 rounded-full bg-slate-100 border border-slate-200/80 shadow-inner">
-          <button
-            type="button"
-            @click="landingTab = 'stores'"
-            class="px-5 sm:px-8 py-2.5 rounded-full text-xs sm:text-sm font-black transition-all flex items-center gap-2 cursor-pointer"
-            :class="landingTab === 'stores' ? 'bg-white text-slate-900 shadow-md scale-102' : 'text-slate-500 hover:text-slate-900'"
-          >
-            <Store class="w-4 h-4 text-[#FF5C1A]" />
-            <span>Food &amp; Campus Stores</span>
-          </button>
-
-          <button
-            type="button"
-            @click="landingTab = 'services'"
-            class="px-5 sm:px-8 py-2.5 rounded-full text-xs sm:text-sm font-black transition-all flex items-center gap-2 cursor-pointer relative"
-            :class="landingTab === 'services' ? 'bg-[#FF5C1A] text-white shadow-md shadow-[#FF5C1A]/25 scale-102' : 'text-slate-500 hover:text-slate-900'"
-          >
-            <Sparkles class="w-4 h-4" />
-            <span>Campus Services</span>
-            <span
-              class="px-1.5 py-0.2 rounded-full text-[9px] font-black uppercase tracking-wider"
-              :class="landingTab === 'services' ? 'bg-white text-[#FF5C1A]' : 'bg-[#FF5C1A] text-white'"
-            >
-              New
-            </span>
-          </button>
-        </div>
-      </div>
-    </div>
 
     <!-- Tab 2: Campus Services View -->
     <ServicesShowcase v-if="landingTab === 'services'" />

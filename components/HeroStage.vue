@@ -64,19 +64,19 @@
       <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
         <NuxtLink
           to="/vendors"
-          class="group inline-flex w-full sm:w-auto items-center justify-center gap-3 rounded-full bg-[#FF5C1A] px-7 py-3.5 text-sm font-bold text-white shadow-md shadow-[#FF5C1A]/25 transition-all hover:bg-[#E54D12] active:scale-[0.98]"
+          class="group inline-flex w-full sm:w-auto items-center justify-center gap-3 rounded-full bg-[#FF5C1A] px-7 py-3.5 text-sm font-bold text-white shadow-md shadow-[#FF5C1A]/25 transition-all hover:bg-[#E54D12] active:scale-[0.98] whitespace-nowrap shrink-0"
         >
-          <span>Browse Active Food & Vendors</span>
-          <span class="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 transition-colors group-hover:bg-white/30">
+          <span class="whitespace-nowrap">Browse Active Food & Vendors</span>
+          <span class="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 transition-colors group-hover:bg-white/30 shrink-0">
             <ArrowUpRight class="h-4 w-4 text-white transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </span>
         </NuxtLink>
         <NuxtLink
           to="/errands/custom"
-          class="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-7 py-3.5 text-sm font-bold text-slate-700 transition-colors hover:border-slate-300 hover:bg-slate-50"
+          class="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-7 py-3.5 text-sm font-bold text-slate-700 transition-colors hover:border-slate-300 hover:bg-slate-50 whitespace-nowrap shrink-0"
         >
-          <span>Send a Custom Errand</span>
-          <span class="text-xs">🏃🏽‍♂️💨</span>
+          <span class="whitespace-nowrap">Send a Custom Errand</span>
+          <span class="text-xs shrink-0">🏃🏽‍♂️💨</span>
         </NuxtLink>
       </div>
 

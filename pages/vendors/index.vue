@@ -5,27 +5,27 @@
     <div class="max-w-[1400px] mx-auto px-4 md:px-4 pt-6 pb-32 animate-fade-in">
       
       <!-- Top Switcher: Stores vs Services -->
-      <div class="flex items-center justify-start gap-2 mb-6 border-b border-slate-100 pb-4">
+      <div class="flex items-center justify-start gap-2 mb-6 border-b border-slate-100 pb-4 overflow-x-auto no-scrollbar">
         <button
           type="button"
           @click="activeDirectoryTab = 'stores'"
-          class="px-5 py-2.5 rounded-full text-xs sm:text-sm font-black transition-all flex items-center gap-2 cursor-pointer"
+          class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-black transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0 select-none"
           :class="activeDirectoryTab === 'stores' ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'"
         >
-          <Store class="w-4 h-4" />
-          <span>Campus Stores ({{ filteredVendors.length }})</span>
+          <Store class="w-4 h-4 shrink-0" />
+          <span class="whitespace-nowrap">Campus Stores ({{ filteredVendors.length }})</span>
         </button>
 
         <button
           type="button"
           @click="activeDirectoryTab = 'services'"
-          class="px-5 py-2.5 rounded-full text-xs sm:text-sm font-black transition-all flex items-center gap-2 cursor-pointer relative"
+          class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-black transition-all flex items-center gap-2 cursor-pointer relative whitespace-nowrap shrink-0 select-none"
           :class="activeDirectoryTab === 'services' ? 'bg-[#FF5C1A] text-white shadow-sm shadow-[#FF5C1A]/20' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'"
         >
-          <Sparkles class="w-4 h-4" />
-          <span>Services &amp; Skills</span>
+          <Sparkles class="w-4 h-4 shrink-0" />
+          <span class="whitespace-nowrap">Services &amp; Skills</span>
           <span
-            class="px-1.5 py-0.2 rounded-full text-[9px] font-black uppercase tracking-wider"
+            class="px-1.5 py-0.2 rounded-full text-[9px] font-black uppercase tracking-wider whitespace-nowrap shrink-0"
             :class="activeDirectoryTab === 'services' ? 'bg-white text-[#FF5C1A]' : 'bg-[#FF5C1A] text-white'"
           >
             PRO
