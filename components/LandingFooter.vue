@@ -98,11 +98,11 @@
       <!-- Bottom Bar -->
       <div class="py-5 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="space-y-1">
-          <p class="text-slate-500 font-bold tracking-tight">
-            &copy; {{ new Date().getFullYear() }} ERRANDERS COMPANY LIMITED. All rights reserved.
+          <p class="text-sm font-semibold text-slate-500">
+            Erranders is a product of Erranders Company Limited.
           </p>
-          <p class="text-xs text-slate-400 font-medium">
-            Erranders is owned and operated by ERRANDERS COMPANY LIMITED.
+          <p class="text-xs font-medium text-slate-400">
+            &copy; {{ new Date().getFullYear() }} Erranders Company Limited. All rights reserved.
           </p>
         </div>
         <div class="flex items-center gap-6">
