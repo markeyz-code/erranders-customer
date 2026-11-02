@@ -482,7 +482,13 @@
                           {{ promoPreview.promo.maxDiscount ? 'Maximum discount: ₦' + promoPreview.promo.maxDiscount?.toLocaleString() + '.' : '' }}
                         </template>
                         <template v-else>
-                          {{ promoPreviewReason }}
+                          <span class="block">This code can't be used on this order:</span>
+                          <ul class="mt-1.5 space-y-1">
+                            <li v-for="(reason, i) in promoPreviewReasons" :key="i" class="flex gap-1.5">
+                              <span class="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-red-500" />
+                              <span>{{ reason }}</span>
+                            </li>
+                          </ul>
                         </template>
                       </p>
                     </div>
@@ -707,16 +713,22 @@
                         <p class="text-sm font-bold" :class="promoPreview.eligibility.isEligible ? 'text-emerald-400' : 'text-red-400'">
                           {{ promoPreview.eligibility.isEligible ? 'Promo Code Eligible!' : 'Promo Code Not Eligible' }}
                         </p>
-                        <p class="text-sm mt-1 leading-relaxed" :class="promoPreview.eligibility.isEligible ? 'text-emerald-300/80' : 'text-red-300/80'">
+                        <div class="text-sm mt-1 leading-relaxed" :class="promoPreview.eligibility.isEligible ? 'text-emerald-300/80' : 'text-red-300/80'">
                           <template v-if="promoPreview.eligibility.isEligible">
                             Use code <strong>{{ promoPreview.promo.code }}</strong> to get 
                             <strong>{{ promoPreview.promo.discountType === 'percentage' ? promoPreview.promo.value + '% off' : '₦' + promoPreview.promo.value?.toLocaleString() + ' off' }}</strong> your order{{ promoPreview.promo.minOrderAmount ? '. Minimum order of ₦' + promoPreview.promo.minOrderAmount?.toLocaleString() + ' required' : '' }}.
                             {{ promoPreview.promo.maxDiscount ? 'Maximum discount: ₦' + promoPreview.promo.maxDiscount?.toLocaleString() + '.' : '' }}
                           </template>
                           <template v-else>
-                            {{ promoPreviewReason }}
+                            <span class="block">This code can't be used on this order:</span>
+                            <ul class="mt-1.5 space-y-1">
+                              <li v-for="(reason, i) in promoPreviewReasons" :key="i" class="flex gap-1.5">
+                                <span class="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-red-400" />
+                                <span>{{ reason }}</span>
+                              </li>
+                            </ul>
                           </template>
-                        </p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1128,18 +1140,41 @@ const isPreviewingPromo = ref(false);
 const debugPromoMsg = ref('');
 
 // Generate a human-readable reason for why a promo code is not eligible
-const promoPreviewReason = computed(() => {
-  if (!promoPreview.value?.eligibility) return 'This promo code cannot be applied to your order.';
-  const elig = promoPreview.value.eligibility;
-  if (!elig.isActive) return 'This promo code is currently inactive and cannot be used.';
-  if (elig.isExpired) return 'This promo code has expired and is no longer valid.';
-  if (!elig.minAmountMet) return `Your order subtotal doesn't meet the minimum of ₦${promoPreview.value.promo?.minOrderAmount?.toLocaleString() || 0} required for this promo.`;
-  if (elig.usageLimitReached) return 'This promo code has reached its maximum usage limit.';
-  if (!elig.vendorAllowed) return 'This promo code is not valid for the vendor you are ordering from.';
-  if (!elig.userAllowed) return 'This promo code is restricted and not available for your account.';
-  if (!elig.orderTypeAllowed) return 'This promo code does not apply to this type of order.';
-  return 'This promo code cannot be applied to your order.';
+/**
+ * Every reason the code cannot be used, not just the first one.
+ *
+ * The server sends plain sentences; those win. The flags below are the fallback for an older
+ * API that does not, and they cover the two that were missing — a first-orders-only code and
+ * one the customer has already used — which is why a returning customer used to be told only
+ * that the code "cannot be applied", with no clue why.
+ */
+const promoPreviewReasons = computed<string[]>(() => {
+  const preview: any = promoPreview.value;
+  if (!preview) return [];
+  if (Array.isArray(preview.reasons) && preview.reasons.length) return preview.reasons;
+
+  const elig = preview.eligibility;
+  if (!elig) return ['We could not check this code. Please try again.'];
+
+  const out: string[] = [];
+  if (!elig.isActive) out.push('This code has been switched off by Erranders.');
+  if (elig.isExpired) out.push('This code has expired.');
+  if (!elig.minAmountMet) {
+    out.push(
+      `This code needs a minimum order of ₦${(preview.promo?.minOrderAmount || 0).toLocaleString()}.`,
+    );
+  }
+  if (elig.usageLimitReached) out.push('This code has been fully claimed.');
+  if (!elig.userRedemptionsMet) out.push('You have already used this code.');
+  if (!elig.vendorAllowed) out.push('This code only works at certain vendors.');
+  if (!elig.userAllowed) out.push('This code is reserved for specific accounts.');
+  if (!elig.newUsersOnlyMet) out.push('This code is for first orders only, and you have ordered before.');
+  if (!elig.orderTypeAllowed) out.push('This code does not apply to this kind of order or delivery location.');
+
+  return out.length ? out : ['This code cannot be used on this order.'];
 });
+
+const promoPreviewReason = computed(() => promoPreviewReasons.value[0] || '');
 let previewTimeout: any = null;
 
 const handlePromoInput = () => {
