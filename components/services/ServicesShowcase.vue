@@ -17,7 +17,8 @@
 
       <div class="flex items-center gap-2">
         <span class="text-xs font-bold px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 border border-slate-200">
-          {{ filteredServices.length }} {{ filteredServices.length === 1 ? 'Service' : 'Services' }} Available
+          {{ groupedProviders.length }} {{ groupedProviders.length === 1 ? 'provider' : 'providers' }}
+          · {{ filteredServices.length }} {{ filteredServices.length === 1 ? 'service' : 'services' }}
         </span>
       </div>
     </div>
@@ -93,19 +94,19 @@
     </div>
 
     <!-- Services Grid -->
-    <div v-else-if="filteredServices.length > 0" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 lg:gap-6">
+    <div v-else-if="groupedProviders.length > 0" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 lg:gap-6">
       <div
-        v-for="service in filteredServices"
-        :key="service._id"
-        @click="openService(service)"
+        v-for="provider in groupedProviders"
+        :key="provider.key"
+        @click="provider.vendorId ? router.push(`/vendors/${provider.vendorId}`) : openService(provider.services[0])"
         class="group cursor-pointer bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 hover:border-[#FF5C1A] hover:shadow-xl hover:shadow-[#FF5C1A]/5 transition-all duration-300 p-2.5 sm:p-3.5 flex flex-col justify-between"
       >
         <!-- Top Media Area -->
         <div class="relative w-full aspect-[16/11] rounded-xl sm:rounded-2xl overflow-hidden bg-slate-100 mb-2 sm:mb-3 shadow-inner">
           <img
-            v-if="service.image || service.images?.[0] || service.vendor?.banner || service.vendor?.logo"
-            :src="service.image || service.images?.[0] || service.vendor?.banner || service.vendor?.logo"
-            :alt="service.name"
+            v-if="provider.image"
+            :src="provider.image"
+            :alt="provider.vendor.storeName"
             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             loading="lazy"
           />
@@ -114,60 +115,54 @@
             <span class="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase">Erranders Pro</span>
           </div>
 
-          <!-- Badges Overlay -->
           <div class="absolute top-1.5 left-1.5 sm:top-2.5 sm:left-2.5 flex flex-col gap-1 sm:gap-1.5 z-10 max-w-[85%]">
             <span class="px-1.5 sm:px-2 py-0.5 rounded-full text-[8px] sm:text-[9px] font-black uppercase tracking-wider bg-slate-950/80 backdrop-blur text-white inline-flex items-center gap-1 shadow-xs truncate">
               <Sparkles class="w-2 h-2 sm:w-2.5 sm:h-2.5 text-[#FF5C1A] shrink-0" />
-              <span class="truncate">{{ formatCategory(service.category) }}</span>
+              <span class="truncate">{{ provider.categories.length === 1 ? formatCategory(provider.categories[0]) : `${provider.count} services` }}</span>
             </span>
-            <span v-if="service.vendor?.serviceLocation === 'mobile_operator'" class="px-1.5 sm:px-2 py-0.5 rounded-full text-[8px] sm:text-[9px] font-black bg-emerald-600/90 backdrop-blur text-white shadow-xs inline-block truncate">
+            <span v-if="provider.vendor?.serviceLocation === 'mobile_operator'" class="px-1.5 sm:px-2 py-0.5 rounded-full text-[8px] sm:text-[9px] font-black bg-emerald-600/90 backdrop-blur text-white shadow-xs inline-block truncate">
               Comes to you
             </span>
           </div>
 
-          <!-- Duration Pill -->
           <div class="absolute bottom-1.5 right-1.5 sm:bottom-2.5 sm:right-2.5 bg-black/75 backdrop-blur text-white px-1.5 sm:px-2.5 py-0.5 rounded-full text-[8px] sm:text-[10px] font-bold flex items-center gap-1 z-10 shadow-xs">
-            <Clock class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#FF5C1A]" />
-            <span>{{ service.durationInMinutes || 30 }}m</span>
+            <Layers class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#FF5C1A]" />
+            <span>{{ provider.count }}</span>
           </div>
         </div>
 
-        <!-- Service Details -->
         <div class="flex-1 flex flex-col justify-between">
           <div>
-            <!-- Provider Info -->
             <div class="flex items-center gap-1.5 mb-1 sm:mb-1.5">
               <div class="w-4 h-4 sm:w-5 sm:h-5 rounded-full overflow-hidden bg-slate-200 shrink-0">
-                <img v-if="service.vendor?.logo" :src="service.vendor.logo" class="w-full h-full object-cover" />
+                <img v-if="provider.vendor?.logo" :src="provider.vendor.logo" class="w-full h-full object-cover" />
                 <span v-else class="w-full h-full flex items-center justify-center text-[8px] sm:text-[9px] font-black text-slate-600">
-                  {{ (service.vendor?.storeName || 'P').charAt(0) }}
+                  {{ (provider.vendor?.storeName || 'P').charAt(0) }}
                 </span>
               </div>
               <span class="text-[11px] sm:text-xs font-semibold text-slate-500 truncate">
-                {{ service.vendor?.storeName || 'Campus Vendor' }}
+                {{ provider.count }} {{ provider.count === 1 ? 'service' : 'services' }}
               </span>
-              <span v-if="service.vendor?.rating" class="ml-auto text-[10px] sm:text-[11px] font-bold text-amber-600 flex items-center gap-0.5 shrink-0">
-                ★ {{ service.vendor.rating.toFixed(1) }}
+              <span v-if="provider.vendor?.rating" class="ml-auto text-[10px] sm:text-[11px] font-bold text-amber-600 flex items-center gap-0.5 shrink-0">
+                ★ {{ provider.vendor.rating.toFixed(1) }}
               </span>
             </div>
 
-            <!-- Service Title -->
+            <!-- The business is the headline, not each individual treatment -->
             <h3 class="font-extrabold text-xs sm:text-base text-slate-900 group-hover:text-[#FF5C1A] transition-colors leading-snug line-clamp-2">
-              {{ service.name }}
+              {{ provider.vendor.storeName || 'Campus Provider' }}
             </h3>
 
-            <!-- Description -->
-            <p v-if="service.description" class="text-[10px] sm:text-xs text-slate-500 font-medium line-clamp-2 mt-0.5 sm:mt-1 leading-relaxed">
-              {{ service.description }}
+            <p v-if="provider.names.length" class="text-[10px] sm:text-xs text-slate-500 font-medium line-clamp-2 mt-0.5 sm:mt-1 leading-relaxed">
+              {{ provider.names.join(' · ') }}
             </p>
           </div>
 
-          <!-- Price & Action Button -->
           <div class="mt-2.5 sm:mt-4 pt-2 sm:pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2">
             <div>
-              <span class="text-[8px] sm:text-[9px] font-bold uppercase tracking-wider text-slate-400 block">Session Fee</span>
+              <span class="text-[8px] sm:text-[9px] font-bold uppercase tracking-wider text-slate-400 block">From</span>
               <span class="text-xs sm:text-base font-black text-slate-900 group-hover:text-[#FF5C1A] transition-colors">
-                ₦{{ service.price?.toLocaleString() }}
+                ₦{{ provider.fromPrice.toLocaleString() }}
               </span>
             </div>
 
@@ -175,7 +170,7 @@
               type="button"
               class="w-full sm:w-auto px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl bg-slate-900 group-hover:bg-[#FF5C1A] text-white font-black text-[10px] sm:text-xs transition-colors flex items-center justify-center gap-1 shadow-xs whitespace-nowrap"
             >
-              <span>Book Slot</span>
+              <span>View services</span>
               <ArrowRight class="w-3 h-3 sm:w-3.5 sm:h-3.5" />
             </button>
           </div>
@@ -206,7 +201,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import {
-  Search, X, Sparkles, Navigation, Clock, Wrench, ArrowRight
+  Search, X, Sparkles, Navigation, Clock, Wrench, ArrowRight, Layers
 } from 'lucide-vue-next';
 import { services_api } from '@/api_factory/modules/services';
 
@@ -283,6 +278,51 @@ const resetFilters = () => {
   selectedCategory.value = 'all';
   comesToYouOnly.value = false;
 };
+
+/**
+ * One card per provider, not per service.
+ *
+ * A single brand with three treatments filled three of the four columns, which reads as
+ * duplicated listings rather than one business offering three things. Grouping also gives
+ * the student a price to compare ("from ₦5,000") instead of three separate starting points.
+ */
+const groupedProviders = computed(() => {
+  const byVendor = new Map<string, any>();
+
+  for (const service of filteredServices.value || []) {
+    const vendor = service.vendor || {};
+    const key = String(vendor._id || vendor.storeName || service._id);
+    if (!byVendor.has(key)) {
+      byVendor.set(key, {
+        key,
+        vendor,
+        vendorId: vendor._id || null,
+        services: [],
+      });
+    }
+    byVendor.get(key).services.push(service);
+  }
+
+  return Array.from(byVendor.values()).map((group: any) => {
+    const prices = group.services.map((sv: any) => Number(sv.price) || 0).filter((n: number) => n > 0);
+    const categories = Array.from(
+      new Set(group.services.map((sv: any) => sv.category).filter(Boolean)),
+    );
+    const lead = group.services[0];
+    return {
+      ...group,
+      count: group.services.length,
+      fromPrice: prices.length ? Math.min(...prices) : 0,
+      categories,
+      image:
+        group.vendor.banner ||
+        group.vendor.logo ||
+        lead.image ||
+        (Array.isArray(lead.images) ? lead.images[0] : ''),
+      names: group.services.map((sv: any) => sv.name).filter(Boolean),
+    };
+  });
+});
 
 const openService = (service: any) => {
   // If service has vendor id, go to the vendor service booking page
