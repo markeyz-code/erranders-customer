@@ -220,11 +220,11 @@
                 <span class="font-bold text-slate-900">₦{{ calculatedTotal.toLocaleString() }}</span>
               </div>
               <div class="flex items-center justify-between text-slate-600 font-medium pt-1 border-t border-orange-100/60">
-                <span>Commitment Deposit (30%)</span>
+                <span>Commitment Deposit ({{ commitmentFeePercentage }}%)</span>
                 <span class="font-bold text-slate-800">₦{{ calculatedCommitmentFee.toLocaleString() }}</span>
               </div>
-              <div class="flex items-center justify-between text-slate-600 font-medium pt-1 border-t border-orange-100/60">
-                <span>Campus Escrow Protection Fee</span>
+              <div v-if="calculatedEscrowFee > 0" class="flex items-center justify-between text-slate-600 font-medium pt-1 border-t border-orange-100/60">
+                <span>Platform Service &amp; Escrow Fee</span>
                 <span class="font-bold text-[#FF5C1A]">₦{{ calculatedEscrowFee.toLocaleString() }}</span>
               </div>
               <div class="flex items-center justify-between pt-1.5 border-t border-orange-200 text-slate-900 font-black">
@@ -307,6 +307,12 @@ const bookingNotes = ref('');
 const submitting = ref(false);
 const confirmed = ref(false);
 const bookingError = ref('');
+const commitmentFeePercentage = ref(30);
+const serviceFeeType = ref<'flat' | 'percentage' | 'both'>('flat');
+const serviceFeeAmount = ref(150);
+const serviceFeePercentage = ref(0);
+const minServiceFee = ref(100);
+const isServiceFeeEnabled = ref(true);
 
 const timeSlots = [
   '09:00', '10:30', '12:00', '14:00', '15:30', '17:00'
@@ -334,9 +340,20 @@ const loadService = async () => {
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
   loadService();
   bookingDate.value = todayDate.value;
+  try {
+    const { data } = await appointments_api.getSettings();
+    if (data?.commitmentFeePercentage !== undefined) commitmentFeePercentage.value = Number(data.commitmentFeePercentage);
+    if (data?.serviceFeeType) serviceFeeType.value = data.serviceFeeType;
+    if (data?.serviceFee !== undefined) serviceFeeAmount.value = Number(data.serviceFee);
+    if (data?.serviceFeePercentage !== undefined) serviceFeePercentage.value = Number(data.serviceFeePercentage);
+    if (data?.minServiceFee !== undefined) minServiceFee.value = Number(data.minServiceFee);
+    if (data?.isEnabled !== undefined) isServiceFeeEnabled.value = Boolean(data.isEnabled);
+  } catch (err) {
+    console.error('Failed to load appointment settings', err);
+  }
 });
 
 const calculatedTotal = computed(() => {
@@ -348,11 +365,20 @@ const calculatedTotal = computed(() => {
 });
 
 const calculatedCommitmentFee = computed(() => {
-  return Math.round(calculatedTotal.value * 0.3);
+  return Math.round(calculatedTotal.value * (commitmentFeePercentage.value / 100));
 });
 
 const calculatedEscrowFee = computed(() => {
-  return Math.round(calculatedTotal.value * 0.03);
+  if (!isServiceFeeEnabled.value || calculatedTotal.value === 0) return 0;
+  let fee = 0;
+  if (serviceFeeType.value === 'percentage') {
+    fee = Math.round(calculatedTotal.value * (serviceFeePercentage.value / 100));
+  } else if (serviceFeeType.value === 'both') {
+    fee = serviceFeeAmount.value + Math.round(calculatedTotal.value * (serviceFeePercentage.value / 100));
+  } else {
+    fee = serviceFeeAmount.value;
+  }
+  return Math.max(minServiceFee.value, fee);
 });
 
 const totalPayNow = computed(() => {
@@ -370,17 +396,25 @@ const submitBooking = async () => {
 
   try {
     const payload = {
-      serviceId: service.value?._id,
-      vendorId: service.value?.vendor?._id || service.value?.vendor,
+      vendor: service.value?.vendor?._id || service.value?.vendor,
       scheduledDate: bookingDate.value,
       startTime: bookingTime.value,
+      endTime: bookingTime.value,
       durationInMinutes: durationMinutes.value,
       notes: bookingNotes.value,
-      amount: calculatedTotal.value,
-      commitmentFee: calculatedCommitmentFee.value,
+      paymentMethod: 'paystack',
+      items: [{
+        service: service.value?._id,
+        price: calculatedTotal.value,
+        durationInMinutes: durationMinutes.value,
+      }],
     };
 
-    await appointments_api.createAppointment(payload);
+    const res = await appointments_api.createAppointment(payload);
+    if (res?.data?.authorization_url) {
+      window.location.href = res.data.authorization_url;
+      return;
+    }
     confirmed.value = true;
   } catch (err: any) {
     bookingError.value = err?.response?.data?.message || err?.message || 'Failed to submit appointment.';

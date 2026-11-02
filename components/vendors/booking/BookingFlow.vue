@@ -234,12 +234,23 @@
                 </div>
                 <div class="px-4 py-3 border-t border-gray-50 bg-gray-50/50 flex flex-col gap-2">
                   <div class="flex justify-between items-center text-gray-500">
-                    <span class="text-sm">Total Price</span>
+                    <span class="text-sm">Total Service Price</span>
                     <span class="text-sm font-semibold">NGN {{ cartTotal.toLocaleString() }}</span>
                   </div>
-                  <div class="flex justify-between items-center">
-                    <span class="text-sm font-bold text-gray-900">Commitment Fee (To Pay Now)</span>
-                    <span class="text-sm font-bold text-parentPrimary">NGN {{ commitmentFee.toLocaleString() }}</span>
+                  <div class="flex justify-between items-center text-gray-500 text-xs">
+                    <span>Commitment Deposit (Vendor)</span>
+                    <span class="font-medium">NGN {{ commitmentFee.toLocaleString() }}</span>
+                  </div>
+                  <div v-if="serviceCharge > 0" class="flex justify-between items-center text-gray-500 text-xs">
+                    <span class="flex items-center gap-1">
+                      Platform Service Fee
+                      <span class="text-[9px] uppercase tracking-wider font-semibold px-1.5 py-0.2 rounded bg-orange-100 text-[#FF5C1A]">Erranders</span>
+                    </span>
+                    <span class="font-semibold text-gray-900">NGN {{ serviceCharge.toLocaleString() }}</span>
+                  </div>
+                  <div class="flex justify-between items-center pt-2 border-t border-gray-200/60">
+                    <span class="text-sm font-bold text-gray-900">Total to Pay Online Now</span>
+                    <span class="text-sm font-bold text-parentPrimary">NGN {{ totalOnlineFee.toLocaleString() }}</span>
                   </div>
                   <div class="flex justify-between items-center text-gray-500">
                     <span class="text-sm font-medium">Balance to Pay in Person</span>
@@ -339,18 +350,29 @@
               </div>
 
               <!-- Footer -->
-              <div class="p-4 border-t border-gray-100 bg-white shrink-0">
-                <div class="flex justify-between items-center mb-1 text-gray-500">
-                  <span class="text-sm">Total Price</span>
+              <div class="p-4 border-t border-gray-100 bg-white shrink-0 space-y-2">
+                <div class="flex justify-between items-center text-gray-500">
+                  <span class="text-sm">Total Service Price</span>
                   <span class="text-sm font-semibold text-gray-900">{{ cart.length ? `NGN ${cartTotal.toLocaleString()}` : 'free' }}</span>
                 </div>
-                <div class="flex justify-between items-center mb-1">
-                  <span class="font-bold text-gray-900">Commitment Fee (Pay Now)</span>
-                  <span class="font-bold text-parentPrimary text-lg">{{ cart.length ? `NGN ${commitmentFee.toLocaleString()}` : 'free' }}</span>
+                <div class="flex justify-between items-center text-gray-500 text-xs">
+                  <span>Commitment Deposit</span>
+                  <span class="font-medium text-gray-700">{{ cart.length ? `NGN ${commitmentFee.toLocaleString()}` : 'free' }}</span>
                 </div>
-                <div class="flex justify-between items-center mb-4 text-gray-500">
-                  <span class="text-sm font-medium">Balance (Pay in Person)</span>
-                  <span class="text-sm font-medium text-gray-900">{{ cart.length ? `NGN ${pendingBalance.toLocaleString()}` : 'free' }}</span>
+                <div v-if="serviceCharge > 0 && cart.length" class="flex justify-between items-center text-gray-500 text-xs">
+                  <span class="flex items-center gap-1">
+                    Service Fee
+                    <span class="text-[9px] uppercase tracking-wider font-semibold px-1 py-0.2 rounded bg-orange-100 text-[#FF5C1A]">Erranders</span>
+                  </span>
+                  <span class="font-semibold text-gray-800">NGN {{ serviceCharge.toLocaleString() }}</span>
+                </div>
+                <div class="flex justify-between items-center pt-2 border-t border-gray-100">
+                  <span class="font-bold text-gray-900">Total to Pay Online</span>
+                  <span class="font-bold text-parentPrimary text-lg">{{ cart.length ? `NGN ${totalOnlineFee.toLocaleString()}` : 'free' }}</span>
+                </div>
+                <div class="flex justify-between items-center pb-2 text-gray-500 text-xs">
+                  <span class="font-medium">Balance (Pay in Person)</span>
+                  <span class="font-medium text-gray-900">{{ cart.length ? `NGN ${pendingBalance.toLocaleString()}` : 'free' }}</span>
                 </div>
                 <button 
                   @click="handleContinue"
@@ -403,16 +425,27 @@
               </div>
             </div>
             
-            <div class="mt-4 pt-4 border-t border-gray-100 flex flex-col gap-2.5">
+            <div class="mt-4 pt-4 border-t border-gray-100 flex flex-col gap-2">
               <div class="flex justify-between items-center text-gray-500 text-sm">
                 <span>Total Service Price</span>
                 <span class="font-bold text-gray-700">₦{{ cartTotal.toLocaleString() }}</span>
               </div>
-              <div class="flex justify-between items-center font-bold text-gray-900 text-sm bg-parentPrimary/5 p-2 rounded-lg">
-                <span>Commitment Fee (Pay Now)</span>
-                <span class="text-parentPrimary">₦{{ commitmentFee.toLocaleString() }}</span>
+              <div class="flex justify-between items-center text-gray-500 text-xs">
+                <span>Commitment Deposit</span>
+                <span class="font-medium text-gray-700">₦{{ commitmentFee.toLocaleString() }}</span>
               </div>
-              <div class="flex justify-between items-center text-gray-500 text-sm">
+              <div v-if="serviceCharge > 0" class="flex justify-between items-center text-gray-500 text-xs">
+                <span class="flex items-center gap-1">
+                  Platform Service Fee
+                  <span class="text-[9px] uppercase tracking-wider font-semibold px-1 py-0.2 rounded bg-orange-100 text-[#FF5C1A]">Erranders</span>
+                </span>
+                <span class="font-semibold text-gray-800">₦{{ serviceCharge.toLocaleString() }}</span>
+              </div>
+              <div class="flex justify-between items-center font-bold text-gray-900 text-sm bg-parentPrimary/5 p-2 rounded-lg mt-1">
+                <span>Total to Pay Online</span>
+                <span class="text-parentPrimary">₦{{ totalOnlineFee.toLocaleString() }}</span>
+              </div>
+              <div class="flex justify-between items-center text-gray-500 text-xs">
                 <span>Balance (Pay in Person)</span>
                 <span class="font-bold text-gray-600">₦{{ pendingBalance.toLocaleString() }}</span>
               </div>
@@ -426,7 +459,7 @@
                 {{ cart.length }} service(s) 
                 <ChevronUp class="w-3.5 h-3.5 text-gray-400 transition-transform duration-300" :class="{'rotate-180': showMobileSummary}" />
               </p>
-              <p class="text-lg font-black text-gray-900 leading-none">₦{{ commitmentFee.toLocaleString() }} <span class="text-[10px] font-semibold text-gray-400 ml-0.5">fee</span></p>
+              <p class="text-lg font-black text-gray-900 leading-none">₦{{ totalOnlineFee.toLocaleString() }} <span class="text-[10px] font-semibold text-gray-400 ml-0.5">online</span></p>
             </div>
             
             <button 
@@ -438,7 +471,7 @@
               <Loader2 v-if="loading" class="w-5 h-5 animate-spin" />
               <template v-else-if="step === 'confirm'">
                 <span v-if="paymentMethod === 'direct_transfer'">Submit Booking</span>
-                <span v-else>Pay ₦{{ commitmentFee.toLocaleString() }}</span> 
+                <span v-else>Pay ₦{{ totalOnlineFee.toLocaleString() }}</span> 
                 <ArrowRight class="w-4 h-4" />
               </template>
               <template v-else-if="step === 'time' && isTimeBooked(selectedTime)">Waitlist <ArrowRight class="w-4 h-4" /></template>
@@ -524,6 +557,11 @@ const showFullLoadingOverlay = ref(false);
 const activeCategory = ref('Featured');
 const bookingNotes = ref('');
 const commitmentFeePercentage = ref(30);
+const serviceFeeType = ref<'flat' | 'percentage' | 'both'>('flat');
+const serviceFeeAmount = ref(150);
+const serviceFeePercentage = ref(0);
+const minServiceFee = ref(100);
+const isServiceFeeEnabled = ref(true);
 const showMobileSummary = ref(false);
 
 const paymentMethod = ref<'paystack'|'direct_transfer'>('paystack');
@@ -573,8 +611,25 @@ const commitmentFee = computed(() => {
   return Math.round(cartTotal.value * (commitmentFeePercentage.value / 100));
 });
 
+const serviceCharge = computed(() => {
+  if (!isServiceFeeEnabled.value || cartTotal.value === 0) return 0;
+  let fee = 0;
+  if (serviceFeeType.value === 'percentage') {
+    fee = Math.round(cartTotal.value * (serviceFeePercentage.value / 100));
+  } else if (serviceFeeType.value === 'both') {
+    fee = serviceFeeAmount.value + Math.round(cartTotal.value * (serviceFeePercentage.value / 100));
+  } else {
+    fee = serviceFeeAmount.value;
+  }
+  return Math.max(minServiceFee.value, fee);
+});
+
+const totalOnlineFee = computed(() => {
+  return commitmentFee.value + serviceCharge.value;
+});
+
 const pendingBalance = computed(() => {
-  return cartTotal.value - commitmentFee.value;
+  return Math.max(0, cartTotal.value - commitmentFee.value);
 });
 
 const totalDurationMins = computed(() => {
@@ -1151,8 +1206,23 @@ onMounted(async () => {
 
   try {
     const { data } = await appointments_api.getSettings();
-    if (data?.commitmentFeePercentage) {
-      commitmentFeePercentage.value = data.commitmentFeePercentage;
+    if (data?.commitmentFeePercentage !== undefined) {
+      commitmentFeePercentage.value = Number(data.commitmentFeePercentage);
+    }
+    if (data?.serviceFeeType) {
+      serviceFeeType.value = data.serviceFeeType;
+    }
+    if (data?.serviceFee !== undefined) {
+      serviceFeeAmount.value = Number(data.serviceFee);
+    }
+    if (data?.serviceFeePercentage !== undefined) {
+      serviceFeePercentage.value = Number(data.serviceFeePercentage);
+    }
+    if (data?.minServiceFee !== undefined) {
+      minServiceFee.value = Number(data.minServiceFee);
+    }
+    if (data?.isEnabled !== undefined) {
+      isServiceFeeEnabled.value = Boolean(data.isEnabled);
     }
   } catch (error) {
     console.error('Failed to load appointment settings', error);
