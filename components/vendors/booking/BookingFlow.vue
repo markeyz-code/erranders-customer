@@ -237,7 +237,11 @@
                     <span class="text-sm">Total Service Price</span>
                     <span class="text-sm font-semibold">NGN {{ cartTotal.toLocaleString() }}</span>
                   </div>
-                  <div class="flex justify-between items-center text-gray-500 text-xs">
+                  <div v-if="isFullPayment" class="flex justify-between items-center text-gray-500 text-xs">
+                    <span>Full payment to vendor</span>
+                    <span class="font-medium">NGN {{ commitmentFee.toLocaleString() }}</span>
+                  </div>
+                  <div v-else-if="isServiceProviderVendor" class="flex justify-between items-center text-gray-500 text-xs">
                     <span>Commitment Deposit (Vendor)</span>
                     <span class="font-medium">NGN {{ commitmentFee.toLocaleString() }}</span>
                   </div>
@@ -252,7 +256,7 @@
                     <span class="text-sm font-bold text-gray-900">Total to Pay Online Now</span>
                     <span class="text-sm font-bold text-parentPrimary">NGN {{ totalOnlineFee.toLocaleString() }}</span>
                   </div>
-                  <div class="flex justify-between items-center text-gray-500">
+                  <div v-if="isServiceProviderVendor && !isFullPayment" class="flex justify-between items-center text-gray-500">
                     <span class="text-sm font-medium">Balance to Pay in Person</span>
                     <span class="text-sm font-medium">NGN {{ pendingBalance.toLocaleString() }}</span>
                   </div>
@@ -610,6 +614,13 @@ const cartTotal = computed(() => {
 const commitmentFee = computed(() => {
   return Math.round(cartTotal.value * (commitmentFeePercentage.value / 100));
 });
+
+// A deposit is a service-booking idea. A provider who chose full payment takes the whole
+// amount online, so there is no deposit and no balance to collect in person.
+const isServiceProviderVendor = computed(() => props.vendor?.businessType === 'service_provider');
+const isFullPayment = computed(
+  () => isServiceProviderVendor.value && props.vendor?.bookingPaymentMode === 'full',
+);
 
 const serviceCharge = computed(() => {
   if (!isServiceFeeEnabled.value || cartTotal.value === 0) return 0;
