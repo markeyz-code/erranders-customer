@@ -194,85 +194,34 @@
 
                 <div class="animate-fade-in relative z-30">
                   <div class="mb-5 space-y-3">
-                    <label class="text-sm font-medium text-gray-400 tracking-wider block mb-1 pl-1">Order Location Type</label>
-                    <div class="grid grid-cols-2 gap-3">
-                      <button 
-                        @click="isWithinLuth = true"
-                        class="flex flex-col items-center justify-center p-3 rounded-xl border transition-all"
-                        :class="isWithinLuth ? 'border-parentPrimary bg-parentPrimary/5 text-parentPrimary' : 'border-gray-100 bg-white hover:border-gray-200'"
+                    <label class="text-sm font-medium text-gray-400 tracking-wider block mb-1 pl-1">Where is it going?</label>
+                    <div class="space-y-2">
+                      <button
+                        v-for="zone in deliveryZones"
+                        :key="zone.id"
+                        type="button"
+                        @click="deliveryZone = zone.id"
+                        class="flex w-full items-start justify-between gap-3 rounded-xl border p-3 text-left transition-all"
+                        :class="deliveryZone === zone.id ? 'border-parentPrimary bg-parentPrimary/5' : 'border-gray-100 bg-white hover:border-gray-200'"
                       >
-                        <span class="text-sm font-bold" :class="isWithinLuth ? 'text-parentPrimary' : 'text-gray-900'">Inside Campus</span>
-                      </button>
-                      <button 
-                        @click="isWithinLuth = false"
-                        class="flex flex-col items-center justify-center p-3 rounded-xl border transition-all"
-                        :class="!isWithinLuth ? 'border-parentPrimary bg-parentPrimary/5 text-parentPrimary' : 'border-gray-100 bg-white hover:border-gray-200'"
-                      >
-                        <span class="text-sm font-bold" :class="!isWithinLuth ? 'text-parentPrimary' : 'text-gray-900'">Outside Campus</span>
+                        <span class="min-w-0">
+                          <span class="block text-sm font-bold" :class="deliveryZone === zone.id ? 'text-parentPrimary' : 'text-gray-900'">{{ zone.title }}</span>
+                          <span class="mt-0.5 block text-[11px] leading-snug text-gray-500">{{ zone.hint }}</span>
+                        </span>
+                        <span class="shrink-0 text-sm font-black" :class="deliveryZone === zone.id ? 'text-parentPrimary' : 'text-gray-400'">
+                          NGN {{ zone.fee.toLocaleString() }}
+                        </span>
                       </button>
                     </div>
-                  </div>
-                  
-                  <div v-if="isWithinLuth">
-                    <label class="text-sm font-medium text-gray-400 tracking-wider block mb-2 pl-1">Hostel / Campus Location</label>
+
+                    <div>
+                    <label class="text-sm font-medium text-gray-400 tracking-wider block mb-2 pl-1">Delivery address</label>
                     <input 
                       v-model="specificAddress"
                       type="text"
                       placeholder="e.g. Block 4 Common Room"
                       class="w-full bg-white border border-gray-50 focus:border-parentPrimary/50 rounded-xl px-4 py-3 text-sm font-medium text-gray-900 outline-none transition-all shadow-sm"
                     />
-                  </div>
-                  
-                  <div v-else class="space-y-4">
-                    <div class="mb-4">
-                      <label class="text-sm font-medium text-gray-400 tracking-wider block mb-2 pl-1">Distance / Area</label>
-                      <div class="grid grid-cols-2 gap-3">
-                        <button 
-                          @click="outsideCampusLocation = 'campus_environs'"
-                          class="flex flex-col items-center justify-center p-3 rounded-xl border transition-all"
-                          :class="outsideCampusLocation === 'campus_environs' ? 'border-parentPrimary bg-parentPrimary/5 text-parentPrimary' : 'border-gray-100 bg-white hover:border-gray-200'"
-                        >
-                          <span class="text-[11px] font-bold" :class="outsideCampusLocation === 'campus_environs' ? 'text-parentPrimary' : 'text-gray-900'">Campus Environs</span>
-                          <span class="text-[9px]" :class="outsideCampusLocation === 'campus_environs' ? 'text-parentPrimary' : 'text-gray-500'">Just Outside</span>
-                        </button>
-                        <button 
-                          @click="outsideCampusLocation = 'outside_campus'"
-                          class="flex flex-col items-center justify-center p-3 rounded-xl border transition-all"
-                          :class="outsideCampusLocation === 'outside_campus' ? 'border-parentPrimary bg-parentPrimary/5 text-parentPrimary' : 'border-gray-100 bg-white hover:border-gray-200'"
-                        >
-                          <span class="text-[11px] font-bold" :class="outsideCampusLocation === 'outside_campus' ? 'text-parentPrimary' : 'text-gray-900'">Far Off-Campus</span>
-                          <span class="text-[9px]" :class="outsideCampusLocation === 'outside_campus' ? 'text-parentPrimary' : 'text-gray-500'">City / Town</span>
-                        </button>
-                      </div>
-                    </div>
-                    <div>
-                      <label class="text-sm font-medium text-gray-400 tracking-wider block mb-2 pl-1">Full Delivery Address</label>
-                      <!-- <UiMapboxAutocomplete 
-                        v-model="specificAddress" 
-                        @select="handleAddressSelect" 
-                        placeholder="e.g. Moremi Hall, Room 302, Unilag" 
-                      /> -->
-                      <input 
-                        v-model="specificAddress"
-                        type="text"
-                        placeholder="e.g. 123 Main Street, Phase 2, Yaba, Lagos"
-                        class="w-full bg-white border border-gray-50 focus:border-parentPrimary/50 rounded-xl px-4 py-3 text-sm font-medium text-gray-900 outline-none transition-all shadow-sm"
-                      />
-                    </div>
-                    <div>
-                      <div class="flex items-center justify-between mb-2 pl-1">
-                        <label class="text-sm font-medium text-gray-400 tracking-wider block">Proposed Delivery Fee (₦)</label>
-                        <span class="text-[10px] font-bold text-parentPrimary">Min: ₦{{ activeMinOutsideFee }}</span>
-                      </div>
-                      <input 
-                        v-model.number="proposedDeliveryFee"
-                        type="number"
-                        :min="activeMinOutsideFee"
-                        @blur="() => { if (!proposedDeliveryFee || proposedDeliveryFee < activeMinOutsideFee) proposedDeliveryFee = activeMinOutsideFee }"
-                        placeholder="Enter your offer"
-                        class="w-full bg-white border border-gray-50 focus:border-parentPrimary/50 rounded-xl px-4 py-3 text-sm font-medium text-gray-900 outline-none transition-all shadow-sm"
-                      />
-                      <p class="text-[10px] text-gray-500 mt-1 pl-1">Enter a fair amount. Riders will bid based on this offer.</p>
                     </div>
                   </div>
                 </div>
@@ -1121,6 +1070,12 @@ const config = useRuntimeConfig();
 const recipientName = ref('');
 const recipientPhone = ref('');
 const isWithinLuth = ref(true);
+
+// The zone is the single source of truth. Anything still asking "within the school?" is
+// derived from it rather than from a separate toggle that could disagree.
+watch(deliveryZone, (zone) => {
+  isWithinLuth.value = zone !== 'outside_school';
+}, { immediate: true });
 const proposedDeliveryFee = ref<number | null>(null);
 const minOutsideCampusFee = ref(450);
 const minCampusEnvironsFee = ref(350);
@@ -1265,6 +1220,47 @@ const platformConvenienceFee = ref(100);
 const platformBaseFee = ref(350);
 const platformRoomDeliveryFee = ref(350);
 const platformDropoffServiceFee = ref(300);
+// Priced by how far the delivery is from the hostel, not by how it is handed over.
+const platformHostelDeliveryFee = ref(300);
+const platformWithinSchoolFee = ref(450);
+const platformOutsideSchoolFee = ref(700);
+
+/**
+ * The three places a delivery can go, and what each costs.
+ *
+ * Price follows distance from the hostel, never the handover method — that was the hole:
+ * someone outside the hostel picked 'room delivery' because it was cheaper, even though the
+ * rider travelled further.
+ */
+const deliveryZones = computed(() => [
+  {
+    id: 'hostel' as const,
+    title: 'Inside the hostel',
+    hint: 'Within school, delivered inside your hostel building.',
+    fee: platformHostelDeliveryFee.value,
+  },
+  {
+    id: 'within_school' as const,
+    title: 'Within school, away from the hostel',
+    hint: 'Within school but far from the hostel — faculty, another hall, the gate area.',
+    fee: platformWithinSchoolFee.value,
+  },
+  {
+    id: 'outside_school' as const,
+    title: 'Entirely outside the school environment',
+    hint: 'Anywhere beyond the school gates.',
+    fee: platformOutsideSchoolFee.value,
+  },
+]);
+
+/** Where the delivery is going. This is the only thing that decides the price. */
+const deliveryZone = ref<'hostel' | 'within_school' | 'outside_school'>('hostel');
+
+const zoneFee = computed(() => {
+  if (deliveryZone.value === 'within_school') return platformWithinSchoolFee.value;
+  if (deliveryZone.value === 'outside_school') return platformOutsideSchoolFee.value;
+  return platformHostelDeliveryFee.value;
+});
 
 const fetchPlatformSettings = async () => {
   try {
@@ -1276,6 +1272,9 @@ const fetchPlatformSettings = async () => {
       platformBaseFee.value = res.data.baseFee ?? 350;
       platformRoomDeliveryFee.value = res.data.roomDeliveryFee ?? 350;
       platformDropoffServiceFee.value = res.data.dropoffServiceFee ?? 300;
+      platformHostelDeliveryFee.value = res.data.hostelDeliveryFee ?? platformRoomDeliveryFee.value;
+      platformWithinSchoolFee.value = res.data.withinSchoolFee ?? 450;
+      platformOutsideSchoolFee.value = res.data.outsideSchoolFee ?? 700;
     }
     
     try {
@@ -1473,13 +1472,13 @@ const examBrethrenActive = ref(false);
 const isNightOwl = computed(() => false);
 
 const computedTotalDeliveryFee = computed(() => {
-  if (!isWithinLuth.value) return proposedDeliveryFee.value || 0;
   if (isNightOwl.value) return 0;
   const currentUser = user.value as any;
   if (currentUser?.campusPrimeActive && currentUser?.campusPrimeExpiry && new Date(currentUser.campusPrimeExpiry) > new Date()) return 0;
   if (deliveryOption.value === 'batch_run') return 150;
   
-  const perVendorFee = deliveryMode.value === 'dropoff_service' ? platformDropoffServiceFee.value : platformRoomDeliveryFee.value;
+  // Where it is going sets the price. How it is handed over does not.
+  const perVendorFee = zoneFee.value;
   let total = 0;
   
   cartStore.allVendorIds.value.forEach(vId => {
