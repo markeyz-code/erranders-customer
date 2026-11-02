@@ -7,7 +7,7 @@
       <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-gray-50">
         <div class="max-w-5xl mx-auto flex items-center justify-between px-4 md:px-4 py-4">
           <NuxtLink to="/" class="flex items-center gap-2.5 group">
-            <!-- <div class="w-9 h-9 bg-gray-900 rounded-xl flex items-center justify-center text-white shadow-sm border border-gray-50 group-hover:bg-parentPrimary transition-all">
+            <!-- <div class="w-9 h-9 bg-gray-900 rounded-xl flex items-center justify-center text-white border border-gray-50 group-hover:bg-parentPrimary transition-all">
               <ShoppingBag class="w-4 h-4" />
             </div>
             <span class="text-lg font-bold text-gray-900 tracking-tighter">Errandr</span> -->
@@ -24,7 +24,7 @@
         <div class="w-24 h-24 bg-gray-50 rounded-[2rem] flex items-center justify-center text-5xl mb-8 animate-float">🛒</div>
         <h2 class="text-3xl font-medium text-gray-900 mb-3 tracking-tight">Your cart is empty</h2>
         <p class="text-sm font-medium text-gray-400 mb-8 leading-relaxed">Discover your favorite campus meals and start building your order.</p>
-        <NuxtLink to="/vendors" class="px-5 py-4 bg-gray-900 text-white rounded-2xl font-medium text-sm tracking-wider hover:bg-parentPrimary transition-all active:scale-95 flex items-center gap-2 shadow-sm border border-gray-50">
+        <NuxtLink to="/vendors" class="px-5 py-4 bg-gray-900 text-white rounded-2xl font-medium text-sm tracking-wider hover:bg-parentPrimary transition-all active:scale-95 flex items-center gap-2 border border-gray-50">
           <ShoppingBag class="w-4 h-4" /> Browse Vendors
         </NuxtLink>
       </div>
@@ -220,7 +220,7 @@
                       v-model="specificAddress"
                       type="text"
                       placeholder="e.g. Block 4 Common Room"
-                      class="w-full bg-white border border-gray-50 focus:border-parentPrimary/50 rounded-xl px-4 py-3 text-sm font-medium text-gray-900 outline-none transition-all shadow-sm"
+                      class="w-full bg-white border border-gray-50 focus:border-parentPrimary/50 rounded-xl px-4 py-3 text-sm font-medium text-gray-900 outline-none transition-all"
                     />
                     </div>
                   </div>
@@ -282,7 +282,7 @@
                         v-model="notifyEmail"
                         type="email"
                         placeholder="Enter your email address"
-                        class="w-full bg-white border border-gray-25 focus:border-parentPrimary/50 rounded-xl px-4 py-3 text-sm font-medium text-gray-900 outline-none transition-all shadow-sm"
+                        class="w-full bg-white border border-gray-25 focus:border-parentPrimary/50 rounded-xl px-4 py-3 text-sm font-medium text-gray-900 outline-none transition-all"
                       />
                     </div>
                   </Transition>
@@ -371,13 +371,13 @@
             </div>
 
             <!-- MOBILE: Group Order Banner -->
-            <div v-if="!groupOrder" class="lg:hidden relative overflow-hidden bg-gray-900 sm:rounded-[1.5rem] p-5 mb-4 flex items-center justify-between cursor-pointer shadow-lg shadow-black/20 active:scale-[0.98] transition-all group border border-gray-800" @click="router.push('/dashboard/group-orders')">
+            <div v-if="!groupOrder" class="lg:hidden relative overflow-hidden bg-gray-900 sm:rounded-[1.5rem] p-5 mb-4 flex items-center justify-between cursor-pointer active:scale-[0.98] transition-all group border border-gray-800" @click="router.push('/dashboard/group-orders')">
               <div class="absolute -right-4 -top-4 w-32 h-32 bg-parentPrimary/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
               <div class="flex-1 relative z-10">
                 <h4 class="text-sm font-black text-white mb-1 drop-shadow-sm flex items-center gap-2">Save on delivery? <span class="text-lg">💰</span></h4>
                 <p class="text-sm font-medium text-white leading-relaxed">Invite roommates to this order and split the fee!</p>
               </div>
-              <div class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md text-white flex items-center justify-center shrink-0 ml-4 shadow-sm relative z-10">
+              <div class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md text-white flex items-center justify-center shrink-0 ml-4 relative z-10">
                 <Users class="w-4 h-4" />
               </div>
             </div>
@@ -385,7 +385,7 @@
 
 
             <!-- MOBILE: Order Summary -->
-            <div class="lg:hidden bg-white rounded-none sm:rounded-2xl border-y sm:border-x border-gray-100 overflow-hidden shadow-xl shadow-black/5">
+            <div class="lg:hidden bg-white rounded-none sm:rounded-2xl border-y sm:border-x border-gray-100 overflow-hidden">
               <div class="px-4 sm:px-5 py-4 bg-gray-50/50 border-b border-gray-100 flex items-center gap-3">
                 <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center border border-gray-25">
                   <Receipt class="w-4 h-4 text-gray-700" />
@@ -445,12 +445,12 @@
                     @input="handlePromoInput"
                     type="text"
                     placeholder="Enter Promo Code"
-                    class="flex-1 px-4 py-3 bg-white border border-gray-25 focus:border-gray-25focus:ring-1 focus:ring-gray-900 rounded-xl text-sm font-bold text-gray-900 placeholder-gray-400 outline-none uppercase transition-all shadow-sm"
+                    class="flex-1 px-4 py-3 bg-white border border-gray-25 focus:border-gray-25focus:ring-1 focus:ring-gray-900 rounded-xl text-sm font-bold text-gray-900 placeholder-gray-400 outline-none uppercase transition-all"
                   />
                   <button 
                     @click="validatePromo"
                     :disabled="isValidatingPromo || !promoCodeInput"
-                    class="px-5 py-3 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-black disabled:opacity-50 transition-colors shadow-sm active:scale-95"
+                    class="px-5 py-3 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-black disabled:opacity-50 transition-colors active:scale-95"
                   >
                     <Loader2 v-if="isValidatingPromo" class="w-3 h-3 animate-spin" />
                     <span v-else>Apply</span>
@@ -494,7 +494,7 @@
                     <span class="text-[9px] text-orange-500 font-medium">You have {{ user.freeDeliveryTokens }} left</span>
                   </div>
                   <div class="w-8 h-4 rounded-full transition-colors relative" :class="useFreeDeliveryToken ? 'bg-orange-500' : 'bg-orange-200'">
-                    <div class="absolute top-0.5 w-3 h-3 rounded-full bg-white transition-all shadow-sm" :class="useFreeDeliveryToken ? 'left-[18px]' : 'left-0.5'"></div>
+                    <div class="absolute top-0.5 w-3 h-3 rounded-full bg-white transition-all" :class="useFreeDeliveryToken ? 'left-[18px]' : 'left-0.5'"></div>
                   </div>
                 </div>
               </div>
@@ -504,7 +504,7 @@
             <div v-if="checkoutStep === 'cart'" class="w-full mx-auto space-y-6">
               <div class="flex items-center justify-between px-2">
                 <div class="flex items-center gap-4">
-                  <div class="w-10 h-10 bg-orange-500 text-white rounded-[1.25rem] flex items-center justify-center shadow-lg shadow-orange-500/30">
+                  <div class="w-10 h-10 bg-orange-500 text-white rounded-[1.25rem] flex items-center justify-center shadow-orange-500/30">
                     <ShoppingCart class="w-5 h-5" />
                   </div>
                   <div>
@@ -512,7 +512,7 @@
                     <p class="text-sm text-gray-500 font-medium">Review your items before checkout</p>
                   </div>
                 </div>
-                <button @click="goBack" class="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-xl text-sm font-bold transition-all shadow-sm border border-gray-50 active:scale-95">Edit Selection</button>
+                <button @click="goBack" class="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-xl text-sm font-bold transition-all border border-gray-50 active:scale-95">Edit Selection</button>
               </div>
               <div class="space-y-6">
                 <div v-for="vendorId in cartStore.allVendorIds.value" :key="vendorId" class="relative group bg-white/70 backdrop-blur-xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2rem] p-6 transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
@@ -535,13 +535,13 @@
                   <!-- Pack Items -->
                   <div v-for="(pack, pIndex) in cartStore.getVendorStats(vendorId).packs" :key="pack.id" class="space-y-3 mb-6 relative">
                     <div class="flex items-center gap-3 relative z-10">
-                      <div class="h-7 px-3 bg-gray-900 text-white rounded-lg flex items-center justify-center text-sm font-black tracking-wider shadow-sm whitespace-nowrap">{{ pack.name || `P${pIndex + 1}` }}</div>
+                      <div class="h-7 px-3 bg-gray-900 text-white rounded-lg flex items-center justify-center text-sm font-black tracking-wider whitespace-nowrap">{{ pack.name || `P${pIndex + 1}` }}</div>
                       <div class="h-px flex-1 bg-gray-100"></div>
                     </div>
                     
                     <div class="space-y-3">
                       <div v-for="(item, iIndex) in pack.items" :key="item.productId + iIndex" class="group/item flex items-start gap-4 p-3 bg-gray-50/50 rounded-2xl hover:bg-gray-50 transition-colors border border-gray-50 hover:border-gray-200">
-                        <div class="w-14 h-14 rounded-[1rem] overflow-hidden shrink-0 border border-gray-25/60 bg-white shadow-sm relative group-hover/item:shadow-md transition-shadow">
+                        <div class="w-14 h-14 rounded-[1rem] overflow-hidden shrink-0 border border-gray-25/60 bg-white relative group-hover/item:shadow-md transition-shadow">
                           <video v-if="item.image && item.image.match(/\.(mp4|webm|ogg|mov)/i)" :src="item.image" class="w-full h-full object-cover" autoplay loop muted playsinline></video>
                           <img v-else :src="item.image || '/placeholder-store.jpg'" @error="$event.target.src = '/placeholder-store.jpg'" class="w-full h-full object-cover transform group-hover/item:scale-105 transition-transform duration-500" />
                           <div class="absolute top-0 right-0 bg-gray-900/80 backdrop-blur-sm text-white text-[9px] font-black px-1.5 py-0.5 rounded-bl-lg">x{{ item.quantity }}</div>
@@ -564,7 +564,7 @@
                                 <div class="w-1 h-1 rounded-full bg-gray-300 group-hover/cust:bg-parentPrimary transition-colors"></div>
                                 {{ c.quantity > 1 ? c.quantity + 'x ' : '' }}{{ c.name }}
                               </span>
-                              <span v-if="c.price > 0" class="text-gray-900 font-bold bg-white px-1.5 rounded shadow-sm border border-gray-50 text-sm shrink-0">+₦{{ c.price.toLocaleString() }}</span>
+                              <span v-if="c.price > 0" class="text-gray-900 font-bold bg-white px-1.5 rounded border border-gray-50 text-sm shrink-0">+₦{{ c.price.toLocaleString() }}</span>
                             </p>
                           </div>
                           
@@ -586,13 +586,13 @@
             <div class="sticky top-[65px] space-y-6">
               
               <!-- DESKTOP: Group Order Banner -->
-              <div v-if="!groupOrder" class="relative overflow-hidden bg-gray-900 rounded-[1.5rem] p-5 flex items-center justify-between cursor-pointer hover:shadow-xl hover:shadow-black/20 hover:-translate-y-1 transition-all group border border-gray-800" @click="router.push('/dashboard/group-orders')">
+              <div v-if="!groupOrder" class="relative overflow-hidden bg-gray-900 rounded-[1.5rem] p-5 flex items-center justify-between cursor-pointer hover:shadow-xl hover: hover:-translate-y-1 transition-all group border border-gray-800" @click="router.push('/dashboard/group-orders')">
                 <div class="absolute -right-4 -top-4 w-32 h-32 bg-parentPrimary/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
                 <div class="flex-1 relative z-10">
                   <h4 class="text-sm font-black text-white mb-1 drop-shadow-sm flex items-center gap-2">Save on delivery? <span class="text-lg">💰</span></h4>
                   <p class="text-sm font-medium text-white leading-relaxed">Invite roommates to this order and split the fee!</p>
                 </div>
-                <div class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md text-white flex items-center justify-center shrink-0 ml-4 group-hover:bg-parentPrimary transition-colors shadow-sm relative z-10">
+                <div class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md text-white flex items-center justify-center shrink-0 ml-4 group-hover:bg-parentPrimary transition-colors relative z-10">
                   <Users class="w-4 h-4" />
                 </div>
               </div>
@@ -609,7 +609,7 @@
               </div>
 
               <!-- Premium Order Summary -->
-              <div class="bg-white rounded-[2rem] border border-gray-50 shadow-xl shadow-black/5 overflow-hidden relative">
+              <div class="bg-white rounded-[2rem] border border-gray-100 overflow-hidden relative">
 
                 <div class="px-6 py-5 border-b border-gray-100 relative z-10 flex items-center gap-3 bg-gray-50/50">
                   <div class="w-8 h-8 rounded-full bg-gray-200/50 flex items-center justify-center backdrop-blur-sm">
@@ -677,12 +677,12 @@
                       @input="handlePromoInput"
                       type="text"
                       placeholder="Enter Promo Code"
-                      class="relative flex-1 px-4 py-3.5 bg-white border border-gray-25 focus:border-parentPrimary/50 focus:ring-2 focus:ring-parentPrimary/20 rounded-xl text-sm font-bold text-gray-900 outline-none uppercase placeholder:text-gray-400 placeholder:normal-case transition-all shadow-sm"
+                      class="relative flex-1 px-4 py-3.5 bg-white border border-gray-25 focus:border-parentPrimary/50 focus:ring-2 focus:ring-parentPrimary/20 rounded-xl text-sm font-bold text-gray-900 outline-none uppercase placeholder:text-gray-400 placeholder:normal-case transition-all"
                     />
                     <button 
                       @click="validatePromo"
                       :disabled="isValidatingPromo || !promoCodeInput"
-                      class="relative px-5 py-3.5 bg-gray-900 text-white rounded-xl text-sm font-black hover:bg-gray-800 disabled:opacity-50 transition-all shadow-sm active:scale-95"
+                      class="relative px-5 py-3.5 bg-gray-900 text-white rounded-xl text-sm font-black hover:bg-gray-800 disabled:opacity-50 transition-all active:scale-95"
                     >
                       <Loader2 v-if="isValidatingPromo" class="w-4 h-4 animate-spin" />
                       <span v-else>Apply</span>
@@ -726,7 +726,7 @@
                       <span class="text-sm text-orange-300/80 font-medium mt-0.5">You have {{ user.freeDeliveryTokens }} left</span>
                     </div>
                     <div class="w-10 h-5 rounded-full transition-all relative border" :class="useFreeDeliveryToken ? 'bg-orange-500 border-orange-400' : 'bg-black/40 border-white/20'">
-                      <div class="absolute top-[3px] w-3 h-3 rounded-full bg-white transition-all shadow-sm" :class="useFreeDeliveryToken ? 'left-[22px]' : 'left-1'"></div>
+                      <div class="absolute top-[3px] w-3 h-3 rounded-full bg-white transition-all" :class="useFreeDeliveryToken ? 'left-[22px]' : 'left-1'"></div>
                     </div>
                   </div>
                   
@@ -744,7 +744,7 @@
                     v-if="canCheckout"
                     @click="checkoutStep === 'cart' ? checkoutStep = 'checkout' : startPayment()"
                     :disabled="placing || (checkoutStep === 'checkout' && paymentMethod === 'wallet' && balance < finalTotal)"
-                    class="w-full py-4 bg-parentPrimary text-white rounded-2xl text-sm font-medium tracking-wider hover:bg-parentPrimary/90 transition-all disabled:opacity-40 flex items-center justify-center gap-2 shadow-sm border border-gray-50 shadow-parentPrimary/20 active:scale-[0.98]"
+                    class="w-full py-4 bg-parentPrimary text-white rounded-2xl text-sm font-medium tracking-wider hover:bg-parentPrimary/90 transition-all disabled:opacity-40 flex items-center justify-center gap-2 border border-gray-50 shadow-parentPrimary/20 active:scale-[0.98]"
                   >
                     <Loader2 v-if="placing" class="w-4 h-4 animate-spin" />
                     <span>{{ placing ? 'Processing...' : (checkoutStep === 'cart' ? 'Proceed to Checkout' : 'Complete Checkout') }}</span>
@@ -762,7 +762,7 @@
 
       <!-- ===== MOBILE FLOATING CHECKOUT BAR ===== -->
       <div v-if="!cartStore.isEmpty.value" class="fixed bottom-[85px] left-4 right-4 z-40 lg:hidden">
-        <div class="bg-gray-900 rounded-2xl px-5 py-4 text-white flex items-center justify-between shadow-sm border border-gray-50 shadow-black/30">
+        <div class="bg-gray-900 rounded-2xl px-5 py-4 text-white flex items-center justify-between border border-gray-50">
           <div>
             <p class="text-[9px] font-bold text-white/40 tracking-wider mb-0.5">Total</p>
             <h3 class="text-xl font-medium text-white tracking-tighter leading-none">₦{{ finalTotal.toLocaleString() }}</h3>
@@ -771,7 +771,7 @@
             v-if="canCheckout"
             @click="checkoutStep === 'cart' ? checkoutStep = 'checkout' : startPayment()"
             :disabled="placing || (checkoutStep === 'checkout' && paymentMethod === 'wallet' && balance < finalTotal)"
-            class="px-4 py-3.5 bg-parentPrimary text-white rounded-xl text-sm font-medium tracking-wider hover:scale-105 active:scale-95 transition-all disabled:opacity-30 flex items-center gap-2 shadow-sm border border-gray-50 shadow-parentPrimary/30"
+            class="px-4 py-3.5 bg-parentPrimary text-white rounded-xl text-sm font-medium tracking-wider hover:scale-105 active:scale-95 transition-all disabled:opacity-30 flex items-center gap-2 border border-gray-50 shadow-parentPrimary/30"
           >
             <div v-if="placing" class="w-4 h-4 border border-white/20 border-t-white rounded-full animate-spin"></div>
             <span v-else>{{ checkoutStep === 'cart' ? 'Checkout' : 'Pay Now' }}</span>
@@ -804,7 +804,7 @@
         leave-from-class="translate-y-0"
         leave-to-class="translate-y-full"
       >
-        <div v-if="showOrderBreakdown" class="fixed inset-x-0 bottom-0 z-[101] bg-white rounded-t-[2rem] max-h-[85vh] overflow-hidden flex flex-col lg:hidden shadow-sm border border-gray-50">
+        <div v-if="showOrderBreakdown" class="fixed inset-x-0 bottom-0 z-[101] bg-white rounded-t-[2rem] max-h-[85vh] overflow-hidden flex flex-col lg:hidden border border-gray-50">
           <div class="sticky top-0 bg-white pt-3 pb-2 px-5 border-b border-gray-50 z-10 rounded-t-[2rem]">
             <div class="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-3"></div>
             <div class="flex items-center justify-between">
@@ -864,9 +864,9 @@
                     <div class="flex items-center justify-between mt-2">
                       <p class="text-sm font-bold text-parentPrimary">Total: ₦{{ (item.subtotal || (item.price * item.quantity)).toLocaleString() }}</p>
                       <div class="flex items-center gap-1 bg-gray-50 rounded-lg p-1 border border-gray-50 shrink-0">
-                        <button @click="cartStore.updateItemQuantity(vendorId, pack.id, iIndex, item.quantity - 1)" class="w-6 h-6 rounded-md bg-white text-gray-500 flex items-center justify-center text-sm font-bold shadow-sm hover:text-rose-500">−</button>
+                        <button @click="cartStore.updateItemQuantity(vendorId, pack.id, iIndex, item.quantity - 1)" class="w-6 h-6 rounded-md bg-white text-gray-500 flex items-center justify-center text-sm font-bold hover:text-rose-500">−</button>
                         <span class="text-sm font-medium min-w-[16px] text-center">{{ item.quantity }}</span>
-                        <button @click="cartStore.updateItemQuantity(vendorId, pack.id, iIndex, item.quantity + 1)" class="w-6 h-6 rounded-md bg-white text-gray-500 flex items-center justify-center text-sm font-bold shadow-sm hover:text-parentPrimary">+</button>
+                        <button @click="cartStore.updateItemQuantity(vendorId, pack.id, iIndex, item.quantity + 1)" class="w-6 h-6 rounded-md bg-white text-gray-500 flex items-center justify-center text-sm font-bold hover:text-parentPrimary">+</button>
                       </div>
                     </div>
                   </div>
@@ -1071,11 +1071,6 @@ const recipientName = ref('');
 const recipientPhone = ref('');
 const isWithinLuth = ref(true);
 
-// The zone is the single source of truth. Anything still asking "within the school?" is
-// derived from it rather than from a separate toggle that could disagree.
-watch(deliveryZone, (zone) => {
-  isWithinLuth.value = zone !== 'outside_school';
-}, { immediate: true });
 const proposedDeliveryFee = ref<number | null>(null);
 const minOutsideCampusFee = ref(450);
 const minCampusEnvironsFee = ref(350);
@@ -1232,6 +1227,24 @@ const platformOutsideSchoolFee = ref(700);
  * someone outside the hostel picked 'room delivery' because it was cheaper, even though the
  * rider travelled further.
  */
+
+
+/** Where the delivery is going. This is the only thing that decides the price. */
+const deliveryZone = ref<'hostel' | 'within_school' | 'outside_school'>('hostel');
+
+// The zone is the single source of truth. Anything still asking "within the school?" is
+// derived from it rather than from a separate toggle that could disagree. Declared here,
+// after both refs, because reading deliveryZone earlier throws at render time.
+watch(deliveryZone, (zone) => {
+  isWithinLuth.value = zone !== 'outside_school';
+}, { immediate: true });
+
+const zoneFee = computed(() => {
+  if (deliveryZone.value === 'within_school') return platformWithinSchoolFee.value;
+  if (deliveryZone.value === 'outside_school') return platformOutsideSchoolFee.value;
+  return platformHostelDeliveryFee.value;
+});
+
 const deliveryZones = computed(() => [
   {
     id: 'hostel' as const,
@@ -1252,15 +1265,6 @@ const deliveryZones = computed(() => [
     fee: platformOutsideSchoolFee.value,
   },
 ]);
-
-/** Where the delivery is going. This is the only thing that decides the price. */
-const deliveryZone = ref<'hostel' | 'within_school' | 'outside_school'>('hostel');
-
-const zoneFee = computed(() => {
-  if (deliveryZone.value === 'within_school') return platformWithinSchoolFee.value;
-  if (deliveryZone.value === 'outside_school') return platformOutsideSchoolFee.value;
-  return platformHostelDeliveryFee.value;
-});
 
 const fetchPlatformSettings = async () => {
   try {
