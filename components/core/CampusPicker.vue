@@ -297,6 +297,16 @@ const loadStats = async (): Promise<void> => {
  * Pre-select the obvious answer — the campus already in use, or the only one on
  * offer — without ever overriding a choice the visitor made on this screen.
  */
+/**
+ * Suggest a campus before the visitor has chosen one.
+ *
+ * Most people arrive already knowing their school, but the list has nearly two hundred
+ * entries and an empty highlight gives them nothing to react to. Pre-highlighting a sensible
+ * default — CMUL, where most early orders came from — means one tap confirms or one tap
+ * changes, rather than a search through the whole list.
+ */
+const SUGGESTED_CAMPUS_KEY = 'cmul';
+
 const maybeAutoSelect = (): void => {
   if (selected.value) return
 
@@ -305,7 +315,17 @@ const maybeAutoSelect = (): void => {
     selected.value = current
     return
   }
-  if (institutions.value.length === 1) selected.value = institutions.value[0]
+  if (institutions.value.length === 1) {
+    selected.value = institutions.value[0]
+    return
+  }
+
+  const suggested = institutions.value.find((campus: any) =>
+    [campus.slug, campus.shortName, campus.code]
+      .filter(Boolean)
+      .some((v: string) => String(v).toLowerCase() === SUGGESTED_CAMPUS_KEY),
+  );
+  if (suggested) selected.value = suggested
 }
 
 const select = (campus: Institution): void => {
