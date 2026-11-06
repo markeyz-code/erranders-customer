@@ -207,6 +207,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
+      buildTime: Date.now().toString(),
       apiBase: process.env.VITE_API_BASE_URL || "https://api.erranders.org",
       wsBase: process.env.WS_BASE_URL || process.env.VITE_WS_URL || "https://api.erranders.org",
       googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY || '',
