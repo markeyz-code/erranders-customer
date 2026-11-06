@@ -279,7 +279,17 @@
                 </div>
              </div>
 
-             <!-- AWAITING PAYMENT -->
+                         <!-- Render failure -->
+            <div v-if="pageError" class="mb-4 rounded-2xl border border-rose-200 bg-rose-50 p-4">
+              <p class="text-sm font-bold text-rose-900">This order could not be displayed</p>
+              <p class="mt-1 text-xs text-rose-700">
+                Something went wrong drawing this page. The order itself is safe — open the orders
+                list or contact support and quote the order number.
+              </p>
+              <p class="mt-2 rounded-lg bg-white/70 p-2 font-mono text-[10px] text-rose-800 break-words">{{ pageError }}</p>
+            </div>
+
+<!-- AWAITING PAYMENT -->
              <div v-if="order.status === 'awaiting_payment'" class="p-4 rounded-2xl bg-gray-900 text-white flex flex-col items-center text-center">
                 <div class="w-12 h-12 rounded-xl bg-[#FF5C1A] flex items-center justify-center mb-4">
                    <Check class="w-6 h-6 text-white" />
@@ -1151,7 +1161,7 @@ import {
   AlertCircle,
   Phone
 } from 'lucide-vue-next';
-import { ref, onMounted, onUnmounted, reactive, computed, watch } from 'vue';
+import { ref, onMounted, onUnmounted, reactive, computed, watch, onErrorCaptured } from 'vue';
 import { useRoute, useRouter, useHead, useRuntimeConfig } from '#imports';
 import OrderChat from '@/components/core/OrderChat.vue';
 import { orders_api } from '@/api_factory/modules/orders';
@@ -1345,6 +1355,16 @@ const fetchOrder = async () => {
         }
     }
 }
+
+const pageError = ref<string | null>(null);
+
+onErrorCaptured((err: any) => {
+  // Blank pages are undiagnosable. This keeps the error on screen and in the console so the
+  // next report names the cause instead of showing white.
+  console.error('[order page] render failed:', err);
+  pageError.value = err?.message || String(err);
+  return false;
+});
 
 onMounted(async () => {
   startPolling();
