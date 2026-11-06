@@ -178,7 +178,7 @@ export default defineNuxtConfig({
           urlPattern: ({ request }) => request.mode === 'navigate',
           handler: 'NetworkFirst',
           options: {
-            cacheName: 'student-pages-cache',
+            cacheName: 'student-pages-cache-v3',
             networkTimeoutSeconds: 3,
             expiration: {
               maxEntries: 50,
