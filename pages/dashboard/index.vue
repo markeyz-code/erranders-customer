@@ -2,18 +2,13 @@
  <div class="space-y-5 md:space-y-8 pb-24 animate-fade-in selection:bg-[#FF5C1A]/15 selection:text-[#FF5C1A] px-3 md:px-4 md:px-4">
 
  <!-- Header -->
- <header class="pt-6 lg:hidden">
- <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 md:gap-6">
- <div>
- <p class="ff-mono text-[10px] font-bold text-[#9C968E] uppercase tracking-[0.15em] flex items-center gap-1.5 mb-2">
- <ShieldCheck class="w-3.5 h-3.5 text-[#FF5C1A]" />
- {{ user?.isPro ? 'Pro Member' : 'Campus Member' }}
- </p>
- <h1 class="ff-display text-2xl md:text-3xl font-bold text-[#171310] tracking-tight leading-none">
- Welcome back, <span class="text-[#FF5C1A]">{{ user?.firstName || 'Student' }}.</span>
- </h1>
- </div>
- </div>
+ <header class="pt-6">
+   <DashboardPageHeader
+     :eyebrow="user?.isPro ? 'pro member' : 'campus member'"
+     title="Welcome back,"
+     :highlight="(user?.firstName || 'Student') + '.'"
+     description="Here is what is happening with your orders today."
+   />
  </header>
 
  <!-- Active Orders & Delivery Verification PIN Alert -->
