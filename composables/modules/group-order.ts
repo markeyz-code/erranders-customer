@@ -156,11 +156,11 @@ export const useGroupOrder = () => {
     }
   }
 
-  const checkout = async (paymentReference?: string) => {
+  const checkout = async (paymentReference?: string, deliveryDetails?: any) => {
     if (!activeCode.value) return
     isLoading.value = true
     try {
-      const { data } = await api.post(`/group-orders/${activeCode.value}/checkout`, { paymentReference, ...guestPayload() })
+      const { data } = await api.post(`/group-orders/${activeCode.value}/checkout`, { paymentReference, deliveryDetails, ...guestPayload() })
       groupOrder.value = data
       return data
     } finally {

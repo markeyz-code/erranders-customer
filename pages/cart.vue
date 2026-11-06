@@ -1829,7 +1829,16 @@ onMounted(async () => {
 
       if (data?.status === 'success' || (data as any)?.status === 'success') {
         if (data?.metadata?.isGroupCheckout || data?.data?.metadata?.isGroupCheckout) {
-           await submitGroupCheckout(route.query.reference as string);
+           const meta = data?.metadata || data?.data?.metadata || {};
+           const groupDeliveryDetails = {
+             recipientName: meta.recipientName || recipientName.value,
+             recipientPhone: meta.recipientPhone || recipientPhone.value,
+             specificAddress: meta.specificAddress || specificAddress.value,
+             deliveryAddress: meta.specificAddress || specificAddress.value,
+             deliveryOption: meta.deliveryOption || deliveryOption.value,
+             deliveryMode: meta.deliveryMode || deliveryMode.value,
+           };
+           await submitGroupCheckout(route.query.reference as string, groupDeliveryDetails);
            showToast({ title: 'Payment Successful', message: 'Group Order updated!', toastType: 'success' });
            // Clear cart aggressively after successful group checkout payment
            cartStore.allVendorIds.value.forEach(vId => cartStore.clearCart(vId));
@@ -1934,10 +1943,11 @@ const submitSplitMode = async () => {
     placing.value = true;
     await initiateCheckout(splitGroupType.value);
     showToast({ title: 'Order Locked!', message: 'Group order is now ready for payment.', toastType: 'success' });
-    // If sponsor, they can just pay now. Otherwise everyone gets notified.
+    placing.value = false;
+    // Immediately proceed to payment for host/sponsor
+    await startPayment();
   } catch (e: any) {
     showToast({ title: 'Error', message: e.message || 'Failed to lock group order', toastType: 'error' });
-  } finally {
     placing.value = false;
   }
 };
@@ -1961,6 +1971,9 @@ const startPayment = async () => {
   if (groupOrder.value) {
      if (groupOrder.value.status === 'open') {
         if (!isHost.value) return showToast({ title: 'Error', message: 'Only the host can checkout.', toastType: 'error' });
+        if (!recipientName.value?.trim() || !recipientPhone.value?.trim()) return showToast({ title: 'Missing Info', message: 'Name and phone required for delivery', toastType: 'error' });
+        if (!specificAddress.value?.trim()) return showToast({ title: 'Missing Info', message: 'Delivery address required', toastType: 'error' });
+        if (!user.value && !guestEmail.value) return (showAuthModal.value = true);
         showSplitModeModal.value = true;
         return;
      }
@@ -2034,7 +2047,16 @@ const startPayment = async () => {
 
     if (paymentMethod.value === 'wallet') {
       if (groupOrder.value) {
-         await submitGroupCheckout('WALLET_PAYMENT');
+         const groupDeliveryDetails = {
+           recipientName: recipientName.value,
+           recipientPhone: recipientPhone.value,
+           specificAddress: specificAddress.value,
+           deliveryAddress: specificAddress.value,
+           deliveryOption: deliveryOption.value,
+           deliveryMode: deliveryMode.value,
+           deliveryLocation: deliveryCoordinates.value ? { type: 'Point', coordinates: deliveryCoordinates.value } : undefined,
+         };
+         await submitGroupCheckout('WALLET_PAYMENT', groupDeliveryDetails);
          showToast({ title: 'Success', message: 'Group Order payment successful!', toastType: 'success' });
          // Clear cart aggressively after successful group wallet payment
          cartStore.allVendorIds.value.forEach(vId => cartStore.clearCart(vId));

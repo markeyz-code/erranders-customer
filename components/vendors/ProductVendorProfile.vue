@@ -691,12 +691,20 @@
 
                     <button 
                       v-if="isHost && groupOrder.status === 'open'"
-                      @click="handleCheckoutGroupOrder"
+                      @click="goToGroupCheckout"
                       :disabled="!canCheckout"
-                      class="w-full py-3 bg-gray-900 text-white rounded-xl text-sm font-medium hover:bg-parentPrimary transition-all shadow-sm border border-gray-50 disabled:opacity-50"
+                      class="w-full py-3 bg-gray-900 text-white rounded-xl text-sm font-medium hover:bg-parentPrimary transition-all shadow-sm border border-gray-50 disabled:opacity-50 flex items-center justify-center gap-2"
                     >
-                      Checkout Everything
+                      <ShoppingCart class="w-4 h-4" />
+                      Review & Pay for Group Order
                     </button>
+                    <NuxtLink
+                      to="/dashboard/search"
+                      class="w-full py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-xl text-xs font-semibold transition-all border border-gray-200 flex items-center justify-center gap-1.5"
+                    >
+                      <Store class="w-3.5 h-3.5 text-parentPrimary" />
+                      + Add Items From Other Stores
+                    </NuxtLink>
                     <button @click="showLeaveConfirmationModal = true" class="w-full py-1.5 text-[10px] font-medium text-rose-400 hover:text-rose-600 transition-all text-center">
                       Leave Group
                     </button>
@@ -922,9 +930,23 @@
                   </p>
                 </div>
 
-                <button v-if="isHost && groupOrder.status === 'open'" @click="handleCheckoutGroupOrder" :disabled="!canCheckout" class="w-full py-3 bg-gray-900 text-white rounded-xl text-sm font-medium hover:bg-parentPrimary transition-all shadow-sm border border-gray-50 disabled:opacity-50">
-                  Checkout Everything
+                <button 
+                  v-if="isHost && groupOrder.status === 'open'" 
+                  @click="goToGroupCheckout" 
+                  :disabled="!canCheckout" 
+                  class="w-full py-3 bg-gray-900 text-white rounded-xl text-sm font-medium hover:bg-parentPrimary transition-all shadow-sm border border-gray-50 disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  <ShoppingCart class="w-4 h-4" />
+                  Review & Pay for Group Order
                 </button>
+                <NuxtLink
+                  to="/dashboard/search"
+                  @click="showMobileCartDrawer = false"
+                  class="w-full py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-xl text-xs font-semibold transition-all border border-gray-200 flex items-center justify-center gap-1.5"
+                >
+                  <Store class="w-3.5 h-3.5 text-parentPrimary" />
+                  + Add Items From Other Stores
+                </NuxtLink>
                 <button @click="showLeaveConfirmationModal = true; showMobileCartDrawer = false" class="w-full py-1.5 text-[10px] font-medium text-rose-400 text-center">Leave Group</button>
               </div>
             </div>
@@ -1598,7 +1620,7 @@
 
 <script setup lang="ts">
 import { 
-  Share2, Heart, ShoppingCart, ShoppingBag, ArrowLeft, ArrowRight, Clock, Star, MapPin, Search, Info, ChevronRight, ChevronDown, Users, Calendar, Copy, Trash2, X, Bike, Plus, Minus, Loader2, LogOut, Bell, FileText, RefreshCw, Lock, CheckCircle2, RotateCcw, Check
+  Share2, Heart, ShoppingCart, ShoppingBag, ArrowLeft, ArrowRight, Clock, Star, MapPin, Search, Info, ChevronRight, ChevronDown, Users, Calendar, Copy, Trash2, X, Bike, Plus, Minus, Loader2, LogOut, Bell, FileText, RefreshCw, Lock, CheckCircle2, RotateCcw, Check, Store
 } from 'lucide-vue-next';
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 
@@ -2379,15 +2401,14 @@ const confirmStartGroupOrder = async () => {
 
 const copyInviteLink = () => {
   const host = window.location.host;
-  const subdomain = vendor.value?.subdomain;
-  let link = '';
-  if (subdomain && !host.includes('localhost') && !host.includes('127.0.0.1')) {
-    link = `https://${subdomain}.erranders.org?group=${activeCode.value}`;
-  } else {
-    link = `${window.location.origin}/vendors/${route.params.id}?group=${activeCode.value}`;
+  let baseUrl = window.location.origin;
+  if (!host.includes('localhost') && !host.includes('127.0.0.1')) {
+    baseUrl = 'https://www.erranders.org';
   }
+  const vendorTarget = vendor.value?._id || route.params.id;
+  const link = `${baseUrl}/vendors/${vendorTarget}?group=${activeCode.value}`;
   navigator.clipboard.writeText(link);
-  showToast('Invite link copied to clipboard!', 'success');
+  showToast('Invite link copied to clipboard! Friends can add items from any store.', 'success');
 };
 
 const confirmLeaveGroup = async () => {
@@ -2592,15 +2613,13 @@ const handleJoinGroup = async (code: string) => {
   }
 };
 
-const handleCheckoutGroupOrder = async () => {
-  if (!isHost.value || groupLoading.value) return;
-  try {
-    await checkout();
-    showToast('Group order placed successfully!', 'success');
-  } catch (e) {
-    console.error('Checkout failed', e);
-    showToast('Failed to checkout. Ensure payment is settled.', 'error');
-  }
+const goToGroupCheckout = () => {
+  if (!canCheckout.value) return;
+  router.push({ path: '/cart', query: { group: activeCode.value } });
+};
+
+const handleCheckoutGroupOrder = () => {
+  goToGroupCheckout();
 };
 
 // shareStore has been replaced by the ShareModal
