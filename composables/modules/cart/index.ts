@@ -78,15 +78,18 @@ export const useCart = () => {
     const { vendorsMetadata } = useVendors();
     const { showToast } = useCustomToast();
 
-    // Prevent multi-vendor checkout by ensuring only one vendor in cart
-    const otherVendorIds = allVendorIds.value.filter(id => id !== item.vendorId);
-    if (otherVendorIds.length > 0) {
-      showToast({
-        title: 'Cart Conflict',
-        message: 'You can only order from one vendor at a time. Please clear or checkout your current cart first.',
-        toastType: 'error'
-      });
-      return;
+    // Prevent multi-vendor checkout by ensuring only one vendor in cart EXCEPT during a group order
+    const isGroupOrderActive = typeof window !== 'undefined' && Boolean(localStorage.getItem('errandr_active_group_code'));
+    if (!isGroupOrderActive) {
+      const otherVendorIds = allVendorIds.value.filter(id => id !== item.vendorId);
+      if (otherVendorIds.length > 0) {
+        showToast({
+          title: 'Cart Conflict',
+          message: 'You can only order from one vendor at a time. Please clear or checkout your current cart first.',
+          toastType: 'error'
+        });
+        return;
+      }
     }
 
     const vCart = ensureVendorCart(item.vendorId);

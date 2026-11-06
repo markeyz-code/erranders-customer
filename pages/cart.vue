@@ -1510,6 +1510,30 @@ const examBrethrenActive = ref(false);
 
 const isNightOwl = computed(() => false);
 
+const activeGroupVendorIds = computed(() => {
+  if (!groupOrder.value) return cartStore.allVendorIds.value;
+  const vSet = new Set<string>();
+  if (groupOrder.value.vendor?._id) vSet.add(groupOrder.value.vendor._id.toString());
+  else if (groupOrder.value.vendor) vSet.add(groupOrder.value.vendor.toString());
+
+  if (Array.isArray(groupOrder.value.vendors)) {
+    groupOrder.value.vendors.forEach((v: any) => {
+      const id = v?._id || v;
+      if (id) vSet.add(id.toString());
+    });
+  }
+  if (Array.isArray(groupOrder.value.participants)) {
+    groupOrder.value.participants.forEach((p: any) => {
+      (p.items || []).forEach((item: any) => {
+        const id = item.vendorId?._id || item.vendorId;
+        if (id) vSet.add(id.toString());
+      });
+    });
+  }
+  cartStore.allVendorIds.value.forEach(id => vSet.add(id));
+  return Array.from(vSet);
+});
+
 const computedTotalDeliveryFee = computed(() => {
   if (isNightOwl.value) return 0;
   const currentUser = user.value as any;
@@ -1520,7 +1544,8 @@ const computedTotalDeliveryFee = computed(() => {
   const perVendorFee = zoneFee.value;
   let total = 0;
   
-  cartStore.allVendorIds.value.forEach(vId => {
+  const vendorList = groupOrder.value ? activeGroupVendorIds.value : cartStore.allVendorIds.value;
+  vendorList.forEach(vId => {
     total += perVendorFee;
   });
   
@@ -1597,7 +1622,7 @@ const computedBirthdayDiscount = computed(() => {
 const computedComboPromoDiscount = computed(() => {
   let discount = 0;
   const isGroupOrderCart = !!groupOrder.value;
-  const vendorIds = isGroupOrderCart ? [groupOrder.value.vendor?._id] : cartStore.allVendorIds.value;
+  const vendorIds = isGroupOrderCart ? activeGroupVendorIds.value : cartStore.allVendorIds.value;
 
   for (const vId of vendorIds) {
     if (!vId) continue;
@@ -1850,7 +1875,7 @@ onMounted(async () => {
     }
   }
 
-  await fetchBulkMetadata(cartStore.allVendorIds.value);
+  await fetchBulkMetadata(activeGroupVendorIds.value);
 
   // Initialize selected packs
   cartStore.allVendorIds.value.forEach(vId => {
@@ -1894,13 +1919,10 @@ watch(
   () => cartStore.carts.value,
   () => {
     if (groupOrder.value && groupOrder.value.status === 'open') {
-      const vendorId = groupOrder.value.vendor?._id || groupOrder.value.vendor;
-      if (vendorId) {
-        clearTimeout(syncTimeout);
-        syncTimeout = setTimeout(() => {
-          syncWithCart(vendorId);
-        }, 800);
-      }
+      clearTimeout(syncTimeout);
+      syncTimeout = setTimeout(() => {
+        syncWithCart();
+      }, 800);
     }
   },
   { deep: true }

@@ -1681,12 +1681,10 @@ const isMiniMart = computed(() => {
 const packTerm = computed(() => isFoodVendor.value ? 'Pack' : 'Cart');
 const packsTerm = computed(() => isFoodVendor.value ? 'Packs' : 'Carts');
 
-const isGroupOrderActiveForThisVendor = computed(() => {
-  if (!activeCode.value || !groupOrder.value || !vendor.value) return false;
-  const vendorId = vendor.value._id;
-  const goVendorId = groupOrder.value.vendor?._id || groupOrder.value.vendor;
-  return vendorId === goVendorId;
+const isGroupOrderActive = computed(() => {
+  return Boolean(activeCode.value && groupOrder.value && groupOrder.value.status === 'open');
 });
+const isGroupOrderActiveForThisVendor = isGroupOrderActive;
 
 const products = ref<any[]>([]);
 const topPicks = ref<any[]>([]);

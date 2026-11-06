@@ -35,7 +35,9 @@
               </div>
               <div>
                 <h3 class="text-sm font-bold text-gray-900 line-clamp-1">{{ order.name }}</h3>
-                <p class="text-sm text-gray-500">{{ order.vendor?.storeName }}</p>
+                <p class="text-sm text-gray-500 line-clamp-1">
+                  {{ order.vendors?.length ? order.vendors.map((v: any) => v.storeName).filter(Boolean).join(', ') : (order.vendor?.storeName || 'Multi-Vendor Group Order') }}
+                </p>
               </div>
             </div>
             
@@ -90,7 +92,7 @@
           
           <NuxtLink
             v-if="order.status === 'open'"
-            :to="`/vendors/${order.vendor?._id}?group=${order.inviteCode}`"
+            :to="`/cart?group=${order.inviteCode}`"
             class="flex-1 py-2.5 bg-white border border-gray-25 text-gray-900 rounded-xl text-sm font-bold shadow-sm hover:border-parentPrimary hover:text-parentPrimary transition-all flex items-center justify-center gap-2"
           >
             Go to Cart

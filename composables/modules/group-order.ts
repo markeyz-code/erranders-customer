@@ -75,7 +75,7 @@ export const useGroupOrder = () => {
     const sId = groupOrder.value.sponsorId?._id || groupOrder.value.sponsorId
     return Boolean((uId && sId === uId) || (gId && sId === gId))
   })
-  const createGroupOrder = async (vendorId: string, name?: string) => {
+  const createGroupOrder = async (vendorId?: string, name?: string) => {
     isLoading.value = true
     try {
       const { data } = await api.post('/group-orders', { vendorId, name, ...guestPayload() })
@@ -187,24 +187,32 @@ export const useGroupOrder = () => {
     }
   }
 
-  const syncWithCart = (vendorId: string) => {
-    const packsByVendor = cart.getPacksByVendor(vendorId)
-    // In Nuxt/Vue 3, getPacksByVendor might return a ref or a simple array
-    const packs = packsByVendor.value || packsByVendor
+  const syncWithCart = (_vendorId?: string) => {
+    const allItems: any[] = []
+    const vendorIds = cart.allVendorIds.value || []
     
-    if (packs && packs.length > 0) {
-      // Find the pack that belongs to the current user (if multiple)
-      // For now, use the first pack since most users only have one active checkout
-      const myItems = packs[0].items.map(item => ({
-        productId: item.productId || item._id,
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity,
-        customizations: item.customizations || [],
-        image: item.image || ''
-      }))
-      updateItems(myItems)
-    }
+    vendorIds.forEach(vId => {
+      const packsByVendor = cart.getPacksByVendor(vId)
+      const packs = packsByVendor.value || packsByVendor
+      if (packs && packs.length > 0) {
+        packs.forEach((pack: any) => {
+          (pack.items || []).forEach((item: any) => {
+            allItems.push({
+              productId: item.productId || item._id,
+              vendorId: item.vendorId || vId,
+              vendorName: item.vendorName || '',
+              name: item.name,
+              price: item.price,
+              quantity: item.quantity,
+              customizations: item.customizations || [],
+              image: item.image || ''
+            })
+          })
+        })
+      }
+    })
+    
+    updateItems(allItems)
   }
 
   const totalGroupItems = computed(() => {
