@@ -41,12 +41,22 @@ export const useRealtimeSocket = () => {
     const { user } = useUser()
     if (user.value?._id) authPayload.userId = user.value._id
 
-    socket.value = io(`${baseUrl}/realtime`, {
-      path: '/socket.io/',
-      transports: ['websocket', 'polling'],
-      upgrade: true,
-      auth: authPayload,
-    })
+    // A failed socket must never take the page down with it. This runs during setup, so a
+    // throw here blanks the whole component rather than just losing live updates.
+    try {
+      socket.value = io(`${baseUrl}/realtime`, {
+        path: '/socket.io/',
+        transports: ['websocket', 'polling'],
+        upgrade: true,
+        auth: authPayload,
+      })
+    } catch (e) {
+      isConnecting.value = false
+      isConnected.value = false
+      socket.value = null
+      console.warn('[socket] could not connect:', e)
+      return
+    }
 
     socket.value.on('connect', () => {
       isConnected.value = true

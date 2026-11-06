@@ -10,9 +10,13 @@ const activeCode = ref<string | null>(null)
 const isLoading = ref(false)
 
 // Initialize from localStorage immediately
-if (typeof window !== 'undefined') {
-  const saved = localStorage.getItem('errandr_active_group_code')
-  if (saved) activeCode.value = saved
+try {
+  if (typeof window !== 'undefined') {
+    const saved = localStorage.getItem('errandr_active_group_code')
+    if (saved) activeCode.value = saved
+  }
+} catch {
+  // Storage can be blocked (private mode, embedded webviews) — carry on without it.
 }
 
 /**
@@ -39,9 +43,14 @@ export const useGroupOrder = () => {
   const { socket, isConnected, connectSocket } = useRealtimeSocket()
   const { showToast } = useToast()
 
-  // Ensure socket connects immediately
-  if (typeof window !== 'undefined') {
-    connectSocket()
+  // Ensure socket connects immediately. Wrapped because this runs during setup: an exception
+  // here would blank the page instead of merely losing live updates.
+  try {
+    if (typeof window !== 'undefined') {
+      connectSocket()
+    }
+  } catch (e) {
+    console.warn('[group-order] socket unavailable:', e)
   }
 
   /** Returns { guestId } payload only when the user is NOT logged in */
@@ -296,9 +305,14 @@ export const useGroupOrder = () => {
   // If there's a cached code but no groupOrder data, fetch it
   if (activeCode.value && !groupOrder.value) {
     fetchGroupOrder(activeCode.value).catch(() => {
+      // Clear the cache: the group is gone (cancelled, or removed by an admin), and holding
+      // a dead code is what makes every later page load fail in the same place.
       // If the group order is not found (e.g. cancelled), clear the cache
       activeCode.value = null
-      if (typeof window !== 'undefined') localStorage.removeItem('errandr_active_group_code')
+      groupOrder.value = null
+      try {
+        if (typeof window !== 'undefined') localStorage.removeItem('errandr_active_group_code')
+      } catch { /* storage blocked */ }
     })
   }
 
