@@ -164,7 +164,11 @@ export default defineNuxtConfig({
       ]
     },
     workbox: {
-      navigateFallback: '/',
+      // There is no precached '/' to fall back to — globPatterns only covers js, css and images —
+      // so workbox threw 'non-precached-url: /' on every navigation and the page could not
+      // settle. Navigation is already handled by the NetworkFirst rule below, so the fallback
+      // is not needed.
+      navigateFallback: null,
       globPatterns: ['**/*.{js,css,png,svg,ico,webp,woff2}'],
       cleanupOutdatedCaches: true,
       skipWaiting: true,
@@ -197,7 +201,6 @@ export default defineNuxtConfig({
     devOptions: {
       enabled: false,
       suppressWarnings: true,
-      navigateFallbackAllowlist: [/^\/$/],
       type: 'module'
     }
   },

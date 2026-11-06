@@ -210,20 +210,48 @@
                    </button>
                 </div>
 
-                <div v-if="(order.viewers && order.viewers.length > 0) || viewersCount > 0" class="w-full mt-6 pt-5 border-t border-gray-100 text-left">
-                   <h4 class="text-[11px] font-bold text-gray-900 uppercase flex items-center gap-1.5 mb-3">
-                     <span class="w-1.5 h-1.5 rounded-full bg-[#FF5C1A]" :class="viewersCount > 0 ? 'animate-pulse' : ''"></span>
-                     {{ Math.max(order.viewers?.length || 0, viewersCount) }} Rider{{ Math.max(order.viewers?.length || 0, viewersCount) > 1 ? 's' : '' }} viewed this request
-                   </h4>
+                <!-- Who is looking at this request -->
+                <div v-if="(order.viewers && order.viewers.length > 0) || viewersCount > 0" class="w-full mt-6 border-t border-gray-100 pt-5 text-left">
+                   <div class="mb-3 flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                         <span class="relative flex h-2 w-2">
+                            <span v-if="viewersCount > 0" class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex h-2 w-2 rounded-full" :class="viewersCount > 0 ? 'bg-emerald-500' : 'bg-gray-300'"></span>
+                         </span>
+                         <p class="text-xs font-bold tracking-tight text-gray-900">
+                            {{ viewerTotal }} rider{{ viewerTotal > 1 ? 's' : '' }}
+                            {{ viewersCount > 0 ? 'looking now' : 'viewed this request' }}
+                         </p>
+                      </div>
+                      <span v-if="viewersCount > 0" class="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-700">
+                         live
+                      </span>
+                   </div>
+
                    <div class="flex flex-wrap gap-2">
-                      <div v-for="viewer in order.viewers" :key="viewer._id" class="flex items-center gap-2 border border-gray-50 px-2.5 py-1.5 rounded-lg">
-                         <div class="w-7 h-7 rounded-full bg-gray-100 overflow-hidden flex items-center justify-center text-gray-500 font-bold text-[10px] uppercase shrink-0">
-                            <img v-if="viewer.errander?.avatar" :src="viewer.errander.avatar" class="w-full h-full object-cover" />
-                            <span v-else>{{ viewer.errander?.firstName?.[0] || 'R' }}{{ viewer.errander?.lastName?.[0] || '' }}</span>
+                      <div
+                         v-for="viewer in order.viewers"
+                         :key="viewer._id"
+                         class="flex items-center gap-2.5 rounded-xl border border-gray-100 bg-gray-50/60 py-1.5 pl-1.5 pr-3"
+                      >
+                         <div class="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-[10px] font-bold uppercase text-gray-500 ring-1 ring-gray-100">
+                            <img v-if="viewer.errander?.avatar" :src="viewer.errander.avatar" class="h-full w-full object-cover" />
+                            <span v-else>{{ (viewer.errander?.firstName?.[0] || 'R') }}{{ viewer.errander?.lastName?.[0] || '' }}</span>
                          </div>
-                         <p class="text-sm font-bold text-gray-900">{{ viewer.errander?.firstName || 'Rider' }} {{ viewer.errander?.lastName || '' }}</p>
+                         <div class="min-w-0">
+                            <p class="truncate text-xs font-bold leading-tight text-gray-900">
+                               {{ viewer.errander?.firstName || 'Rider' }} {{ viewer.errander?.lastName || '' }}
+                            </p>
+                            <p class="text-[10px] leading-tight text-gray-400">
+                               {{ viewerTime(viewer.timestamp) }}
+                            </p>
+                         </div>
                       </div>
                    </div>
+
+                   <p v-if="!order.viewers?.length && viewersCount > 0" class="text-[11px] text-gray-400">
+                      Riders are viewing your request right now.
+                   </p>
                 </div>
 
                 <!-- Bids -->
@@ -1579,6 +1607,20 @@ const payForErrand = async () => {
 
 const isPayingWithWallet = ref(false);
 
+
+const viewerTotal = computed(() => Math.max(order.value?.viewers?.length || 0, viewersCount.value || 0));
+
+// "just now" is more useful than a date — a viewer from yesterday tells you nothing today.
+const viewerTime = (stamp?: string) => {
+  if (!stamp) return 'just now';
+  const diff = Date.now() - new Date(stamp).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  return `${Math.floor(hours / 24)}d ago`;
+};
 
 const showSubstituteReviewModal = ref(false);
 const substituteData = ref<any>(null);
