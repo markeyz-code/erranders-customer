@@ -1363,6 +1363,19 @@ onMounted(async () => {
            showToast({ title: 'Payment Successful', message: 'Payment confirmed! Your order is being processed.', toastType: 'success' });
          } catch (e: any) {
            console.error('Payment verification error:', e);
+           // The server says why — 'Payment amount mismatch' is the useful one, and a generic
+           // 'could not confirm' hides it from the person who just paid.
+           const reason =
+             e?.response?.data?.message ||
+             (Array.isArray(e?.response?.data?.message) ? e.response.data.message[0] : '') ||
+             '';
+           if (reason) {
+             showToast({
+               title: 'Payment not confirmed',
+               message: String(reason),
+               toastType: 'error',
+             });
+           }
            // Try the other method as fallback
            try {
              await verifyPayment(route.query.reference as string);
@@ -1372,9 +1385,14 @@ onMounted(async () => {
            }
          }
        }
-       // Reload order to get updated status
-       const res2 = await orders_api.getOrder(route.params.id as string);
-       order.value = res2.data;
+       // Reload order to get updated status. Guarded: if this throws, the page has already
+       // navigated back from payment and the user is left staring at nothing.
+       try {
+         const res2 = await orders_api.getOrder(route.params.id as string);
+         if (res2?.data) order.value = res2.data;
+       } catch (reloadError) {
+         console.error('Could not reload order after payment:', reloadError);
+       }
        const url = new URL(window.location.href);
        url.searchParams.delete('reference');
        url.searchParams.delete('trxref');
