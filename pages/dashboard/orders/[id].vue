@@ -621,17 +621,25 @@
                      <ClipboardList class="w-3.5 h-3.5" /> Errand Details
                    </h4>
                    <div class="space-y-3">
-                     <div class="p-3 bg-gray-50 rounded-lg text-gray-700 text-sm">
-                       {{ order.description || 'No description provided.' }}
+                     <div class="p-3 bg-gray-50 rounded-lg text-gray-700 text-sm whitespace-pre-line">
+                       {{ errandDescription }}
+                     </div>
+                     <div v-if="errandFrom" class="flex items-start gap-2 text-sm">
+                       <span class="shrink-0 text-gray-400">From</span>
+                       <span class="text-gray-900 font-semibold text-right w-full">{{ errandFrom }}</span>
+                     </div>
+                     <div v-if="errandTo" class="flex items-start gap-2 text-sm">
+                       <span class="shrink-0 text-gray-400">To</span>
+                       <span class="text-gray-900 font-semibold text-right w-full">{{ errandTo }}</span>
                      </div>
 
                      <div class="flex justify-between items-center pt-1">
                        <span class="text-gray-400 text-sm">Urgency</span>
-                       <span class="px-2 py-0.5 rounded border border-gray-25 text-gray-700 font-bold capitalize text-[11px]">{{ order.urgency || 'standard' }}</span>
+                       <span class="px-2 py-0.5 rounded border border-gray-25 text-gray-700 font-bold capitalize text-[11px]">{{ errandUrgency }}</span>
                      </div>
-                     <div v-if="order.estimatedItemCost" class="flex justify-between items-center">
+                     <div v-if="errandItemCost" class="flex justify-between items-center">
                        <span class="text-gray-400 text-sm">Est. Item Cost</span>
-                       <span class="text-gray-900 font-bold text-sm">₦{{ order.estimatedItemCost?.toLocaleString() }}</span>
+                       <span class="text-gray-900 font-bold text-sm">₦{{ errandItemCost?.toLocaleString() }}</span>
                      </div>
                      <div v-if="order.customDetails?.itemCostBuffer" class="flex justify-between items-center">
                        <span class="text-gray-400 text-sm">Safety Buffer</span>
@@ -1627,6 +1635,16 @@ const payForErrand = async () => {
 
 const isPayingWithWallet = ref(false);
 
+
+const cd = computed(() => (order.value?.customDetails || {}) as any);
+
+const errandDescription = computed(
+  () => cd.value.description || order.value?.description || order.value?.notes || 'No description provided.',
+);
+const errandUrgency = computed(() => cd.value.urgency || order.value?.urgency || 'standard');
+const errandFrom = computed(() => cd.value.pickupLocation || '');
+const errandTo = computed(() => cd.value.dropoffLocation || '');
+const errandItemCost = computed(() => cd.value.estimatedItemCost || order.value?.estimatedItemCost || 0);
 
 const viewerTotal = computed(() => Math.max(order.value?.viewers?.length || 0, viewersCount.value || 0));
 
