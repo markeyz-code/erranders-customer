@@ -3418,4 +3418,25 @@ onUnmounted(() => {
 .cart-drawer :deep(.bg-gray-50\/50) {
   background: color-mix(in srgb, var(--card) 88%, var(--ink));
 }
+
+/* The product sheet is the one that reaches the bottom of a phone. It was 90vh inside a stretched
+   overlay, so it ended above the browser chrome with the page showing underneath. */
+@media (max-width: 767px) {
+  .sheet-overlay.tall {
+    align-items: stretch;
+    padding: 0;
+  }
+
+  .sheet-overlay.tall .sheet {
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+    border: 0;
+  }
+
+  /* The add-to-cart bar sits above the home indicator, not under it. */
+  .sheet-overlay.tall .sheet > :last-child {
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+}
 </style>
