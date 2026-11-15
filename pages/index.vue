@@ -7,10 +7,16 @@
       </NuxtLink>
 
       <nav class="nav-links" aria-label="Main">
-        <NuxtLink to="/vendors" class="nav-link">Food</NuxtLink>
-        <NuxtLink to="/errands/custom" class="nav-link">Errands</NuxtLink>
-        <NuxtLink to="/dashboard/recurring-orders" class="nav-link">Meal Autopilot</NuxtLink>
-        <NuxtLink to="/market-pool" class="nav-link">Swap</NuxtLink>
+        <NuxtLink
+          v-for="link in navLinks"
+          :key="link.to"
+          :to="link.to"
+          class="nav-link"
+          :class="{ current: isCurrent(link.to) }"
+          :aria-current="isCurrent(link.to) ? 'page' : undefined"
+        >
+          {{ link.label }}
+        </NuxtLink>
       </nav>
 
       <div class="nav-actions">
@@ -27,6 +33,7 @@
         <NuxtLink v-if="!isLoggedIn" to="/auth/login" class="ghost">Log in</NuxtLink>
         <NuxtLink :to="isLoggedIn ? '/dashboard' : '/auth/signup'" class="primary">
           {{ isLoggedIn ? 'Dashboard' : 'Get started' }}
+          <ArrowRight class="w-4 h-4" aria-hidden="true" />
         </NuxtLink>
       </div>
     </header>
@@ -556,6 +563,17 @@ const applyTheme = (dark: boolean, persist = true) => {
 const toggleTheme = () => applyTheme(!isDark.value);
 const year = new Date().getFullYear();
 
+const route = useRoute();
+
+const navLinks = [
+  { to: '/vendors', label: 'Food' },
+  { to: '/errands/custom', label: 'Errands' },
+  { to: '/dashboard/recurring-orders', label: 'Meal Autopilot' },
+  { to: '/market-pool', label: 'Swap' },
+];
+
+const isCurrent = (path: string) => route.path === path || route.path.startsWith(path + '/');
+
 const openVendors = computed(() =>
   (onlineVendors.value || []).filter((v: any) => v?.isOpen !== false),
 );
@@ -628,18 +646,26 @@ useHead({
   padding-bottom: 0;
 }
 
-/* Header */
+/* Header: one line, tight, with the current section marked. */
 .nav {
   position: sticky;
   top: 0;
   z-index: 50;
   display: flex;
   align-items: center;
-  gap: 18px;
-  padding: 12px 20px;
-  background: color-mix(in srgb, var(--page) 92%, transparent);
-  backdrop-filter: blur(14px);
+  gap: 10px;
+  height: 64px;
+  padding: 0 20px;
+  background: color-mix(in srgb, var(--page) 88%, transparent);
+  backdrop-filter: saturate(1.2) blur(16px);
   border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  flex: none;
+  height: 40px;
 }
 
 .brand-img {
@@ -649,8 +675,8 @@ useHead({
 
 .nav-links {
   display: none;
-  gap: 4px;
-  margin-left: 10px;
+  gap: 2px;
+  margin-left: 18px;
 }
 
 @media (min-width: 860px) {
@@ -660,17 +686,37 @@ useHead({
 }
 
 .nav-link {
-  padding: 9px 12px;
+  position: relative;
+  padding: 9px 13px;
   border-radius: 10px;
   color: var(--muted);
   font-size: 15px;
-  font-weight: 650;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   text-decoration: none;
+  transition: color 0.15s ease, background 0.15s ease;
 }
 
 .nav-link:hover {
-  background: var(--surface);
   color: var(--ink);
+  background: var(--surface);
+}
+
+.nav-link.current {
+  color: var(--ink);
+  font-weight: 750;
+}
+
+/* A short orange rule under the section you are in. */
+.nav-link.current::after {
+  content: '';
+  position: absolute;
+  left: 13px;
+  right: 13px;
+  bottom: 2px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--accent);
 }
 
 .nav-actions {
@@ -680,14 +726,35 @@ useHead({
   gap: 8px;
 }
 
+.icon-toggle {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.icon-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 .ghost {
   display: none;
-  padding: 10px 14px;
-  border-radius: 11px;
+  padding: 9px 12px;
+  border-radius: 10px;
   color: var(--ink);
   font-size: 15px;
   font-weight: 700;
   text-decoration: none;
+}
+
+.ghost:hover {
+  background: var(--surface);
 }
 
 @media (min-width: 640px) {
@@ -697,6 +764,9 @@ useHead({
 }
 
 .primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 10px 16px;
   border-radius: 11px;
   background: var(--accent);
@@ -704,6 +774,18 @@ useHead({
   font-size: 15px;
   font-weight: 750;
   text-decoration: none;
+  white-space: nowrap;
+}
+
+.primary:hover {
+  filter: brightness(1.04);
+}
+
+@media (max-width: 420px) {
+  .primary {
+    padding: 10px 13px;
+    font-size: 14px;
+  }
 }
 
 /* Hero: fixed heights so switching slides never moves the page. */
