@@ -641,7 +641,7 @@
               <!-- Group Participants -->
               <div v-if="groupOrder && groupOrder.participants" class="bg-white rounded-2xl border border-gray-50 shadow-sm overflow-hidden">
                 <div class="flex items-center justify-between px-5 py-4 bg-gray-50/50 border-b border-gray-100">
-                  <h3 class="text-sm font-medium text-gray-400 ">Participants ({{ groupOrder.participants?.length || 0 }})</h3>
+                  <h3 class="group-title">Participants ({{ groupOrder.participants?.length || 0 }})</h3>
                   <button v-if="isHost" @click="copyInviteLink" class="text-[10px] font-medium text-parentPrimary hover:underline">Copy Link</button>
                 </div>
                 <div class="p-3 space-y-2">
@@ -880,7 +880,7 @@
                 <ArrowLeft class="w-5 h-5"/>
               </button>
               <div class="text-center">
-                <p class="text-[10px] font-bold text-gray-900  uppercase mb-0.5">Your Cart From</p>
+                <p class="cart-from">Your cart from</p>
                 <h2 class="text-[17px] font-bold text-gray-900 leading-none">{{ vendor.storeName }}</h2>
               </div>
               <button @click="showMobileCartDrawer = false" class="w-10 h-10 bg-gray-50 hover:bg-gray-100 transition-colors rounded-full flex items-center justify-center text-gray-400 shrink-0 active:scale-95">
@@ -892,7 +892,7 @@
           <div class="flex-1 flex flex-col bg-white">
             <!-- Group Participants (if in group) -->
             <div v-if="groupOrder" class="p-5 space-y-3 border-b border-gray-50">
-              <h3 class="text-sm font-medium text-gray-400 ">Participants ({{ groupOrder.participants?.length || 0 }})</h3>
+              <h3 class="group-title">Participants ({{ groupOrder.participants?.length || 0 }})</h3>
               <div v-for="p in groupOrder.participants" :key="p.user?._id || p.user" class="p-3 bg-gray-50 rounded-xl flex items-center gap-3">
                 <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-medium text-sm text-gray-500 overflow-hidden shrink-0">
                   <img v-if="p.user?.avatar" :src="p.user?.avatar" class="w-full h-full object-cover" />
@@ -3368,6 +3368,22 @@ onUnmounted(() => {
   flex-direction: column;
   overflow-y: auto;
   background: var(--card);
+  color: var(--ink);
+}
+
+/* ─── Cart panel and group card ───
+   Same surface, same border, same type as the rest of the app. */
+.cart-from {
+  margin: 0 0 2px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--mute);
+}
+
+.group-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 750;
   color: var(--ink);
 }
 </style>
