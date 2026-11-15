@@ -601,15 +601,15 @@ const getInitials = (name: string) => {
 /* STORES — open first, closed on request, one accent. */
 .stores {
   min-height: 100vh;
-  background: #faf8f5;
-  color: #141110;
+  background: #f5f4f0;
+  color: #17130f;
   padding-bottom: 96px;
 }
 
 @media (prefers-color-scheme: dark) {
   :global(html.dark) .stores {
-    background: #12100e;
-    color: #f6f2ec;
+    background: #121010;
+    color: #f5f1ea;
   }
 }
 
@@ -628,7 +628,7 @@ const getInitials = (name: string) => {
 
 :global(html.dark) .top {
   background: rgba(18, 16, 14, 0.92);
-  border-color: #2c2721;
+  border-color: #2c2825;
 }
 
 .icon-btn {
@@ -637,7 +637,7 @@ const getInitials = (name: string) => {
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  border: 1px solid #e8e2d9;
+  border: 1px solid #e4e1da;
   background: #fff;
   color: inherit;
   display: grid;
@@ -646,8 +646,8 @@ const getInitials = (name: string) => {
 }
 
 :global(html.dark) .icon-btn {
-  background: #1b1713;
-  border-color: #2c2721;
+  background: #1c1917;
+  border-color: #2c2825;
 }
 
 .cart-dot {
@@ -674,13 +674,13 @@ const getInitials = (name: string) => {
   gap: 9px;
   padding: 4px 4px 4px 14px;
   border-radius: 12px;
-  border: 1px solid #e8e2d9;
+  border: 1px solid #e4e1da;
   background: #fff;
 }
 
 :global(html.dark) .search {
-  background: #1b1713;
-  border-color: #2c2721;
+  background: #1c1917;
+  border-color: #2c2825;
 }
 
 .search:focus-within {
@@ -721,9 +721,9 @@ const getInitials = (name: string) => {
 .tab {
   padding: 9px 16px;
   border-radius: 999px;
-  border: 1px solid #e8e2d9;
+  border: 1px solid #e4e1da;
   background: transparent;
-  color: #6b655d;
+  color: #6f6a63;
   font-size: 14.5px;
   font-weight: 700;
   cursor: pointer;
@@ -731,7 +731,7 @@ const getInitials = (name: string) => {
 
 .tab.on {
   background: #141110;
-  border-color: #141110;
+  border-color: #17130f;
   color: #faf8f5;
 }
 
@@ -745,11 +745,11 @@ const getInitials = (name: string) => {
 .head-sub {
   margin: 5px 0 18px;
   font-size: 15px;
-  color: #6b655d;
+  color: #6f6a63;
 }
 
 :global(html.dark) .head-sub {
-  color: #b3aca3;
+  color: #a39d94;
 }
 
 .controls {
@@ -777,17 +777,17 @@ const getInitials = (name: string) => {
   flex: none;
   padding: 9px 15px;
   border-radius: 999px;
-  border: 1px solid #e8e2d9;
+  border: 1px solid #e4e1da;
   background: #fff;
-  color: #6b655d;
+  color: #6f6a63;
   font-size: 14.5px;
   font-weight: 700;
   cursor: pointer;
 }
 
 :global(html.dark) .chip {
-  background: #1b1713;
-  border-color: #2c2721;
+  background: #1c1917;
+  border-color: #2c2825;
 }
 
 .chip.on {
@@ -807,7 +807,7 @@ const getInitials = (name: string) => {
   gap: 7px;
   padding: 9px 14px;
   border-radius: 12px;
-  border: 1px solid #e8e2d9;
+  border: 1px solid #e4e1da;
   background: #fff;
   color: inherit;
   font-size: 14.5px;
@@ -816,8 +816,8 @@ const getInitials = (name: string) => {
 }
 
 :global(html.dark) .sort-btn {
-  background: #1b1713;
-  border-color: #2c2721;
+  background: #1c1917;
+  border-color: #2c2825;
 }
 
 .sort-menu {
@@ -827,15 +827,15 @@ const getInitials = (name: string) => {
   z-index: 30;
   min-width: 190px;
   border-radius: 14px;
-  border: 1px solid #e8e2d9;
+  border: 1px solid #e4e1da;
   background: #fff;
   padding: 6px;
   box-shadow: 0 18px 40px rgba(20, 17, 16, 0.14);
 }
 
 :global(html.dark) .sort-menu {
-  background: #1b1713;
-  border-color: #2c2721;
+  background: #1c1917;
+  border-color: #2c2825;
 }
 
 .sort-item {
@@ -888,15 +888,15 @@ const getInitials = (name: string) => {
 .card {
   position: relative;
   border-radius: 16px;
-  border: 1px solid #e8e2d9;
+  border: 1px solid #e4e1da;
   background: #fff;
   overflow: hidden;
   transition: border-color 0.15s ease, transform 0.15s ease;
 }
 
 :global(html.dark) .card {
-  background: #1b1713;
-  border-color: #2c2721;
+  background: #1c1917;
+  border-color: #2c2825;
 }
 
 .card:hover {
@@ -918,7 +918,7 @@ const getInitials = (name: string) => {
 .card-media {
   position: relative;
   height: 152px;
-  background: #faf8f5;
+  background: #f5f4f0;
   overflow: hidden;
 }
 
@@ -944,7 +944,7 @@ const getInitials = (name: string) => {
   font-size: 12.5px;
   font-weight: 750;
   background: #fff;
-  color: #141110;
+  color: #17130f;
 }
 
 .closed-tag {
@@ -986,14 +986,14 @@ const getInitials = (name: string) => {
 .card-meta {
   margin: 4px 0 0;
   font-size: 14px;
-  color: #6b655d;
+  color: #6f6a63;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 :global(html.dark) .card-meta {
-  color: #b3aca3;
+  color: #a39d94;
 }
 
 .rating {
@@ -1003,15 +1003,15 @@ const getInitials = (name: string) => {
   flex: none;
   font-size: 14px;
   font-weight: 750;
-  color: #141110;
+  color: #17130f;
 }
 
 :global(html.dark) .rating {
-  color: #f6f2ec;
+  color: #f5f1ea;
 }
 
 .rating-count {
-  color: #6b655d;
+  color: #6f6a63;
   font-weight: 650;
 }
 
@@ -1034,7 +1034,7 @@ const getInitials = (name: string) => {
   border-radius: 999px;
   border: 0;
   background: rgba(255, 255, 255, 0.94);
-  color: #141110;
+  color: #17130f;
   display: grid;
   place-items: center;
   cursor: pointer;
@@ -1053,7 +1053,7 @@ const getInitials = (name: string) => {
   border-radius: 14px;
   border: 1px dashed #e8e2d9;
   background: transparent;
-  color: #6b655d;
+  color: #6f6a63;
   font-size: 15px;
   font-weight: 650;
   text-align: left;
@@ -1092,14 +1092,14 @@ const getInitials = (name: string) => {
 .empty-body {
   margin: 6px 0 0;
   font-size: 15px;
-  color: #6b655d;
+  color: #6f6a63;
 }
 
 .skel {
   height: 232px;
   border-radius: 16px;
   background: #fff;
-  border: 1px solid #e8e2d9;
+  border: 1px solid #e4e1da;
   animation: pulse 1.5s ease-in-out infinite;
 }
 

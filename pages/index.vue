@@ -35,7 +35,10 @@
       <!-- Hero: one sentence, one field, one object that explains the product. -->
       <section class="hero">
         <div class="hero-copy">
-          <h1>Don't walk down.<br />Errand it.</h1>
+          <h1>
+            <span class="line-fixed">Don't walk down.</span>
+            <span class="line-turn" aria-live="polite">{{ rotatingLine }}</span>
+          </h1>
           <p class="hero-sub">
             Food, laundry, a document, a mattress you no longer need. Someone on campus handles it.
           </p>
@@ -98,15 +101,19 @@
       <section class="open">
         <div class="sec-head">
           <h2>Open right now</h2>
-          <NuxtLink to="/vendors" class="sec-link">All stores</NuxtLink>
+          <div class="sec-tools">
+            <button type="button" class="rail-btn" aria-label="Scroll left" @click="scrollRail(-1)">‹</button>
+            <button type="button" class="rail-btn" aria-label="Scroll right" @click="scrollRail(1)">›</button>
+            <NuxtLink to="/vendors" class="sec-link">All stores</NuxtLink>
+          </div>
         </div>
 
-        <div v-if="loading" class="grid">
+        <div v-if="loading" class="rail">
           <div v-for="i in 3" :key="i" class="skel" />
         </div>
 
-        <div v-else class="grid">
-          <NuxtLink v-for="vendor in openVendors" :key="vendor._id" :to="`/vendors/${vendor._id}`" class="store">
+        <div v-else ref="rail" class="rail" role="list">
+          <NuxtLink v-for="vendor in openVendors" :key="vendor._id" :to="`/vendors/${vendor._id}`" class="store" role="listitem">
             <div class="store-media">
               <img :src="vendor.banner || vendor.logo || '/placeholder-store.jpg'" class="store-img" alt="" loading="lazy" />
               <span v-if="vendor.preOrderOnly" class="pill">Pre-order</span>
@@ -134,11 +141,17 @@
               <p class="closed-title">Closed now</p>
               <button type="button" class="closed-toggle quiet" :aria-expanded="true" @click="showClosed = false">Hide</button>
             </div>
-            <div class="closed-chips">
-              <span v-for="vendor in closedVendors" :key="vendor._id" class="closed-chip">
-                {{ cleanName(vendor.storeName) }}
-                <span class="closed-when">{{ opensAt(vendor) }}</span>
-              </span>
+            <div class="rail">
+              <NuxtLink v-for="vendor in closedVendors" :key="vendor._id" :to="`/vendors/${vendor._id}`" class="store closed-store">
+                <div class="store-media">
+                  <img :src="vendor.banner || vendor.logo || '/placeholder-store.jpg'" class="store-img dim" alt="" loading="lazy" />
+                  <span class="pill closed">{{ opensAt(vendor) }}</span>
+                </div>
+                <div class="store-body">
+                  <p class="store-name">{{ cleanName(vendor.storeName) }}</p>
+                  <p class="store-meta">{{ vendor.category || 'Store' }} · Closed</p>
+                </div>
+              </NuxtLink>
             </div>
           </template>
         </div>
@@ -251,7 +264,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { ArrowRight, ArrowUpRight, Moon, Star, Sun } from 'lucide-vue-next';
 import { useLandingPage } from '@/composables/modules/landing';
 import { useUser } from '@/composables/modules/auth/user';
@@ -262,6 +275,20 @@ const { loading, onlineVendors, fetchHomeData } = useLandingPage();
 const { isLoggedIn } = useUser();
 
 const mode = ref<'food' | 'errand'>('food');
+
+// The claim stays fixed; only the verb changes, so the page never loses its point.
+const LINES = ['Errand it.', 'Order it.', 'Swap it.', 'Plan it.'];
+const rotatingLine = ref(LINES[0]);
+let lineTimer: ReturnType<typeof setInterval> | null = null;
+
+const startLines = () => {
+  if (typeof window === 'undefined') return;
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+  lineTimer = setInterval(() => {
+    const i = LINES.indexOf(rotatingLine.value);
+    rotatingLine.value = LINES[(i + 1) % LINES.length];
+  }, 3200);
+};
 
 // Light unless the student chose dark. Same key as the dashboard toggle, so the choice follows them.
 const isDark = ref(false);
@@ -277,8 +304,15 @@ const q = ref('');
 const year = new Date().getFullYear();
 
 const openVendors = computed(() =>
-  (onlineVendors.value || []).filter((v: any) => v?.isOpen !== false).slice(0, 3),
+  (onlineVendors.value || []).filter((v: any) => v?.isOpen !== false),
 );
+
+const rail = ref<HTMLElement | null>(null);
+const scrollRail = (dir: number) => {
+  const el = rail.value;
+  if (!el) return;
+  el.scrollBy({ left: dir * Math.round(el.clientWidth * 0.8), behavior: 'smooth' });
+};
 const closedVendors = computed(() =>
   (onlineVendors.value || []).filter((v: any) => v?.isOpen === false),
 );
@@ -306,9 +340,14 @@ const go = () => {
   }
 };
 
+onBeforeUnmount(() => {
+  if (lineTimer) clearInterval(lineTimer);
+});
+
 onMounted(() => {
   const saved = typeof localStorage !== 'undefined' ? localStorage.getItem('erranders-theme') : null;
   applyTheme(saved === 'dark', false);
+  startLines();
   fetchHomeData();
 });
 
@@ -321,13 +360,15 @@ useHead({
 <style scoped>
 .landing {
   --accent: #f26a2e;
-  --ink: #141110;
-  --muted: #6b655d;
-  --faint: #97908a;
-  --line: #e8e2d9;
+  --ink: #17130f;
+  --muted: #6f6a63;
+  --faint: #6f6a63;
+  --line: #e4e1da;
   --surface: #ffffff;
-  --page: #faf8f5;
-  --dark: #16120f;
+  --page: #f5f4f0;
+  --dark: #17130f;
+  --soft-orange: #fde6da;
+  --soft-green: #dff3e7;
 
   background: var(--page);
   color: var(--ink);
@@ -336,13 +377,15 @@ useHead({
 }
 
 :global(html.dark) .landing {
-  --ink: #f6f2ec;
-  --muted: #b3aca3;
-  --faint: #8b847c;
-  --line: #2c2721;
-  --surface: #1b1713;
-  --page: #12100e;
+  --ink: #f5f1ea;
+  --muted: #a39d94;
+  --faint: #a39d94;
+  --line: #2c2825;
+  --surface: #1c1917;
+  --page: #121010;
   --dark: #0c0a09;
+  --soft-orange: #3a2418;
+  --soft-green: #16301f;
 }
 
 /* Header */
@@ -1131,7 +1174,7 @@ useHead({
 }
 
 :global(html.dark) body {
-  background: #12100e;
+  background: #121010;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1204,14 +1247,97 @@ useHead({
   color: var(--ink);
 }
 
+
+.sec-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rail-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.rail-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Draggable rail: works with a trackpad, a mouse wheel and the arrow buttons. */
+.rail {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-bottom: 6px;
+  margin: 0 -20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  scrollbar-width: none;
+}
+
+.rail::-webkit-scrollbar {
+  display: none;
+}
+
+.rail > * {
+  scroll-snap-align: start;
+  flex: 0 0 260px;
+}
+
+@media (min-width: 900px) {
+  .rail > * {
+    flex: 0 0 320px;
+  }
+}
+
+.closed-store .store-img.dim {
+  filter: grayscale(0.7);
+  opacity: 0.62;
+}
+
+.pill.closed {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
 .closed-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.closed-when {
-  color: var(--muted);
-  font-weight: 600;
+.line-fixed,
+.line-turn {
+  display: block;
+}
+
+.line-turn {
+  animation: lineIn 0.45s ease-out;
+}
+
+@keyframes lineIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sec-tools .sec-link {
+  margin-left: 6px;
 }
 </style>

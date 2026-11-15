@@ -10,13 +10,15 @@
  */
 
 .dash {
-  --dash-ink: #141110;
-  --dash-muted: #6b655d;
-  --dash-faint: #97908a;
-  --dash-line: #e8e2d9;
+  --dash-ink: #17130f;
+  --dash-muted: #6f6a63;
+  --dash-faint: #6f6a63;
+  --dash-line: #e4e1da;
   --dash-surface: #ffffff;
-  --dash-page: #faf8f5;
+  --dash-page: #f5f4f0;
   --dash-accent: #f26a2e;
+  --dash-soft-orange: #fde6da;
+  --dash-soft-green: #dff3e7;
   --dash-radius: 18px;
   --dash-radius-sm: 12px;
 
@@ -25,12 +27,14 @@
 }
 
 html.dark .dash {
-  --dash-ink: #f6f2ec;
-  --dash-muted: #b3aca3;
-  --dash-faint: #8b847c;
-  --dash-line: #2c2721;
-  --dash-surface: #1b1713;
-  --dash-page: #12100e;
+  --dash-ink: #f5f1ea;
+  --dash-muted: #a39d94;
+  --dash-faint: #a39d94;
+  --dash-line: #2c2825;
+  --dash-surface: #1c1917;
+  --dash-page: #121010;
+  --dash-soft-orange: #3a2418;
+  --dash-soft-green: #16301f;
 }
 
 /* One page tint, bled past the container padding without changing layout. */
