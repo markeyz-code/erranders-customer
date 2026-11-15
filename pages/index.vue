@@ -1443,6 +1443,7 @@ useHead({
 .store {
   display: flex;
   flex-direction: column;
+  height: 100%;
   border: 1px solid var(--line);
   border-radius: 16px;
   background: var(--surface);
@@ -1457,26 +1458,29 @@ useHead({
   transform: translateY(-1px);
 }
 
+/* The media is a fixed box that clips. Nothing inside it can spill onto the name. */
 .store-media {
   position: relative;
-  height: 148px;
+  flex: none;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
   background: var(--page);
 }
 
-/* A logo is shown whole on a quiet panel; a photo fills its frame. */
 .store-media.logo {
-  display: grid;
-  place-items: center;
-  padding: 16px;
-}
-
-.store-media.filled {
-  background: var(--page);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
 }
 
 .store-img {
+  display: block;
   width: 100%;
   height: 100%;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .store-img.cover {
@@ -1502,6 +1506,7 @@ useHead({
   color: #141110;
   font-size: 12.5px;
   font-weight: 750;
+  box-shadow: 0 2px 8px rgba(23, 19, 15, 0.12);
 }
 
 .pill.closed {
@@ -1510,27 +1515,31 @@ useHead({
   border: 1px solid var(--line);
 }
 
+/* Body fills whatever height the tallest card in the row needs. */
 .store-body {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 14px;
+  gap: 3px;
+  flex: 1;
+  padding: 13px 14px 14px;
+  min-width: 0;
 }
 
 .store-name {
   margin: 0;
-  font-size: 16px;
+  font-size: 15.5px;
   font-weight: 750;
-  line-height: 1.2;
+  line-height: 1.25;
   color: var(--ink);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .store-meta {
   margin: 0;
-  font-size: 14px;
+  font-size: 13.5px;
   color: var(--mute);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1542,7 +1551,7 @@ useHead({
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  margin-top: 6px;
+  margin-top: auto;
   padding-top: 10px;
   border-top: 1px solid var(--line);
 }
@@ -2064,6 +2073,7 @@ useHead({
 /* Draggable rail: works with a trackpad, a mouse wheel and the arrow buttons. */
 .rail {
   display: flex;
+  align-items: stretch;
   gap: 14px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
@@ -2079,7 +2089,7 @@ useHead({
 
 .rail > * {
   scroll-snap-align: start;
-  flex: 0 0 min(260px, 78vw);
+  flex: 0 0 min(240px, 76vw);
 }
 
 @media (min-width: 900px) {
