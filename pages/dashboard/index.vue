@@ -425,17 +425,15 @@ useHead({
   clip-path: inset(0 -100vmax);
 }
 
-@media (prefers-color-scheme: dark) {
-  .home {
-    --ink: #f6f2ec;
-    --muted: #b3aca3;
-    --faint: #8b847c;
-    --line: #2c2721;
-    --surface: #1b1713;
-    --page: #12100e;
-    --dark: #0c0a09;
-    --accent-ink: #171310;
-  }
+:global(html.dark) .home {
+  --ink: #f6f2ec;
+  --muted: #b3aca3;
+  --faint: #8b847c;
+  --line: #2c2721;
+  --surface: #1b1713;
+  --page: #12100e;
+  --dark: #0c0a09;
+  --accent-ink: #171310;
 }
 
 /* ─── Header ─── */
@@ -834,11 +832,9 @@ useHead({
   padding: 16px 18px;
 }
 
-@media (prefers-color-scheme: dark) {
-  .pay {
-    background: rgba(242, 106, 46, 0.1);
-    border-color: rgba(242, 106, 46, 0.36);
-  }
+:global(html.dark) .pay {
+  background: rgba(242, 106, 46, 0.1);
+  border-color: rgba(242, 106, 46, 0.36);
 }
 
 .pay-title {

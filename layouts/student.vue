@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-white flex flex-col lg:flex-row selection:bg-[#FF5C1A]/15 selection:text-[#FF5C1A] w-full overflow-x-hidden pt-safe">
+  <div class="app-shell min-h-screen bg-white flex flex-col lg:flex-row selection:bg-[#FF5C1A]/15 selection:text-[#FF5C1A] w-full overflow-x-hidden pt-safe">
     <!-- <CorePromoBanner /> -->
     <FullScreenLoader></FullScreenLoader>
     <Toast ref="toastRef"></Toast>
@@ -7,7 +7,7 @@
     <CallOverlay />
 
     <!-- Desktop Sidebar: ID Badge -->
-    <aside class="side-rail hidden lg:flex flex-col w-[84px] h-[calc(100vh-2rem)] fixed left-4 top-4 bottom-4 z-50">
+    <aside class="side-rail app-aside hidden lg:flex flex-col w-[84px] h-[calc(100vh-2rem)] fixed left-4 top-4 bottom-4 z-50">
       <div class="h-full bg-[#FAF8F5] rounded-2xl flex flex-col overflow-hidden border border-[#E7E2DA] relative">
 
         <!-- Brand row -->
@@ -125,7 +125,7 @@
     </aside>
 
     <!-- Mobile Header -->
-    <header class="lg:hidden bg-white/95 backdrop-blur-2xl border-b border-gray-100 sticky top-0 z-40 w-full shrink-0">
+    <header class="app-bar lg:hidden bg-white/95 backdrop-blur-2xl border-b border-gray-100 sticky top-0 z-40 w-full shrink-0">
       <div class="flex items-center justify-between px-4 py-3 sm:py-4">
         
         <!-- Left: Menu & Logo -->
@@ -157,6 +157,17 @@
           >
             <MapPin class="w-3 h-3 text-[#FF5C1A] shrink-0" />
             <span class="truncate">{{ currentCampusLabel }}</span>
+          </button>
+
+          <!-- Theme toggle: on phones too, since the OS setting no longer decides. -->
+          <button
+            type="button"
+            @click="toggleTheme"
+            class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-50 flex items-center justify-center border border-gray-50 hover:bg-gray-100 transition-all active:scale-95"
+            :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+          >
+            <Sun v-if="isDark" class="w-4 h-4 sm:w-[18px] sm:h-[18px] text-gray-700" />
+            <Moon v-else class="w-4 h-4 sm:w-[18px] sm:h-[18px] text-gray-700" />
           </button>
 
           <!-- Search Icon -->
@@ -328,7 +339,7 @@
 
       <!-- Desktop manifest header -->
       <div v-if="!route.path.startsWith('/vendors')" class="hidden lg:block mb-8 animate-fade-in">
-        <div class="flex items-center justify-between bg-white rounded-2xl px-5 py-4 border border-[#E7E2DA]">
+        <div class="app-bar flex items-center justify-between bg-white rounded-2xl px-5 py-4 border border-[#E7E2DA]">
           <div class="flex items-center gap-5">
             <button v-if="!isDashboard" @click="router.back()" class="w-10 h-10 rounded-lg bg-[#FAF8F5] flex items-center justify-center border border-[#E7E2DA] hover:bg-[#171310] hover:text-white hover:border-[#171310] transition-all group">
               <ArrowLeft class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform"></ArrowLeft>
@@ -368,6 +379,17 @@
               <Bell class="w-[18px] h-[18px]"></Bell>
               <div v-if="unreadCount > 0" class="absolute top-2.5 right-2.5 w-2 h-2 bg-[#FF5C1A] border border-white rounded-full"></div>
             </NuxtLink>
+
+            <button
+              type="button"
+              @click="toggleTheme"
+              class="w-11 h-11 bg-[#FAF8F5] rounded-lg flex items-center justify-center text-[#9C968E] hover:bg-[#171310] hover:text-white transition-all border border-[#E7E2DA]"
+              :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+              :title="isDark ? 'Light mode' : 'Dark mode'"
+            >
+              <Sun v-if="isDark" class="w-[18px] h-[18px]" />
+              <Moon v-else class="w-[18px] h-[18px]" />
+            </button>
 
             <div class="w-px h-8 border-l border-dashed border-[#E7E2DA]"></div>
 
@@ -448,6 +470,8 @@ import {
   Menu,
   X,
   Bell,
+  Moon,
+  Sun,
   ArrowLeft,
   Target,
   Wallet,
@@ -589,6 +613,25 @@ const userInitials = computed(() => {
 const handleLogoutClick = () => {
   logoutModalOpen.value = true
 }
+
+const isDark = ref(false);
+
+const applyTheme = (dark: boolean, persist = true) => {
+  isDark.value = dark;
+  if (typeof document !== 'undefined') {
+    document.documentElement.classList.toggle('dark', dark);
+  }
+  if (persist && typeof localStorage !== 'undefined') {
+    localStorage.setItem('erranders-theme', dark ? 'dark' : 'light');
+  }
+};
+
+const toggleTheme = () => applyTheme(!isDark.value);
+
+onMounted(() => {
+  const saved = typeof localStorage !== 'undefined' ? localStorage.getItem('erranders-theme') : null;
+  applyTheme(saved === 'dark', false);
+});
 
 const isActive = (path: string) => {
   if (path === '/dashboard') return route.path === '/dashboard' || route.path === '/';
@@ -767,5 +810,70 @@ watch(() => studentOrders.value, () => {
 .nav-list-leave-active {
   position: absolute;
   width: 100%;
+}
+
+/* ── Desktop rail ──
+   Icons only. Labels stay in the markup for the mobile drawer, which renders the same list in full. */
+@media (min-width: 1024px) {
+  .side-rail .rail-hide {
+    display: none !important;
+  }
+
+  .side-rail nav a,
+  .side-rail .mt-auto a {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+    gap: 0;
+  }
+
+  .side-rail nav a span,
+  .side-rail .mt-auto a span {
+    display: none;
+  }
+
+  .side-rail > div:first-child {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* ── Dark mode ──
+   The shell follows the same switch as the page. Defaults to light; nothing inherits the OS setting. */
+html.dark body {
+  background: #12100e;
+}
+
+html.dark .app-shell {
+  background: #12100e;
+  color: #f6f2ec;
+}
+
+html.dark .app-bar,
+html.dark .app-aside {
+  background: #1b1713 !important;
+  border-color: #2c2721 !important;
+  color: #f6f2ec;
+}
+
+html.dark .app-bar .text-\[\#171310\],
+html.dark .app-bar h1,
+html.dark .app-bar h2 {
+  color: #f6f2ec !important;
+}
+
+html.dark .side-rail a {
+  color: #b3aca3;
+}
+
+html.dark .side-rail a:hover,
+html.dark .side-rail a[aria-current='page'] {
+  color: #f6f2ec;
+}
+
+html.dark .side-rail a.\!bg-white,
+html.dark .side-rail a.bg-white {
+  background: #1b1713 !important;
 }
 </style>
