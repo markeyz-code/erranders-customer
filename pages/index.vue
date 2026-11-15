@@ -1759,12 +1759,7 @@ useHead({
   color: var(--muted);
 }
 
-/* Closing banner */
-.closer {
-  margin-top: 44px;
-  padding-bottom: 44px;
-}
-
+/* Closing banner: a card with a small gutter from the screen edges, not a full-width band. */
 .closer {
   display: flex;
   flex-wrap: wrap;
@@ -1772,11 +1767,19 @@ useHead({
   justify-content: space-between;
   gap: 16px;
   max-width: 1080px;
-  margin: 44px auto 0;
-  padding: 28px;
-  border-radius: 20px;
+  /* 16px each side on a phone, centred with room to breathe on a wide screen. */
+  margin: 40px 16px 44px;
+  padding: 24px;
+  border-radius: 18px;
   background: var(--accent);
   color: #fff;
+}
+
+@media (min-width: 720px) {
+  .closer {
+    margin: 44px auto;
+    padding: 28px;
+  }
 }
 
 .closer h2 {
