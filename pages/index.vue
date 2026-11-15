@@ -159,20 +159,40 @@
         </div>
 
         <div v-else ref="rail" class="rail" role="list">
-          <NuxtLink v-for="vendor in openVendors" :key="vendor._id" :to="`/vendors/${vendor._id}`" class="store" role="listitem">
-            <div class="store-media">
-              <img :src="vendor.banner || vendor.logo || '/placeholder-store.jpg'" class="store-img" alt="" loading="lazy" />
+          <NuxtLink
+            v-for="vendor in openVendors"
+            :key="vendor._id"
+            :to="`/vendors/${vendor._id}`"
+            class="store"
+            role="listitem"
+          >
+            <!-- A photo is cropped to fill; a logo is contained, so a wordmark is never cut in half. -->
+            <div class="store-media" :class="vendor.banner ? 'filled' : 'logo'">
+              <img
+                :src="vendor.banner || vendor.logo || '/placeholder-store.jpg'"
+                class="store-img"
+                :class="vendor.banner ? 'cover' : 'contain'"
+                alt=""
+                loading="lazy"
+              />
               <span v-if="vendor.preOrderOnly" class="pill">Pre-order</span>
             </div>
+
             <div class="store-body">
-              <div class="store-row">
-                <p class="store-name">{{ cleanName(vendor.storeName) }}</p>
+              <p class="store-name">{{ cleanName(vendor.storeName) }}</p>
+              <p class="store-meta">{{ vendor.category || 'Store' }}</p>
+              <div class="store-foot">
+                <span class="store-time">
+                  <Clock class="w-3.5 h-3.5" aria-hidden="true" />
+                  {{ vendor.preparationTime || 20 }} min
+                </span>
                 <span v-if="hasReviews(vendor)" class="rating">
-                  <Star class="w-3.5 h-3.5" aria-hidden="true" />{{ vendor.rating?.toFixed(1) }}
+                  <Star class="w-3.5 h-3.5" aria-hidden="true" />
+                  {{ Number(vendor.rating).toFixed(1) }}
+                  <span class="rating-count">({{ reviewCount(vendor) }})</span>
                 </span>
                 <span v-else class="new">New</span>
               </div>
-              <p class="store-meta">{{ vendor.category || 'Store' }} · {{ vendor.preparationTime || 20 }} min</p>
             </div>
           </NuxtLink>
         </div>
@@ -189,13 +209,22 @@
             </div>
             <div class="rail">
               <NuxtLink v-for="vendor in closedVendors" :key="vendor._id" :to="`/vendors/${vendor._id}`" class="store closed-store">
-                <div class="store-media">
-                  <img :src="vendor.banner || vendor.logo || '/placeholder-store.jpg'" class="store-img dim" alt="" loading="lazy" />
+                <div class="store-media" :class="vendor.banner ? 'filled' : 'logo'">
+                  <img
+                    :src="vendor.banner || vendor.logo || '/placeholder-store.jpg'"
+                    class="store-img dim"
+                    :class="vendor.banner ? 'cover' : 'contain'"
+                    alt=""
+                    loading="lazy"
+                  />
                   <span class="pill closed">{{ opensAt(vendor) }}</span>
                 </div>
                 <div class="store-body">
                   <p class="store-name">{{ cleanName(vendor.storeName) }}</p>
-                  <p class="store-meta">{{ vendor.category || 'Store' }} · Closed</p>
+                  <p class="store-meta">{{ vendor.category || 'Store' }}</p>
+                  <div class="store-foot">
+                    <span class="store-time closed">Closed</span>
+                  </div>
                 </div>
               </NuxtLink>
             </div>
@@ -709,7 +738,7 @@ const closedVendors = computed(() =>
   (onlineVendors.value || []).filter((v: any) => v?.isOpen === false),
 );
 const closedCount = computed(() => closedVendors.value.length);
-const showClosed = ref(false);
+const showClosed = ref(true);
 
 /** Whatever the API calls it, show a time a student can act on. */
 const opensAt = (vendor: any) => {
@@ -1376,28 +1405,55 @@ useHead({
 }
 
 .store {
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--line);
   border-radius: 16px;
   background: var(--surface);
   overflow: hidden;
   text-decoration: none;
   color: inherit;
+  transition: border-color 0.15s ease, transform 0.15s ease;
 }
 
 .store:hover {
   border-color: var(--accent);
+  transform: translateY(-1px);
 }
 
 .store-media {
   position: relative;
-  height: 150px;
+  height: 148px;
+  background: var(--page);
+}
+
+/* A logo is shown whole on a quiet panel; a photo fills its frame. */
+.store-media.logo {
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.store-media.filled {
   background: var(--page);
 }
 
 .store-img {
   width: 100%;
   height: 100%;
+}
+
+.store-img.cover {
   object-fit: cover;
+}
+
+.store-img.contain {
+  object-fit: contain;
+}
+
+.store-img.dim {
+  filter: grayscale(0.6);
+  opacity: 0.55;
 }
 
 .pill {
@@ -1412,71 +1468,88 @@ useHead({
   font-weight: 750;
 }
 
-.store-body {
-  padding: 12px 14px 14px;
+.pill.closed {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
 }
 
-.store-row {
+.store-body {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 10px;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px;
 }
 
 .store-name {
   margin: 0;
   font-size: 16px;
   font-weight: 750;
+  line-height: 1.2;
+  color: var(--ink);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .store-meta {
-  margin: 4px 0 0;
+  margin: 0;
   font-size: 14px;
-  color: var(--muted);
+  color: var(--mute);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.store-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.store-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13.5px;
+  font-weight: 650;
+  color: var(--mute);
+}
+
+.store-time.closed {
+  color: var(--mute);
 }
 
 .rating {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  flex: none;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 750;
+  color: var(--ink);
+}
+
+.rating :global(svg) {
+  color: #d97706;
+  fill: #d97706;
+}
+
+.rating-count {
+  color: var(--mute);
+  font-weight: 650;
 }
 
 .new {
-  flex: none;
   padding: 3px 9px;
   border-radius: 999px;
-  background: rgba(242, 106, 46, 0.12);
+  background: var(--orsoft);
   color: #b3400b;
   font-size: 12.5px;
   font-weight: 750;
-}
-
-.closed-line {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  margin: 16px 0 0;
-  padding: 14px 16px;
-  border: 1px dashed var(--line);
-  border-radius: 14px;
-  font-size: 14.5px;
-  color: var(--muted);
-}
-
-.closed-chip {
-  padding: 5px 11px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  font-size: 13.5px;
-  font-weight: 650;
-  color: var(--ink);
 }
 
 .skel {
@@ -1951,7 +2024,7 @@ useHead({
 
 .rail > * {
   scroll-snap-align: start;
-  flex: 0 0 260px;
+  flex: 0 0 min(260px, 78vw);
 }
 
 @media (min-width: 900px) {
