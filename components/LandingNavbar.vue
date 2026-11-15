@@ -1,11 +1,11 @@
 <template>
   <!-- Navbar Wrapper -->
   <nav 
-    class="fixed w-[95%] left-1/2 -translate-x-1/2 z-[60] transition-all duration-500 rounded-[2rem] mt-4"
+    class="fixed top-0 left-1/2 -translate-x-1/2 z-[60] w-[95%] transition-all duration-500 rounded-b-[2rem]"
     :class="[
-      scrolled 
-        ? 'bg-white border border-gray-50 shadow-[0_8px_30px_rgb(0,0,0,0.08)] py-3' 
-        : 'bg-transparent py-5'
+      scrolled
+        ? 'bg-white border border-gray-50 shadow-[0_8px_30px_rgb(0,0,0,0.08)] py-2.5'
+        : 'bg-transparent py-3'
     ]"
   >
     <div class="max-w-7xl mx-auto px-4 lg:px-10">

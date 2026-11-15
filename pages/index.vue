@@ -665,8 +665,8 @@ useHead({
 
 <style scoped>
 .landing {
-  /* The original navigation floats over the content, so the page starts below it. */
-  padding-top: 88px;
+  /* The navigation is pinned to the top edge, so the page starts below its height. */
+  padding-top: 84px;
 
   /* Palette lives in assets/css/theme.css. */
   --muted: var(--mute);
