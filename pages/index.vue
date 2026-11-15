@@ -70,6 +70,30 @@
                   aria-label="Search stores, food, or describe an errand"
                 />
                 <button type="submit" class="field-go">Search</button>
+
+                <!-- Results as you type, from the vendors already loaded on this page. -->
+                <div v-if="suggestions.length" class="sug" role="listbox" aria-label="Matching stores">
+                  <NuxtLink
+                    v-for="vendor in suggestions"
+                    :key="vendor._id"
+                    :to="`/vendors/${vendor._id}`"
+                    class="sug-item"
+                    role="option"
+                  >
+                    <span class="sug-logo">
+                      <img v-if="vendor.logo" :src="vendor.logo" alt="" loading="lazy" />
+                    </span>
+                    <span class="sug-text">
+                      <span class="sug-name">{{ cleanName(vendor.storeName) }}</span>
+                      <span class="sug-meta">{{ vendor.category || 'Store' }} · {{ vendor.preparationTime || 20 }} min</span>
+                    </span>
+                    <ArrowRight class="w-4 h-4" aria-hidden="true" />
+                  </NuxtLink>
+
+                  <NuxtLink :to="{ path: '/vendors', query: { q: q } }" class="sug-all">
+                    See all results for "{{ q }}"
+                  </NuxtLink>
+                </div>
               </form>
 
               <!-- What the app actually does, one tap from the field. -->
@@ -682,6 +706,17 @@ const select = (i: number) => {
  * One field, two destinations. Anything that reads like a task goes to the custom errand form with
  * the description prefilled; everything else is a store search.
  */
+const suggestions = computed(() => {
+  const term = q.value.trim().toLowerCase();
+  if (term.length < 2) return [];
+  return (onlineVendors.value || [])
+    .filter((v: any) => {
+      const hay = `${v.storeName || ''} ${v.category || ''}`.toLowerCase();
+      return hay.includes(term);
+    })
+    .slice(0, 5);
+});
+
 const TASK_WORDS = /\b(pick up|drop off|deliver|buy|get me|laundry|print|photocopy|document|package|parcel|queue|stand in|repair|fix|clean|fetch)\b/i;
 
 const go = () => {
@@ -1112,6 +1147,7 @@ useHead({
 }
 
 .field {
+  position: relative;
   display: flex;
   min-width: 0;
   max-width: 100%;
@@ -2092,5 +2128,97 @@ useHead({
 .mode:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+/* Suggestions: a panel under the field, above the chips. */
+.sug {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 40;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: 0 20px 44px rgba(23, 19, 15, 0.14);
+}
+
+.sug-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  text-decoration: none;
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+}
+
+.sug-item:hover {
+  background: var(--orsoft);
+}
+
+.sug-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  overflow: hidden;
+  flex: none;
+  background: var(--page);
+}
+
+.sug-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sug-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sug-name {
+  font-size: 15px;
+  font-weight: 750;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sug-meta {
+  font-size: 13px;
+  color: var(--mute);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sug-all {
+  display: block;
+  padding: 12px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 750;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.sug-all:hover {
+  background: var(--orsoft);
+}
+
+/* One ring only: the field draws it, the input never does. */
+.field-input,
+.field-input:focus,
+.field-input:focus-visible,
+.field-input:focus-within {
+  outline: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  -webkit-appearance: none;
+  appearance: none;
 }
 </style>
