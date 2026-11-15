@@ -1,319 +1,151 @@
 <template>
-  <div class="min-h-screen bg-white">
-    <CoreAppNavbar />
+  <div class="stores">
+    <!-- Slim sticky header: search and cart, nothing else competing. -->
+    <header class="top">
+      <button type="button" class="icon-btn" aria-label="Back" @click="routerBack()">
+        <ArrowLeft class="w-5 h-5" aria-hidden="true" />
+      </button>
 
-    <div class="max-w-[1400px] mx-auto px-4 md:px-4 pt-6 pb-32 animate-fade-in">
-      
-      <!-- Top Switcher: Stores vs Services -->
-      <div class="flex items-center justify-start gap-2 mb-6 border-b border-slate-100 pb-4 overflow-x-auto no-scrollbar">
-        <button
-          type="button"
-          @click="activeDirectoryTab = 'stores'"
-          class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-black transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0 select-none"
-          :class="activeDirectoryTab === 'stores' ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'"
-        >
-          <Store class="w-4 h-4 shrink-0" />
-          <span class="whitespace-nowrap">Campus Stores ({{ filteredVendors.length }})</span>
+      <label class="search">
+        <Search class="search-icon" aria-hidden="true" />
+        <input
+          v-model="searchQuery"
+          type="search"
+          class="search-input"
+          placeholder="Search stores or food"
+          aria-label="Search stores"
+        />
+      </label>
+
+      <NuxtLink to="/cart" class="icon-btn cart-btn" aria-label="Cart">
+        <ShoppingBag class="w-5 h-5" aria-hidden="true" />
+        <span v-if="cartCount > 0" class="cart-dot">{{ cartCount }}</span>
+      </NuxtLink>
+    </header>
+
+    <main class="inner">
+      <!-- Services stays reachable; it is no longer a tab competing with the store list. -->
+      <div class="tabs">
+        <button type="button" class="tab" :class="{ on: activeDirectoryTab === 'stores' }" @click="activeDirectoryTab = 'stores'">
+          Stores
         </button>
-
-        <button
-          type="button"
-          @click="activeDirectoryTab = 'services'"
-          class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-black transition-all flex items-center gap-2 cursor-pointer relative whitespace-nowrap shrink-0 select-none"
-          :class="activeDirectoryTab === 'services' ? 'bg-[#FF5C1A] text-white shadow-sm shadow-[#FF5C1A]/20' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'"
-        >
-          <Sparkles class="w-4 h-4 shrink-0" />
-          <span class="whitespace-nowrap">Services &amp; Skills</span>
-          <span
-            class="px-1.5 py-0.2 rounded-full text-[9px] font-black uppercase tracking-wider whitespace-nowrap shrink-0"
-            :class="activeDirectoryTab === 'services' ? 'bg-white text-[#FF5C1A]' : 'bg-[#FF5C1A] text-white'"
-          >
-            PRO
-          </span>
+        <button type="button" class="tab" :class="{ on: activeDirectoryTab === 'services' }" @click="activeDirectoryTab = 'services'">
+          Services
         </button>
       </div>
 
-      <!-- Services View -->
       <ServicesShowcase v-if="activeDirectoryTab === 'services'" />
 
-      <!-- Stores View -->
-      <div v-else>
-      <!-- Top Header Row -->
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-        <div>
-          <h2 class="text-2xl md:text-3xl font-medium text-gray-900 tracking-tight leading-none">
-            {{ filteredVendors.length }} Campus Stores
-          </h2>
-          <p class="text-[10px] font-bold text-gray-400 uppercase  mt-1">
-            Available in your campus area
-          </p>
-        </div>
-        
-        <!-- Search & Filter buttons -->
-        <div class="flex flex-wrap items-center gap-3">
-          <div class="relative group z-20 w-full md:w-64">
-            <Search class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-parentPrimary transition-colors" />
-            <input
-              v-model="searchQuery"
-              type="text"
-              placeholder="Search stores, food..."
-              class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-50 rounded-xl text-base font-bold text-gray-900 focus:bg-white focus:border-parentPrimary transition-all outline-none shadow-sm placeholder:text-gray-400"
-            />
-          </div>
+      <template v-else>
+        <section class="head">
+          <h1>Stores at {{ campusName }}</h1>
+          <p class="head-sub">{{ openCount }} open now, {{ closedCount }} closed</p>
+        </section>
 
-          <!-- Category Dropdown -->
-          <div class="relative z-30" ref="categoryDropdownRef">
-            <button 
-              @click="showCategoryDropdown = !showCategoryDropdown"
-              class="flex items-center gap-2 px-4 py-2.5 border border-gray-50 rounded-xl text-sm font-medium transition-all shadow-sm shrink-0 active:scale-95 bg-white"
-              :class="globalFilter ? 'text-parentPrimary border-parentPrimary/30' : 'text-gray-700 hover:bg-gray-50'"
+        <!-- One row of categories, one sort menu. -->
+        <div class="controls">
+          <div class="chips" role="tablist" aria-label="Categories">
+            <button
+              v-for="cat in categories"
+              :key="cat.key"
+              type="button"
+              role="tab"
+              :aria-selected="selectedCategory === cat.key"
+              class="chip"
+              :class="{ on: selectedCategory === cat.key }"
+              @click="selectedCategory = cat.key"
             >
-              <span v-if="globalFilter">{{ globalFiltersList.find(f => f.keyword === globalFilter)?.icon || '📌' }}</span>
-              <Filter v-else class="w-3.5 h-3.5" />
-              <span class="truncate max-w-[100px]">{{ globalFilter ? (globalFiltersList.find(f => f.keyword === globalFilter)?.label || globalFilter) : 'Category' }}</span>
-              <ChevronDown class="w-3 h-3 ml-1 transition-transform" :class="{ 'rotate-180': showCategoryDropdown }" />
+              {{ cat.label }}
             </button>
-
-            <!-- Dropdown Menu -->
-            <Transition name="fade-up">
-              <div v-if="showCategoryDropdown" class="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-50 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] overflow-hidden max-h-[300px] overflow-y-auto">
-                <button 
-                  @click="setFilter(''); showCategoryDropdown = false; selectedCategory = 'all'"
-                  class="w-full text-left px-4 py-3 text-sm font-bold hover:bg-gray-50 transition-colors flex items-center gap-3"
-                  :class="!globalFilter ? 'text-parentPrimary bg-parentPrimary/5' : 'text-gray-600'"
-                >
-                  <Filter class="w-3.5 h-3.5" />
-                  <span>All Categories</span>
-                </button>
-                <button 
-                  v-for="filter in globalFiltersList" 
-                  :key="filter.keyword"
-                  @click="setFilter(filter.keyword); showCategoryDropdown = false; selectedCategory = 'all'"
-                  class="w-full text-left px-4 py-3 text-sm font-bold hover:bg-gray-50 transition-colors flex items-center gap-3"
-                  :class="globalFilter === filter.keyword ? 'text-parentPrimary bg-parentPrimary/5' : 'text-gray-600'"
-                >
-                  <span class="text-sm leading-none">{{ filter.icon }}</span>
-                  <span>{{ filter.label }}</span>
-                </button>
-              </div>
-            </Transition>
           </div>
-          
-          <button 
-            @click="showMobileFilters = true" 
-            class="flex items-center gap-2 px-4 py-2.5 border border-gray-50 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors bg-white shadow-sm shrink-0 active:scale-95"
-          >
-            <SlidersHorizontal class="w-3.5 h-3.5" /> Filters
-          </button>
-          
-          <!-- Sort Dropdown -->
-          <div class="relative z-30" ref="sortDropdownRef">
-            <button 
-              @click="showSortDropdown = !showSortDropdown"
-              class="flex items-center gap-2 px-4 py-2.5 border border-gray-50 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors bg-white shadow-sm shrink-0 active:scale-95"
-            >
-              Sort By
-              <ChevronDown class="w-3 h-3 ml-1 transition-transform" :class="{ 'rotate-180': showSortDropdown }" />
+
+          <div class="sort-wrap" ref="sortDropdownRef">
+            <button type="button" class="sort-btn" :aria-expanded="showSortDropdown" @click="showSortDropdown = !showSortDropdown">
+              {{ sortLabel }}
+              <ChevronDown class="w-4 h-4" aria-hidden="true" />
             </button>
-            
-            <Transition name="fade-up">
-              <div v-if="showSortDropdown" class="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-50 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] overflow-hidden">
-                <button 
-                  @click="sortBy = 'latest'; showSortDropdown = false"
-                  class="w-full text-left px-4 py-3 text-sm font-bold hover:bg-gray-50 transition-colors"
-                  :class="sortBy === 'latest' ? 'text-parentPrimary bg-parentPrimary/5' : 'text-gray-600'"
-                >
-                  Latest Added
-                </button>
-                <button 
-                  @click="sortBy = 'alphabetical'; showSortDropdown = false"
-                  class="w-full text-left px-4 py-3 text-sm font-bold hover:bg-gray-50 transition-colors"
-                  :class="sortBy === 'alphabetical' ? 'text-parentPrimary bg-parentPrimary/5' : 'text-gray-600'"
-                >
-                  Alphabetical (A-Z)
-                </button>
-                <button 
-                  @click="sortBy = 'popularity'; showSortDropdown = false"
-                  class="w-full text-left px-4 py-3 text-sm font-bold hover:bg-gray-50 transition-colors"
-                  :class="sortBy === 'popularity' ? 'text-parentPrimary bg-parentPrimary/5' : 'text-gray-600'"
-                >
-                  Most Popular
-                </button>
-              </div>
-            </Transition>
-          </div>
-          
-          <button 
-            v-if="hasActiveFilters"
-            @click="resetAllFilters" 
-            class="text-sm font-medium text-parentPrimary hover:underline px-3 py-2.5 bg-parentPrimary/10 rounded-xl shrink-0 active:scale-95"
-          >
-            Reset
-          </button>
-        </div>
-      </div>
-
-      <!-- Loading State -->
-      <div v-if="loading" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        <div v-for="i in 8" :key="i" class="space-y-4 animate-pulse">
-          <div class="bg-gray-100 aspect-[16/10] rounded-2xl"></div>
-          <div class="space-y-2">
-            <div class="h-4 bg-gray-100 rounded-full w-3/4"></div>
-            <div class="h-3 bg-gray-100 rounded-full w-1/2"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Vendors Grid -->
-      <div v-else-if="filteredVendors.length > 0" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        <div
-          v-for="vendor in filteredVendors"
-          :key="vendor._id"
-          @click="handleVendorClick(vendor)"
-          class="group cursor-pointer relative flex flex-col bg-white rounded-3xl hover:-translate-y-1 transition-all duration-300"
-        >
-            <!-- TOP IMAGE AREA -->
-            <div class="relative h-[200px] w-full overflow-hidden rounded-3xl border border-gray-50 shadow-sm">
-              <template v-if="!vendor.isOpen">
-                <video
-                  v-if="(vendor.banner || vendor.image || vendor.logo) && (vendor.banner || vendor.image || vendor.logo).match(/\\.(mp4|webm|ogg|mov)$/i)"
-                  :src="vendor.banner || vendor.image || vendor.logo"
-                  class="w-full h-full object-cover grayscale opacity-50"
-                  autoplay loop muted playsinline
-                ></video>
-                <img
-                  v-else
-                  :src="vendor.banner || vendor.image || vendor.logo || 'https://images.unsplash.com/photo-1547592180-85f173990554?w=600&h=400&fit=crop'"
-                  class="w-full h-full object-cover grayscale opacity-50"
-                  alt="Vendor Banner"
-                />
-                <div class="absolute inset-0 bg-black/60 z-10 flex flex-col items-center justify-center">
-                  <Lock class="w-10 h-10 text-white mb-2" />
-                  <span class="text-white font-bold text-sm tracking-wide text-center">STORE<br/>CLOSED</span>
-                </div>
-              </template>
-              <template v-else>
-                <video
-                  v-if="(vendor.banner || vendor.image || vendor.logo) && (vendor.banner || vendor.image || vendor.logo).match(/\.(mp4|webm|ogg|mov)$/i)"
-                  :src="vendor.banner || vendor.image || vendor.logo"
-                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
-                  autoplay loop muted playsinline
-                ></video>
-                <img
-                  v-else
-                  :src="vendor.banner || vendor.image || vendor.logo || 'https://images.unsplash.com/photo-1547592180-85f173990554?w=600&h=400&fit=crop'"
-                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
-                  alt="Vendor Banner"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </template>
-
-              <!-- TOP LEFT BADGES -->
-              <div class="absolute top-3 left-3 flex flex-col gap-2">
-                <span v-if="vendor.isFeatured" class="px-2.5 py-1 bg-white shadow-sm border border-gray-50 rounded-lg text-gray-900 text-[10px] font-extrabold tracking-wide uppercase">
-                  Featured
-                </span>
-                <span v-else-if="vendor.businessType === 'service_provider'" class="px-2.5 py-1 bg-white shadow-sm border border-gray-50 rounded-lg text-purple-700 text-[10px] font-extrabold tracking-wide uppercase">
-                  Service
-                </span>
-                <span v-else-if="vendor.businessType === 'hybrid'" class="px-2.5 py-1 bg-white shadow-sm border border-gray-50 rounded-lg text-indigo-700 text-[10px] font-extrabold tracking-wide uppercase">
-                  Hybrid
-                </span>
-                <span v-if="vendor.preOrderOnly" class="px-2.5 py-1 bg-white shadow-sm border border-gray-50 rounded-lg text-rose-600 text-[10px] font-extrabold tracking-wide uppercase">
-                  Pre-order
-                </span>
-              </div>
-
-              <!-- HEART ICON -->
-              <button
-                @click.stop="toggleFavoriteVendor(vendor)"
-                class="absolute top-2 right-2 w-11 h-11 rounded-full bg-white/90 backdrop-blur-sm shadow-sm flex items-center justify-center text-gray-400 hover:text-rose-500 hover:bg-white transition-all active:scale-95"
-                :class="isVendorFavorited(vendor._id) ? 'text-rose-500' : ''"
-              >
-                <Heart :class="['w-4 h-4', isVendorFavorited(vendor._id) ? 'fill-current' : '']" />
+            <div v-if="showSortDropdown" class="sort-menu">
+              <button v-for="opt in sortOptions" :key="opt.value" type="button" class="sort-item" :class="{ on: sortBy === opt.value }" @click="sortBy = opt.value; showSortDropdown = false">
+                {{ opt.label }}
               </button>
             </div>
-
-            <!-- BOTTOM DETAILS AREA -->
-            <div class="pt-3 pb-1 px-1 flex-1 flex flex-col">
-              <div class="flex items-start justify-between gap-3 mb-1">
-                <h3 class="text-[17px] font-bold text-gray-900 group-hover:text-parentPrimary transition-colors truncate">
-                  {{ vendor.storeName }}
-                </h3>
-                <div class="flex items-center gap-1 bg-gray-50 px-2 py-1 rounded-lg shrink-0">
-                  <Star class="w-3.5 h-3.5 text-amber-500 fill-current" />
-                  <span class="text-[13px] font-bold text-gray-900">{{ vendor.rating ? vendor.rating.toFixed(1) : '5.0' }}</span>
-                </div>
-              </div>
-
-              <p class="text-[13px] text-gray-500 font-medium line-clamp-1 mb-2">
-                {{ vendor.address || vendor.location?.address || 'Campus Location' }}
-              </p>
-
-              <div class="flex items-center gap-2 text-[12px] font-medium text-gray-400 mt-auto">
-                <span class="px-2 py-0.5 bg-gray-100 rounded-md text-gray-600 truncate max-w-[120px]">
-                  {{ vendor.category || 'Vendor' }}
-                </span>
-                <span>•</span>
-                <span>{{ vendor.totalRatings || 0 }} reviews</span>
-              </div>
-            </div>
           </div>
-      </div>
-
-      <!-- Empty State: No filter results -->
-      <div v-else class="relative w-full overflow-hidden rounded-2xl border border-dashed border-gray-200 py-20 px-4 text-center">
-        <!-- Background layers -->
-        <div class="absolute inset-0 bg-gradient-to-b from-slate-50/80 to-white pointer-events-none"></div>
-        <div class="absolute -top-12 left-1/2 -translate-x-1/2 w-64 h-64 bg-parentPrimary/5 rounded-full blur-[80px] pointer-events-none"></div>
-
-        <!-- Emoji icon -->
-        <div class="relative z-10 w-16 h-16 bg-white rounded-2xl shadow-sm border border-gray-50 border border-gray-50 flex items-center justify-center text-3xl mx-auto mb-5" style="animation: float 3s ease-in-out infinite;">
-          🔍
         </div>
 
-        <!-- Copy -->
-        <div class="relative z-10 space-y-2 mb-6">
-          <h3 class="text-xl font-medium text-gray-900 tracking-tight">Nothing Matches</h3>
-          <p class="text-sm text-gray-400 font-medium max-w-xs mx-auto leading-relaxed">
-            We couldn't find stores for your current filters. Try broadening your search!
-          </p>
+        <div v-if="loading" class="grid">
+          <div v-for="i in 6" :key="i" class="skel" />
         </div>
 
-        <!-- Active filter chips (visual hint) -->
-        <div class="relative z-10 flex flex-wrap items-center justify-center gap-2 mb-8">
-          <span v-if="searchQuery" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-sm font-bold text-gray-600">
-            🔍 "{{ searchQuery }}"
-          </span>
-          <span v-if="selectedCategory !== 'all'" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-sm font-bold text-gray-600">
-            📌 <span class="capitalize">{{ selectedCategory }}</span>
-          </span>
-          <span v-if="showOnlyOffers" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-sm font-bold text-gray-600">
-            🏷️ Offers only
-          </span>
-          <span v-if="showQuickDelivery" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-sm font-bold text-gray-600">
-            ⚡ Under 30 min
-          </span>
-        </div>
+        <template v-else>
+          <div v-if="openVendors.length" class="grid">
+            <article v-for="vendor in openVendors" :key="vendor._id" class="card">
+              <button type="button" class="card-hit" @click="handleVendorClick(vendor)">
+                <div class="card-media">
+                  <video v-if="isVideo(vendor.banner || vendor.logo)" :src="vendor.banner || vendor.logo" class="card-img" autoplay loop muted playsinline />
+                  <img v-else :src="vendor.banner || vendor.logo || '/placeholder-store.jpg'" class="card-img" alt="" loading="lazy" />
+                  <span class="open-tag">Open now</span>
+                  <span v-if="vendor.preOrderOnly" class="floating-tag">Pre-order</span>
+                  <span v-if="vendor.vendorType === 'service_provider' || vendor.type === 'service'" class="floating-tag">Service</span>
+                </div>
+                <div class="card-body">
+                  <div class="card-row">
+                    <p class="card-name">{{ cleanName(vendor.storeName) }}</p>
+                    <span v-if="hasReviews(vendor)" class="rating">
+                      <Star class="w-3.5 h-3.5" aria-hidden="true" />
+                      {{ vendor.rating?.toFixed(1) }} <span class="rating-count">({{ reviewCount(vendor) }})</span>
+                    </span>
+                    <span v-else class="new-tag">New</span>
+                  </div>
+                  <p class="card-meta">
+                    {{ vendor.category || 'Store' }}
+                    <span aria-hidden="true">·</span>
+                    {{ vendor.preparationTime || 20 }} min
+                    <template v-if="areaOf(vendor)">
+                      <span aria-hidden="true">·</span> {{ areaOf(vendor) }}
+                    </template>
+                  </p>
+                </div>
+              </button>
 
-        <!-- Actions -->
-        <div class="relative z-10 flex items-center justify-center gap-3">
-          <button
-            @click="resetAllFilters"
-            class="inline-flex items-center gap-2 px-4 py-2.5 bg-parentPrimary text-white rounded-xl text-sm font-medium hover:scale-105 transition-transform shadow-sm border border-gray-50 shadow-parentPrimary/20 active:scale-95"
-          >
-            Reset Filters
+              <button type="button" class="heart" :aria-pressed="isVendorFavorited(vendor._id)" aria-label="Save store" @click="toggleFavorite(vendor._id)">
+                <Heart class="w-4 h-4" :class="{ filled: isVendorFavorited(vendor._id) }" aria-hidden="true" />
+              </button>
+            </article>
+          </div>
+
+          <div v-else class="empty">
+            <p class="empty-title">Nothing open in {{ activeCategoryLabel }}</p>
+            <p class="empty-body">
+              {{ closedCount > 0 ? 'Everything in this category is closed right now. You can still order ahead.' : 'No store matches this yet. Try another category.' }}
+            </p>
+          </div>
+
+          <!-- Closed stores are hidden until asked for. -->
+          <button v-if="closedCount > 0 && !showClosed" type="button" class="closed-line" @click="showClosed = true">
+            {{ closedCount }} closed {{ closedCount === 1 ? 'store is' : 'stores are' }} hidden. Show closed stores
           </button>
-          <NuxtLink
-            to="/dashboard"
-            class="inline-flex items-center px-4 py-2.5 bg-gray-100 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-200 transition-colors active:scale-95"
-          >
-            Go Home
-          </NuxtLink>
-        </div>
-      </div>
-    </div>
-  </div>
+
+          <section v-if="showClosed && closedVendors.length" class="closed-sec">
+            <h2>Closed right now</h2>
+            <div class="grid">
+              <article v-for="vendor in closedVendors" :key="vendor._id" class="card closed">
+                <button type="button" class="card-hit" @click="handleVendorClick(vendor)">
+                  <div class="card-media">
+                    <img :src="vendor.banner || vendor.logo || '/placeholder-store.jpg'" class="card-img dim" alt="" loading="lazy" />
+                    <span class="closed-tag">Closed</span>
+                    <span v-if="vendor.preOrderOnly" class="floating-tag order-ahead">Order ahead</span>
+                  </div>
+                  <div class="card-body">
+                    <p class="card-name">{{ cleanName(vendor.storeName) }}</p>
+                    <p class="card-meta">{{ vendor.category || 'Store' }}</p>
+                  </div>
+                </button>
+              </article>
+            </div>
+          </section>
+        </template>
+      </template>
+    </main>
 
     <!-- Closed Store Modal -->
     <VendorClosedModal 
@@ -436,7 +268,7 @@
 
 import { ref, computed, watch, onMounted } from 'vue';
 import { useRoute, useHead } from '#imports';
-import { Search, Tag, Clock, Star, Heart, Filter, X, Share2, Bell, SlidersHorizontal, ChevronDown, Lock, Store, Sparkles } from 'lucide-vue-next';
+import { Search, Tag, Clock, Star, Heart, Filter, X, Share2, Bell, SlidersHorizontal, ChevronDown, Lock, Store, Sparkles, ArrowLeft, ShoppingBag } from 'lucide-vue-next';
 import { onClickOutside } from '@vueuse/core';
 import VendorNotifyModal from '@/components/vendors/VendorNotifyModal.vue';
 import { useFavorites } from '@/composables/modules/favorites';
@@ -539,6 +371,62 @@ const handleShareVendor = (vendor: any) => {
 };
 
 
+
+
+// ─── Listing helpers ───
+const routerBack = () => {
+  if (typeof window !== 'undefined' && window.history.length > 1) window.history.back();
+  else navigateTo('/dashboard');
+};
+
+const { itemCount } = useCart();
+const cartCount = computed(() => itemCount?.value ?? 0);
+
+const campusName = computed(() => {
+  try {
+    const { institution } = useInstitution();
+    return institution.value?.shortName || institution.value?.name || 'your campus';
+  } catch {
+    return 'your campus';
+  }
+});
+
+const openVendors = computed(() => filteredVendors.value.filter((v: any) => v?.isOpen !== false));
+const closedVendors = computed(() => filteredVendors.value.filter((v: any) => v?.isOpen === false));
+const openCount = computed(() => openVendors.value.length);
+const closedCount = computed(() => closedVendors.value.length);
+const showClosed = ref(false);
+
+const categories = [
+  { key: 'all', label: 'All' },
+  { key: 'food', label: 'Food' },
+  { key: 'snacks', label: 'Snacks' },
+  { key: 'pharmacy', label: 'Pharmacy' },
+  { key: 'services', label: 'Services' },
+];
+
+const sortOptions = [
+  { value: 'latest', label: 'Best match' },
+  { value: 'rating', label: 'Top rated' },
+  { value: 'fastest', label: 'Fastest' },
+  { value: 'popularity', label: 'Most ordered' },
+];
+
+const sortLabel = computed(() => sortOptions.find((o) => o.value === sortBy.value)?.label || 'Best match');
+
+const activeCategoryLabel = computed(() => categories.find((c) => c.key === selectedCategory.value)?.label || 'this');
+
+/** "(Demo)" is an internal marker; it should not be part of a store's public name. */
+const cleanName = (name?: string) => String(name || 'Store').replace(/\s*\(demo\)\s*/i, '').trim();
+
+const reviewCount = (vendor: any) =>
+  Number(vendor?.reviewCount ?? vendor?.totalReviews ?? vendor?.reviewsCount ?? vendor?.reviews ?? 0);
+
+const hasReviews = (vendor: any) => reviewCount(vendor) > 0 && Number(vendor?.rating) > 0;
+
+const areaOf = (vendor: any) => vendor?.area || vendor?.location?.area || vendor?.campusArea || '';
+
+const isVideo = (src?: string) => Boolean(src && String(src).match(/\.(mp4|webm|ogg|mov)$/i));
 
 const hasActiveFilters = computed(() => {
   return searchQuery.value !== '' ||
@@ -706,5 +594,525 @@ const getInitials = (name: string) => {
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-6px); }
+}
+</style>
+
+<style scoped>
+/* STORES — open first, closed on request, one accent. */
+.stores {
+  min-height: 100vh;
+  background: #faf8f5;
+  color: #141110;
+  padding-bottom: 96px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(html.dark) .stores {
+    background: #12100e;
+    color: #f6f2ec;
+  }
+}
+
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: rgba(250, 248, 245, 0.92);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid #e8e2d9;
+}
+
+:global(html.dark) .top {
+  background: rgba(18, 16, 14, 0.92);
+  border-color: #2c2721;
+}
+
+.icon-btn {
+  position: relative;
+  flex: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid #e8e2d9;
+  background: #fff;
+  color: inherit;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+:global(html.dark) .icon-btn {
+  background: #1b1713;
+  border-color: #2c2721;
+}
+
+.cart-dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 17px;
+  height: 17px;
+  border-radius: 999px;
+  background: #f26a2e;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  padding: 0 4px;
+}
+
+.search {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 4px 4px 4px 14px;
+  border-radius: 12px;
+  border: 1px solid #e8e2d9;
+  background: #fff;
+}
+
+:global(html.dark) .search {
+  background: #1b1713;
+  border-color: #2c2721;
+}
+
+.search:focus-within {
+  border-color: #f26a2e;
+  box-shadow: 0 0 0 3px rgba(242, 106, 46, 0.16);
+}
+
+.search-icon {
+  width: 17px;
+  height: 17px;
+  color: #97908a;
+  flex: none;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 15px;
+  padding: 9px 0;
+  outline: none;
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 18px 16px 0;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.tab {
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid #e8e2d9;
+  background: transparent;
+  color: #6b655d;
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tab.on {
+  background: #141110;
+  border-color: #141110;
+  color: #faf8f5;
+}
+
+.head h1 {
+  margin: 0;
+  font-size: clamp(26px, 5vw, 36px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.head-sub {
+  margin: 5px 0 18px;
+  font-size: 15px;
+  color: #6b655d;
+}
+
+:global(html.dark) .head-sub {
+  color: #b3aca3;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.chips::-webkit-scrollbar {
+  display: none;
+}
+
+.chip {
+  flex: none;
+  padding: 9px 15px;
+  border-radius: 999px;
+  border: 1px solid #e8e2d9;
+  background: #fff;
+  color: #6b655d;
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+:global(html.dark) .chip {
+  background: #1b1713;
+  border-color: #2c2721;
+}
+
+.chip.on {
+  background: #f26a2e;
+  border-color: #f26a2e;
+  color: #fff;
+}
+
+.sort-wrap {
+  position: relative;
+  flex: none;
+}
+
+.sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 14px;
+  border-radius: 12px;
+  border: 1px solid #e8e2d9;
+  background: #fff;
+  color: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+:global(html.dark) .sort-btn {
+  background: #1b1713;
+  border-color: #2c2721;
+}
+
+.sort-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 30;
+  min-width: 190px;
+  border-radius: 14px;
+  border: 1px solid #e8e2d9;
+  background: #fff;
+  padding: 6px;
+  box-shadow: 0 18px 40px rgba(20, 17, 16, 0.14);
+}
+
+:global(html.dark) .sort-menu {
+  background: #1b1713;
+  border-color: #2c2721;
+}
+
+.sort-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: inherit;
+  font-size: 14.5px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.sort-item:hover {
+  background: rgba(242, 106, 46, 0.1);
+}
+
+.sort-item.on {
+  color: #f26a2e;
+  font-weight: 800;
+}
+
+.grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 560px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.card {
+  position: relative;
+  border-radius: 16px;
+  border: 1px solid #e8e2d9;
+  background: #fff;
+  overflow: hidden;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+:global(html.dark) .card {
+  background: #1b1713;
+  border-color: #2c2721;
+}
+
+.card:hover {
+  border-color: #f26a2e;
+  transform: translateY(-1px);
+}
+
+.card-hit {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+.card-media {
+  position: relative;
+  height: 152px;
+  background: #faf8f5;
+  overflow: hidden;
+}
+
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-img.dim {
+  filter: grayscale(0.6);
+  opacity: 0.6;
+}
+
+.open-tag,
+.closed-tag,
+.floating-tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 9px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 750;
+  background: #fff;
+  color: #141110;
+}
+
+.closed-tag {
+  background: rgba(20, 17, 16, 0.82);
+  color: #fff;
+}
+
+.floating-tag {
+  top: auto;
+  bottom: 10px;
+  left: 10px;
+}
+
+.floating-tag.order-ahead {
+  background: #f26a2e;
+  color: #fff;
+}
+
+.card-body {
+  padding: 12px 14px 14px;
+}
+
+.card-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.card-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 750;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-meta {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #6b655d;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:global(html.dark) .card-meta {
+  color: #b3aca3;
+}
+
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+  font-size: 14px;
+  font-weight: 750;
+  color: #141110;
+}
+
+:global(html.dark) .rating {
+  color: #f6f2ec;
+}
+
+.rating-count {
+  color: #6b655d;
+  font-weight: 650;
+}
+
+.new-tag {
+  flex: none;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(242, 106, 46, 0.12);
+  color: #b3400b;
+  font-size: 12.5px;
+  font-weight: 750;
+}
+
+.heart {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 0;
+  background: rgba(255, 255, 255, 0.94);
+  color: #141110;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.heart .filled {
+  fill: #f26a2e;
+  color: #f26a2e;
+}
+
+.closed-line {
+  display: block;
+  width: 100%;
+  margin-top: 18px;
+  padding: 15px 18px;
+  border-radius: 14px;
+  border: 1px dashed #e8e2d9;
+  background: transparent;
+  color: #6b655d;
+  font-size: 15px;
+  font-weight: 650;
+  text-align: left;
+  cursor: pointer;
+}
+
+.closed-line:hover {
+  border-color: #f26a2e;
+  color: #f26a2e;
+}
+
+.closed-sec {
+  margin-top: 22px;
+}
+
+.closed-sec h2 {
+  margin: 0 0 12px;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.empty {
+  border: 1px dashed #e8e2d9;
+  border-radius: 16px;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.empty-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 750;
+}
+
+.empty-body {
+  margin: 6px 0 0;
+  font-size: 15px;
+  color: #6b655d;
+}
+
+.skel {
+  height: 232px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid #e8e2d9;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.stores :where(a, button, input):focus-visible {
+  outline: 3px solid #f26a2e;
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stores * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 </style>
