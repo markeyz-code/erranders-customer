@@ -47,6 +47,12 @@
             class="panel"
           >
             <div :key="`c-${index}-${changeId}`" class="swap">
+              <!-- The eyebrow was part of every original message; it is back with them. -->
+              <p :key="'e-' + phrase" class="eyebrow swap">
+                <span class="eyebrow-dot" aria-hidden="true"></span>
+                {{ phraseText.eyebrow }}
+              </p>
+
               <h1 :key="phrase" class="headline swap">
                 <span class="line">{{ phraseText.headlinePrefix }}</span>
                 <span class="line highlight">{{ phraseText.headlineHighlight }}</span>
@@ -1018,6 +1024,27 @@ useHead({
 @keyframes rise {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+.eyebrow {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 0 12px;
+  font-size: 15px;
+  line-height: 1.45;
+  font-weight: 650;
+  color: var(--muted);
+  max-width: 46ch;
+}
+
+.eyebrow-dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: var(--accent);
 }
 
 .headline {
