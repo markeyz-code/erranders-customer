@@ -872,9 +872,9 @@
         leave-from-class="translate-y-0"
         leave-to-class="translate-y-full"
       >
-        <div v-if="showMobileCartDrawer" class="sheet-full lg:hidden">
+        <div v-if="showMobileCartDrawer" class="sheet-full cart-drawer lg:hidden">
           <!-- Header -->
-          <div class="sticky top-0 bg-white border-b border-gray-100 z-10 shadow-sm">
+          <div class="drawer-head">
             <div class="flex items-center justify-between px-5 py-4">
               <button @click="showMobileCartDrawer = false" class="w-10 h-10 bg-parentPrimary rounded-full flex items-center justify-center text-white shrink-0 hover:bg-parentPrimary/90 active:scale-95 transition-all">
                 <ArrowLeft class="w-5 h-5"/>
@@ -889,7 +889,7 @@
             </div>
           </div>
           
-          <div class="flex-1 flex flex-col bg-white">
+          <div class="flex-1 flex flex-col">
             <!-- Group Participants (if in group) -->
             <div v-if="groupOrder" class="p-5 space-y-3 border-b border-gray-50">
               <h3 class="group-title">Participants ({{ groupOrder.participants?.length || 0 }})</h3>
@@ -987,7 +987,7 @@
                   
                   <!-- Pack Size Selector -->
                   <div v-if="vendor.packs && vendor.packs.length > 0 && vendor.requiresTakeawayPack" class="px-5 py-3 bg-amber-50/60 border-b border-amber-100/50 relative z-10">
-                    <label class="block text-[10px] font-bold text-amber-700 tracking-wider mb-2 uppercase">Pack Size</label>
+                    <p class="pack-label">Pack size</p>
                     <div
                       @click="openPackDropdowns[pack.id + 'mobile'] = !openPackDropdowns[pack.id + 'mobile']"
                       class="w-full bg-white text-sm p-2.5 rounded-xl border border-amber-200 cursor-pointer flex items-center justify-between hover:border-parentPrimary/50 transition-colors shadow-sm"
@@ -3385,5 +3385,37 @@ onUnmounted(() => {
   font-size: 15px;
   font-weight: 750;
   color: var(--ink);
+}
+
+/* ─── Mobile cart drawer ───
+   Explicit surfaces, so dark mode is a hierarchy rather than one flat grey. */
+.cart-drawer {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.drawer-head {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 1px 0 rgba(23, 19, 15, 0.04);
+}
+
+.pack-label {
+  margin: 0 0 8px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--mute);
+}
+
+/* The close button in the drawer head. */
+.cart-drawer .drawer-head + * {
+  background: transparent;
+}
+
+.cart-drawer :deep(.bg-gray-50\/50) {
+  background: color-mix(in srgb, var(--card) 88%, var(--ink));
 }
 </style>
