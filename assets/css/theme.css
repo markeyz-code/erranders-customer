@@ -89,6 +89,20 @@ img {
   background: var(--bg);
 }
 
+/* Lucide draws with stroke, not fill. Pinning both to the text colour stops an icon from picking up
+   the colour of the surface behind it and disappearing into the button. */
+svg.lucide {
+  color: inherit;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* Brand marks are illustrations, not icons: they keep their own fills. */
+svg[data-brand] {
+  fill: currentColor;
+  stroke: none;
+}
+
 /* One focus ring, everywhere. */
 :where(a, button, input, select, textarea):focus-visible {
   outline: 3px solid var(--accent);

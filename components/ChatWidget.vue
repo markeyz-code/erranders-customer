@@ -215,12 +215,13 @@
         </Transition>
         <button
           @click="toggleChat"
-          class="group relative w-14 h-14 rounded-full bg-[#FF5C1A] text-white shadow-sm border border-gray-50 shadow-[#FF5C1A]/40 flex items-center justify-center hover:scale-105 hover:-translate-y-1 transition-all duration-300"
+          class="group relative w-14 h-14 rounded-full shadow-sm flex items-center justify-center hover:scale-105 hover:-translate-y-1 transition-all duration-300"
+          style="background: #f26a2e; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.28); box-shadow: 0 10px 24px rgba(242, 106, 46, 0.32);"
           aria-label="Open chat"
         >
           <div v-if="unreadCount > 0 && !isOpen" class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full shadow-sm animate-pulse"></div>
           <div class="absolute inset-0 rounded-full bg-white opacity-0 group-hover:opacity-10 transition-opacity"></div>
-          <MessageSquare class="w-7 h-7 transition-transform group-hover:scale-110" />
+          <MessageSquare class="w-7 h-7 transition-transform group-hover:scale-110" style="color: #ffffff; stroke: #ffffff;" />
         </button>
       </div>
     </div>
