@@ -1,111 +1,105 @@
 <template>
-  <div class="space-y-6 animate-fade-in pb-32 selection:bg-parentPrimary/10 selection:text-parentPrimary px-4 md:px-4">
-
-    <!-- Reschedule Requests Section -->
-    <div v-if="rescheduleRequests.length > 0" class="bg-amber-50 rounded-2xl p-4 border border-amber-200 shadow-sm space-y-3">
-      <div class="flex items-center gap-2 mb-2">
-        <span class="text-xl">📅</span>
-        <h3 class="font-bold text-amber-900 text-sm">Action Required: Reschedule Requests</h3>
+  <div class="wrap">
+    <header class="head">
+      <div class="min-w-0">
+        <h1>My Errands</h1>
+        <p>Everything you have ordered, and where each one stands.</p>
       </div>
-      <div v-for="req in rescheduleRequests" :key="req._id" class="bg-white rounded-xl p-3 border border-amber-100 flex flex-col sm:flex-row gap-3 justify-between sm:items-center">
-        <div>
-          <p class="text-sm text-gray-900 font-medium">Order #{{ req.orderId?.orderNumber || '...' }} from <span class="font-bold">{{ req.orderId?.vendor?.storeName || 'Vendor' }}</span></p>
-          <p class="text-[11px] text-gray-500 mt-0.5">They are away in Exam Mode and suggested delivery on: <span class="font-bold text-gray-900">{{ formatDate(req.suggestedDate) }}</span></p>
+    </header>
+
+    <!-- Reschedule requests keep their urgency, in the same language as everything else. -->
+    <section v-if="rescheduleRequests.length > 0" class="notice">
+      <p class="notice-title">A store wants to move your delivery</p>
+      <div v-for="req in rescheduleRequests" :key="req._id" class="notice-row">
+        <div class="min-w-0">
+          <p class="notice-line">
+            #{{ req.orderId?.orderNumber || '…' }} from
+            <strong>{{ req.orderId?.vendor?.storeName || 'Vendor' }}</strong>
+          </p>
+          <p class="notice-sub">
+            They are in Exam Mode and suggest {{ formatDate(req.suggestedDate) }}.
+          </p>
         </div>
-        <div class="flex gap-2 shrink-0">
-          <button @click="resolveRequest(req._id, 'reject')" class="px-3 py-1.5 rounded-lg text-sm font-bold text-gray-500 hover:bg-gray-100 transition-colors border border-gray-25">
-            Cancel Order
-          </button>
-          <button @click="resolveRequest(req._id, 'accept')" class="px-3 py-1.5 rounded-lg text-sm font-bold bg-amber-500 text-white hover:bg-amber-600 transition-colors">
-            Accept Date
-          </button>
+        <div class="notice-actions">
+          <button type="button" class="btn btn-quiet" @click="resolveRequest(req._id, 'reject')">Cancel order</button>
+          <button type="button" class="btn btn-accent" @click="resolveRequest(req._id, 'accept')">Accept date</button>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- Filters & Search -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
+    <!-- Filters -->
+    <div class="bar">
+      <div class="chips" role="tablist" aria-label="Filter orders">
         <button
-          v-for="status in filters" 
-          :key="status.key" 
+          v-for="status in filters"
+          :key="status.key"
+          type="button"
+          role="tab"
+          :aria-selected="activeFilter === status.key"
+          class="chip"
+          :class="{ on: activeFilter === status.key }"
           @click="activeFilter = status.key"
-          class="px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap active:scale-95"
-          :class="activeFilter === status.key ? 'bg-parentPrimary text-white shadow-sm border border-gray-50 shadow-parentPrimary/20' : 'text-gray-500 bg-white border border-gray-50 hover:border-parentPrimary/30'"
         >
           {{ status.label }}
         </button>
       </div>
 
-      <div class="relative group z-20 w-full md:w-72">
-        <Search class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-parentPrimary transition-colors" />
-        <input 
+      <label class="search">
+        <Search class="search-icon" aria-hidden="true" />
+        <input
           v-model="searchQuery"
-          type="text" 
-          placeholder="Search by vendor or ID..." 
-          class="w-full pl-10 pr-4 py-3 bg-white border border-gray-50 rounded-xl text-base font-bold text-gray-900 focus:ring-4 focus:ring-parentPrimary/10 focus:border-parentPrimary transition-all placeholder:text-gray-300 outline-none shadow-sm"
+          type="search"
+          class="search-input"
+          placeholder="Search by store or order number"
+          aria-label="Search orders"
         />
-      </div>
+      </label>
     </div>
 
-    <!-- Loading State -->
-    <div v-if="loading" class="space-y-3">
-      <div v-for="i in 6" :key="i" class="h-20 bg-gray-50 rounded-2xl animate-pulse border border-gray-50" />
+    <!-- Loading -->
+    <div v-if="loading" class="rows">
+      <div v-for="i in 5" :key="i" class="row-skel" />
     </div>
 
-    <!-- Empty State -->
-    <div v-else-if="filteredOrders.length === 0">
-      <div class="bg-white rounded-[2rem] text-center py-20 px-4 border border-dashed border-gray-200">
-        <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 border border-gray-50">📋</div>
-        <h2 class="text-xl font-medium text-gray-900 mb-1 tracking-tight">No orders found</h2>
-        <p class="text-sm font-medium text-gray-500 mb-8 max-w-xs mx-auto">You haven't placed any orders matching this criteria yet.</p>
-        <NuxtLink to="/vendors" class="inline-flex px-5 py-3.5 bg-gray-900 text-white rounded-xl font-medium text-sm uppercase tracking-wider hover:bg-parentPrimary transition-colors shadow-sm border border-gray-50 active:scale-95">
-          Start Shopping
-        </NuxtLink>
-      </div>
+    <!-- Empty -->
+    <div v-else-if="filteredOrders.length === 0" class="empty">
+      <Package class="w-6 h-6" aria-hidden="true" />
+      <p class="empty-title">{{ searchQuery || activeFilter !== 'all' ? 'Nothing matches that' : 'No orders yet' }}</p>
+      <p class="empty-body">
+        {{ searchQuery || activeFilter !== 'all'
+          ? 'Try a different filter, or clear the search.'
+          : 'When you order, it will appear here with its status and PIN.' }}
+      </p>
+      <NuxtLink to="/vendors" class="btn btn-dark">Browse stores</NuxtLink>
     </div>
 
-    <!-- Data Grid -->
-    <div v-else class="space-y-3">
-      <div 
-        v-for="order in filteredOrders" 
-        :key="order._id" 
-        class="group bg-white rounded-2xl p-4 border border-gray-50 hover:border-parentPrimary/30 hover:shadow-sm transition-all cursor-pointer flex items-center justify-between gap-4"
+    <!-- Rows -->
+    <div v-else class="rows">
+      <button
+        v-for="order in filteredOrders"
+        :key="order._id"
+        type="button"
+        class="row"
         @click="selectedOrder = order"
       >
-        <div class="flex items-center gap-4 flex-1 min-w-0">
-          <div class="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center text-xl shrink-0 group-hover:bg-parentPrimary/5 transition-colors border border-gray-50">
-            {{ statusEmoji(order.status) }}
-          </div>
-          <div class="min-w-0 flex-1">
-            <div class="flex items-center gap-2 mb-0.5">
-              <h3 class="font-medium text-gray-900 text-sm tracking-tight truncate">#{{ order.orderNumber }}</h3>
-              <span :class="getStatusBadge(order.status)" class="sm:hidden text-[9px] font-medium uppercase px-2 py-0.5 rounded-md border shrink-0">
-                {{ formatStatus(order.status) }}
-              </span>
-              <span v-if="isDeliveryPinActive(order)" class="bg-[#FF5C1A]/10 text-[#FF5C1A] border border-[#FF5C1A]/30 text-[10px] font-black px-2 py-0.5 rounded-md shrink-0">
-                PIN: {{ order.deliveryPin }}
-              </span>
-            </div>
-            <p class="text-[11px] font-bold text-gray-500 truncate">{{ order.vendor?.storeName || (order.type === 'custom_errand' ? 'Custom Errand' : 'Errand') }}</p>
-          </div>
-        </div>
+        <span class="row-mark" :class="statusTone(order.status)" aria-hidden="true"></span>
 
-        <div class="text-right px-2 shrink-0">
-          <p class="text-sm font-medium text-gray-900 leading-none mb-1">₦{{ order.total?.toLocaleString() }}</p>
-          <p class="text-[10px] font-bold text-gray-400">{{ timeAgo(order.createdAt) }}</p>
-        </div>
+        <span class="row-main">
+          <span class="row-top">
+            <span class="row-id">#{{ order.orderNumber }}</span>
+            <span class="pill" :class="statusTone(order.status)">{{ formatStatus(order.status) }}</span>
+          </span>
+          <span class="row-store">{{ order.vendor?.storeName || (order.type === 'custom_errand' ? 'Custom errand' : 'Errand') }}</span>
+        </span>
 
-        <div class="shrink-0 flex items-center gap-2">
-          <span v-if="isDeliveryPinActive(order)" class="hidden sm:inline-flex items-center gap-1 bg-gray-900 text-[#FF5C1A] text-[11px] font-black px-2.5 py-1 rounded-md tracking-wider">
-            🔑 PIN: {{ order.deliveryPin }}
-          </span>
-          <span :class="getStatusBadge(order.status)" class="hidden sm:block text-[9px] font-medium uppercase px-2.5 py-1 rounded-md border">
-            {{ formatStatus(order.status) }}
-          </span>
-          <ChevronRight class="w-4 h-4 text-gray-300 group-hover:text-parentPrimary transition-colors" />
-        </div>
-      </div>
+        <span class="row-side">
+          <span class="row-total">₦{{ order.total?.toLocaleString() }}</span>
+          <span class="row-when">{{ timeAgo(order.createdAt) }}</span>
+        </span>
+
+        <span v-if="isDeliveryPinActive(order)" class="pin">PIN {{ order.deliveryPin }}</span>
+        <ChevronRight class="row-caret" aria-hidden="true" />
+      </button>
     </div>
 
     <!-- ============================================ -->
@@ -281,6 +275,15 @@ const filters = [
   { key: 'delivered', label: 'Completed' },
 ];
 
+const statusTone = (status?: string) => {
+  const st = String(status || '').toLowerCase();
+  if (['delivered', 'completed'].includes(st)) return 'ok';
+  if (['cancelled', 'refunded', 'failed', 'disputed'].includes(st)) return 'bad';
+  if (['awaiting_payment', 'awaiting_payment_confirmation'].includes(st)) return 'wait';
+  if (['picked_up', 'in_transit', 'confirmed', 'preparing', 'ready_for_pickup'].includes(st)) return 'live';
+  return '';
+};
+
 const filteredOrders = computed(() => {
   let list = orders.value;
   if (activeFilter.value !== 'all') {
@@ -363,4 +366,78 @@ useHead({ title: 'My Errands - Errandr' });
 }
 .animate-zoom-in { animation: zoomIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
 @keyframes zoomIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+</style>
+
+<style scoped>
+/* PAGE STYLES — tokens come from assets/css/dashboard.css. */
+.wrap { display: flex; flex-direction: column; gap: 18px; padding-bottom: 96px; }
+
+.head h1 { margin: 0; font-size: clamp(26px, 5vw, 34px); font-weight: 800; letter-spacing: -0.035em; color: var(--dash-ink); }
+.head p { margin: 4px 0 0; font-size: 15px; color: var(--dash-muted); }
+
+.notice { border: 1px solid #f5c9a8; background: #fff4ec; border-radius: var(--dash-radius); padding: 16px; }
+html.dark .notice { background: rgba(242, 106, 46, 0.1); border-color: rgba(242, 106, 46, 0.36); }
+.notice-title { margin: 0 0 10px; font-size: 16px; font-weight: 800; color: var(--dash-ink); }
+.notice-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid rgba(20, 17, 16, 0.08); }
+.notice-row:first-of-type { border-top: 0; }
+.notice-line { margin: 0; font-size: 15px; color: var(--dash-ink); }
+.notice-sub { margin: 2px 0 0; font-size: 14px; color: var(--dash-muted); }
+.notice-actions { display: flex; gap: 8px; }
+
+.bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex: none; padding: 9px 15px; border-radius: 999px; border: 1px solid var(--dash-line); background: var(--dash-surface); color: var(--dash-muted); font-size: 14.5px; font-weight: 700; cursor: pointer; }
+.chip.on { background: var(--dash-accent); border-color: var(--dash-accent); color: #fff; }
+
+.search { display: flex; align-items: center; gap: 9px; padding: 4px 4px 4px 14px; border: 1px solid var(--dash-line); border-radius: 14px; background: var(--dash-surface); min-width: min(320px, 100%); }
+.search:focus-within { border-color: var(--dash-accent); box-shadow: 0 0 0 3px rgba(242, 106, 46, 0.16); }
+.search-icon { width: 17px; height: 17px; color: var(--dash-faint); flex: none; }
+.search-input { flex: 1; min-width: 0; border: 0; background: transparent; outline: none; color: var(--dash-ink); font-size: 15px; padding: 10px 0; }
+.search-input::placeholder { color: var(--dash-faint); }
+
+.rows { display: flex; flex-direction: column; gap: 8px; }
+
+.row { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; padding: 14px 16px; border: 1px solid var(--dash-line); border-radius: var(--dash-radius); background: var(--dash-surface); cursor: pointer; transition: border-color 0.15s ease, box-shadow 0.15s ease; }
+.row:hover { border-color: var(--dash-accent); box-shadow: 0 1px 0 rgba(20, 17, 16, 0.04); }
+
+.row-mark { width: 10px; height: 34px; border-radius: 999px; flex: none; background: var(--dash-line); }
+.row-mark.ok { background: #16a34a; }
+.row-mark.live { background: var(--dash-accent); }
+.row-mark.bad { background: #dc2626; }
+.row-mark.wait { background: #d97706; }
+
+.row-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.row-top { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.row-id { font-size: 15.5px; font-weight: 750; color: var(--dash-ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row-store { font-size: 14px; color: var(--dash-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.pill { flex: none; padding: 3px 9px; border-radius: 999px; font-size: 12.5px; font-weight: 750; background: var(--dash-page); color: var(--dash-muted); border: 1px solid var(--dash-line); }
+.pill.ok { color: #15803d; background: rgba(22, 163, 74, 0.1); border-color: rgba(22, 163, 74, 0.25); }
+.pill.live { color: var(--dash-accent); background: rgba(242, 106, 46, 0.12); border-color: rgba(242, 106, 46, 0.3); }
+.pill.bad { color: #b91c1c; background: rgba(220, 38, 38, 0.1); border-color: rgba(220, 38, 38, 0.25); }
+.pill.wait { color: #b45309; background: rgba(217, 119, 6, 0.1); border-color: rgba(217, 119, 6, 0.25); }
+
+.row-side { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex: none; }
+.row-total { font-size: 15.5px; font-weight: 750; color: var(--dash-ink); }
+.row-when { font-size: 13px; color: var(--dash-faint); }
+
+.pin { flex: none; padding: 5px 10px; border-radius: 9px; background: var(--dash-ink); color: var(--dash-page); font-size: 13px; font-weight: 800; letter-spacing: 0.06em; }
+.row-caret { width: 18px; height: 18px; color: var(--dash-faint); flex: none; }
+
+.row-skel { height: 72px; border-radius: var(--dash-radius); background: var(--dash-surface); border: 1px solid var(--dash-line); animation: pulse 1.5s ease-in-out infinite; }
+
+.empty { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 46px 20px; border: 1px dashed var(--dash-line); border-radius: var(--dash-radius); background: var(--dash-surface); color: var(--dash-muted); text-align: center; }
+.empty-title { margin: 4px 0 0; font-size: 17px; font-weight: 750; color: var(--dash-ink); }
+.empty-body { margin: 0; font-size: 15px; max-width: 36ch; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 11px 16px; border-radius: 12px; font-size: 15px; font-weight: 700; border: 1px solid transparent; cursor: pointer; text-decoration: none; }
+.btn-accent { background: var(--dash-accent); color: #fff; }
+.btn-dark { background: var(--dash-ink); color: var(--dash-page); }
+.btn-quiet { background: transparent; border-color: currentColor; color: inherit; opacity: 0.8; }
+
+@media (max-width: 520px) {
+  .row { flex-wrap: wrap; }
+  .pin { order: 5; }
+}
 </style>
