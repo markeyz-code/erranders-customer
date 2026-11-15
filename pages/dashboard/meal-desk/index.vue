@@ -1,9 +1,6 @@
 <template>
   <div class="min-h-screen bg-[#FDFCFB]">
     <main class="container mx-auto px-4 py-6 sm:py-8 space-y-6">
-      <!-- Barter Campus Trade Advert -->
-      <CoreBarterAdBanner />
-
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <!-- Left Column: Controls & Intelligence -->
       <div class="lg:col-span-4 space-y-6">
@@ -11,19 +8,9 @@
         <div class="bg-white rounded-[24px] border border-[#E7E2DA] p-5 sm:p-6 shadow-sm relative overflow-hidden">
           <div class="flex items-center justify-between mb-5">
             <div>
-              <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Order Slip - Errandr</p>
-              <h2 class="text-lg font-black text-gray-900">Meal Desk</h2>
+              <h2 class="text-xl font-black tracking-tight text-gray-900">Meal Desk</h2>
             </div>
             <div class="flex items-center gap-2">
-              <button 
-                type="button" 
-                @click="confirmResetConfiguration"
-                class="px-2.5 py-1.5 rounded-xl bg-gray-100 hover:bg-rose-50 text-gray-500 hover:text-rose-600 border border-[#E7E2DA] hover:border-rose-200 transition-all flex items-center gap-1.5 text-[11px] font-bold active:scale-95 shadow-2xs"
-                title="Clear configuration and restart from scratch"
-              >
-                <RotateCcw class="w-3.5 h-3.5" />
-                <span>Reset</span>
-              </button>
               <div class="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-[#FF5C1A] shadow-sm">
                 <ChefHat class="w-5 h-5" />
               </div>
@@ -60,6 +47,19 @@
                     <Wallet class="w-3.5 h-3.5 text-[#FF5C1A]" /> Cycle Budget
                   </label>
                   <span class="text-[10px] font-semibold text-gray-400">{{ cycleDays }}-day cycle total</span>
+                </div>
+                <!-- Wallet against budget: the number that decides whether this plan is payable. -->
+                <div class="wallet-line" :class="{ short: walletShortfall > 0 }">
+                  <template v-if="walletShortfall > 0">
+                    <span>
+                      Wallet has ₦{{ (balance || 0).toLocaleString() }}.
+                      Add ₦{{ walletShortfall.toLocaleString() }} to cover this budget.
+                    </span>
+                    <button type="button" class="wallet-add" @click="showFundWalletModal = true">Add money</button>
+                  </template>
+                  <template v-else>
+                    <span>Wallet has ₦{{ (balance || 0).toLocaleString() }}, enough for this budget.</span>
+                  </template>
                 </div>
                 <div class="relative">
                   <span class="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-gray-900 text-sm">₦</span>
@@ -265,63 +265,22 @@
               </span>
             </button>
 
-            <!-- Clear Configuration & Restart Button -->
-            <button 
-              type="button"
-              @click="confirmResetConfiguration"
-              class="w-full py-3 rounded-xl bg-gray-50 hover:bg-rose-50 text-gray-600 hover:text-rose-600 border border-[#E7E2DA] hover:border-rose-200 text-xs font-bold transition-all flex items-center justify-center gap-2 active:scale-95 shadow-2xs"
-              title="Purge saved plan and reset all filters to default"
-            >
-              <RotateCcw class="w-3.5 h-3.5 text-gray-500" />
-              <span>Clear Configuration & Restart</span>
-            </button>
           </div>
         </div>
 
-        <!-- Intelligence Report Card -->
-        <div class="bg-[#171310] rounded-[24px] p-6 shadow-xl relative overflow-hidden text-white">
-          <div class="flex items-center justify-between mb-4">
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Intelligence Report</p>
-            <div class="w-7 h-7 rounded-full bg-[#FF5C1A]/20 flex items-center justify-center text-[#FF5C1A]">
-              <Brain class="w-3.5 h-3.5" />
-            </div>
-          </div>
-          
-          <p class="text-sm font-medium text-gray-300 leading-relaxed mb-6">
-            Based on your budget, ordering cooked food from campus vendors is convenient and your <strong class="text-white">₦{{ budget.toLocaleString() }}</strong> budget covers roughly <strong class="text-[#00F0FF]">{{ calculatedDays }} days</strong> at {{ mealsPerDay }} meals/day.
-          </p>
-
-          <div class="border-t border-dashed border-gray-800 pt-4 flex items-end justify-between">
-            <div>
-              <p class="text-[10px] font-medium text-gray-500 mb-1">Potential Savings</p>
-              <p class="text-2xl font-black text-[#00F0FF]">₦{{ potentialSavings.toLocaleString() }}</p>
-            </div>
-            <p class="text-[10px] text-gray-600 font-mono">stub no. 0000</p>
-          </div>
-          
-          <!-- Decorative cutouts -->
-          <div class="absolute top-1/2 -left-3 w-6 h-6 bg-[#FDFCFB] rounded-full -translate-y-1/2"></div>
-          <div class="absolute top-1/2 -right-3 w-6 h-6 bg-[#FDFCFB] rounded-full -translate-y-1/2"></div>
-        </div>
       </div>
 
       <!-- Right Column: Roadmap & Iterations -->
       <div class="lg:col-span-8">
         <div class="flex items-center justify-between mb-6">
           <div>
-            <h2 class="text-2xl font-black text-gray-900 tracking-tight">Weekly Roadmap</h2>
-            <p class="text-sm font-medium text-gray-500">Optimized for campus dining & nutrition</p>
+            <h2 class="text-2xl font-black text-gray-900 tracking-tight">Your plan</h2>
+            <p class="text-[15px] font-medium text-gray-500">Built from real campus menus, inside your budget.</p>
           </div>
           <div class="flex items-center gap-2">
-            <button 
-              type="button"
-              @click="confirmResetConfiguration"
-              class="px-3 py-2 bg-rose-50 border border-rose-200 rounded-lg text-xs font-bold text-rose-600 hover:bg-rose-100 transition-all flex items-center gap-1.5 active:scale-95 shadow-2xs"
-              title="Clear configuration and restart from scratch"
-            >
-              <RotateCcw class="w-3.5 h-3.5" />
-              <span class="hidden sm:inline">Clear & Restart</span>
-              <span class="sm:hidden">Reset</span>
+            <button type="button" class="start-over" @click="confirmResetConfiguration">
+              <RotateCcw class="w-4 h-4" aria-hidden="true" />
+              Start over
             </button>
             <button 
               v-if="generatedPlan" 
@@ -686,15 +645,17 @@
           </div>
         </div>
         
-        <!-- Empty State -->
-        <div v-else class="h-80 border-2 border-dashed border-[#E7E2DA] rounded-3xl flex flex-col items-center justify-center text-center p-8 text-gray-400 bg-white/50">
-          <div class="w-16 h-16 rounded-full bg-orange-50 flex items-center justify-center text-[#FF5C1A] mb-4">
-            <ChefHat class="w-8 h-8" />
-          </div>
-          <h3 class="text-base font-bold text-gray-700 mb-1">Ready to optimize your campus meals?</h3>
-          <p class="text-sm text-gray-400 max-w-sm mb-6">
-            Enter your weekly budget on the left, pick your favorite vendors or diet constraints, and click <strong>Optimize My Plan</strong>.
+        <!-- Pre-plan: the live cost of a single meal, so the budget means something before you run it. -->
+        <div v-else class="prep">
+          <p class="prep-label">Cost per meal at this budget</p>
+          <p class="prep-amount">₦{{ perMealCost.toLocaleString() }}</p>
+          <p class="prep-sub">
+            {{ cycleDays }} days, {{ mealsPerDay }}
+            {{ mealsPerDay === 1 ? 'meal' : 'meals' }} a day, ₦{{ budget.toLocaleString() }} in total.
           </p>
+          <button type="button" class="prep-btn" :disabled="isGenerating" @click="generatePlan">
+            {{ isGenerating ? 'Building…' : 'Build my plan' }}
+          </button>
         </div>
       </div>
       </div>
@@ -1968,6 +1929,14 @@ const generatedPlan = computed(() => {
   return iterations.value[currentIterationIndex.value] || null;
 });
 
+// What one meal actually costs at this budget. Shown before the plan runs so the number is real.
+const perMealCost = computed(() => {
+  const slots = Math.max(1, cycleDays.value * mealsPerDay.value);
+  return Math.round((Number(budget.value) || 0) / slots);
+});
+
+const walletShortfall = computed(() => Math.max(0, (Number(budget.value) || 0) - (Number(balance.value) || 0)));
+
 const budgetDeficit = computed(() => {
   if (!generatedPlan.value) return 0;
   if (typeof generatedPlan.value.budgetDeficit === 'number') {
@@ -2864,5 +2833,104 @@ input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+</style>
+
+<style scoped>
+/* MEAL DESK — planner first, decoration never. */
+
+.prep {
+  border-radius: 20px;
+  background: #f26a2e;
+  color: #fff;
+  padding: 26px;
+}
+
+.prep-label {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 650;
+  opacity: 0.85;
+}
+
+.prep-amount {
+  margin: 6px 0 0;
+  font-size: clamp(40px, 8vw, 56px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.prep-sub {
+  margin: 10px 0 20px;
+  font-size: 15px;
+  line-height: 1.5;
+  opacity: 0.9;
+  max-width: 40ch;
+}
+
+.prep-btn {
+  width: 100%;
+  padding: 15px 20px;
+  border: 0;
+  border-radius: 13px;
+  background: #141110;
+  color: #faf8f5;
+  font-size: 16px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.prep-btn:active {
+  transform: scale(0.99);
+}
+
+.start-over {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: 11px;
+  border: 1px solid #e8e2d9;
+  background: transparent;
+  color: #6b655d;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.start-over:hover {
+  border-color: #f26a2e;
+  color: #f26a2e;
+}
+
+.wallet-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: #faf8f5;
+  font-size: 14px;
+  color: #6b655d;
+}
+
+.wallet-line.short {
+  background: rgba(242, 106, 46, 0.1);
+  color: #a03d0f;
+}
+
+.wallet-add {
+  padding: 6px 11px;
+  border-radius: 9px;
+  border: 0;
+  background: #f26a2e;
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 750;
+  cursor: pointer;
 }
 </style>
