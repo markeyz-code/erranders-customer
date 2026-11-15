@@ -831,15 +831,18 @@ const getInitials = (name: string) => {
 
 .grid {
   display: grid;
-  gap: 14px;
-  grid-template-columns: 1fr;
+  /* Two per row on a phone: one card per screen made the list feel endless. */
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 @media (min-width: 560px) {
   .grid {
-    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
   }
 }
+
+
 
 @media (min-width: 900px) {
   .grid {
@@ -1068,6 +1071,55 @@ const getInitials = (name: string) => {
   .stores * {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 559px) {
+  .card-media {
+    height: 108px;
+  }
+
+  .card-body {
+    padding: 10px 11px 12px;
+  }
+
+  .card-name {
+    font-size: 14px;
+  }
+
+  .card-meta {
+    font-size: 12.5px;
+  }
+
+  .open-tag,
+  .closed-tag {
+    top: 7px;
+    left: 7px;
+    padding: 3px 7px;
+    font-size: 11px;
+  }
+
+  .floating-tag {
+    left: 7px;
+    bottom: 7px;
+    padding: 3px 7px;
+    font-size: 11px;
+  }
+
+  .heart {
+    top: 7px;
+    right: 7px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .rating {
+    font-size: 12.5px;
+  }
+
+  .new-tag {
+    padding: 2px 7px;
+    font-size: 11px;
   }
 }
 </style>
