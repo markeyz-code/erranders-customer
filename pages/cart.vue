@@ -211,35 +211,40 @@
                 <AnimatedInput v-model="recipientPhone" label="Phone Number" type="tel" />
                 <!-- Delivery Option is fixed to use_an_errander -->
                 <div class="mb-5 space-y-3">
-                  <label class="text-sm font-medium text-gray-400 tracking-wider block mb-1 pl-1">Delivery Method</label>
+                  <p class="step-label">How should it reach you?</p>
                   <div class="grid grid-cols-2 gap-3">
-                    <button 
+                    <button
+                      type="button"
+                      class="mode-card"
+                      :class="{ on: deliveryMode === 'room_delivery' }"
+                      :aria-pressed="deliveryMode === 'room_delivery'"
                       @click="deliveryMode = 'room_delivery'"
-                      class="flex flex-col items-center justify-center p-3 rounded-xl border transition-all"
-                      :class="deliveryMode === 'room_delivery' ? 'border-parentPrimary bg-parentPrimary/5 text-parentPrimary' : 'border-gray-100 bg-white hover:border-gray-200'"
                     >
-                      <span class="text-sm font-bold" :class="deliveryMode === 'room_delivery' ? 'text-parentPrimary' : 'text-gray-900'">Room Delivery</span>
+                      <DoorOpen class="w-5 h-5" aria-hidden="true" />
+                      <span class="mode-title">To your room</span>
+                      <span class="mode-note">Handed to you at the door</span>
                     </button>
-                    <button 
+                    <button
+                      type="button"
+                      class="mode-card"
+                      :class="{ on: deliveryMode === 'dropoff_service' }"
+                      :aria-pressed="deliveryMode === 'dropoff_service'"
                       @click="deliveryMode = 'dropoff_service'"
-                      class="flex flex-col items-center justify-center p-3 rounded-xl border transition-all"
-                      :class="deliveryMode === 'dropoff_service' ? 'border-parentPrimary bg-parentPrimary/5 text-parentPrimary' : 'border-gray-100 bg-white hover:border-gray-200'"
                     >
-                      <span class="text-sm font-bold" :class="deliveryMode === 'dropoff_service' ? 'text-parentPrimary' : 'text-gray-900'">Drop-off Service</span>
+                      <MapPin class="w-5 h-5" aria-hidden="true" />
+                      <span class="mode-title">Drop-off point</span>
+                      <span class="mode-note">Porter, gate or reception</span>
                     </button>
                   </div>
                   <!-- Explanatory note for delivery types -->
-                  <div class="bg-gray-50 p-3 rounded-xl mt-2">
-                    <p class="text-[11px] font-medium text-gray-600 leading-relaxed">
-                      <span class="font-bold text-gray-900">Room Delivery:</span> Hand-delivered directly to your room or exact location. <br/>
-                      <span class="font-bold text-gray-900">Drop-off Service:</span> Delivered to a central drop-off point at your location (e.g. hostel porter, gate).
-                    </p>
-                  </div>
+                  <p class="mode-hint">
+                    A drop-off point is cheaper because the runner does not have to find you.
+                  </p>
                 </div>
 
                 <div class="animate-fade-in relative z-30">
                   <div class="mb-5 space-y-3">
-                    <label class="text-sm font-medium text-gray-400 tracking-wider block mb-1 pl-1">Where is it going?</label>
+                    <p class="step-label">Where is it going?</p>
                     <div class="space-y-2">
                       <button
                         v-for="zone in deliveryZones"
@@ -260,7 +265,7 @@
                     </div>
 
                     <div>
-                    <label class="text-sm font-medium text-gray-400 tracking-wider block mb-2 pl-1">Delivery address</label>
+                    <p class="step-label">Address or landmark</p>
                     <input 
                       v-model="specificAddress"
                       type="text"
@@ -691,7 +696,7 @@
                 </div>
                 
                 <div class="p-6 space-y-4 relative z-10">
-                  <div class="flex justify-between items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
+                  <div class="flex justify-between items-center text-[15px] font-medium text-[var(--mute)]">
                     <span>Subtotal</span>
                     <span class="text-gray-900 font-bold">₦{{ (groupOrder ? groupSubtotal : cartStore.subtotal.value)?.toLocaleString() }}</span>
                   </div>
@@ -808,25 +813,32 @@
                     </div>
                   </div>
                   
-                  <div class="flex justify-between items-end pt-2">
+                  <p v-if="computedTotalDeliveryFee > 0" class="fee-note">
+                    Delivery is set by how far the runner has to go. A drop-off point costs less than your door.
+                  </p>
+
+                  <div class="total-row">
                     <div>
-                      <p class="text-[9px] font-black text-gray-400 tracking-[0.2em] uppercase mb-1.5">Total Amount</p>
-                      <h3 class="text-2xl font-black text-gray-900 tracking-tighter">₦{{ finalTotal.toLocaleString() }}</h3>
+                      <p class="total-label">Total</p>
+                      <p class="total-value">₦{{ finalTotal.toLocaleString() }}</p>
                     </div>
-                    <span class="text-[9px] font-bold text-gray-500 text-right leading-tight uppercase flex flex-col items-end gap-1">
-                      <Lock class="w-3 h-3" />
-                      Secure<br/>Gateway
-                    </span>
+                    <p class="total-note">
+                      <Lock class="w-3.5 h-3.5" aria-hidden="true" />
+                      Paid securely
+                    </p>
                   </div>
-                  <button 
+
+                  <button
                     v-if="canCheckout"
                     @click="checkoutStep === 'cart' ? checkoutStep = 'checkout' : startPayment()"
                     :disabled="placing || (checkoutStep === 'checkout' && paymentMethod === 'wallet' && balance < finalTotal)"
-                    class="w-full py-4 bg-parentPrimary text-white rounded-2xl text-sm font-medium tracking-wider hover:bg-parentPrimary/90 transition-all disabled:opacity-40 flex items-center justify-center gap-2 border border-gray-50 shadow-parentPrimary/20 active:scale-[0.98]"
+                    class="pay-btn"
                   >
-                    <Loader2 v-if="placing" class="w-4 h-4 animate-spin" />
-                    <span>{{ placing ? 'Processing...' : (checkoutStep === 'cart' ? 'Proceed to Checkout' : 'Complete Checkout') }}</span>
-                    <ArrowRight v-if="!placing" class="w-4 h-4" />
+                    <Loader2 v-if="placing" class="w-4 h-4 animate-spin" aria-hidden="true" />
+                    <span v-if="placing">Processing</span>
+                    <span v-else-if="checkoutStep === 'cart'">Review and pay</span>
+                    <span v-else>Pay ₦{{ finalTotal.toLocaleString() }}</span>
+                    <ArrowRight v-if="!placing" class="w-4 h-4" aria-hidden="true" />
                   </button>
                   <div v-else class="w-full py-4 bg-gray-100 text-gray-500 rounded-2xl text-sm font-medium tracking-wider text-center">
                     {{ groupOrder?.status === 'open' ? 'Waiting for host to checkout' : (getMyStatus?.hasPaid ? 'You have paid' : 'Waiting for Sponsor to pay') }}
@@ -1093,7 +1105,7 @@
 </template>
 
 <script setup lang="ts">
-import { ShoppingCart, Repeat, ArrowLeft, Moon, ArrowRight, Home, Building2, MapPin, Search, Plus, Calendar, Clock, Lock, CreditCard, ChevronDown, Check, FileText, Gift, Wallet, Loader2, RefreshCw, Trash2, Tag, Percent, Users, Package, Ticket, Store, Receipt, Box, Info, ShoppingBag, ImagePlus, CheckCircle2, ShieldCheck } from 'lucide-vue-next';
+import { ShoppingCart, Repeat, ArrowLeft, Moon, ArrowRight, Home, Building2, MapPin, Search, Plus, Calendar, Clock, Lock, CreditCard, ChevronDown, Check, FileText, Gift, Wallet, Loader2, RefreshCw, Trash2, Tag, Percent, Users, Package, Ticket, Store, Receipt, Box, Info, ShoppingBag, ImagePlus, CheckCircle2, ShieldCheck, DoorOpen } from 'lucide-vue-next';
 import AnimatedInput from '@/components/ui/AnimatedInput.vue';
 import SelectInput from '@/components/ui/SelectInput.vue';
 import CheckoutAuthModal from '@/components/CheckoutAuthModal.vue';
@@ -2577,5 +2589,131 @@ const preCreateOrders = async (): Promise<string[]> => {
 .closed-when {
   color: var(--mute);
   font-weight: 600;
+}
+
+/* CHECKOUT — the money panel. */
+.total-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.total-label {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--mute);
+}
+
+.total-value {
+  margin: 2px 0 0;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.total-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--mute);
+}
+
+.pay-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 14px;
+  padding: 16px 20px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 750;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+
+.pay-btn:hover:not(:disabled) {
+  filter: brightness(1.04);
+}
+
+.pay-btn:active:not(:disabled) {
+  transform: scale(0.995);
+}
+
+.pay-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Delivery method cards. */
+.step-label {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--mute);
+}
+
+.mode-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.mode-card:hover {
+  border-color: var(--accent);
+}
+
+.mode-card.on {
+  border-color: var(--accent);
+  background: var(--orsoft);
+}
+
+.mode-title {
+  font-size: 15px;
+  font-weight: 750;
+}
+
+.mode-note {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mute);
+}
+
+.mode-hint {
+  margin: 8px 0 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--mute);
+}
+
+.fee-note {
+  margin: 4px 0 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--mute);
 }
 </style>
