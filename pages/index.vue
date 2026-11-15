@@ -47,12 +47,12 @@
             class="panel"
           >
             <div :key="`c-${index}-${changeId}`" class="swap">
-              <h1 class="headline">
-                <span class="line">{{ current.line1 }}</span>
-                <span class="line">{{ current.line2 }}</span>
+              <h1 :key="phrase" class="headline swap">
+                <span class="line">{{ phraseText.headlinePrefix }}</span>
+                <span class="line highlight">{{ phraseText.headlineHighlight }}</span>
               </h1>
 
-              <p class="sub">{{ current.sub }}</p>
+              <p :key="'s-' + phrase" class="sub swap">{{ phraseText.subtext }}</p>
 
               <form v-if="current.placeholder" class="field" @submit.prevent="go">
                 <input
@@ -485,6 +485,83 @@ const slides: Slide[] = [
   },
 ];
 
+/**
+ * The hero copy from before the rebuild. Eight messages in the three campus languages plus the
+ * plain one, rotating every five seconds, exactly as they were.
+ */
+type HeroMessage = { eyebrow: string; headlinePrefix: string; headlineHighlight: string; subtext: string };
+
+const heroMessages: HeroMessage[] = [
+  // 1. Pidgin (Campus Heat / Chill)
+  {
+    eyebrow: 'The sun is outside fighting everybody? 😭☀️ Omo, rest!',
+    headlinePrefix: 'Sun dey bake everybody outside?',
+    headlineHighlight: 'Omo, Rest & Just Errand It! 🛵💨',
+    subtext: 'You stay cool in your hostel, we run the trek — hot food, cold drinks & packages delivered to your room! 🧡',
+  },
+  // 2. Campus Slang (Downstairs Trek / Urgent Items)
+  {
+    eyebrow: 'Why bother trekking downstairs to pick up anything? 📦🚪',
+    headlinePrefix: 'Trek downstairs under this sun?',
+    headlineHighlight: 'Just Errand It to Your Door! 🏃🏽‍♂️✨',
+    subtext: 'Some errands can wait, but that urgent package or warm meal? Errand Ninjas deliver straight to your floor.',
+  },
+  // 3. Yorùbá (Comfort & Doorstep Service)
+  {
+    eyebrow: 'Oòrùn ń jó gbogbo èèyàn níta campus? ☀️',
+    headlinePrefix: 'Kí ló dé tí wàá fi fìyà jẹ ara ẹ?',
+    headlineHighlight: 'Jókòó, Kàn Errand It! 🛵💨',
+    subtext: 'Má ṣe yọ ara ẹ lẹ́nu rárá. Ìwọ fọkàn balẹ̀ sínú hostel, àwọn Ninjas wa yóò gbé oúnjẹ dídùn dé bá ẹ!',
+  },
+  // 4. Campus Slang (8am Lecture Hunger / Meal Schedule)
+  {
+    eyebrow: 'Entering 8am class on an empty stomach? Never again! ⏰🍱',
+    headlinePrefix: 'Hungry for 8am lecture?',
+    headlineHighlight: 'Auto-pilot with Meal Schedule! ⚡😋',
+    subtext: 'Schedule breakfast and lunch ahead of time. Hot meals arrive right on cue before your first lecture starts.',
+  },
+  // 5. Igbo (Rest & Rapid Errands)
+  {
+    eyebrow: 'Anwụ na-eti mmadụ niile na campus taa? ☀️',
+    headlinePrefix: 'Gịnị mere ị ga-eji gbaa ọsọ n\'anwụ?',
+    headlineHighlight: 'Nọrọ Hostel, Just Errand It! 🛵✨',
+    subtext: 'Nwanne, zuru ike na hostel! Anyị ga-agbara gị ọsọ weta nri ụtọ na ngwugwu ọbụla bịarute gị aka.',
+  },
+  // 6. Pidgin (Roommates / Group Orders)
+  {
+    eyebrow: 'Delivery fee dey choke you and your roommates? 😩',
+    headlinePrefix: 'Why pay solo delivery fee?',
+    headlineHighlight: 'Split Am With Group Orders! 👥🍕',
+    subtext: 'Team up with your roomies or course mates, order together from your favorite vendors, and divide the cost sharp-sharp!',
+  },
+  // 7. Hausa (Peace of Mind & Hot Meals)
+  {
+    eyebrow: 'Rana tana kona mutane a harabar makaranta? ☀️',
+    headlinePrefix: 'Kada ka wahalar da kanka a waje,',
+    headlineHighlight: 'Kawai Errand It! 🛵💨',
+    subtext: 'Huta a daki lafiya! Ninjas zasu kawo maka abinci mai dumi da dukkan kayan bukata har kofar dakinka.',
+  },
+  // 8. Campus Relatable (The Classic Erranders Promise)
+  {
+    eyebrow: 'Why trek from New Hall to Gate under scorching sun? 🏃🏽‍♂️🔥',
+    headlinePrefix: 'Why stress yourself on campus?',
+    headlineHighlight: 'Just Errand It! 🛵💨',
+    subtext: 'From cafeteria meals to boutique items, pharmacy runs, and market pickups — consider it handled with speed.',
+  },
+];
+
+const phrase = ref(0);
+let phraseTimer: ReturnType<typeof setInterval> | null = null;
+const phraseText = computed(() => heroMessages[phrase.value % heroMessages.length]);
+
+const startPhrases = () => {
+  if (typeof window === 'undefined') return;
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+  phraseTimer = setInterval(() => {
+    phrase.value = (phrase.value + 1) % heroMessages.length;
+  }, 5000);
+};
+
 const index = ref(0);
 const q = ref('');
 const current = computed(() => slides[index.value]);
@@ -647,12 +724,14 @@ watch([pausedByPointer, pausedByFocus], ([pointer, focus]) => {
 
 onBeforeUnmount(() => {
   clearTimer();
+  if (phraseTimer) clearInterval(phraseTimer);
 });
 
 onMounted(() => {
   const saved = typeof localStorage !== 'undefined' ? localStorage.getItem('erranders-theme') : null;
   applyTheme(saved === 'dark', false);
-  // Autoplay stays off while the tabs and pause control are hidden.
+  startPhrases();
+  // The slide carousel stays off while its tabs and pause control are hidden.
   running.value = false;
   fetchHomeData();
 });
@@ -953,6 +1032,11 @@ useHead({
 
 .headline .line {
   display: block;
+}
+
+/* The second half of the original headline carried the accent. */
+.headline .highlight {
+  color: var(--accent);
 }
 
 .sub {
