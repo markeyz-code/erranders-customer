@@ -215,6 +215,18 @@
             </template>
           </div>
 
+          <!-- Theme switch -->
+          <button
+            type="button"
+            class="ml-2 flex h-10 w-10 items-center justify-center rounded-full border border-gray-25 bg-white transition-all hover:border-gray-300 hover:shadow-sm"
+            :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+            :title="isDark ? 'Light mode' : 'Dark mode'"
+            @click="toggleTheme"
+          >
+            <Sun v-if="isDark" class="h-5 w-5 text-gray-900" />
+            <Moon v-else class="h-5 w-5 text-gray-900" />
+          </button>
+
           <!-- Cart Icon -->
           <NuxtLink to="/cart" class="relative p-2.5 rounded-full bg-white border border-gray-25 hover:shadow-sm hover:border-gray-300 transition-all flex items-center justify-center ml-2">
             <ShoppingCart class="w-5 h-5 text-gray-900" />
@@ -752,7 +764,7 @@ import { useCart } from "@/composables/modules/cart"
 import { 
   Home, User, LogOut, Menu as MenuIcon, Filter, ChevronDown, ShoppingCart, 
   Info, Zap, Package, Calendar, Store, Bike, LayoutDashboard, Repeat, Users, 
-  ShoppingBag, ArrowLeftRight, X, ChevronRight, ArrowRight, Sparkles
+  ShoppingBag, ArrowLeftRight, X, ChevronRight, ArrowRight, Sparkles, Sun, Moon
 } from 'lucide-vue-next'
 import { useRoute } from 'vue-router'
 import { useGlobalFilter } from '@/composables/core/useGlobalFilter'
@@ -822,6 +834,8 @@ const handleScroll = () => {
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
+  const saved = typeof localStorage !== 'undefined' ? localStorage.getItem('erranders-theme') : null
+  applyTheme(saved === 'dark', false)
   fetchCategories()
 })
 

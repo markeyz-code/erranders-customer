@@ -1,44 +1,8 @@
 <template>
   <div class="landing">
     <!-- Sticky header: four links, one action. Nothing else. -->
-    <header class="nav-shell">
-      <div class="nav">
-      <NuxtLink to="/" class="brand" aria-label="Erranders home">
-        <img src="@/assets/img/logo-light.png" alt="Erranders" class="brand-img" />
-      </NuxtLink>
-
-      <nav class="nav-links" aria-label="Main">
-        <NuxtLink
-          v-for="link in navLinks"
-          :key="link.to"
-          :to="link.to"
-          class="nav-link"
-          :class="{ current: isCurrent(link.to) }"
-          :aria-current="isCurrent(link.to) ? 'page' : undefined"
-        >
-          {{ link.label }}
-        </NuxtLink>
-      </nav>
-
-      <div class="nav-actions">
-        <button
-          type="button"
-          class="icon-toggle"
-          :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
-          :title="isDark ? 'Light mode' : 'Dark mode'"
-          @click="toggleTheme"
-        >
-          <Sun v-if="isDark" class="w-5 h-5" aria-hidden="true" />
-          <Moon v-else class="w-5 h-5" aria-hidden="true" />
-        </button>
-        <NuxtLink v-if="!isLoggedIn" to="/auth/login" class="ghost">Log in</NuxtLink>
-        <NuxtLink :to="isLoggedIn ? '/dashboard' : '/auth/signup'" class="primary">
-          {{ isLoggedIn ? 'Dashboard' : 'Get started' }}
-          <ArrowRight class="w-4 h-4" aria-hidden="true" />
-        </NuxtLink>
-      </div>
-      </div>
-    </header>
+    <!-- Original landing navigation. -->
+    <LandingNavbar />
 
     <main>
       <!-- Hero: one sentence, one field, one object that explains the product. -->
@@ -336,6 +300,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { ArrowRight, ArrowUpRight, Moon, Star, Sun } from 'lucide-vue-next';
+import LandingNavbar from '@/components/LandingNavbar.vue';
 import { useLandingPage } from '@/composables/modules/landing';
 import { useUser } from '@/composables/modules/auth/user';
 
@@ -642,17 +607,6 @@ const applyTheme = (dark: boolean, persist = true) => {
 const toggleTheme = () => applyTheme(!isDark.value);
 const year = new Date().getFullYear();
 
-const route = useRoute();
-
-const navLinks = [
-  { to: '/vendors', label: 'Food' },
-  { to: '/errands/custom', label: 'Custom errands' },
-  { to: '/dashboard/recurring-orders', label: 'Meal Autopilot' },
-  { to: '/market-pool', label: 'Swap' },
-];
-
-const isCurrent = (path: string) => route.path === path || route.path.startsWith(path + '/');
-
 const openVendors = computed(() =>
   (onlineVendors.value || []).filter((v: any) => v?.isOpen !== false),
 );
@@ -711,6 +665,9 @@ useHead({
 
 <style scoped>
 .landing {
+  /* The original navigation floats over the content, so the page starts below it. */
+  padding-top: 88px;
+
   /* Palette lives in assets/css/theme.css. */
   --muted: var(--mute);
   --faint: var(--mute);
