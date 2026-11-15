@@ -594,18 +594,25 @@
                     v-if="availablePacks(vendorId).length > 1"
                     class="mb-4 rounded-2xl border border-gray-100 bg-gray-50/60 p-3"
                   >
-                    <p class="mb-2 text-[10px] font-bold uppercase tracking-wider text-gray-400">Packaging type</p>
-                    <div class="relative">
-                      <select
-                        :value="selectedPackName(vendorId)"
-                        class="w-full appearance-none rounded-xl border border-gray-200 bg-white px-3 py-2.5 pr-9 text-sm font-bold text-gray-800 outline-none focus:border-[#FF5C1A]"
-                        @change="choosePackByName(vendorId, ($event.target as HTMLSelectElement).value)"
-                      >
-                        <option v-for="opt in availablePacks(vendorId)" :key="opt.name" :value="opt.name">
-                          {{ opt.name }} — ₦{{ Number(opt.price || 0).toLocaleString() }}
-                        </option>
-                      </select>
-                      <ChevronDown class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                    <p class="pack-label">Packaging type</p>
+                    <div class="pick">
+                      <button type="button" class="pick-btn" :aria-expanded="openPack === vendorId" @click="openPack = openPack === vendorId ? '' : vendorId">
+                        <span>{{ currentPackLabel(vendorId) }}</span>
+                        <ChevronDown class="w-4 h-4" aria-hidden="true" />
+                      </button>
+                      <div v-if="openPack === vendorId" class="pick-menu">
+                        <button
+                          v-for="opt in availablePacks(vendorId)"
+                          :key="opt.name"
+                          type="button"
+                          class="pick-item"
+                          :class="{ on: selectedPackName(vendorId) === opt.name }"
+                          @click="choosePackByName(vendorId, opt.name); openPack = ''"
+                        >
+                          <span>{{ opt.name }} · ₦{{ Number(opt.price || 0).toLocaleString() }}</span>
+                          <Check v-if="selectedPackName(vendorId) === opt.name" class="w-4 h-4" aria-hidden="true" />
+                        </button>
+                      </div>
                     </div>
                   </div>
 
@@ -919,11 +926,25 @@
               
               <div v-if="vendorsMetadata[vendorId]?.packs?.length > 0 && !cartStore.getVendorStats(vendorId).packs.flatMap(p => p.items).every(i => i.isPackagingFeeIncluded)" class="pl-3 border-l-2 border-gray-50 space-y-1">
                 <p class="pack-label">Packaging type</p>
-                <select v-model="selectedPacks[vendorId]" class="review-select">
-                  <option v-for="(packOption, idx) in vendorsMetadata[vendorId].packs" :key="idx" :value="packOption">
-                    {{ packOption.name }} (₦{{ packOption.price }})
-                  </option>
-                </select>
+                <div class="pick">
+                  <button type="button" class="pick-btn" :aria-expanded="openPack === 'review-' + vendorId" @click="openPack = openPack === 'review-' + vendorId ? '' : 'review-' + vendorId">
+                    <span>{{ selectedPacks[vendorId]?.name || 'Choose' }} · ₦{{ Number(selectedPacks[vendorId]?.price || 0).toLocaleString() }}</span>
+                    <ChevronDown class="w-4 h-4" aria-hidden="true" />
+                  </button>
+                  <div v-if="openPack === 'review-' + vendorId" class="pick-menu">
+                    <button
+                      v-for="(packOption, idx) in vendorsMetadata[vendorId].packs"
+                      :key="idx"
+                      type="button"
+                      class="pick-item"
+                      :class="{ on: selectedPacks[vendorId]?.name === packOption.name }"
+                      @click="selectedPacks[vendorId] = packOption; openPack = ''"
+                    >
+                      <span>{{ packOption.name }} · ₦{{ Number(packOption.price || 0).toLocaleString() }}</span>
+                      <Check v-if="selectedPacks[vendorId]?.name === packOption.name" class="w-4 h-4" aria-hidden="true" />
+                    </button>
+                  </div>
+                </div>
               </div>
               <div v-for="(pack, pIndex) in cartStore.getVendorStats(vendorId).packs" :key="'mb-pack-' + pack.id" class="pl-3 border-l-2 border-gray-50 space-y-3">
                 <div class="flex items-center justify-between">
@@ -1203,6 +1224,14 @@ const handleGuestCheckout = (guestData: any) => {
 };
 
 const deliveryOption = ref('use_an_errander');
+const openPack = ref('');
+
+const currentPackLabel = (vendorId: string) => {
+  const name = selectedPackName(vendorId);
+  const pack = availablePacks(vendorId).find((p: any) => p.name === name);
+  return `${name} · ₦${Number(pack?.price || 0).toLocaleString()}`;
+};
+
 const checkoutStep = ref<'cart' | 'checkout'>('cart');
 const placing = ref(false);
 const showAuthModal = ref(false);
@@ -3008,5 +3037,74 @@ const preCreateOrders = async (): Promise<string[]> => {
   padding: 14px 18px calc(14px + env(safe-area-inset-bottom));
   border-top: 1px solid var(--line);
   background: var(--card);
+}
+
+/* Custom picker: our own list instead of the operating system's grey menu. */
+.pick {
+  position: relative;
+}
+
+.pick-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.pick-btn:hover {
+  border-color: var(--accent);
+}
+
+.pick-menu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 40;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  box-shadow: 0 18px 40px rgba(23, 19, 15, 0.16);
+}
+
+.pick-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 13px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 650;
+  text-align: left;
+  cursor: pointer;
+}
+
+.pick-item:last-child {
+  border-bottom: 0;
+}
+
+.pick-item:hover {
+  background: var(--orsoft);
+}
+
+.pick-item.on {
+  color: var(--accent);
+  font-weight: 750;
 }
 </style>
