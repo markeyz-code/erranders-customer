@@ -85,26 +85,26 @@
     <div v-else class="min-h-screen flex flex-col">
       
       <!-- Sticky Header -->
-      <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-gray-50">
+      <header class="cart-head">
         <div class="max-w-[1200px] mx-auto flex items-center justify-between px-4 md:px-4 py-3">
           <div class="flex items-center gap-3">
-            <button @click="checkoutStep === 'checkout' ? checkoutStep = 'cart' : goBack()" class="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-50 hover:bg-gray-100 transition-all active:scale-95">
-              <ArrowLeft class="w-4 h-4 text-gray-900" />
+            <button type="button" class="head-btn" aria-label="Back" @click="checkoutStep === 'checkout' ? checkoutStep = 'cart' : goBack()">
+              <ArrowLeft class="w-4 h-4" aria-hidden="true" />
             </button>
             <div>
-              <h1 class="text-base font-medium text-gray-900 tracking-tight leading-none">{{ checkoutStep === 'cart' ? 'Your Cart' : 'Checkout' }}</h1>
-              <p class="text-sm font-bold text-gray-400 mt-0.5">{{ cartStore.itemCount }} items</p>
+              <h1 class="head-title">{{ checkoutStep === 'cart' ? 'Your cart' : 'Checkout' }}</h1>
+              <p class="head-sub">{{ cartStore.itemCount }} {{ cartStore.itemCount === 1 ? 'item' : 'items' }}</p>
             </div>
           </div>
           <div class="flex items-center gap-2">
-            <NuxtLink to="/dashboard/search" class="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-50 hover:bg-gray-100 transition-all active:scale-95 text-gray-900">
-              <Search class="w-4 h-4" />
+            <NuxtLink to="/dashboard/search" class="head-btn" aria-label="Search">
+              <Search class="w-4 h-4" aria-hidden="true" />
             </NuxtLink>
             
             <button 
               v-if="checkoutStep === 'checkout'"
               @click="showOrderBreakdown = true"
-              class="flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-50 rounded-xl text-sm font-medium text-gray-900 hover:bg-gray-100 transition-all lg:hidden active:scale-95"
+              class="head-review lg:hidden"
             >
               <ShoppingCart class="w-3.5 h-3.5" />
               Review
@@ -196,14 +196,14 @@
             </div>
 
             <!-- Step 1: Delivery Details -->
-            <div class="bg-white rounded-none sm:rounded-2xl border-y sm:border-x border-gray-100 overflow-visible">
-              <div class="flex items-center gap-3 px-4 sm:px-5 py-4 bg-gray-50/50 border-b border-gray-100 sm:rounded-t-2xl">
-                <div class="w-8 h-8 bg-parentPrimary/10 rounded-xl flex items-center justify-center text-parentPrimary">
-                  <MapPin class="w-4 h-4" />
+            <div class="checkout-card">
+              <div class="card-head">
+                <div class="card-icon">
+                  <MapPin class="w-4 h-4" aria-hidden="true" />
                 </div>
                 <div>
-                  <h3 class="text-sm font-medium text-gray-900 tracking-tight">Delivery Details</h3>
-                  <p class="text-sm font-bold text-gray-400">Where should we drop it?</p>
+                  <h3 class="card-title">Delivery details</h3>
+                  <p class="card-sub">Where should we drop it?</p>
                 </div>
               </div>
               <div class="p-4 sm:p-5 space-y-4">
@@ -341,22 +341,22 @@
             </div>
 
             <!-- Step 2: Payment -->
-            <div class="bg-white rounded-none sm:rounded-2xl border-y sm:border-x border-gray-100 overflow-visible mt-5">
-              <div class="flex items-center gap-3 px-4 sm:px-5 py-4 bg-gray-50/50 border-b border-gray-100 sm:rounded-t-2xl">
-                <div class="w-9 h-9 bg-blue-50 rounded-xl flex items-center justify-center text-blue-500">
-                  <CreditCard class="w-4.5 h-4.5" />
+            <div class="checkout-card mt-5">
+              <div class="card-head">
+                <div class="card-icon">
+                  <CreditCard class="w-4 h-4" aria-hidden="true" />
                 </div>
                 <div>
-                  <h3 class="text-sm font-semibold text-gray-900 tracking-tight">Payment Method</h3>
-                  <p class="text-sm font-medium text-gray-400">Choose how to pay</p>
+                  <h3 class="card-title">Payment method</h3>
+                  <p class="card-sub">Choose how to pay</p>
                 </div>
               </div>
               <div class="p-3">
                 <div class="flex flex-col gap-2">
                   <button 
                     @click="paymentMethod = 'card'"
-                    :class="paymentMethod === 'card' ? 'border-parentPrimary bg-parentPrimary/5 ring-1 ring-parentPrimary/30' : 'border-gray-100 hover:border-gray-200 bg-white'"
-                    class="p-3 rounded-xl border transition-all text-left flex items-center justify-between w-full active:scale-[0.98]"
+                    :class="paymentMethod === 'card' ? 'pay-tile on' : 'pay-tile'"
+                    class="pay-tile w-full"
                   >
                     <div class="flex items-center gap-3">
                       <div class="w-9 h-7 flex items-center justify-center bg-white rounded border border-gray-50">
@@ -894,15 +894,15 @@
         leave-from-class="translate-y-0"
         leave-to-class="translate-y-full"
       >
-        <div v-if="showOrderBreakdown" class="fixed inset-x-0 bottom-0 z-[101] bg-white rounded-t-[2rem] max-h-[85vh] overflow-hidden flex flex-col lg:hidden border border-gray-50">
-          <div class="sticky top-0 bg-white pt-3 pb-2 px-5 border-b border-gray-50 z-10 rounded-t-[2rem]">
-            <div class="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-3"></div>
+        <div v-if="showOrderBreakdown" class="review-sheet">
+          <div class="review-head">
+            <div class="review-grip" aria-hidden="true"></div>
             <div class="flex items-center justify-between">
               <div>
-                <h2 class="text-lg font-medium text-gray-900 tracking-tight">Review Items</h2>
-                <p class="text-sm font-bold text-gray-400">Check your packs & quantities</p>
+                <h2 class="card-title">Review items</h2>
+                <p class="card-sub">Check your packs and quantities</p>
               </div>
-              <button @click="showOrderBreakdown = false" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-500">
+              <button type="button" class="head-btn" aria-label="Close" @click="showOrderBreakdown = false">
                 <X class="w-4 h-4" />
               </button>
             </div>
@@ -918,8 +918,8 @@
               </div>
               
               <div v-if="vendorsMetadata[vendorId]?.packs?.length > 0 && !cartStore.getVendorStats(vendorId).packs.flatMap(p => p.items).every(i => i.isPackagingFeeIncluded)" class="pl-3 border-l-2 border-gray-50 space-y-1">
-                <label class="block text-sm font-bold text-gray-400">Packaging Type</label>
-                <select v-model="selectedPacks[vendorId]" class="w-full bg-white text-sm p-2 rounded-lg border border-gray-25 focus:outline-none focus:border-parentPrimary text-gray-700 font-medium">
+                <p class="pack-label">Packaging type</p>
+                <select v-model="selectedPacks[vendorId]" class="review-select">
                   <option v-for="(packOption, idx) in vendorsMetadata[vendorId].packs" :key="idx" :value="packOption">
                     {{ packOption.name }} (₦{{ packOption.price }})
                   </option>
@@ -927,8 +927,8 @@
               </div>
               <div v-for="(pack, pIndex) in cartStore.getVendorStats(vendorId).packs" :key="'mb-pack-' + pack.id" class="pl-3 border-l-2 border-gray-50 space-y-3">
                 <div class="flex items-center justify-between">
-                  <span class="text-[9px] font-medium bg-gray-900 text-white px-2.5 py-1 rounded-md">{{ pack.name || `Pack ${pIndex + 1}` }}</span>
-                  <button @click="cartStore.removePack(vendorId, pack.id)" class="text-sm font-medium text-rose-400 hover:text-rose-500">Remove</button>
+                  <span class="pack-chip">{{ pack.name || `Pack ${pIndex + 1}` }}</span>
+                  <button type="button" class="link-danger" @click="cartStore.removePack(vendorId, pack.id)">Remove</button>
                 </div>
                 <div v-for="(item, iIndex) in pack.items" :key="'mb-item-'+iIndex" class="flex items-start gap-3">
                   <div class="w-11 h-11 bg-gray-50 rounded-lg overflow-hidden border border-gray-50 shrink-0 mt-1">
@@ -953,10 +953,10 @@
 
                     <div class="flex items-center justify-between mt-2">
                       <p class="text-sm font-bold text-parentPrimary">Total: ₦{{ (item.subtotal || (item.price * item.quantity)).toLocaleString() }}</p>
-                      <div class="flex items-center gap-1 bg-gray-50 rounded-lg p-1 border border-gray-50 shrink-0">
-                        <button @click="cartStore.updateItemQuantity(vendorId, pack.id, iIndex, item.quantity - 1)" class="w-6 h-6 rounded-md bg-white text-gray-500 flex items-center justify-center text-sm font-bold hover:text-rose-500">−</button>
+                      <div class="qty">
+                        <button type="button" class="qty-btn" aria-label="Fewer" @click="cartStore.updateItemQuantity(vendorId, pack.id, iIndex, item.quantity - 1)">−</button>
                         <span class="text-sm font-medium min-w-[16px] text-center">{{ item.quantity }}</span>
-                        <button @click="cartStore.updateItemQuantity(vendorId, pack.id, iIndex, item.quantity + 1)" class="w-6 h-6 rounded-md bg-white text-gray-500 flex items-center justify-center text-sm font-bold hover:text-parentPrimary">+</button>
+                        <button type="button" class="qty-btn" aria-label="More" @click="cartStore.updateItemQuantity(vendorId, pack.id, iIndex, item.quantity + 1)">+</button>
                       </div>
                     </div>
                   </div>
@@ -965,10 +965,8 @@
             </div>
           </div>
           
-          <div class="px-5 py-4 border-t border-gray-100 bg-white">
-            <button @click="showOrderBreakdown = false" class="w-full py-3.5 bg-gray-900 text-white rounded-2xl text-sm font-medium tracking-wider active:scale-[0.98] transition-transform">
-              Done Reviewing
-            </button>
+          <div class="review-foot">
+            <button type="button" class="pay-btn" @click="showOrderBreakdown = false">Done reviewing</button>
           </div>
         </div>
       </Transition>
@@ -2806,5 +2804,209 @@ const preCreateOrders = async (): Promise<string[]> => {
 .promo-apply:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+}
+
+.cart-head {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+}
+
+.head-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.head-sub {
+  margin: 3px 0 0;
+  font-size: 13.5px;
+  font-weight: 650;
+  color: var(--mute);
+}
+
+.head-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.head-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.head-review {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 14px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.card-sub {
+  margin: 2px 0 0;
+  font-size: 13.5px;
+  font-weight: 650;
+  color: var(--mute);
+}
+
+.pay-tile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 13px 14px;
+  border-radius: 13px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.pay-tile:hover {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+}
+
+.pay-tile.on {
+  border-color: var(--accent);
+  background: var(--orsoft);
+}
+
+.pay-tile .pay-logo {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 26px;
+  border-radius: 6px;
+  background: var(--card);
+  border: 1px solid var(--line);
+}
+
+/* Review sheet: the same surfaces as the rest of checkout. */
+.review-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 101;
+  display: flex;
+  flex-direction: column;
+  max-height: 85vh;
+  overflow: hidden;
+  border-radius: 20px 20px 0 0;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+}
+
+.review-head {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 10px 18px 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--card);
+  border-radius: 20px 20px 0 0;
+}
+
+.review-grip {
+  width: 40px;
+  height: 4px;
+  margin: 0 auto 10px;
+  border-radius: 999px;
+  background: var(--line);
+}
+
+.review-select {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 650;
+  outline: none;
+}
+
+.review-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(242, 106, 46, 0.16);
+}
+
+.pack-chip {
+  display: inline-flex;
+  padding: 4px 9px;
+  border-radius: 8px;
+  background: var(--orsoft);
+  color: var(--accent);
+  font-size: 12.5px;
+  font-weight: 750;
+}
+
+.link-danger {
+  border: 0;
+  background: transparent;
+  color: #b91c1c;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+}
+
+.qty {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+}
+
+.qty-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.qty-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.review-foot {
+  padding: 14px 18px calc(14px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
+  background: var(--card);
 }
 </style>
