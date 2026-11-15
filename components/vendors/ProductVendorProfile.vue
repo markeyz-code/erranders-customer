@@ -977,8 +977,8 @@
                   <!-- Pack Header -->
                   <div class="flex items-center justify-between px-5 py-4 bg-gray-50/50 border-b border-gray-100">
                     <div class="flex items-center gap-2">
-                      <div class="w-7 h-7 bg-white rounded-lg flex items-center justify-center border border-gray-25 shadow-sm text-gray-700">
-                        <Package class="w-3.5 h-3.5" />
+                      <div class="pack-icon">
+                        <Package class="w-4 h-4" />
                       </div>
                       <span class="text-sm font-bold text-gray-900">{{ pack.name || `Pack ${pIndex + 1}` }}</span>
                     </div>
@@ -1692,7 +1692,7 @@
 
 <script setup lang="ts">
 import { 
-  Share2, Heart, ShoppingCart, ShoppingBag, ArrowLeft, ArrowRight, Clock, Star, MapPin, Search, Info, ChevronLeft, ChevronRight, ChevronDown, Users, Calendar, Copy, Trash2, X, Bike, Plus, Minus, Loader2, LogOut, Bell, FileText, RefreshCw, Lock, CheckCircle2, RotateCcw, Check, Store, MessageCircle
+  Share2, Heart, ShoppingCart, ShoppingBag, ArrowLeft, ArrowRight, Clock, Star, MapPin, Search, Info, ChevronLeft, ChevronRight, ChevronDown, Users, Calendar, Copy, Trash2, X, Bike, Plus, Minus, Loader2, LogOut, Bell, FileText, RefreshCw, Lock, CheckCircle2, RotateCcw, Check, Store, MessageCircle, Package
 } from 'lucide-vue-next';
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 
@@ -3516,5 +3516,22 @@ onUnmounted(() => {
     padding: 7px 11px;
     font-size: 12.5px;
   }
+}
+
+/* The pack badge: an icon that cannot disappear into a white square. */
+.pack-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  background: var(--orsoft);
+  color: var(--accent);
+  flex: none;
+}
+
+.pack-icon :deep(svg) {
+  color: var(--accent) !important;
+  stroke: var(--accent) !important;
 }
 </style>
