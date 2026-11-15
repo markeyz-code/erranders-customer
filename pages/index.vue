@@ -53,38 +53,34 @@
       >
         <div class="hero-copy">
           <!-- Tabs. The line under the active one fills as the timer runs. -->
-          <div class="tabs" role="tablist" aria-label="Services" @keydown="onTabKey">
-            <button
-              v-for="(sl, i) in slides"
-              :key="sl.key"
-              :id="`tab-${sl.key}`"
-              type="button"
-              role="tab"
-              class="tab"
-              :class="{ on: i === index }"
-              :aria-selected="i === index"
-              :aria-controls="`panel-${sl.key}`"
-              :tabindex="i === index ? 0 : -1"
-              @click="select(i)"
-            >
-              {{ sl.tab }}
-              <span
-                v-if="i === index"
-                :key="`line-${index}-${runId}`"
-                class="tab-line"
-                :class="{ running: running }"
-                aria-hidden="true"
-              />
-            </button>
-          </div>
+          <!-- Tabs hidden: the hero shows one message. Restore by uncommenting.
+          <button
+          v-for="(sl, i) in slides"
+          :key="sl.key"
+          :id="`tab-${sl.key}`"
+          type="button"
+          role="tab"
+          class="tab"
+          :class="{ on: i === index }"
+          :aria-selected="i === index"
+          :aria-controls="`panel-${sl.key}`"
+          :tabindex="i === index ? 0 : -1"
+          @click="select(i)"
+          >
+          {{ sl.tab }}
+          <span
+          v-if="i === index"
+          :key="`line-${index}-${runId}`"
+          class="tab-line"
+          :class="{ running: running }"
+          aria-hidden="true"
+          />
+          </button>
+          -->
 
           <!-- Fixed height so the page does not jump between slides. -->
           <div
-            :id="`panel-${current.key}`"
             class="panel"
-            role="tabpanel"
-            :aria-labelledby="`tab-${current.key}`"
-            :aria-live="running ? 'off' : 'polite'"
           >
             <div :key="`c-${index}-${changeId}`" class="swap">
               <h1 class="headline">
@@ -114,18 +110,18 @@
             </div>
           </div>
 
-          <div class="controls">
-            <button
-              type="button"
-              class="play-btn"
-              :aria-label="running ? 'Pause slides' : 'Play slides'"
-              @click="toggleRunning"
-            >
-              <span v-if="running" class="icon">II</span>
-              <span v-else class="icon">▶</span>
-              {{ running ? 'Pause' : 'Play' }}
-            </button>
-          </div>
+          <!-- Play/pause hidden with the tabs; there is nothing to pause.
+          <button
+          type="button"
+          class="play-btn"
+          :aria-label="running ? 'Pause slides' : 'Play slides'"
+          @click="toggleRunning"
+          >
+          <span v-if="running" class="icon">II</span>
+          <span v-else class="icon">▶</span>
+          {{ running ? 'Pause' : 'Play' }}
+          </button>
+          -->
         </div>
 
         <!-- The ticket. Same object each slide, different contents. -->
@@ -379,8 +375,8 @@ const slides: Slide[] = [
     key: 'food',
     tab: 'Food',
     line1: "Don't walk down.",
-    line2: 'Order it.',
-    sub: 'Hot food from campus vendors, brought to your hostel door.',
+    line2: 'Errand it.',
+    sub: 'Food, laundry, a document, a mattress you no longer need. Someone on campus handles it.',
     placeholder: 'Jollof, suya, a cold drink',
     button: 'Order food',
     route: '/vendors',
@@ -702,7 +698,8 @@ onBeforeUnmount(() => {
 onMounted(() => {
   const saved = typeof localStorage !== 'undefined' ? localStorage.getItem('erranders-theme') : null;
   applyTheme(saved === 'dark', false);
-  start();
+  // Autoplay stays off while the tabs and pause control are hidden.
+  running.value = false;
   fetchHomeData();
 });
 
