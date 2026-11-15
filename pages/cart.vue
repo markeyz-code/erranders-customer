@@ -419,7 +419,7 @@
             <div v-if="!groupOrder" class="lg:hidden relative overflow-hidden bg-gray-900 sm:rounded-[1.5rem] p-5 mb-4 flex items-center justify-between cursor-pointer active:scale-[0.98] transition-all group border border-gray-800" @click="router.push('/dashboard/group-orders')">
               <div class="absolute -right-4 -top-4 w-32 h-32 bg-parentPrimary/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
               <div class="flex-1 relative z-10">
-                <h4 class="text-sm font-black text-white mb-1 drop-shadow-sm flex items-center gap-2">Save on delivery? <span class="text-lg">💰</span></h4>
+                <h4 class="text-sm font-black text-white mb-1 flex items-center gap-2">Save on delivery? <Users class="w-4 h-4" aria-hidden="true" /></h4>
                 <p class="text-sm font-medium text-white leading-relaxed">Invite roommates to this order and split the fee!</p>
               </div>
               <div class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md text-white flex items-center justify-center shrink-0 ml-4 relative z-10">
@@ -455,15 +455,15 @@
                   <span class="text-gray-900 font-bold">₦{{ (computedTotalServiceFee + computedPaystackFee).toLocaleString() }}</span>
                 </div>
                 <div v-if="isBirthday" class="flex justify-between items-center text-sm font-bold text-[#008950]">
-                  <span class="flex items-center gap-1">🎂 Birthday Treat</span>
+                  <span class="flex items-center gap-1"><Gift class="w-3.5 h-3.5" aria-hidden="true" /> Birthday treat</span>
                   <span class="font-bold">-₦{{ computedBirthdayDiscount.toLocaleString() }}</span>
                 </div>
                 <div v-if="computedTokenDiscount > 0" class="flex justify-between items-center text-sm font-bold text-orange-500">
-                  <span class="flex items-center gap-1">🎟 Streak Free Delivery</span>
+                  <span class="flex items-center gap-1"><Ticket class="w-3.5 h-3.5" aria-hidden="true" /> Streak free delivery</span>
                   <span class="font-bold">-₦{{ computedTokenDiscount.toLocaleString() }}</span>
                 </div>
                 <div v-if="computedComboPromoDiscount > 0" class="flex justify-between items-center text-sm font-bold text-emerald-600">
-                  <span class="flex items-center gap-1">✨ Exam Combo Discount</span>
+                  <span class="flex items-center gap-1"><Percent class="w-3.5 h-3.5" aria-hidden="true" /> Exam combo discount</span>
                   <span class="font-bold">-₦{{ computedComboPromoDiscount.toLocaleString() }}</span>
                 </div>
                 <div v-if="computedBrethrenDiscount > 0" class="flex justify-between items-center text-sm font-bold text-parentPrimary">
@@ -477,7 +477,7 @@
               </div>
               <div class="px-4 sm:px-5 pb-5 pt-3 border-t border-dashed border-gray-300 space-y-5">
                 <div v-if="isNightOwl" class="p-3 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center gap-3">
-                  <span class="text-lg">🦉</span>
+                  <FileText class="w-5 h-5" aria-hidden="true" />
                   <div>
                     <p class="text-sm font-bold text-indigo-700">Night Owl Active!</p>
                     <p class="text-sm font-medium text-indigo-600">Enjoy free delivery till 2 AM</p>
@@ -541,7 +541,7 @@
                 </div>
                 <div v-if="user && user.freeDeliveryTokens > 0 && !isBirthday" class="flex items-center justify-between p-3 bg-orange-50 border border-orange-100 rounded-xl cursor-pointer hover:bg-orange-100/50 transition-colors" @click="useFreeDeliveryToken = !useFreeDeliveryToken">
                   <div class="flex flex-col">
-                    <span class="text-sm font-bold text-orange-600 flex items-center gap-1">🎟 Use Free Delivery</span>
+                    <span class="text-sm font-bold text-orange-600 flex items-center gap-1"><Ticket class="w-3.5 h-3.5" aria-hidden="true" /> Use free delivery</span>
                     <span class="text-[9px] text-orange-500 font-medium">You have {{ user.freeDeliveryTokens }} left</span>
                   </div>
                   <div class="w-8 h-4 rounded-full transition-colors relative" :class="useFreeDeliveryToken ? 'bg-orange-500' : 'bg-orange-200'">
@@ -661,7 +661,7 @@
               <div v-if="!groupOrder" class="relative overflow-hidden bg-gray-900 rounded-[1.5rem] p-5 flex items-center justify-between cursor-pointer hover:shadow-xl hover: hover:-translate-y-1 transition-all group border border-gray-800" @click="router.push('/dashboard/group-orders')">
                 <div class="absolute -right-4 -top-4 w-32 h-32 bg-parentPrimary/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
                 <div class="flex-1 relative z-10">
-                  <h4 class="text-sm font-black text-white mb-1 drop-shadow-sm flex items-center gap-2">Save on delivery? <span class="text-lg">💰</span></h4>
+                  <h4 class="text-sm font-black text-white mb-1 flex items-center gap-2">Save on delivery? <Users class="w-4 h-4" aria-hidden="true" /></h4>
                   <p class="text-sm font-medium text-white leading-relaxed">Invite roommates to this order and split the fee!</p>
                 </div>
                 <div class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md text-white flex items-center justify-center shrink-0 ml-4 group-hover:bg-parentPrimary transition-colors relative z-10">
@@ -672,7 +672,7 @@
               <!-- Top Notice Banner -->
               <div v-if="computedComboPromoDiscount > 0" class="bg-emerald-50 border border-emerald-100 rounded-xl p-3 flex items-start gap-3">
                 <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                  <span class="text-emerald-600 text-lg">✨</span>
+                  <Percent class="w-5 h-5 text-emerald-600" aria-hidden="true" />
                 </div>
                 <div>
                   <h4 class="text-sm font-bold text-emerald-800">Exam Combo Promo Applied!</h4>
@@ -711,15 +711,15 @@
                   <!-- Discounts Area -->
                   <div class="pt-4 mt-4 border-t border-white/10 border-dashed space-y-3">
                     <div v-if="isBirthday" class="flex justify-between items-center text-sm font-bold text-emerald-400 bg-emerald-500/10 px-3 py-2 rounded-lg">
-                      <span class="flex items-center gap-2"><span class="text-base">🎂</span> Birthday Treat</span>
+                      <span class="flex items-center gap-2"><Gift class="w-4 h-4" aria-hidden="true" /> Birthday treat</span>
                       <span class="font-black">-₦{{ computedBirthdayDiscount.toLocaleString() }}</span>
                     </div>
                     <div v-if="computedTokenDiscount > 0" class="flex justify-between items-center text-sm font-bold text-orange-400 bg-orange-500/10 px-3 py-2 rounded-lg">
-                      <span class="flex items-center gap-2">🎟 Streak Free Delivery</span>
+                      <span class="flex items-center gap-2"><Ticket class="w-4 h-4" aria-hidden="true" /> Streak free delivery</span>
                       <span class="font-black">-₦{{ computedTokenDiscount.toLocaleString() }}</span>
                     </div>
                     <div v-if="computedComboPromoDiscount > 0" class="flex justify-between items-center text-sm font-bold text-teal-400 bg-teal-500/10 px-3 py-2 rounded-lg">
-                      <span class="flex items-center gap-2">✨ Exam Combo Discount</span>
+                      <span class="flex items-center gap-2"><Percent class="w-4 h-4" aria-hidden="true" /> Exam combo discount</span>
                       <span class="font-black">-₦{{ computedComboPromoDiscount.toLocaleString() }}</span>
                     </div>
                     <div v-if="computedBrethrenDiscount > 0" class="flex justify-between items-center text-sm font-bold text-parentPrimary bg-parentPrimary/10 px-3 py-2 rounded-lg">
@@ -735,7 +735,7 @@
                 
                 <div class="px-6 pb-6 pt-4 border-t border-gray-100 space-y-6 relative z-10 bg-gray-50/50">
                   <div v-if="isNightOwl" class="p-3 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center gap-3">
-                    <span class="text-lg">🦉</span>
+                    <FileText class="w-5 h-5" aria-hidden="true" />
                     <div>
                       <p class="text-sm font-bold text-indigo-700">Night Owl Active!</p>
                       <p class="text-sm font-medium text-indigo-600">Enjoy free delivery till 2 AM</p>

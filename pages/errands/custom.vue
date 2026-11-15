@@ -663,9 +663,8 @@ watch(isLoggedIn, (newVal) => {
 
 onMounted(() => {
   fetchInitialData()
-  if (!isLoggedIn.value) {
-    isAuthModalOpen.value = true
-  }
+  // Browsing and building an errand does not need an account. The gate belongs at submit, where the
+  // order is actually created, so a visitor can see what they are being asked to sign up for.
 })
 
 const form = ref({
@@ -1100,6 +1099,7 @@ const buildErrandPayload = async () => {
 
 const submitErrand = async () => {
   if (!isLoggedIn.value) {
+    // The form is already saved as a draft, so signing in does not lose it.
     isAuthModalOpen.value = true
     return
   }
