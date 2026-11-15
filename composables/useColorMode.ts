@@ -1,5 +1,8 @@
 /**
- * Theme switching, in one place.
+ * Colour mode switching, in one place.
+ *
+ * Named useColorMode rather than useTheme: composables/core/useTheme.ts already exports useTheme for
+ * vendor theme objects, and two exports with one name means auto-import silently picks one of them.
  *
  * There were three copies of this logic (landing page, its navbar, the dashboard layout), and when
  * one copy was missing its definitions the toggle threw and the page went blank. One implementation
@@ -46,7 +49,7 @@ const apply = (dark: boolean, persist: boolean) => {
 
 export const setTheme = (dark: boolean, persist = true) => apply(dark, persist);
 
-export const useTheme = () => {
+export const useColorMode = () => {
   onMounted(() => {
     const stored = readStored();
     apply(stored ?? false, false);
@@ -61,6 +64,6 @@ export const useTheme = () => {
   };
 };
 
-export const useThemeState = () => ({
+export const useColorModeState = () => ({
   isDark: computed(() => isDark.value),
 });

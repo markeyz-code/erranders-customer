@@ -777,7 +777,7 @@ const scrolled = ref(false)
 const $route = useRoute()
 const { user, logOut } = useUser()
 
-const { isDark, toggleTheme } = useTheme()
+const { isDark, toggleTheme } = useColorMode()
 const { itemCount: cartItemCount } = useCart()
 const { globalFilter, setFilter, globalFiltersList, fetchCategories } = useGlobalFilter()
 

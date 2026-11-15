@@ -610,7 +610,7 @@ const handleLogoutClick = () => {
   logoutModalOpen.value = true
 }
 
-const { isDark, toggleTheme } = useTheme();
+const { isDark, toggleTheme } = useColorMode();
 
 onMounted(() => {
 });
