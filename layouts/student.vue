@@ -1,5 +1,5 @@
 <template>
-  <div class="app-shell min-h-screen bg-white flex flex-col lg:flex-row selection:bg-[#FF5C1A]/15 selection:text-[#FF5C1A] w-full overflow-x-hidden pt-safe">
+  <div class="app-shell min-h-screen [--color-parent-primary:#f26a2e] bg-white flex flex-col lg:flex-row selection:bg-[#FF5C1A]/15 selection:text-[#FF5C1A] w-full overflow-x-hidden pt-safe">
     <!-- <CorePromoBanner /> -->
     <FullScreenLoader></FullScreenLoader>
     <Toast ref="toastRef"></Toast>
@@ -350,12 +350,8 @@
               <span class="text-[13px] font-bold text-[#6B655D]">{{ user?.isPro ? 'Campus Prime member' : 'Campus member' }}</span>
             </div>
             <div v-else>
-              <div class="flex items-center gap-2 mb-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#FF5C1A] animate-pulse"></span>
-                <span class="ff-mono text-[10px] font-bold tracking-[0.15em] uppercase text-[#9C968E]">Route · {{ pageTitle }}</span>
-              </div>
               <h1 class="ff-display text-[26px] font-bold text-[#171310] tracking-tight leading-none">{{ pageTitle }}</h1>
-              <p class="text-[13px] font-bold text-[#9C968E] mt-1.5">{{ pageDescription }}</p>
+              <p class="text-[15px] font-medium text-[#6B655D] mt-1.5">{{ pageDescription }}</p>
             </div>
           </div>
           <div class="flex items-center gap-3">

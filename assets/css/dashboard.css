@@ -1,77 +1,160 @@
 /**
  * Dashboard design layer.
  *
- * Twenty-two pages each carrying their own spacing, radii and heading treatment is what made
- * the dashboard feel assembled rather than designed. These rules normalise the shared
- * structures once, so every page inherits the same rhythm without twenty-two separate edits.
+ * Every dashboard page inherits this. The home page was rebuilt by hand; rather than repeat that
+ * work ten times and drift, the shared structures live here and the pages only carry their own
+ * content.
  *
- * Deliberately low-specificity and scoped under .dash so it cannot leak into the marketing
- * pages or fight the component-level Tailwind utilities, which still win where they are set.
+ * Rules are deliberately low-specificity and scoped under `.dash` so they cannot leak into the
+ * marketing pages, and component-level Tailwind utilities still win where a page sets them.
  */
 
 .dash {
-  --dash-ink: #171310;
+  --dash-ink: #141110;
   --dash-muted: #6b655d;
-  --dash-faint: #9c968e;
-  --dash-line: #ede9e3;
+  --dash-faint: #97908a;
+  --dash-line: #e8e2d9;
   --dash-surface: #ffffff;
-  --dash-page: #fbfaf8;
-  --dash-accent: #ff5c1a;
-  --dash-radius: 1.25rem;
+  --dash-page: #faf8f5;
+  --dash-accent: #f26a2e;
+  --dash-radius: 18px;
+  --dash-radius-sm: 12px;
+
+  color: var(--dash-ink);
+  font-size: 15px;
 }
 
-/* Consistent vertical rhythm between sections. */
+html.dark .dash {
+  --dash-ink: #f6f2ec;
+  --dash-muted: #b3aca3;
+  --dash-faint: #8b847c;
+  --dash-line: #2c2721;
+  --dash-surface: #1b1713;
+  --dash-page: #12100e;
+}
+
+/* One page tint, bled past the container padding without changing layout. */
+.dash {
+  background: var(--dash-page);
+  box-shadow: 0 0 0 100vmax var(--dash-page);
+  clip-path: inset(0 -100vmax);
+}
+
+/* Consistent vertical rhythm. */
 .dash > * + * {
   margin-top: 1.5rem;
 }
 
-/* One heading treatment, so "Wallet" and "Orders" and "Activity" are visually siblings. */
+/* ─── Type ───
+   Headlines are chunky and tight; body text never drops below 15px; the tiny uppercase
+   letter-spaced labels that used to be everywhere are normalised away. */
 .dash h1:not(.keep-type) {
-  font-family: var(--ff-display, inherit);
   color: var(--dash-ink);
-  letter-spacing: -0.02em;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.dash h2:not(.keep-type) {
+  color: var(--dash-ink);
+  font-weight: 800;
+  letter-spacing: -0.025em;
   line-height: 1.15;
 }
 
-/* Cards: one border colour, one radius, one shadow. */
+.dash h3:not(.keep-type),
+.dash h4:not(.keep-type) {
+  color: var(--dash-ink);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.dash p,
+.dash li,
+.dash dd,
+.dash dt {
+  font-size: max(15px, 0.9375rem);
+  line-height: 1.55;
+}
+
+/* Sentence case. All-caps eyebrows read as decoration, not information. */
+.dash .uppercase:not(.keep-case) {
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.dash .ff-mono:not(.keep-mono-case) {
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.dash .section-label,
+.dash [class*='tracking-[0.15em]'] {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--dash-muted);
+}
+
+/* ─── Surfaces ───
+   One border colour, one radius, one shadow. */
 .dash .card-norm,
-.dash .rounded-2xl.border.border-gray-50,
+.dash .rounded-2xl.border,
 .dash .rounded-\[1\.25rem\].border {
   border-color: var(--dash-line);
   border-radius: var(--dash-radius);
   background: var(--dash-surface);
 }
 
-/* Section labels were uppercase with three different letter-spacings. */
-.dash .section-label {
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--dash-faint);
-}
-
-/* Empty states should look deliberate rather than broken. */
+/* Empty states look deliberate rather than broken. */
 .dash .empty-state {
   border: 1px dashed var(--dash-line);
   border-radius: var(--dash-radius);
-  background: var(--dash-page);
+  background: var(--dash-surface);
   padding: 2.5rem 1.5rem;
   text-align: center;
+  color: var(--dash-muted);
 }
 
-/* Focus rings are ours, not the browser's, and identical everywhere. */
+/* ─── Focus ───
+   Visible on every interactive element, including inside dark surfaces. */
 .dash :where(a, button, input, select, textarea):focus-visible {
-  outline: 2px solid var(--dash-accent);
+  border-radius: var(--dash-radius-sm);
+  outline: 3px solid var(--dash-accent);
   outline-offset: 2px;
-  border-radius: 0.5rem;
 }
 
+/* ─── Dark mode ───
+   Pages that hardcode white surfaces would otherwise stay bright in dark mode. These overrides
+   catch the common cases; anything with an explicit `bg-white` utility becomes the surface token. */
+html.dark .dash .bg-white {
+  background-color: var(--dash-surface);
+}
+
+html.dark .dash .text-gray-900,
+html.dark .dash .text-\[\#171310\] {
+  color: var(--dash-ink);
+}
+
+html.dark .dash .text-gray-500,
+html.dark .dash .text-gray-400,
+html.dark .dash .text-\[\#9C968E\] {
+  color: var(--dash-muted);
+}
+
+html.dark .dash .border-gray-50,
+html.dark .dash .border-\[\#E7E2DA\] {
+  border-color: var(--dash-line);
+}
+
+/* ─── Reduced motion ─── */
 @media (prefers-reduced-motion: reduce) {
   .dash *,
   .dash *::before,
   .dash *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
