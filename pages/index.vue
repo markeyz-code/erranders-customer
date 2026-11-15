@@ -83,8 +83,8 @@
                   Make a custom errand
                 </NuxtLink>
                 <NuxtLink to="/market-pool" class="mode">
-                  <Repeat class="w-4 h-4" aria-hidden="true" />
-                  Swap something
+                  <Tag class="w-4 h-4" aria-hidden="true" />
+                  Declutter and sell
                 </NuxtLink>
               </div>
 
@@ -320,7 +320,7 @@
 
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
-import { ArrowRight, ArrowUpRight, Moon, Star, Sun } from 'lucide-vue-next';
+import { ArrowRight, ArrowUpRight, Moon, PackageSearch, Star, Sun, Tag, UtensilsCrossed } from 'lucide-vue-next';
 import LandingNavbar from '@/components/LandingNavbar.vue';
 import { useLandingPage } from '@/composables/modules/landing';
 import { useUser } from '@/composables/modules/auth/user';
@@ -952,7 +952,7 @@ useHead({
   /* The hero owns the first screen: it fills the viewport under the 84px bar. */
   min-height: calc(100vh - 84px);
   min-height: calc(100svh - 84px);
-  align-content: start;
+  align-content: center;
 }
 
 @media (min-width: 960px) {
