@@ -724,6 +724,9 @@ useHead({
   color: var(--ink);
   font-size: 15px;
   padding-bottom: 0;
+
+  /* Nothing on this page is wider than the viewport. The rails scroll inside themselves. */
+  overflow-x: clip;
 }
 
 /* Header: a floating bar with margins, so it never touches the edges. */
@@ -893,6 +896,7 @@ useHead({
   max-width: 1120px;
   margin: 0 auto;
   padding: 44px 20px 20px;
+  min-width: 0;
 }
 
 @media (min-width: 960px) {
@@ -955,6 +959,7 @@ useHead({
 /* Reserved space: the headline is two lines, the sub is three. */
 .panel {
   min-height: 236px;
+  min-width: 0;
 }
 
 @media (min-width: 960px) {
@@ -974,6 +979,7 @@ useHead({
 
 .headline {
   margin: 0;
+  overflow-wrap: anywhere;
   font-size: clamp(34px, 6vw, 58px);
   font-weight: 800;
   letter-spacing: -0.045em;
@@ -996,6 +1002,8 @@ useHead({
 
 .field {
   display: flex;
+  min-width: 0;
+  max-width: 100%;
   gap: 8px;
   margin-top: 18px;
   padding: 6px 6px 6px 16px;
@@ -1026,7 +1034,8 @@ useHead({
 }
 
 .field-go {
-  flex: none;
+  flex: 0 1 auto;
+  min-width: 0;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -1099,6 +1108,7 @@ useHead({
 .ticket-wrap {
   display: flex;
   justify-content: center;
+  min-width: 0;
 }
 
 .ticket {
@@ -1844,9 +1854,7 @@ useHead({
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   padding-bottom: 6px;
-  margin: 0 -20px;
-  padding-left: 20px;
-  padding-right: 20px;
+  max-width: 100%;
   scrollbar-width: none;
 }
 
