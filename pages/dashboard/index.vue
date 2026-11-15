@@ -1,336 +1,241 @@
 <template>
- <div class="space-y-5 md:space-y-8 pb-24 animate-fade-in selection:bg-[#FF5C1A]/15 selection:text-[#FF5C1A] px-3 md:px-4 md:px-4">
+  <div class="home">
+    <!-- Header: greeting once, then chips. No second welcome banner. -->
+    <header class="home-head">
+      <div class="min-w-0">
+        <p class="greet">{{ greeting }}</p>
+        <h1 class="name">{{ user?.firstName || 'Student' }}.</h1>
+      </div>
 
- <!-- Header -->
- <header class="pt-6">
-   <DashboardPageHeader
-     :eyebrow="user?.isPro ? 'pro member' : 'campus member'"
-     title="Welcome back,"
-     :highlight="(user?.firstName || 'Student') + '.'"
-     description="Here is what is happening with your orders today."
-   />
- </header>
+      <div class="chips">
+        <NuxtLink to="/dashboard/leaderboard" class="chip">
+          <Flame class="chip-icon" aria-hidden="true" />
+          <span>{{ user?.streakCount || 0 }}-day streak</span>
+        </NuxtLink>
+        <NuxtLink to="/dashboard/leaderboard" class="chip">
+          <BarChart3 class="chip-icon" aria-hidden="true" />
+          <span>#{{ rank }} on campus</span>
+        </NuxtLink>
+        <button type="button" class="chip chip-accent" @click="isRedeemModalOpen = true">
+          <Trophy class="chip-icon" aria-hidden="true" />
+          <span>{{ user?.points || 0 }} pts</span>
+        </button>
+      </div>
+    </header>
 
- <!-- Active Orders & Delivery Verification PIN Alert -->
- <section v-if="activeOrdersWithPin.length > 0" class="space-y-3">
- <div 
- v-for="activeOrder in activeOrdersWithPin" 
- :key="activeOrder._id"
- class="relative overflow-hidden bg-gradient-to-r from-gray-950 via-gray-900 to-[#2A1810] text-white rounded-2xl p-4 md:p-5 border-2 border-[#FF5C1A] shadow-xl animate-fade-in"
- >
- <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
- <div class="space-y-1">
- <div class="flex items-center gap-2">
- <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
- <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FF5C1A] text-white text-[10px] font-black uppercase tracking-wider">
- <ShieldCheck class="w-3.5 h-3.5" /> Delivery Verification PIN
- </span>
- <span class="text-xs font-bold text-gray-400 capitalize">
- {{ activeOrder.type === 'custom_errand' ? 'Custom Errand' : 'Food Order' }} • {{ activeOrder.status?.replace(/_/g, ' ') }}
- </span>
- </div>
- <p class="text-xs text-gray-300 font-medium">
- Give this 4-digit code to your Errand Ninja upon arrival:
- </p>
- </div>
+    <!-- Live order: the one dark surface that means act now. -->
+    <section v-if="activeOrder" class="hero">
+      <article class="live">
+        <div class="live-top">
+          <span class="live-dot" aria-hidden="true"></span>
+          <p class="live-status">{{ statusLabel(activeOrder.status) }}</p>
+          <span v-if="eta" class="live-eta">{{ eta }} min</span>
+        </div>
 
- <div class="flex items-center gap-3">
- <div class="flex items-center gap-1.5">
- <span 
- v-for="(digit, idx) in (activeOrder.deliveryPin || '').split('')" 
- :key="idx" 
- class="w-10 h-12 rounded-xl bg-black/80 border border-white/20 flex items-center justify-center text-2xl font-black text-[#FF5C1A] shadow-inner"
- >
- {{ digit }}
- </span>
- </div>
+        <p class="live-title">{{ activeOrder.vendor?.storeName || 'Your order' }}</p>
+        <p class="live-sub">
+          <template v-if="runnerName">Runner · {{ runnerName }}</template>
+          <template v-else>Looking for a runner…</template>
+        </p>
 
- <div class="flex items-center gap-2">
- <button 
- @click.stop="copyPin(activeOrder.deliveryPin)" 
- class="px-3 py-2.5 bg-white/10 hover:bg-white/20 active:scale-95 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1 border border-white/10"
- title="Copy PIN"
- >
- <Copy class="w-3.5 h-3.5" />
- <span class="hidden sm:inline">Copy</span>
- </button>
- <NuxtLink 
- :to="`/dashboard/orders/${activeOrder._id}`" 
- class="px-4 py-2.5 bg-[#FF5C1A] hover:bg-[#e6511a] active:scale-95 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-md shadow-[#FF5C1A]/20"
- >
- <span>Track Errand</span>
- <ArrowRight class="w-3.5 h-3.5" />
- </NuxtLink>
- </div>
- </div>
- </div>
- </div>
- </section>
+        <ol class="steps" aria-label="Delivery progress">
+          <li
+            v-for="(step, i) in STEPS"
+            :key="step.key"
+            class="step"
+            :class="{ done: i < stepIndex, current: i === stepIndex }"
+            :aria-current="i === stepIndex ? 'step' : undefined"
+          >
+            <span class="step-dot" aria-hidden="true"></span>
+            <span class="step-label">{{ step.label }}</span>
+          </li>
+        </ol>
 
- <!-- Awaiting Payment Alert: Prompts to pay instead of showing a delivery PIN -->
- <section v-else-if="awaitingPaymentOrders.length > 0" class="space-y-3">
- <div 
- v-for="unpaidOrder in awaitingPaymentOrders" 
- :key="unpaidOrder._id"
- class="relative overflow-hidden bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 md:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-fade-in"
- >
- <div class="space-y-1">
- <div class="flex items-center gap-2">
- <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-800 text-[10px] font-black uppercase tracking-wider">
- 💳 Payment Required
- </span>
- <span class="text-xs font-bold text-amber-800 capitalize">
- {{ unpaidOrder.type === 'custom_errand' ? 'Custom Errand' : 'Order' }} • Awaiting Payment
- </span>
- </div>
- <p class="text-xs text-amber-900/80 font-medium">
- Complete payment for #{{ unpaidOrder.orderNumber || unpaidOrder._id?.slice(-6) }} so an Errand Ninja can be dispatched.
- </p>
- </div>
+        <div class="live-actions">
+          <NuxtLink :to="`/dashboard/orders/${activeOrder._id}`" class="btn btn-accent">
+            Track order
+            <ArrowRight class="w-4 h-4" aria-hidden="true" />
+          </NuxtLink>
+          <a v-if="runnerPhone" :href="`tel:${runnerPhone}`" class="btn btn-ghost">
+            <Phone class="w-4 h-4" aria-hidden="true" />
+            Call runner
+          </a>
+        </div>
+      </article>
 
- <NuxtLink 
- :to="`/dashboard/orders/${unpaidOrder._id}`" 
- class="px-4 py-2.5 bg-[#FF5C1A] hover:bg-[#e6511a] text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-md shadow-[#FF5C1A]/20 shrink-0"
- >
- <span>Complete Payment</span>
- <ArrowRight class="w-3.5 h-3.5" />
- </NuxtLink>
- </div>
- </section>
+      <!-- Ticket stub: notched edges, perforation, PIN in display type. -->
+      <aside class="ticket" aria-label="Delivery PIN">
+        <p class="ticket-label">Give this PIN to your runner</p>
+        <p class="ticket-pin">{{ activeOrder.deliveryPin }}</p>
+        <div class="perforation" aria-hidden="true"></div>
+        <button type="button" class="btn btn-ticket" @click="copyPin(activeOrder.deliveryPin)">
+          <Copy class="w-4 h-4" aria-hidden="true" />
+          Copy code
+        </button>
+      </aside>
+    </section>
 
- <!-- Quick Stats: manifest tiles -->
- <section class="grid grid-cols-2 lg:grid-cols-4 gap-3">
- <div v-for="stat in quickStats" :key="stat.label"
- class="relative bg-white border border-[#E7E2DA] rounded-xl p-4 flex items-center gap-3 hover:border-[#FF5C1A]/40 hover:bg-[#FAF8F5] transition-all cursor-pointer group overflow-hidden"
- @click="router.push(stat.link || '/dashboard')"
- >
- <div class="absolute left-0 top-0 bottom-0 w-[3px] bg-[#E7E2DA] group-hover:bg-[#FF5C1A] transition-colors"></div>
- <div class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" :class="stat.bgColor">
- <component :is="stat.icon" class="w-4 h-4" :class="stat.iconColor" />
- </div>
- <div class="min-w-0">
- <p class="ff-mono text-[9px] font-bold text-[#9C968E] uppercase  mb-0.5">{{ stat.label }}</p>
- <div class="flex items-baseline gap-1">
- <p class="text-sm font-bold text-[#171310] tracking-tight">{{ stat.value }}</p>
- <span v-if="stat.suffix" class="ff-mono text-[9px] font-bold text-[#9C968E]">{{ stat.suffix }}</span>
- </div>
- </div>
- </div>
- </section>
+    <!-- Nothing live: one question, one field, four ways in. -->
+    <section v-else class="hero-idle">
+      <h2 class="ask">What do you need?</h2>
+      <form class="ask-form" @submit.prevent="handleSearch">
+        <Search class="ask-icon" aria-hidden="true" />
+        <input
+          v-model="searchQuery"
+          type="search"
+          class="ask-input"
+          placeholder="Jollof, laundry pickup, an old fan to swap…"
+          aria-label="Search stores and services"
+        />
+        <button type="submit" class="ask-go" aria-label="Search">
+          <ArrowRight class="w-5 h-5" aria-hidden="true" />
+        </button>
+      </form>
 
- <!-- Custom Errands Promo -->
- <section class="relative overflow-hidden rounded-2xl bg-[#171310] p-4 md:p-4 md:p-4 md:p-5 flex items-center justify-between group shadow-[#171310]/10">
- <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:22px_22px] opacity-[0.04]"></div>
- <div class="absolute right-0 top-0 w-64 h-64 bg-[#FF5C1A]/20 rounded-full blur-[80px] -mr-20 -mt-20 group-hover:bg-[#FF5C1A]/30 transition-colors duration-700"></div>
+      <div class="quick">
+        <NuxtLink to="/vendors" class="quick-chip">
+          <UtensilsCrossed class="w-4 h-4" aria-hidden="true" /> Food
+        </NuxtLink>
+        <NuxtLink to="/errands/custom" class="quick-chip">
+          <PackageSearch class="w-4 h-4" aria-hidden="true" /> Run an errand
+        </NuxtLink>
+        <NuxtLink to="/market-pool" class="quick-chip">
+          <Repeat class="w-4 h-4" aria-hidden="true" /> Swap something
+        </NuxtLink>
+        <NuxtLink to="/dashboard/group-orders" class="quick-chip">
+          <Users class="w-4 h-4" aria-hidden="true" /> Group order
+        </NuxtLink>
+      </div>
+    </section>
 
- <div class="relative z-10 flex-1 max-w-xl">
- <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-md rounded-lg border border-white/10 text-white ff-mono text-[10px] font-bold uppercase  mb-4">
- <Rocket class="w-3.5 h-3.5 text-[#FF5C1A]" /> Now with Negotiable Fees
- </div>
- <h2 class="ff-display text-2xl md:text-3xl font-bold text-white tracking-tight mb-2">
- Need an <span class="text-[#FF5C1A]">Errand</span> Run?
- </h2>
- <p class="text-sm md:text-base text-white/60 font-medium mb-6 leading-relaxed">
- Don't just order food. Send an Errander to pick up your laundry, deliver documents, or buy groceries. Set your own price and get it done fast!
- </p>
- <NuxtLink to="/errands/custom" class="inline-flex items-center justify-center gap-2 px-4 md:px-4 py-3.5 bg-[#FF5C1A] text-white rounded-lg text-sm font-bold hover:bg-[#e6511a] transition-colors shadow-[#FF5C1A]/20 active:scale-95">
- Request an Errand <ArrowRight class="w-4 h-4" />
- </NuxtLink>
- </div>
+    <!-- Payment prompt sits above everything except a live order. -->
+    <section v-if="unpaidOrder" class="pay">
+      <div class="min-w-0">
+        <p class="pay-title">Payment needed</p>
+        <p class="pay-sub">
+          Order #{{ unpaidOrder.orderNumber || unpaidOrder._id?.slice(-6) }} is waiting. A runner can't be sent until it's paid.
+        </p>
+      </div>
+      <NuxtLink :to="`/dashboard/orders/${unpaidOrder._id}`" class="btn btn-dark shrink-0">
+        Pay now
+      </NuxtLink>
+    </section>
 
- <div class="hidden md:flex relative z-10 w-48 h-48 shrink-0 items-center justify-center">
- <div class="absolute inset-0 bg-[#FF5C1A]/20 rounded-full blur-[30px] animate-pulse"></div>
- <div class="relative w-32 h-32 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl rotate-12 flex items-center justify-center group-hover:rotate-6 transition-transform duration-500">
- <PackageSearch class="w-16 h-16 text-white drop-" stroke-width="1.5" />
- </div>
- </div>
- </section>
+    <!-- Bento: three ways in, one hierarchy. -->
+    <section class="bento">
+      <NuxtLink to="/errands/custom" class="tile tile-errand">
+        <div class="tile-head">
+          <PackageSearch class="w-6 h-6" aria-hidden="true" />
+          <span class="tile-tag">Set your own price</span>
+        </div>
+        <h3 class="tile-title">Need an errand run?</h3>
+        <p class="tile-body">Laundry, documents, groceries — a student runs it for you.</p>
+        <span class="tile-cta">
+          Request an errand
+          <ArrowUpRight class="w-4 h-4" aria-hidden="true" />
+        </span>
+      </NuxtLink>
 
-  <!-- Barter Campus Trade Promo -->
-  <CoreBarterAdBanner />
+      <NuxtLink to="/market-pool" class="tile tile-barter">
+        <div class="tile-head">
+          <Repeat class="w-5 h-5" aria-hidden="true" />
+          <span class="tile-tag">Campus market</span>
+        </div>
+        <h3 class="tile-title">Sell what you don't use</h3>
+        <p class="tile-body">Fans, textbooks, mattresses. Cash or swap, escrow protected.</p>
+        <span class="tile-cta">
+          Explore barter
+          <ArrowUpRight class="w-4 h-4" aria-hidden="true" />
+        </span>
+      </NuxtLink>
 
-  <!-- Redeem Points Promo -->
-  <section class="relative overflow-hidden rounded-2xl bg-[#FF5C1A] p-4 md:p-5 flex flex-col md:flex-row items-center justify-between group shadow-lg shadow-[#FF5C1A]/20">
-  <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:22px_22px] opacity-10"></div>
-  <div class="absolute right-0 top-0 w-64 h-64 bg-white/20 rounded-full blur-[80px] -mr-20 -mt-20"></div>
+      <button type="button" class="tile tile-points" @click="isRedeemModalOpen = true">
+        <div class="ring" role="img" :aria-label="`${user?.points || 0} of ${REDEEM_MIN} points`">
+          <svg viewBox="0 0 44 44" class="ring-svg" aria-hidden="true">
+            <circle cx="22" cy="22" r="18" class="ring-track" />
+            <circle
+              cx="22"
+              cy="22"
+              r="18"
+              class="ring-fill"
+              :style="{ strokeDashoffset: ringOffset }"
+            />
+          </svg>
+          <span class="ring-text">{{ user?.points || 0 }}</span>
+        </div>
+        <div class="min-w-0 text-left">
+          <p class="tile-title sm">Redeem points</p>
+          <p class="tile-body sm">{{ pointsToGo }} to go</p>
+        </div>
+      </button>
+    </section>
 
-  <div class="relative z-10 flex-1 w-full md:max-w-xl text-center md:text-left">
-  <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-md rounded-lg text-white ff-mono text-[10px] font-bold uppercase  mb-3 md:mb-4 mx-auto md:mx-0">
-  <Trophy class="w-3.5 h-3.5 text-white" /> Turn Points into Cash
+    <!-- Open now: live stores only. Closed ones collapse into one line. -->
+    <section class="open">
+      <div class="open-head">
+        <h2 class="section-title">Open right now</h2>
+        <NuxtLink to="/vendors" class="section-link">All stores</NuxtLink>
+      </div>
+
+      <div v-if="loading" class="store-grid">
+        <div v-for="i in 3" :key="i" class="store-skel" />
+      </div>
+
+      <div v-else-if="openVendors.length === 0" class="quiet">
+        <MoonStar class="w-6 h-6" aria-hidden="true" />
+        <p>Campus is quiet — no store is open right now.</p>
+        <button type="button" class="btn btn-ghost" @click="fetchHomeData">
+          <RefreshCw class="w-4 h-4" aria-hidden="true" /> Check again
+        </button>
+      </div>
+
+      <div v-else class="store-grid">
+        <NuxtLink
+          v-for="vendor in openVendors"
+          :key="vendor._id"
+          :to="`/vendors/${vendor._id}`"
+          class="store"
+        >
+          <div class="store-media">
+            <video
+              v-if="isVideo(vendor.logo || vendor.banner)"
+              :src="vendor.logo || vendor.banner"
+              class="store-img"
+              autoplay
+              loop
+              muted
+              playsinline
+            />
+            <img v-else :src="vendor.logo || vendor.banner || '/placeholder-store.jpg'" class="store-img" alt="" />
+          </div>
+          <div class="store-body">
+            <p class="store-name">{{ vendor.storeName }}</p>
+            <p class="store-meta">
+              {{ vendor.category || 'Store' }}
+              <span aria-hidden="true">·</span>
+              {{ vendor.preparationTime || 20 }} min
+            </p>
+          </div>
+        </NuxtLink>
+      </div>
+
+      <NuxtLink v-if="closedCount > 0" to="/vendors" class="closed-line">
+        <Lock class="w-4 h-4" aria-hidden="true" />
+        <span>{{ closedCount }} more {{ closedCount === 1 ? 'place is' : 'places are' }} closed. See when they open.</span>
+      </NuxtLink>
+
+      <p v-if="fetchError === 'network'" class="offline">
+        <WifiOff class="w-4 h-4" aria-hidden="true" /> No connection. Showing what we last had.
+      </p>
+    </section>
+
+    <RedeemPointsModal
+      :is-open="isRedeemModalOpen"
+      :current-points="user?.points || 0"
+      @close="isRedeemModalOpen = false"
+      @redeemed="handlePointsRedeemed"
+    />
   </div>
-  <h2 class="ff-display text-2xl md:text-3xl font-bold text-white tracking-tight mb-2 leading-tight">
-  Got Points? <br class="md:hidden" /> Redeem Them Now!
-  </h2>
-  <p class="text-sm md:text-base text-white/80 font-medium mb-6 md:mb-0 leading-relaxed max-w-sm mx-auto md:mx-0">
-  Convert your hard-earned Erranders points into real cash in your wallet and enjoy free meals.
-  </p>
-  </div>
-
-  <div class="relative z-10 w-full md:w-auto mt-4 md:mt-0 flex flex-col items-center">
-  <button @click="isRedeemModalOpen = true" class="w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 bg-white text-[#FF5C1A] rounded-xl text-sm font-bold hover:bg-[#FAF8F5] transition-all shadow-xl active:scale-95 whitespace-nowrap">
-  Redeem {{ user?.points || 0 }} pts <ArrowRight class="w-4 h-4" />
-  </button>
-  <p class="text-[10px] text-white/70 font-medium mt-2">Min. 500 points to redeem</p>
-  </div>
-  </section>
-
-  <!-- Quick Actions -->
-  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
- <NuxtLink to="/meal-planner" class="bg-white border border-[#E7E2DA] rounded-xl p-4 md:p-4 flex items-center justify-between group hover:border-[#FF5C1A]/30 transition-all">
- <div>
- <div class="w-10 h-10 bg-[#FAF8F5] border border-[#E7E2DA] rounded-lg flex items-center justify-center mb-3">
- <UtensilsCrossed class="w-5 h-5 text-[#9C968E] group-hover:text-[#FF5C1A] transition-colors" />
- </div>
- <h3 class="ff-display text-base font-bold text-[#171310] tracking-tight mb-1">Meal Planner</h3>
- <p class="text-sm text-[#9C968E] font-bold">Plan your week and save up to 25%</p>
- </div>
- <div class="w-10 h-10 bg-[#FAF8F5] text-[#9C968E] rounded-lg flex items-center justify-center shrink-0 group-hover:text-[#FF5C1A] group-hover:bg-[#FF5C1A]/10 transition-colors">
- <ArrowRight class="w-4 h-4" />
- </div>
- </NuxtLink>
-
-  <NuxtLink to="/dashboard/group-orders" class="bg-white border border-[#E7E2DA] rounded-xl p-4 md:p-4 flex items-center justify-between group hover:border-[#FF5C1A]/30 transition-all">
-  <div>
-  <div class="w-10 h-10 bg-[#FAF8F5] border border-[#E7E2DA] rounded-lg flex items-center justify-center mb-3">
-  <Users class="w-5 h-5 text-[#9C968E] group-hover:text-[#FF5C1A] transition-colors" />
-  </div>
-  <h3 class="ff-display text-base font-bold text-[#171310] tracking-tight mb-1">Group Orders</h3>
-  <p class="text-sm text-[#9C968E] font-bold">Order with friends and split the bill</p>
-  </div>
-  <div class="w-10 h-10 bg-[#FAF8F5] text-[#9C968E] rounded-lg flex items-center justify-center shrink-0 group-hover:text-[#FF5C1A] group-hover:bg-[#FF5C1A]/10 transition-colors">
-  <ArrowRight class="w-4 h-4" />
-  </div>
-  </NuxtLink>
-
-  <NuxtLink to="/market-pool" class="bg-white border border-[#E7E2DA] rounded-xl p-4 md:p-4 flex items-center justify-between group hover:border-[#FF5C1A]/30 transition-all">
-  <div>
-  <div class="w-10 h-10 bg-[#FAF8F5] border border-[#E7E2DA] rounded-lg flex items-center justify-center mb-3">
-  <ShoppingCart class="w-5 h-5 text-[#9C968E] group-hover:text-[#FF5C1A] transition-colors" />
-  </div>
-  <h3 class="ff-display text-base font-bold text-[#171310] tracking-tight mb-1">Market Pool</h3>
-  <p class="text-sm text-[#9C968E] font-bold">Buy food in bulk at wholesale prices</p>
-  </div>
-  <div class="w-10 h-10 bg-[#FAF8F5] text-[#9C968E] rounded-lg flex items-center justify-center shrink-0 group-hover:text-[#FF5C1A] group-hover:bg-[#FF5C1A]/10 transition-colors">
-  <ArrowRight class="w-4 h-4" />
-  </div>
-  </NuxtLink>
-
-  <NuxtLink to="/market-pool/orders" class="bg-white border border-[#E7E2DA] rounded-xl p-4 md:p-4 flex items-center justify-between group hover:border-[#FF5C1A]/30 transition-all">
-  <div>
-  <div class="w-10 h-10 bg-[#FAF8F5] border border-[#E7E2DA] rounded-lg flex items-center justify-center mb-3">
-  <Package class="w-5 h-5 text-[#9C968E] group-hover:text-[#FF5C1A] transition-colors" />
-  </div>
-  <h3 class="ff-display text-base font-bold text-[#171310] tracking-tight mb-1">Pool Orders</h3>
-  <p class="text-sm text-[#9C968E] font-bold">Track and manage your market pool requests</p>
-  </div>
-  <div class="w-10 h-10 bg-[#FAF8F5] text-[#9C968E] rounded-lg flex items-center justify-center shrink-0 group-hover:text-[#FF5C1A] group-hover:bg-[#FF5C1A]/10 transition-colors">
-  <ArrowRight class="w-4 h-4" />
-  </div>
-  </NuxtLink>
-  </section>
-
- <!-- Popular Vendors -->
- <section class="space-y-4 pt-4">
- <div class="flex items-center justify-between">
- <div>
- <h2 class="ff-display text-lg font-bold text-[#171310] tracking-tight">Campus Favorites</h2>
- <p class="ff-mono text-[9px] font-bold text-[#9C968E] uppercase  mt-0.5">Top picks for you</p>
- </div>
- <NuxtLink to="/vendors" class="text-sm font-bold text-[#FF5C1A] hover:underline px-3 py-1.5 bg-[#FF5C1A]/5 rounded-lg">
- View All
- </NuxtLink>
- </div>
-
- <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
- <div v-for="i in 3" :key="i" class="bg-[#FAF8F5] rounded-xl h-32 animate-pulse border border-[#E7E2DA]" />
- </div>
-
- <div v-else-if="onlineVendors.length === 0" class="relative overflow-hidden rounded-2xl border border-[#E7E2DA] bg-white py-16 px-4 md:px-4 text-center group">
- <div class="absolute inset-0 bg-[radial-gradient(#E7E2DA_1px,transparent_1px)] [background-size:16px_16px] opacity-40"></div>
- <div class="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-32 bg-[#FF5C1A]/5 rounded-full blur-[50px] transition-all duration-700 group-hover:bg-[#FF5C1A]/10"></div>
-
- <div class="relative z-10 w-20 h-20 bg-[#FAF8F5] rounded-2xl flex items-center justify-center mx-auto mb-6 border border-[#E7E2DA] transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-6">
- <MoonStar class="w-10 h-10 text-[#9C968E]" stroke-width="1.5" />
- </div>
-
- <div class="relative z-10 space-y-3 mb-8 max-w-[280px] mx-auto">
- <h3 class="ff-display text-2xl font-bold text-[#171310] tracking-tight">Campus is Asleep</h3>
- <p class="text-[13px] text-[#9C968E] font-bold leading-relaxed">
- All our partner vendors are currently closed. Catch some rest and we'll be back serving hot meals soon!
- </p>
- </div>
-
- <div class="relative z-10 flex flex-col items-center gap-4">
- <div class="ff-mono inline-flex items-center gap-2 px-4 py-2 bg-[#FAF8F5] border border-[#E7E2DA] rounded-lg text-[10px] font-bold text-[#9C968E] uppercase ">
- <Clock class="w-3.5 h-3.5 text-[#9C968E]" />
- Opens at 8:00 AM
- </div>
-
- <div class="flex items-center gap-3 w-full sm:w-auto justify-center mt-2">
- <button
- @click="fetchHomeData"
- class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 md:px-4 py-3 bg-[#171310] text-white rounded-lg text-[13px] font-bold hover:bg-black transition-colors shadow-[#171310]/10 active:scale-95"
- >
- <RefreshCw class="w-4 h-4" />
- Refresh
- </button>
- <NuxtLink
- to="/vendors"
- class="flex-1 sm:flex-none inline-flex items-center justify-center px-4 md:px-4 py-3 bg-white border border-[#E7E2DA] text-[#171310] rounded-lg text-[13px] font-bold hover:bg-[#FAF8F5] transition-colors active:scale-95"
- >
- All Vendors
- </NuxtLink>
- </div>
-
- <div v-if="fetchError === 'network'" class="mt-4 flex items-center justify-center gap-2 px-4 py-2 bg-rose-50 border border-rose-100 rounded-lg">
- <WifiOff class="w-3.5 h-3.5 text-rose-500 shrink-0" />
- <p class="ff-mono text-[10px] font-bold text-rose-600 uppercase ">No Connection</p>
- </div>
- </div>
- </div>
-
- <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
- <NuxtLink
- v-for="vendor in onlineVendors.slice(0, 6)"
- :key="vendor._id"
- :to="`/vendors/${vendor._id}`"
- class="bg-white border border-[#E7E2DA] rounded-xl p-3 flex items-center gap-4 hover:border-[#FF5C1A]/30 transition-all group"
- >
- <div class="relative w-20 h-20 shrink-0 overflow-hidden rounded-lg">
-  <video v-if="(vendor.logo || vendor.banner) && (vendor.logo || vendor.banner).match(/\.(mp4|webm|ogg|mov)$/i)" :src="vendor.logo || vendor.banner" class="w-full h-full object-cover bg-[#FAF8F5]" autoplay loop muted playsinline></video>
-  <img v-else :src="vendor.logo || vendor.banner || '/placeholder-store.jpg'" class="w-full h-full object-cover bg-[#FAF8F5]" />
-  <div v-if="vendor.isOpen === false" class="absolute inset-0 bg-black/60 z-10 flex flex-col items-center justify-center">
-    <Lock class="w-5 h-5 text-white mb-1" />
-    <span class="text-white font-bold text-[8px] tracking-wide px-1 text-center leading-tight">STORE<br/>CLOSED</span>
-  </div>
-  <div v-else class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-emerald-500 rounded-full border border-white" title="Active" />
- </div>
- <div class="flex-1 min-w-0 py-1">
- <h3 class="text-sm font-bold text-[#171310] group-hover:text-[#FF5C1A] truncate tracking-tight mb-1 transition-colors">{{ vendor.storeName }}</h3>
- <p class="text-sm text-[#9C968E] font-bold truncate mb-2">{{ vendor.category || 'Restaurant' }}</p>
- <div class="flex items-center gap-3">
- <div class="flex items-center gap-1">
- <Star class="w-3.5 h-3.5 text-amber-500 fill-current" />
- <span class="text-[10px] font-bold text-[#171310]">{{ vendor.rating?.toFixed(1) || '5.0' }}</span>
- </div>
- <div class="flex items-center gap-1 text-[#9C968E]">
- <Timer class="w-3.5 h-3.5" />
- <span class="ff-mono text-[10px] font-bold">{{ vendor.preparationTime || '20' }} min</span>
- </div>
- </div>
- </div>
- </NuxtLink>
- </div>
- </section>
-
- <RedeemPointsModal 
-  :is-open="isRedeemModalOpen"
-  :current-points="user?.points || 0"
-  @close="isRedeemModalOpen = false"
-  @redeemed="handlePointsRedeemed"
- />
-
- </div>
 </template>
 
 <script setup lang="ts">
@@ -338,15 +243,30 @@ import { useAuth } from '@/composables/modules/auth';
 import { useLandingPage } from '@/composables/modules/landing';
 import { useUser } from '@/composables/modules/auth/user';
 import { useStudentOrders } from '@/composables/modules/orders';
-import { MapPin, Search, ArrowRight, ArrowUpRight, PackageSearch, Tag, Star, Clock, Heart, Users, UtensilsCrossed, ShoppingCart, ShieldCheck, Trophy, Flame, BarChart3, RefreshCw, WifiOff, MoonStar, Rocket, Lock, Package, Coins, Copy } from 'lucide-vue-next';
-import { onMounted, ref, computed } from 'vue';
+import {
+  ArrowRight,
+  ArrowUpRight,
+  BarChart3,
+  Copy,
+  Flame,
+  Lock,
+  MoonStar,
+  PackageSearch,
+  Phone,
+  RefreshCw,
+  Repeat,
+  Search,
+  Trophy,
+  Users,
+  UtensilsCrossed,
+  WifiOff,
+} from 'lucide-vue-next';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCustomToast } from '@/composables/core/useCustomToast';
 import RedeemPointsModal from '@/components/core/RedeemPointsModal.vue';
 
-definePageMeta({
- layout: 'student'
-})
+definePageMeta({ layout: 'student' });
 
 const router = useRouter();
 const { user } = useUser();
@@ -355,129 +275,896 @@ const { loading, onlineVendors, fetchError, fetchHomeData } = useLandingPage();
 const { orders: studentOrders, fetchOrders } = useStudentOrders();
 const { showToast } = useCustomToast();
 
-const activeOrdersWithPin = computed(() => {
-  const activeDeliveryStatuses = ['picked_up', 'in_transit', 'ready_for_pickup', 'confirmed', 'preparing', 'interception_in_progress'];
-  const excludedStatuses = ['awaiting_payment', 'awaiting_payment_confirmation', 'pending', 'negotiating', 'draft', 'delivered', 'cancelled', 'refunded', 'disputed', 'failed'];
+const REDEEM_MIN = 500;
 
-  return (studentOrders.value || [])
-    .filter((o: any) => {
-      if (!o.deliveryPin) return false;
-      const status = String(o.status || '').toLowerCase();
-      if (excludedStatuses.includes(status)) return false;
-      if (o.paymentStatus && ['pending', 'failed'].includes(String(o.paymentStatus).toLowerCase()) && status === 'awaiting_payment') return false;
-      return activeDeliveryStatuses.includes(status);
-    })
-    .slice(0, 1); // Aggressively show at most 1 primary active delivery card to prevent page stacking
+const searchQuery = ref('');
+const isRedeemModalOpen = ref(false);
+
+const STEPS = [
+  { key: 'placed', label: 'Placed' },
+  { key: 'picked_up', label: 'Picked up' },
+  { key: 'on_the_way', label: 'On the way' },
+  { key: 'arrived', label: 'Arrived' },
+];
+
+/** Positions a status on the four-step rail. Unknown statuses sit at step one. */
+const STEP_INDEX: Record<string, number> = {
+  confirmed: 0,
+  preparing: 0,
+  picked_up: 1,
+  ready_for_pickup: 1,
+  in_transit: 2,
+  on_the_way: 2,
+  interception_in_progress: 2,
+  arrived: 3,
+  delivered: 3,
+};
+
+const greeting = computed(() => {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Good morning,';
+  if (hour < 17) return 'Good afternoon,';
+  return 'Good evening,';
 });
 
-const awaitingPaymentOrders = computed(() => {
-  return (studentOrders.value || [])
-    .filter((o: any) => {
-      const status = String(o.status || '').toLowerCase();
-      return ['awaiting_payment', 'awaiting_payment_confirmation'].includes(status);
-    })
-    .slice(0, 1); // Show at most 1 payment prompt
+const activeOrder = computed(() => {
+  const live = ['picked_up', 'in_transit', 'ready_for_pickup', 'confirmed', 'preparing', 'interception_in_progress'];
+  return (studentOrders.value || []).find((o: any) => live.includes(String(o.status || '').toLowerCase()) && o.deliveryPin) || null;
 });
+
+const unpaidOrder = computed(() => {
+  const waiting = ['awaiting_payment', 'awaiting_payment_confirmation'];
+  return (studentOrders.value || []).find((o: any) => waiting.includes(String(o.status || '').toLowerCase())) || null;
+});
+
+const stepIndex = computed(() => {
+  const status = String(activeOrder.value?.status || '').toLowerCase();
+  return STEP_INDEX[status] ?? 0;
+});
+
+const runnerName = computed(() => {
+  const o: any = activeOrder.value;
+  return o?.errander?.user?.firstName || o?.erranderName || o?.errander?.firstName || '';
+});
+
+const runnerPhone = computed(() => {
+  const o: any = activeOrder.value;
+  return o?.errander?.user?.phone || o?.errander?.phone || '';
+});
+
+const eta = computed(() => {
+  const o: any = activeOrder.value;
+  return o?.estimatedDeliveryTime || o?.eta || '';
+});
+
+const statusLabel = (status?: string) => {
+  const map: Record<string, string> = {
+    confirmed: 'Order confirmed',
+    preparing: 'Vendor preparing',
+    picked_up: 'Runner has it',
+    ready_for_pickup: 'Ready for pickup',
+    in_transit: 'On the way to you',
+    interception_in_progress: 'Runner on the way',
+  };
+  return map[String(status || '').toLowerCase()] || 'In progress';
+};
+
+const rank = computed(() => ((user.value?.points || 0) > 1000 ? 1 : 42));
+
+const ringOffset = computed(() => {
+  const circumference = 2 * Math.PI * 18;
+  const ratio = Math.min(1, (user.value?.points || 0) / REDEEM_MIN);
+  return circumference * (1 - ratio);
+});
+
+const pointsToGo = computed(() => Math.max(0, REDEEM_MIN - (user.value?.points || 0)));
+
+const openVendors = computed(() => (onlineVendors.value || []).filter((v: any) => v?.isOpen !== false).slice(0, 6));
+const closedCount = computed(() => (onlineVendors.value || []).filter((v: any) => v?.isOpen === false).length);
+
+const isVideo = (src?: string) => Boolean(src && String(src).match(/\.(mp4|webm|ogg|mov)$/i));
 
 const copyPin = async (pin: string) => {
   if (!pin) return;
   try {
     await navigator.clipboard.writeText(pin);
-    showToast({ title: 'Copied!', message: 'Delivery PIN copied to clipboard.', toastType: 'success' });
-  } catch (err) {
-    showToast({ title: 'Failed', message: 'Could not copy PIN.', toastType: 'error' });
+    showToast({ title: 'Copied', message: 'Delivery PIN copied.', toastType: 'success' } as any);
+  } catch {
+    showToast({ title: 'Could not copy', message: 'Copy it by hand instead.', toastType: 'error' } as any);
   }
 };
-
-onMounted(async () => {
-  await Promise.allSettled([fetchProfile(), fetchOrders()]);
-});
-
-const searchQuery = ref('');
-const isRedeemModalOpen = ref(false);
-
-const handlePointsRedeemed = (newPoints: number) => {
-  if (user.value) {
-    user.value.points = newPoints;
-  }
-};
-
-const quickStats = computed(() => [
- { 
- label: 'Rewards', 
- value: `${user.value?.points || 0}`, 
- suffix: 'PTS',
- icon: Trophy, 
- iconColor: 'text-amber-500',
- bgColor: 'bg-amber-50',
- link: '/dashboard/quests'
- },
- { 
- label: 'Streak', 
- value: `${user.value?.streakCount || 0}`, 
- suffix: 'DAYS',
- icon: Flame, 
- iconColor: 'text-orange-500',
- bgColor: 'bg-orange-50'
- },
- { 
- label: 'Rank', 
- value: `#${(user.value?.points || 0) > 1000 ? '1' : '42'}`, 
- icon: BarChart3, 
- iconColor: 'text-blue-500',
- bgColor: 'bg-blue-50',
- link: '/dashboard/leaderboard'
- },
- { 
- label: 'Status', 
- value: user.value?.isPro ? 'Pro' : 'Standard', 
- icon: ShieldCheck, 
- iconColor: user.value?.isPro ? 'text-white' : 'text-gray-400',
- bgColor: user.value?.isPro ? 'bg-[#FF5C1A]' : 'bg-gray-50'
- }
-])
 
 const handleSearch = () => {
- if (searchQuery.value.trim()) {
- router.push({ path: '/search', query: { q: searchQuery.value } });
- }
+  if (searchQuery.value.trim()) {
+    router.push({ path: '/search', query: { q: searchQuery.value } });
+  }
+};
+
+const handlePointsRedeemed = (newPoints: number) => {
+  if (user.value) user.value.points = newPoints;
 };
 
 onMounted(async () => {
- await fetchHomeData();
+  await Promise.allSettled([fetchProfile(), fetchOrders(), fetchHomeData()]);
 });
 
 useHead({
- title: 'Dashboard - Errandr',
- meta: [
- { name: 'description', content: 'Campus life, elevated. Manage your orders, rewards, and meal plans.' },
- ],
+  title: 'Home - Erranders',
+  meta: [{ name: 'description', content: 'Order food, run errands, swap what you do not use — on campus.' }],
 });
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap');
+/*
+ * One page, two surfaces: warm off-white by day, near-black by night. Every colour below reads
+ * from a variable so dark mode is a handful of overrides rather than a second set of classes.
+ */
+.home {
+  --accent: #f26a2e;
+  --accent-ink: #ffffff;
+  --ink: #141110;
+  --muted: #6b655d;
+  --faint: #97908a;
+  --line: #e8e2d9;
+  --surface: #ffffff;
+  --page: #faf8f5;
+  --dark: #16120f;
+  --radius: 18px;
 
-.ff-display {
- font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
-}
-.ff-mono {
- font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding-bottom: 96px;
+  font-size: 15px;
+
+  /* Page tint bleeds past the container padding without changing layout, so dark mode has a
+     dark page rather than dark cards on a white sheet. */
+  background: var(--page);
+  box-shadow: 0 0 0 100vmax var(--page);
+  clip-path: inset(0 -100vmax);
 }
 
-.animate-fade-in {
- animation: fadeIn 0.4s ease-out;
-}
-@keyframes fadeIn {
- from { opacity: 0; transform: translateY(10px); }
- to { opacity: 1; transform: translateY(0); }
+@media (prefers-color-scheme: dark) {
+  .home {
+    --ink: #f6f2ec;
+    --muted: #b3aca3;
+    --faint: #8b847c;
+    --line: #2c2721;
+    --surface: #1b1713;
+    --page: #12100e;
+    --dark: #0c0a09;
+    --accent-ink: #171310;
+  }
 }
 
-.animate-float {
- animation: float 3s ease-in-out infinite;
+/* ─── Header ─── */
+.home-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 8px;
 }
-@keyframes float {
- 0%, 100% { transform: translateY(0px); }
- 50% { transform: translateY(-6px); }
+
+.greet {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 0;
+}
+
+.name {
+  font-size: clamp(28px, 6vw, 40px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  margin: 2px 0 0;
+  color: var(--ink);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 650;
+  text-decoration: none;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.chip:hover {
+  border-color: var(--accent);
+}
+
+.chip-accent {
+  border-color: transparent;
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.chip-icon {
+  width: 15px;
+  height: 15px;
+  opacity: 0.85;
+}
+
+/* ─── Live order ─── */
+.hero {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+  .hero {
+    grid-template-columns: minmax(0, 1.55fr) minmax(240px, 0.75fr);
+    align-items: stretch;
+  }
+}
+
+.live {
+  background: var(--dark);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.live-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.live-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: #4ade80;
+  box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.18);
+}
+
+.live-status {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.live-eta {
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.live-title {
+  margin: 0;
+  font-size: clamp(22px, 4vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.live-sub {
+  margin: 0;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.steps {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin: 4px 0 0;
+  padding: 0;
+}
+
+.step {
+  position: relative;
+  padding-top: 18px;
+  font-size: 12.5px;
+  font-weight: 650;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.step::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.step:first-child::before {
+  border-radius: 999px 0 0 999px;
+}
+
+.step:last-child::before {
+  border-radius: 0 999px 999px 0;
+}
+
+.step.done::before,
+.step.current::before {
+  background: var(--accent);
+}
+
+.step-dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.step.done .step-dot {
+  background: var(--accent);
+}
+
+.step.current .step-dot {
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(242, 106, 46, 0.22);
+}
+
+.step.done,
+.step.current {
+  color: #fff;
+}
+
+.live-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+/* ─── Ticket ─── */
+.ticket {
+  position: relative;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  /* Notched edges read as a torn ticket stub. */
+  -webkit-mask:
+    radial-gradient(14px at 0 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(14px at 100% 50%, transparent 98%, #000) right / 51% 100% no-repeat;
+  mask:
+    radial-gradient(14px at 0 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(14px at 100% 50%, transparent 98%, #000) right / 51% 100% no-repeat;
+}
+
+.ticket-label {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 650;
+  opacity: 0.9;
+}
+
+.ticket-pin {
+  margin: 0;
+  font-size: clamp(40px, 9vw, 56px);
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.perforation {
+  border-top: 2px dashed rgba(0, 0, 0, 0.28);
+  opacity: 0.6;
+  margin: 2px 0;
+}
+
+.btn-ticket {
+  background: rgba(0, 0, 0, 0.82);
+  color: #fff;
+  border: 0;
+}
+
+/* ─── Buttons ─── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-accent {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.btn-dark {
+  background: var(--ink);
+  color: var(--page);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: inherit;
+  border-color: currentColor;
+  opacity: 0.85;
+}
+
+.live .btn-ghost {
+  border-color: rgba(255, 255, 255, 0.32);
+  opacity: 1;
+}
+
+/* ─── Idle hero ─── */
+.hero-idle {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px;
+}
+
+.ask {
+  margin: 0 0 14px;
+  font-size: clamp(22px, 4vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.ask-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--page);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 6px 6px 6px 14px;
+}
+
+.ask-form:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(242, 106, 46, 0.16);
+}
+
+.ask-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--faint);
+  flex: none;
+}
+
+.ask-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 550;
+  padding: 10px 0;
+  outline: none;
+}
+
+.ask-input::placeholder {
+  color: var(--faint);
+}
+
+.ask-go {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 0;
+  background: var(--accent);
+  color: var(--accent-ink);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.quick-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.quick-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ─── Payment prompt ─── */
+.pay {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  border: 1px solid #f5c9a8;
+  background: #fff4ec;
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .pay {
+    background: rgba(242, 106, 46, 0.1);
+    border-color: rgba(242, 106, 46, 0.36);
+  }
+}
+
+.pay-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.pay-sub {
+  margin: 2px 0 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* ─── Bento ─── */
+.bento {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 760px) {
+  .bento {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .tile-errand {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .tile-barter {
+    grid-column: span 2;
+  }
+
+  .tile-points {
+    grid-column: span 2;
+  }
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.tile:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+}
+
+.tile-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tile-tag {
+  font-size: 13px;
+  font-weight: 650;
+  opacity: 0.75;
+}
+
+.tile-title {
+  margin: 0;
+  font-size: clamp(19px, 3vw, 24px);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.tile-body {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.5;
+  opacity: 0.72;
+}
+
+.tile-cta {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14.5px;
+  font-weight: 750;
+  color: var(--accent);
+}
+
+.tile-errand {
+  background: var(--dark);
+  color: #fff;
+  border-color: var(--dark);
+  justify-content: space-between;
+  min-height: 190px;
+}
+
+.tile-errand .tile-cta {
+  color: var(--accent);
+}
+
+.tile-errand:hover {
+  border-color: var(--accent);
+}
+
+.tile-points {
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+}
+
+.tile-title.sm {
+  font-size: 16px;
+}
+
+.tile-body.sm {
+  font-size: 13.5px;
+}
+
+/* Progress ring for the points tile. */
+.ring {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  flex: none;
+}
+
+.ring-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.ring-track,
+.ring-fill {
+  fill: none;
+  stroke-width: 4;
+}
+
+.ring-track {
+  stroke: var(--line);
+}
+
+.ring-fill {
+  stroke: var(--accent);
+  stroke-linecap: round;
+  stroke-dasharray: 113;
+  transition: stroke-dashoffset 0.4s ease;
+}
+
+.ring-text {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+/* ─── Open now ─── */
+.open-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  margin: 0;
+  font-size: clamp(19px, 3vw, 22px);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+.section-link {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.store-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 560px) {
+  .store-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .store-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.store {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s ease;
+}
+
+.store:hover {
+  border-color: var(--accent);
+}
+
+.store-media {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex: none;
+  background: var(--page);
+}
+
+.store-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.store-body {
+  min-width: 0;
+}
+
+.store-name {
+  margin: 0;
+  font-size: 15.5px;
+  font-weight: 750;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.store-meta {
+  margin: 3px 0 0;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.store-skel {
+  height: 88px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+.closed-line {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px dashed var(--line);
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.closed-line:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.quiet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 32px 20px;
+  border-radius: var(--radius);
+  border: 1px dashed var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  text-align: center;
+}
+
+.quiet p {
+  margin: 0;
+  font-size: 14.5px;
+}
+
+.offline {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+/* Visible keyboard focus everywhere, including the ticket and tiles. */
+.home :where(a, button, input):focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home *,
+  .home *::before,
+  .home *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 </style>

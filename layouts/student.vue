@@ -7,7 +7,7 @@
     <CallOverlay />
 
     <!-- Desktop Sidebar: ID Badge -->
-    <aside class="hidden lg:flex flex-col w-72 h-[calc(100vh-2rem)] fixed left-4 top-4 bottom-4 z-50">
+    <aside class="side-rail hidden lg:flex flex-col w-[84px] h-[calc(100vh-2rem)] fixed left-4 top-4 bottom-4 z-50">
       <div class="h-full bg-[#FAF8F5] rounded-2xl flex flex-col overflow-hidden border border-[#E7E2DA] relative">
 
         <!-- Brand row -->
@@ -22,7 +22,7 @@
         </div>
 
         <!-- ID Badge card -->
-        <div class="mx-4 mb-4 rounded-xl bg-white border border-[#E7E2DA] p-4">
+        <div class="rail-hide mx-4 mb-4 rounded-xl bg-white border border-[#E7E2DA] p-4">
           <div class="flex items-center gap-3">
             <div class="w-11 h-11 rounded-lg bg-[#171310] text-white flex items-center justify-center font-bold text-base uppercase shrink-0">
               {{ userInitials }}
@@ -37,7 +37,7 @@
           <button
             type="button"
             @click="openPicker"
-            class="w-full flex items-center justify-between gap-2 p-2.5 rounded-lg bg-[#FAF8F5] border border-[#E7E2DA] hover:border-[#FF5C1A]/40 transition-all text-left my-3 group"
+            class="rail-hide w-full flex items-center justify-between gap-2 p-2.5 rounded-lg bg-[#FAF8F5] border border-[#E7E2DA] hover:border-[#FF5C1A]/40 transition-all text-left my-3 group"
           >
             <div class="flex items-center gap-2 min-w-0">
               <MapPin class="w-3.5 h-3.5 text-[#FF5C1A] shrink-0" />
@@ -47,14 +47,14 @@
           </button>
 
           <!-- Perforated tear line -->
-          <div class="flex items-center gap-1.5 my-3">
+          <div class="rail-hide flex items-center gap-1.5 my-3">
             <span class="w-1.5 h-1.5 rounded-full bg-[#FAF8F5] border border-[#E7E2DA] shrink-0"></span>
             <div class="flex-1 border-t border-dashed border-[#D9D2C7]"></div>
             <span class="w-1.5 h-1.5 rounded-full bg-[#FAF8F5] border border-[#E7E2DA] shrink-0"></span>
           </div>
 
           <!-- Mode switcher: dispatch stamps -->
-          <div class="grid grid-cols-2 gap-2">
+          <div class="rail-hide grid grid-cols-2 gap-2">
             <button
               @click="setMode('errands')"
               class="py-2 rounded-lg text-[11px] font-bold uppercase tracking-wide border transition-all flex items-center justify-center gap-1.5"
@@ -81,6 +81,8 @@
               v-for="item in activeNavItems"
               :key="item.path"
               :to="item.path"
+              :title="item.label"
+              :aria-label="item.label"
               class="flex items-center gap-3 pl-3.5 pr-3 py-3 rounded-lg text-[13px] font-bold transition-all relative"
               :class="isActive(item.path)
                 ? 'bg-white text-[#171310] shadow-[0_1px_3px_rgba(23,19,16,0.06)]'
@@ -91,8 +93,8 @@
                 :class="isActive(item.path) ? 'bg-[#FF5C1A]' : 'bg-transparent'"
               ></span>
               <component :is="item.icon" class="w-[18px] h-[18px] shrink-0" :class="isActive(item.path) ? 'text-[#FF5C1A]' : ''"></component>
-              <span class="flex-1">{{ item.label }}</span>
-              <span class="ff-mono text-[9px] font-bold  opacity-40">{{ item.code }}</span>
+              <span class="rail-hide flex-1">{{ item.label }}</span>
+              <span class="rail-hide ff-mono text-[9px] font-bold  opacity-40">{{ item.code }}</span>
             </NuxtLink>
           </TransitionGroup>
         </nav>
@@ -103,6 +105,8 @@
             v-for="item in sharedNavItems"
             :key="item.path"
             :to="item.path"
+            :title="item.label"
+            :aria-label="item.label"
             class="flex items-center gap-3 pl-3.5 pr-3 py-3 rounded-lg text-[13px] font-bold transition-all relative"
             :class="isActive(item.path)
               ? 'bg-white text-[#171310] shadow-[0_1px_3px_rgba(23,19,16,0.06)]'
@@ -113,8 +117,8 @@
               :class="isActive(item.path) ? 'bg-[#FF5C1A]' : 'bg-transparent'"
             ></span>
             <component :is="item.icon" class="w-[18px] h-[18px] shrink-0" :class="isActive(item.path) ? 'text-[#FF5C1A]' : ''"></component>
-            <span class="flex-1">{{ item.label }}</span>
-            <span class="ff-mono text-[9px] font-bold  opacity-40">{{ item.code }}</span>
+            <span class="rail-hide flex-1">{{ item.label }}</span>
+            <span class="rail-hide ff-mono text-[9px] font-bold  opacity-40">{{ item.code }}</span>
           </NuxtLink>
         </div>
       </div>
@@ -320,7 +324,7 @@
     </Teleport>
 
     <!-- Main Content -->
-    <main class="dash flex-1 w-full lg:w-auto lg:ml-72 transition-all duration-700 py-2.5 px-0 sm:p-4 lg:p-10 pb-16 lg:pb-32 overflow-x-hidden">
+    <main class="dash flex-1 w-full lg:w-auto lg:ml-[108px] transition-all duration-700 py-2.5 px-0 sm:p-4 lg:p-10 pb-28 lg:pb-32 overflow-x-hidden">
 
       <!-- Desktop manifest header -->
       <div v-if="!route.path.startsWith('/vendors')" class="hidden lg:block mb-8 animate-fade-in">
@@ -329,15 +333,10 @@
             <button v-if="!isDashboard" @click="router.back()" class="w-10 h-10 rounded-lg bg-[#FAF8F5] flex items-center justify-center border border-[#E7E2DA] hover:bg-[#171310] hover:text-white hover:border-[#171310] transition-all group">
               <ArrowLeft class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform"></ArrowLeft>
             </button>
-            <div v-if="isDashboard">
-              <div class="flex items-center gap-2 mb-1.5">
-                <ShieldCheck class="w-3.5 h-3.5 text-[#FF5C1A]" />
-                <span class="ff-mono text-[10px] font-bold tracking-[0.15em] uppercase text-[#9C968E]">{{ user?.isPro ? 'Pro Member' : 'Campus Member' }}</span>
-              </div>
-              <h1 class="ff-display text-[26px] font-bold text-[#171310] tracking-tight leading-none">
-                Welcome back, <span class="text-[#FF5C1A]">{{ user?.firstName || 'Student' }}.</span>
-              </h1>
-              <p class="text-[13px] font-bold text-[#9C968E] mt-1.5">Here's your campus activity at a glance</p>
+            <!-- The page carries its own greeting; this bar only holds the controls. -->
+            <div v-if="isDashboard" class="flex items-center gap-2">
+              <ShieldCheck class="w-4 h-4 text-[#FF5C1A]" />
+              <span class="text-[13px] font-bold text-[#6B655D]">{{ user?.isPro ? 'Campus Prime member' : 'Campus member' }}</span>
             </div>
             <div v-else>
               <div class="flex items-center gap-2 mb-1.5">
@@ -413,6 +412,23 @@
       @close="handleOrderReviewClosed"
       @reviewed="handleOrderReviewed"
     />
+    <!-- Mobile tab bar: the five things a student does on a phone, within thumb reach. -->
+    <nav class="lg:hidden fixed bottom-0 inset-x-0 z-40 border-t border-[#EDE9E3] bg-white/95 backdrop-blur-xl pb-[env(safe-area-inset-bottom)]" aria-label="Primary">
+      <ul class="grid grid-cols-5">
+        <li v-for="tab in ['/dashboard', '/dashboard/search', '/dashboard/orders', '/dashboard/wallet', '/dashboard/profile']" :key="tab">
+          <NuxtLink
+            :to="tab"
+            class="flex flex-col items-center gap-1 py-2.5 text-[11px] font-bold transition-colors"
+            :class="isActive(tab) ? 'text-[#f26a2e]' : 'text-[#9C968E]'"
+            :aria-current="isActive(tab) ? 'page' : undefined"
+          >
+            <component :is="tabIcon(tab)" class="w-5 h-5" aria-hidden="true" />
+            <span>{{ tabLabel(tab) }}</span>
+          </NuxtLink>
+        </li>
+      </ul>
+    </nav>
+
     <CoreWhatsAppWidget />
   </div>
 </template>
@@ -498,8 +514,9 @@ const errandsNavItems = [
   { path: '/dashboard', label: 'Home', icon: Home, code: 'HM' },
   { path: '/dashboard/search', label: 'Search', icon: Search, code: 'SR' },
   { path: '/dashboard/orders', label: 'Orders', icon: ShoppingBag, code: 'OR' },
-  { path: '/dashboard/meal-desk', label: 'Meal Desk', icon: ChefHat, code: 'MD' },
-  { path: '/dashboard/recurring-orders', label: 'Meal Autopilot', icon: Repeat, code: 'RO' },
+  // Meal Desk, Meal Autopilot and Meal Planner were three entries for one job. Meals is the
+  // entry point; Autopilot is reachable from inside it.
+  { path: '/dashboard/meal-desk', label: 'Meals', icon: ChefHat, code: 'ML' },
   { path: '/dashboard/group-orders', label: 'Group Orders', icon: Users, code: 'GO' },
   { path: '/dashboard/quests', label: 'Campus Quests', icon: Target, code: 'CQ' },
 ]
@@ -577,6 +594,17 @@ const isActive = (path: string) => {
   if (path === '/dashboard') return route.path === '/dashboard' || route.path === '/';
   return route.path.startsWith(path);
 }
+
+// Mobile tab bar destinations. Kept beside isActive so the rail, sidebar and tabs agree.
+const TAB_META: Record<string, { label: string; icon: any }> = {
+  '/dashboard': { label: 'Home', icon: Home },
+  '/dashboard/search': { label: 'Search', icon: Search },
+  '/dashboard/orders': { label: 'Orders', icon: ShoppingBag },
+  '/dashboard/wallet': { label: 'Wallet', icon: Wallet },
+  '/dashboard/profile': { label: 'Profile', icon: User },
+};
+const tabLabel = (path: string) => TAB_META[path]?.label || '';
+const tabIcon = (path: string) => TAB_META[path]?.icon || Home;
 
 const confirmLogout = async () => {
   await logOut()
