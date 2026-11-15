@@ -435,12 +435,12 @@
 
 
             <!-- MOBILE: Order Summary -->
-            <div class="lg:hidden bg-white rounded-none sm:rounded-2xl border-y sm:border-x border-gray-100 overflow-hidden">
-              <div class="px-4 sm:px-5 py-4 bg-gray-50/50 border-b border-gray-100 flex items-center gap-3">
-                <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center border border-gray-25">
-                  <Receipt class="w-4 h-4 text-gray-700" />
+            <div class="checkout-card lg:hidden">
+              <div class="card-head">
+                <div class="card-icon">
+                  <Receipt class="w-4 h-4" aria-hidden="true" />
                 </div>
-                <h3 class="text-sm font-bold text-gray-900 tracking-tight">Order Summary</h3>
+                <h3 class="card-title">Order summary</h3>
               </div>
               <div class="p-4 sm:p-5 space-y-3">
                 <div class="flex justify-between items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
@@ -494,13 +494,13 @@
                     v-model="promoCodeInput"
                     @input="handlePromoInput"
                     type="text"
-                    placeholder="Enter Promo Code"
-                    class="flex-1 px-4 py-3 bg-white border border-gray-25 focus:border-gray-25focus:ring-1 focus:ring-gray-900 rounded-xl text-sm font-bold text-gray-900 placeholder-gray-400 outline-none uppercase transition-all"
+                    placeholder="Promo code"
+                    class="promo-input"
                   />
                   <button 
                     @click="validatePromo"
                     :disabled="isValidatingPromo || !promoCodeInput"
-                    class="px-5 py-3 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-black disabled:opacity-50 transition-colors active:scale-95"
+                    class="promo-apply"
                   >
                     <Loader2 v-if="isValidatingPromo" class="w-3 h-3 animate-spin" />
                     <span v-else>Apply</span>
@@ -571,7 +571,7 @@
                 <button @click="goBack" class="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-xl text-sm font-bold transition-all border border-gray-50 active:scale-95">Edit Selection</button>
               </div>
               <div class="space-y-6">
-                <div v-for="vendorId in cartStore.allVendorIds.value" :key="vendorId" class="relative group bg-white/70 backdrop-blur-xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2rem] p-6 transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
+                <div v-for="vendorId in cartStore.allVendorIds.value" :key="vendorId" class="vendor-card relative group">
                   <!-- Vendor Header -->
                   <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100/50">
                     <div class="flex items-center gap-4">
@@ -688,11 +688,11 @@
               <!-- Premium Order Summary -->
               <div class="bg-white rounded-[2rem] border border-gray-100 overflow-hidden relative">
 
-                <div class="px-6 py-5 border-b border-gray-100 relative z-10 flex items-center gap-3 bg-gray-50/50">
-                  <div class="w-8 h-8 rounded-full bg-gray-200/50 flex items-center justify-center backdrop-blur-sm">
-                    <Receipt class="w-4 h-4 text-gray-700" />
+                <div class="card-head">
+                  <div class="card-icon">
+                    <Receipt class="w-4 h-4" aria-hidden="true" />
                   </div>
-                  <h3 class="text-base font-bold text-gray-900 tracking-tight">Order Summary</h3>
+                  <h3 class="card-title">Order summary</h3>
                 </div>
                 
                 <div class="p-6 space-y-4 relative z-10">
@@ -2715,5 +2715,96 @@ const preCreateOrders = async (): Promise<string[]> => {
   font-size: 13.5px;
   line-height: 1.45;
   color: var(--mute);
+}
+
+/* CHECKOUT CARDS — shared shell, so no panel is a translucent tint over the page. */
+.checkout-card {
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  overflow: hidden;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--card) 92%, var(--ink));
+}
+
+.card-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  background: var(--orsoft);
+  color: var(--accent);
+  flex: none;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 15.5px;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.vendor-card {
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  padding: 20px;
+  transition: border-color 0.15s ease;
+}
+
+.vendor-card:hover {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+}
+
+.promo-input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  outline: none;
+}
+
+.promo-input::placeholder {
+  color: var(--mute);
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 600;
+}
+
+.promo-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(242, 106, 46, 0.16);
+}
+
+.promo-apply {
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 15px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.promo-apply:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 </style>
