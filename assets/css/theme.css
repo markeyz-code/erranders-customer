@@ -102,3 +102,47 @@ img {
     scroll-behavior: auto !important;
   }
 }
+
+/* ─── Tailwind utility bridge ───
+   Older components paint with utilities (bg-white, text-gray-900) rather than tokens. In dark mode
+   those literals would stay bright, so they are mapped once here instead of being hunted down in
+   three thousand lines of markup. Light mode is untouched. */
+html.dark .bg-white,
+html.dark .bg-gray-50,
+html.dark .bg-\[\#FAF8F5\],
+html.dark .bg-\[\#FDFCFB\] {
+  background-color: var(--card) !important;
+}
+
+html.dark body,
+html.dark .bg-gray-100 {
+  background-color: var(--bg);
+}
+
+html.dark .text-gray-900,
+html.dark .text-gray-950,
+html.dark .text-\[\#171310\],
+html.dark .text-black {
+  color: var(--ink) !important;
+}
+
+html.dark .text-gray-400,
+html.dark .text-gray-500,
+html.dark .text-gray-600,
+html.dark .text-\[\#9C968E\],
+html.dark .text-\[\#6B655D\] {
+  color: var(--mute) !important;
+}
+
+html.dark .border-gray-50,
+html.dark .border-gray-100,
+html.dark .border-gray-200,
+html.dark .border-\[\#E7E2DA\],
+html.dark .border-\[\#EDE9E3\] {
+  border-color: var(--line) !important;
+}
+
+html.dark .divide-gray-50 > :not([hidden]) ~ :not([hidden]),
+html.dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--line) !important;
+}
