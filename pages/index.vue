@@ -930,15 +930,19 @@ useHead({
   gap: 36px;
   max-width: 1120px;
   margin: 0 auto;
-  padding: 44px 20px 20px;
+  padding: 32px 20px 32px;
   min-width: 0;
+  /* The hero owns the first screen: it fills the viewport under the 84px bar. */
+  min-height: calc(100vh - 84px);
+  min-height: calc(100svh - 84px);
+  align-content: center;
 }
 
 @media (min-width: 960px) {
   .hero {
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-    align-items: start;
-    padding: 64px 20px 36px;
+    align-items: center;
+    padding: 24px 20px 32px;
   }
 }
 
@@ -1311,7 +1315,7 @@ useHead({
 .closer {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 44px 20px 0;
+  padding: 56px 20px 0;
 }
 
 .sec-head {
