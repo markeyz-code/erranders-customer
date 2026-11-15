@@ -13,6 +13,9 @@
  */
 
 :root {
+  /* Form controls and scrollbars follow the mode. */
+  color-scheme: light dark;
+
   /* Surfaces */
   --bg: #f5f4f0;
   --card: #ffffff;

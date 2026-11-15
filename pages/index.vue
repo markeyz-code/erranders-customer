@@ -33,66 +33,122 @@
 
     <main>
       <!-- Hero: one sentence, one field, one object that explains the product. -->
-      <section class="hero">
+      <section
+        class="hero"
+        @mouseenter="pausedByPointer = true"
+        @mouseleave="pausedByPointer = false"
+        @focusin="pausedByFocus = true"
+        @focusout="pausedByFocus = false"
+        @touchstart.passive="onTouchStart"
+        @touchend.passive="onTouchEnd"
+      >
         <div class="hero-copy">
-          <h1>
-            <span class="line-fixed">Don't walk down.</span>
-            <span class="line-turn" aria-live="polite">{{ rotatingLine }}</span>
-          </h1>
-          <p class="hero-sub">
-            Food, laundry, a document, a mattress you no longer need. Someone on campus handles it.
-          </p>
-
-          <div class="switch" role="tablist" aria-label="What do you need">
-            <button type="button" role="tab" :aria-selected="mode === 'food'" class="switch-btn" :class="{ on: mode === 'food' }" @click="mode = 'food'">Food</button>
-            <button type="button" role="tab" :aria-selected="mode === 'errand'" class="switch-btn" :class="{ on: mode === 'errand' }" @click="mode = 'errand'">Errand</button>
+          <!-- Tabs. The line under the active one fills as the timer runs. -->
+          <div class="tabs" role="tablist" aria-label="Services" @keydown="onTabKey">
+            <button
+              v-for="(sl, i) in slides"
+              :key="sl.key"
+              :id="`tab-${sl.key}`"
+              type="button"
+              role="tab"
+              class="tab"
+              :class="{ on: i === index }"
+              :aria-selected="i === index"
+              :aria-controls="`panel-${sl.key}`"
+              :tabindex="i === index ? 0 : -1"
+              @click="select(i)"
+            >
+              {{ sl.tab }}
+              <span
+                v-if="i === index"
+                :key="`line-${index}-${runId}`"
+                class="tab-line"
+                :class="{ running: running }"
+                aria-hidden="true"
+              />
+            </button>
           </div>
 
-          <form class="hero-field" @submit.prevent="go">
-            <input
-              v-model="q"
-              type="search"
-              class="hero-input"
-              :placeholder="mode === 'food' ? 'Jollof, suya, a cold drink' : 'Laundry, printing, a package'"
-              :aria-label="mode === 'food' ? 'Search food' : 'Describe your errand'"
-            />
-            <button type="submit" class="hero-go">
-              {{ mode === 'food' ? 'Order food' : 'Send errand' }}
-              <ArrowRight class="w-4 h-4" aria-hidden="true" />
-            </button>
-          </form>
+          <!-- Fixed height so the page does not jump between slides. -->
+          <div
+            :id="`panel-${current.key}`"
+            class="panel"
+            role="tabpanel"
+            :aria-labelledby="`tab-${current.key}`"
+            :aria-live="running ? 'off' : 'polite'"
+          >
+            <div :key="`c-${index}-${changeId}`" class="swap">
+              <h1 class="headline">
+                <span class="line">{{ current.line1 }}</span>
+                <span class="line">{{ current.line2 }}</span>
+              </h1>
 
-          <p class="live">
-            <span class="live-dot" aria-hidden="true"></span>
-            {{ openCount }} {{ openCount === 1 ? 'store' : 'stores' }} open now
-          </p>
+              <p class="sub">{{ current.sub }}</p>
+
+              <form v-if="current.placeholder" class="field" @submit.prevent="go">
+                <input
+                  v-model="q"
+                  type="search"
+                  class="field-input"
+                  :placeholder="current.placeholder"
+                  :aria-label="current.placeholder"
+                />
+                <button type="submit" class="field-go">{{ current.button }}</button>
+              </form>
+
+              <NuxtLink v-else :to="current.route" class="field-go solo">{{ current.button }}</NuxtLink>
+
+              <p class="hint">
+                <span v-if="current.key === 'food'" class="hint-dot" aria-hidden="true"></span>
+                {{ hintText }}
+              </p>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button
+              type="button"
+              class="play-btn"
+              :aria-label="running ? 'Pause slides' : 'Play slides'"
+              @click="toggleRunning"
+            >
+              <span v-if="running" class="icon">II</span>
+              <span v-else class="icon">▶</span>
+              {{ running ? 'Pause' : 'Play' }}
+            </button>
+          </div>
         </div>
 
-        <!-- The ticket. One memorable thing; everything else stays quiet. -->
-        <div class="ticket-wrap" aria-hidden="true">
-          <div class="ticket">
+        <!-- The ticket. Same object each slide, different contents. -->
+        <div class="ticket-wrap">
+          <div :key="`t-${index}-${changeId}`" class="ticket" aria-hidden="true">
             <div class="ticket-top">
-              <p class="ticket-status">On the way</p>
-              <p class="ticket-item">Jollof and chicken</p>
-              <p class="ticket-vendor">Waris Kitchen</p>
+              <p class="ticket-status">{{ current.ticket.status }}</p>
+              <p class="ticket-item">{{ current.ticket.title }}</p>
+              <p class="ticket-vendor">{{ current.ticket.sub }}</p>
 
               <div class="progress">
-                <span class="prog done"></span>
-                <span class="prog done"></span>
-                <span class="prog now"></span>
-                <span class="prog"></span>
+                <span
+                  v-for="(step, i) in current.ticket.steps"
+                  :key="step"
+                  class="prog"
+                  :class="{ done: i <= current.ticket.at }"
+                />
               </div>
               <div class="progress-labels">
-                <span>Placed</span><span>Picked up</span><span>On the way</span><span>Arrived</span>
+                <span v-for="step in current.ticket.steps" :key="step">{{ step }}</span>
               </div>
             </div>
 
             <div class="ticket-stub">
-              <p class="stub-label">Delivery PIN</p>
-              <p class="stub-pin">4 8 2 1</p>
+              <p class="stub-label">{{ current.ticket.stubLabel }}</p>
+              <p class="stub-value">{{ current.ticket.stubValue }}</p>
               <div class="perforation"></div>
-              <p class="stub-note">Give it to your rider when they arrive</p>
+              <p class="stub-note">{{ current.ticket.stubNote }}</p>
             </div>
+
+            <span class="notch left" aria-hidden="true" />
+            <span class="notch right" aria-hidden="true" />
           </div>
         </div>
       </section>
@@ -264,7 +320,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { ArrowRight, ArrowUpRight, Moon, Star, Sun } from 'lucide-vue-next';
 import { useLandingPage } from '@/composables/modules/landing';
 import { useUser } from '@/composables/modules/auth/user';
@@ -274,20 +330,215 @@ definePageMeta({ layout: false });
 const { loading, onlineVendors, fetchHomeData } = useLandingPage();
 const { isLoggedIn } = useUser();
 
-const mode = ref<'food' | 'errand'>('food');
+const AUTO_MS = 6500;
 
-// The claim stays fixed; only the verb changes, so the page never loses its point.
-const LINES = ['Errand it.', 'Order it.', 'Swap it.', 'Plan it.'];
-const rotatingLine = ref(LINES[0]);
-let lineTimer: ReturnType<typeof setInterval> | null = null;
+type Ticket = {
+  status: string;
+  title: string;
+  sub: string;
+  steps: string[];
+  at: number;
+  stubLabel: string;
+  stubValue: string;
+  stubNote: string;
+};
 
-const startLines = () => {
-  if (typeof window === 'undefined') return;
-  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
-  lineTimer = setInterval(() => {
-    const i = LINES.indexOf(rotatingLine.value);
-    rotatingLine.value = LINES[(i + 1) % LINES.length];
-  }, 3200);
+type Slide = {
+  key: string;
+  tab: string;
+  line1: string;
+  line2: string;
+  sub: string;
+  placeholder: string | null;
+  button: string;
+  route: string;
+  hint: string;
+  ticket: Ticket;
+};
+
+const slides: Slide[] = [
+  {
+    key: 'food',
+    tab: 'Food',
+    line1: "Don't walk down.",
+    line2: 'Order it.',
+    sub: 'Hot food from campus vendors, brought to your hostel door.',
+    placeholder: 'Jollof, suya, a cold drink',
+    button: 'Order food',
+    route: '/vendors',
+    hint: '',
+    ticket: {
+      status: 'On the way',
+      title: 'Jollof and chicken',
+      sub: 'Waris Kitchen',
+      steps: ['Placed', 'Picked up', 'On the way', 'Arrived'],
+      at: 2,
+      stubLabel: 'Delivery PIN',
+      stubValue: '3 8 8 8',
+      stubNote: 'Give it to your rider when they arrive',
+    },
+  },
+  {
+    key: 'errand',
+    tab: 'Errand',
+    line1: "Can't go?",
+    line2: 'Errand it.',
+    sub: 'Laundry, documents, groceries. A student runner picks it up. You set the fee.',
+    placeholder: 'Pick up my laundry from Block B',
+    button: 'Send errand',
+    route: '/errands/custom',
+    hint: 'Your fee is held until a runner accepts',
+    ticket: {
+      status: 'Runner accepted',
+      title: 'Laundry pickup, Block B',
+      sub: 'Chidi accepted your fee',
+      steps: ['Posted', 'Accepted', 'Picked up', 'Done'],
+      at: 1,
+      stubLabel: 'Delivery PIN',
+      stubValue: '5 2 1 4',
+      stubNote: 'Give it to your runner when they arrive',
+    },
+  },
+  {
+    key: 'meals',
+    tab: 'Meals',
+    line1: 'Hungry later?',
+    line2: 'Plan it.',
+    sub: 'Pick your meals for the week once. We place each order and deliver it on time.',
+    placeholder: null,
+    button: 'Set up Meal Autopilot',
+    route: '/dashboard/recurring-orders',
+    hint: 'Orders are placed and delivered on schedule',
+    ticket: {
+      status: 'Scheduled',
+      title: 'Jollof rice and chicken',
+      sub: 'Waris Kitchen',
+      steps: ['Planned', 'Ordered', 'On the way', 'Arrived'],
+      at: 0,
+      stubLabel: 'Next order',
+      stubValue: 'Tue 1:00 pm',
+      stubNote: 'Repeats every Tuesday',
+    },
+  },
+  {
+    key: 'swap',
+    tab: 'Swap',
+    line1: "Don't dump it.",
+    line2: 'Swap it.',
+    sub: 'Turn an old fan, textbooks or a mattress into cash, or trade with verified students.',
+    placeholder: 'What do you want to sell or swap?',
+    button: 'List an item',
+    route: '/market-pool',
+    hint: 'Payment is held safely. No listing fees',
+    ticket: {
+      status: 'Offer received',
+      title: 'Standing fan, 18 inch',
+      sub: 'Offer 12,000',
+      steps: ['Listed', 'Offer', 'Agreed', 'Paid'],
+      at: 1,
+      stubLabel: 'Held safely',
+      stubValue: '12,000',
+      stubNote: 'Released when you both agree',
+    },
+  },
+];
+
+const index = ref(0);
+const q = ref('');
+const current = computed(() => slides[index.value]);
+
+const openCount = computed(
+  () => (onlineVendors.value || []).filter((v: any) => v?.isOpen !== false).length,
+);
+const hintText = computed(() =>
+  current.value.key === 'food'
+    ? `${openCount.value} ${openCount.value === 1 ? 'store' : 'stores'} open now`
+    : current.value.hint,
+);
+
+const running = ref(false);
+const runId = ref(0);
+const changeId = ref(0);
+const pausedByPointer = ref(false);
+const pausedByFocus = ref(false);
+const stoppedByPerson = ref(false);
+let timer: ReturnType<typeof setInterval> | null = null;
+
+const reduced = () =>
+  typeof window !== 'undefined' &&
+  Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
+
+const clearTimer = () => {
+  if (timer) {
+    clearInterval(timer);
+    timer = null;
+  }
+};
+
+const advance = () => {
+  index.value = (index.value + 1) % slides.length;
+  changeId.value += 1;
+  runId.value += 1;
+};
+
+const start = () => {
+  if (reduced()) return;
+  clearTimer();
+  running.value = true;
+  stoppedByPerson.value = false;
+  runId.value += 1;
+  timer = setInterval(advance, AUTO_MS);
+};
+
+const stop = (byPerson = false) => {
+  clearTimer();
+  running.value = false;
+  if (byPerson) stoppedByPerson.value = true;
+};
+
+const toggleRunning = () => {
+  if (running.value) stop(false);
+  else start();
+};
+
+/** Any deliberate choice stops autoplay until Play is pressed again. */
+const select = (i: number) => {
+  index.value = i;
+  changeId.value += 1;
+  runId.value += 1;
+  stop(true);
+};
+
+const go = () => {
+  const slide = current.value;
+  if (!slide.placeholder) return;
+  if (slide.key === 'food') {
+    navigateTo({ path: '/vendors', query: q.value ? { q: q.value } : {} });
+    return;
+  }
+  navigateTo(slide.route);
+};
+
+// Swipe
+let touchX = 0;
+const onTouchStart = (e: TouchEvent) => {
+  touchX = e.changedTouches[0]?.clientX ?? 0;
+};
+const onTouchEnd = (e: TouchEvent) => {
+  const dx = (e.changedTouches[0]?.clientX ?? 0) - touchX;
+  if (Math.abs(dx) < 48) return;
+  const next = dx < 0 ? index.value + 1 : index.value - 1;
+  select((next + slides.length) % slides.length);
+};
+
+const onTabKey = (e: KeyboardEvent) => {
+  if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+  e.preventDefault();
+  const next = e.key === 'ArrowRight' ? index.value + 1 : index.value - 1;
+  const at = (next + slides.length) % slides.length;
+  select(at);
+  const el = document.getElementById(`tab-${slides[at].key}`);
+  el?.focus();
 };
 
 // Light unless the student chose dark. Same key as the dashboard toggle, so the choice follows them.
@@ -303,7 +554,6 @@ const applyTheme = (dark: boolean, persist = true) => {
   }
 };
 const toggleTheme = () => applyTheme(!isDark.value);
-const q = ref('');
 const year = new Date().getFullYear();
 
 const openVendors = computed(() =>
@@ -319,7 +569,6 @@ const scrollRail = (dir: number) => {
 const closedVendors = computed(() =>
   (onlineVendors.value || []).filter((v: any) => v?.isOpen === false),
 );
-const openCount = computed(() => (onlineVendors.value || []).filter((v: any) => v?.isOpen !== false).length);
 const closedCount = computed(() => closedVendors.value.length);
 const showClosed = ref(false);
 
@@ -335,22 +584,24 @@ const reviewCount = (vendor: any) =>
   Number(vendor?.reviewCount ?? vendor?.totalReviews ?? vendor?.reviewsCount ?? 0);
 const hasReviews = (vendor: any) => reviewCount(vendor) > 0 && Number(vendor?.rating) > 0;
 
-const go = () => {
-  if (mode.value === 'food') {
-    navigateTo({ path: '/vendors', query: q.value ? { q: q.value } : {} });
-  } else {
-    navigateTo('/errands/custom');
+// Hovering or focusing the hero pauses the timer but keeps autoplay armed.
+watch([pausedByPointer, pausedByFocus], ([pointer, focus]) => {
+  if (stoppedByPerson.value) return;
+  if (pointer || focus) clearTimer();
+  else if (running.value) {
+    clearTimer();
+    timer = setInterval(advance, AUTO_MS);
   }
-};
+});
 
 onBeforeUnmount(() => {
-  if (lineTimer) clearInterval(lineTimer);
+  clearTimer();
 });
 
 onMounted(() => {
   const saved = typeof localStorage !== 'undefined' ? localStorage.getItem('erranders-theme') : null;
   applyTheme(saved === 'dark', false);
-  startLines();
+  start();
   fetchHomeData();
 });
 
@@ -455,82 +706,131 @@ useHead({
   text-decoration: none;
 }
 
-/* Hero */
+/* Hero: fixed heights so switching slides never moves the page. */
 .hero {
   display: grid;
-  gap: 40px;
+  gap: 36px;
   max-width: 1120px;
   margin: 0 auto;
-  padding: 48px 20px 24px;
+  padding: 44px 20px 20px;
 }
 
 @media (min-width: 960px) {
   .hero {
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-    align-items: center;
-    padding: 72px 20px 40px;
+    align-items: start;
+    padding: 64px 20px 36px;
   }
 }
 
-.hero-copy h1 {
-  margin: 0;
-  font-size: clamp(38px, 7vw, 64px);
-  font-weight: 800;
-  letter-spacing: -0.045em;
-  line-height: 0.98;
-}
-
-.hero-sub {
-  margin: 16px 0 0;
-  font-size: 17px;
-  line-height: 1.5;
-  color: var(--muted);
-  max-width: 46ch;
-}
-
-.switch {
-  display: inline-flex;
+.tabs {
+  display: flex;
   gap: 4px;
-  margin-top: 26px;
-  padding: 4px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: var(--surface);
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-bottom: 18px;
 }
 
-.switch-btn {
-  padding: 8px 18px;
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  position: relative;
+  flex: none;
+  padding: 10px 14px 12px;
   border: 0;
-  border-radius: 999px;
   background: transparent;
   color: var(--muted);
-  font-size: 14.5px;
+  font-size: 15px;
   font-weight: 700;
   cursor: pointer;
 }
 
-.switch-btn.on {
-  background: var(--ink);
-  color: var(--page);
+.tab.on {
+  color: var(--ink);
 }
 
-.hero-field {
+.tab-line {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 4px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--accent);
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+.tab-line.running {
+  animation: fill 6.5s linear forwards;
+}
+
+@keyframes fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* Reserved space: the headline is two lines, the sub is three. */
+.panel {
+  min-height: 236px;
+}
+
+@media (min-width: 960px) {
+  .panel {
+    min-height: 262px;
+  }
+}
+
+.swap {
+  animation: rise 0.35s ease-out;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.headline {
+  margin: 0;
+  font-size: clamp(34px, 6vw, 58px);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  color: var(--ink);
+}
+
+.headline .line {
+  display: block;
+}
+
+.sub {
+  margin: 14px 0 0;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--muted);
+  max-width: 46ch;
+  min-height: 52px;
+}
+
+.field {
   display: flex;
   gap: 8px;
-  margin-top: 12px;
+  margin-top: 18px;
   padding: 6px 6px 6px 16px;
   border-radius: 16px;
   border: 1px solid var(--line);
-  background: var(--surface);
+  background: var(--card);
   max-width: 560px;
 }
 
-.hero-field:focus-within {
+.field:focus-within {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(242, 106, 46, 0.16);
 }
 
-.hero-input {
+.field-input {
   flex: 1;
   min-width: 0;
   border: 0;
@@ -541,11 +841,11 @@ useHead({
   outline: none;
 }
 
-.hero-input::placeholder {
-  color: var(--faint);
+.field-input::placeholder {
+  color: var(--muted);
 }
 
-.hero-go {
+.field-go {
   flex: none;
   display: inline-flex;
   align-items: center;
@@ -558,25 +858,64 @@ useHead({
   font-size: 15px;
   font-weight: 750;
   cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
 }
 
-.live {
+.field-go.solo {
+  margin-top: 18px;
+}
+
+.field-go:active {
+  transform: scale(0.99);
+}
+
+.hint {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin: 14px 0 0;
+  margin: 12px 0 0;
   font-size: 14.5px;
   color: var(--muted);
+  min-height: 22px;
 }
 
-.live-dot {
+.hint-dot {
   width: 8px;
   height: 8px;
   border-radius: 999px;
   background: #16a34a;
 }
 
-/* Ticket */
+.controls {
+  margin-top: 10px;
+}
+
+.play-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--muted);
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.play-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.play-btn .icon {
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+/* Ticket: the top and its text flip together, so one is never light on light. */
 .ticket-wrap {
   display: flex;
   justify-content: center;
@@ -588,14 +927,22 @@ useHead({
   max-width: 380px;
   transform: rotate(-2deg);
   border-radius: 20px;
-  box-shadow: 0 26px 60px rgba(20, 17, 16, 0.22);
+  box-shadow: 0 26px 60px rgba(23, 19, 15, 0.22);
+  --ticket-top-bg: #17130f;
+  --ticket-top-ink: #f5f1ea;
+}
+
+:global(html.dark) .ticket {
+  --ticket-top-bg: #f5f1ea;
+  --ticket-top-ink: #17130f;
 }
 
 .ticket-top {
-  background: var(--dark);
-  color: #fff;
+  background: var(--ticket-top-bg);
+  color: var(--ticket-top-ink);
   padding: 22px;
   border-radius: 20px 20px 0 0;
+  min-height: 196px;
 }
 
 .ticket-status {
@@ -605,17 +952,23 @@ useHead({
   color: #4ade80;
 }
 
+:global(html.dark) .ticket-status {
+  color: #15803d;
+}
+
 .ticket-item {
   margin: 8px 0 0;
   font-size: 20px;
   font-weight: 800;
   letter-spacing: -0.02em;
+  color: var(--ticket-top-ink);
 }
 
 .ticket-vendor {
   margin: 2px 0 0;
   font-size: 14.5px;
-  color: rgba(255, 255, 255, 0.6);
+  opacity: 0.62;
+  color: var(--ticket-top-ink);
 }
 
 .progress {
@@ -628,11 +981,10 @@ useHead({
 .prog {
   height: 3px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.2);
+  background: color-mix(in srgb, var(--ticket-top-ink) 22%, transparent);
 }
 
-.prog.done,
-.prog.now {
+.prog.done {
   background: var(--accent);
 }
 
@@ -642,51 +994,31 @@ useHead({
   gap: 4px;
   margin-top: 8px;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
+  opacity: 0.55;
 }
 
-/* Notches are drawn as page-coloured circles on the seam rather than a mask.
-   A mask clipped the note and the bottom edge of the stub. */
 .ticket-stub {
   position: relative;
   background: var(--accent);
   color: #fff;
   padding: 22px 22px 24px;
   border-radius: 0 0 20px 20px;
-}
-
-.ticket-stub::before,
-.ticket-stub::after {
-  content: '';
-  position: absolute;
-  top: -11px;
-  width: 22px;
-  height: 22px;
-  border-radius: 999px;
-  background: var(--page);
-}
-
-.ticket-stub::before {
-  left: -11px;
-}
-
-.ticket-stub::after {
-  right: -11px;
+  min-height: 168px;
 }
 
 .stub-label {
   margin: 0;
   font-size: 13px;
   font-weight: 650;
-  opacity: 0.9;
+  opacity: 0.92;
 }
 
-.stub-pin {
-  margin: 6px 0 14px;
-  font-size: 40px;
+.stub-value {
+  margin: 8px 0 14px;
+  font-size: clamp(30px, 5vw, 40px);
   font-weight: 800;
-  letter-spacing: 0.24em;
-  line-height: 1;
+  letter-spacing: 0.12em;
+  line-height: 1.05;
   font-variant-numeric: tabular-nums;
 }
 
@@ -697,7 +1029,28 @@ useHead({
 .stub-note {
   margin: 12px 0 0;
   font-size: 13px;
-  opacity: 0.9;
+  opacity: 0.92;
+}
+
+/* Notches are the page colour, not black, so they read as cut-outs in both modes. */
+.notch {
+  position: absolute;
+  top: 196px;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--bg);
+  margin-top: -11px;
+}
+
+.notch.left { left: -11px; }
+.notch.right { right: -11px; }
+
+@media (max-width: 959px) {
+  .ticket {
+    transform: none;
+    max-width: 100%;
+  }
 }
 
 /* Sections */
@@ -1290,32 +1643,6 @@ useHead({
   background: var(--surface);
   color: var(--ink);
   border: 1px solid var(--line);
-}
-
-.closed-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.line-fixed,
-.line-turn {
-  display: block;
-}
-
-.line-turn {
-  animation: lineIn 0.45s ease-out;
-}
-
-@keyframes lineIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .sec-tools .sec-link {
