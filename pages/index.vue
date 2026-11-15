@@ -60,21 +60,36 @@
 
               <p :key="'s-' + phrase" class="sub swap">{{ phraseText.subtext }}</p>
 
-              <form v-if="current.placeholder" class="field" @submit.prevent="go">
+              <!-- One field for both jobs: find a store, or describe something to run. -->
+              <form class="field" @submit.prevent="go">
                 <input
                   v-model="q"
                   type="search"
                   class="field-input"
-                  :placeholder="current.placeholder"
-                  :aria-label="current.placeholder"
+                  placeholder="Jollof, a pharmacy, or pick up my laundry"
+                  aria-label="Search stores, food, or describe an errand"
                 />
-                <button type="submit" class="field-go">{{ current.button }}</button>
+                <button type="submit" class="field-go">Search</button>
               </form>
 
-              <NuxtLink v-else :to="current.route" class="field-go solo">{{ current.button }}</NuxtLink>
+              <!-- What the app actually does, one tap from the field. -->
+              <div class="modes">
+                <NuxtLink to="/vendors" class="mode">
+                  <UtensilsCrossed class="w-4 h-4" aria-hidden="true" />
+                  Order food
+                </NuxtLink>
+                <NuxtLink to="/errands/custom" class="mode">
+                  <PackageSearch class="w-4 h-4" aria-hidden="true" />
+                  Make a custom errand
+                </NuxtLink>
+                <NuxtLink to="/market-pool" class="mode">
+                  <Repeat class="w-4 h-4" aria-hidden="true" />
+                  Swap something
+                </NuxtLink>
+              </div>
 
               <p class="hint">
-                <span v-if="current.key === 'food'" class="hint-dot" aria-hidden="true"></span>
+                <span class="hint-dot" aria-hidden="true"></span>
                 {{ hintText }}
               </p>
             </div>
@@ -634,23 +649,25 @@ const select = (i: number) => {
   stop(true);
 };
 
+/**
+ * One field, two destinations. Anything that reads like a task goes to the custom errand form with
+ * the description prefilled; everything else is a store search.
+ */
+const TASK_WORDS = /\b(pick up|drop off|deliver|buy|get me|laundry|print|photocopy|document|package|parcel|queue|stand in|repair|fix|clean|fetch)\b/i;
+
 const go = () => {
-  const slide = current.value;
-  if (!slide.placeholder) return;
-  const term = q.value?.trim();
-
-  // Food and pharmacy both end up in the store list, so the typed term is carried through.
-  if (slide.key === 'food') {
-    navigateTo({ path: '/vendors', query: term ? { q: term } : {} });
+  const term = q.value?.trim() ?? '';
+  if (!term) {
+    navigateTo('/vendors');
     return;
   }
 
-  if (slide.key === 'pharmacy') {
-    navigateTo({ path: '/vendors', query: { category: 'pharmacy', ...(term ? { q: term } : {}) } });
+  if (TASK_WORDS.test(term)) {
+    navigateTo({ path: '/errands/custom', query: { describe: term } });
     return;
   }
 
-  navigateTo(slide.route);
+  navigateTo({ path: '/vendors', query: { q: term } });
 };
 
 // Swipe
@@ -935,7 +952,7 @@ useHead({
   /* The hero owns the first screen: it fills the viewport under the 84px bar. */
   min-height: calc(100vh - 84px);
   min-height: calc(100svh - 84px);
-  align-content: center;
+  align-content: start;
 }
 
 @media (min-width: 960px) {
@@ -1091,6 +1108,11 @@ useHead({
   color: var(--ink);
   font-size: 16px;
   padding: 12px 0;
+  outline: none;
+}
+
+/* The field draws its own ring on focus-within; a second outline on the input reads as a double box. */
+.field-input:focus-visible {
   outline: none;
 }
 
@@ -1951,5 +1973,32 @@ useHead({
 
 .sec-tools .sec-link {
   margin-left: 6px;
+}
+
+/* The three ways in, right under the field. */
+.modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 14.5px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.mode:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 </style>
