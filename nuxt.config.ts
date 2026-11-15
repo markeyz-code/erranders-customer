@@ -127,7 +127,7 @@ export default defineNuxtConfig({
     }
   },
 
-  css: ["/assets/css/main.css", "/assets/css/dashboard.css", "/assets/font/stylesheet.css"],
+  css: ["/assets/css/theme.css", "/assets/css/main.css", "/assets/css/dashboard.css", "/assets/font/stylesheet.css"],
 
   modules: [
     "@nuxtjs/tailwindcss",

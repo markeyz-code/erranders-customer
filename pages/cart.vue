@@ -2383,13 +2383,13 @@ const preCreateOrders = async (): Promise<string[]> => {
   font-size: clamp(26px, 5vw, 34px);
   font-weight: 800;
   letter-spacing: -0.035em;
-  color: var(--dash-ink, #141110);
+  color: var(--ink);
 }
 
 .empty-head p {
   margin: 4px 0 0;
   font-size: 15px;
-  color: var(--dash-muted, #6b655d);
+  color: var(--mute);
 }
 
 .empty-card {
@@ -2400,8 +2400,8 @@ const preCreateOrders = async (): Promise<string[]> => {
   gap: 14px;
   padding: 18px 20px;
   border-radius: 16px;
-  background: var(--dash-ink, #141110);
-  color: var(--dash-page, #faf8f5);
+  background: var(--ink);
+  color: var(--bg);
 }
 
 .empty-card-title {
@@ -2422,7 +2422,7 @@ const preCreateOrders = async (): Promise<string[]> => {
   gap: 7px;
   padding: 12px 17px;
   border-radius: 12px;
-  background: #f26a2e;
+  background: var(--accent);
   color: #fff;
   font-size: 15px;
   font-weight: 750;
@@ -2442,13 +2442,13 @@ const preCreateOrders = async (): Promise<string[]> => {
   font-size: 20px;
   font-weight: 800;
   letter-spacing: -0.025em;
-  color: var(--dash-ink, #141110);
+  color: var(--ink);
 }
 
 .sec-link {
   font-size: 14.5px;
   font-weight: 750;
-  color: #f26a2e;
+  color: var(--accent);
   text-decoration: none;
 }
 
@@ -2471,9 +2471,9 @@ const preCreateOrders = async (): Promise<string[]> => {
 }
 
 .store {
-  border: 1px solid var(--dash-line, #e8e2d9);
+  border: 1px solid var(--line);
   border-radius: 16px;
-  background: var(--dash-surface, #fff);
+  background: var(--card);
   overflow: hidden;
   text-decoration: none;
   color: inherit;
@@ -2481,13 +2481,13 @@ const preCreateOrders = async (): Promise<string[]> => {
 }
 
 .store:hover {
-  border-color: #f26a2e;
+  border-color: var(--accent);
 }
 
 .store-media {
   position: relative;
   height: 128px;
-  background: var(--dash-page, #faf8f5);
+  background: var(--bg);
 }
 
 .store-img {
@@ -2519,7 +2519,7 @@ const preCreateOrders = async (): Promise<string[]> => {
   margin: 0;
   font-size: 15.5px;
   font-weight: 750;
-  color: var(--dash-ink, #141110);
+  color: var(--ink);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2528,7 +2528,7 @@ const preCreateOrders = async (): Promise<string[]> => {
 .store-meta {
   margin: 3px 0 0;
   font-size: 14px;
-  color: var(--dash-muted, #6b655d);
+  color: var(--mute);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2537,23 +2537,23 @@ const preCreateOrders = async (): Promise<string[]> => {
 .store-skel {
   height: 200px;
   border-radius: 16px;
-  background: var(--dash-surface, #fff);
-  border: 1px solid var(--dash-line, #e8e2d9);
+  background: var(--card);
+  border: 1px solid var(--line);
   animation: pulse 1.5s ease-in-out infinite;
 }
 
 .closed {
-  border: 1px dashed var(--dash-line, #e8e2d9);
+  border: 1px dashed var(--line);
   border-radius: 16px;
   padding: 16px 18px;
-  background: var(--dash-surface, #fff);
+  background: var(--card);
 }
 
 .closed-title {
   margin: 0 0 10px;
   font-size: 15px;
   font-weight: 750;
-  color: var(--dash-ink, #141110);
+  color: var(--ink);
 }
 
 .closed-chips {
@@ -2568,14 +2568,14 @@ const preCreateOrders = async (): Promise<string[]> => {
   gap: 7px;
   padding: 8px 12px;
   border-radius: 999px;
-  border: 1px solid var(--dash-line, #e8e2d9);
+  border: 1px solid var(--line);
   font-size: 14px;
   font-weight: 650;
-  color: var(--dash-ink, #141110);
+  color: var(--ink);
 }
 
 .closed-when {
-  color: var(--dash-muted, #6b655d);
+  color: var(--mute);
   font-weight: 600;
 }
 </style>

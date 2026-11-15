@@ -10,37 +10,15 @@
  */
 
 .dash {
-  --dash-ink: #17130f;
-  --dash-muted: #6f6a63;
-  --dash-faint: #6f6a63;
-  --dash-line: #e4e1da;
-  --dash-surface: #ffffff;
-  --dash-page: #f5f4f0;
-  --dash-accent: #f26a2e;
-  --dash-soft-orange: #fde6da;
-  --dash-soft-green: #dff3e7;
-  --dash-radius: 18px;
-  --dash-radius-sm: 12px;
-
-  color: var(--dash-ink);
+  /* Tokens come from assets/css/theme.css. This file only maps them onto dashboard structures. */
+  color: var(--ink);
   font-size: 15px;
-}
-
-html.dark .dash {
-  --dash-ink: #f5f1ea;
-  --dash-muted: #a39d94;
-  --dash-faint: #a39d94;
-  --dash-line: #2c2825;
-  --dash-surface: #1c1917;
-  --dash-page: #121010;
-  --dash-soft-orange: #3a2418;
-  --dash-soft-green: #16301f;
 }
 
 /* One page tint, bled past the container padding without changing layout. */
 .dash {
-  background: var(--dash-page);
-  box-shadow: 0 0 0 100vmax var(--dash-page);
+  background: var(--bg);
+  box-shadow: 0 0 0 100vmax var(--bg);
   clip-path: inset(0 -100vmax);
 }
 
@@ -53,14 +31,14 @@ html.dark .dash {
    Headlines are chunky and tight; body text never drops below 15px; the tiny uppercase
    letter-spaced labels that used to be everywhere are normalised away. */
 .dash h1:not(.keep-type) {
-  color: var(--dash-ink);
+  color: var(--ink);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.1;
 }
 
 .dash h2:not(.keep-type) {
-  color: var(--dash-ink);
+  color: var(--ink);
   font-weight: 800;
   letter-spacing: -0.025em;
   line-height: 1.15;
@@ -68,7 +46,7 @@ html.dark .dash {
 
 .dash h3:not(.keep-type),
 .dash h4:not(.keep-type) {
-  color: var(--dash-ink);
+  color: var(--ink);
   font-weight: 700;
   letter-spacing: -0.015em;
 }
@@ -98,7 +76,7 @@ html.dark .dash {
   font-weight: 700;
   letter-spacing: normal;
   text-transform: none;
-  color: var(--dash-muted);
+  color: var(--mute);
 }
 
 /* ─── Surfaces ───
@@ -106,26 +84,26 @@ html.dark .dash {
 .dash .card-norm,
 .dash .rounded-2xl.border,
 .dash .rounded-\[1\.25rem\].border {
-  border-color: var(--dash-line);
-  border-radius: var(--dash-radius);
-  background: var(--dash-surface);
+  border-color: var(--line);
+  border-radius: 18px;
+  background: var(--card);
 }
 
 /* Empty states look deliberate rather than broken. */
 .dash .empty-state {
-  border: 1px dashed var(--dash-line);
-  border-radius: var(--dash-radius);
-  background: var(--dash-surface);
+  border: 1px dashed var(--line);
+  border-radius: 18px;
+  background: var(--card);
   padding: 2.5rem 1.5rem;
   text-align: center;
-  color: var(--dash-muted);
+  color: var(--mute);
 }
 
 /* ─── Focus ───
    Visible on every interactive element, including inside dark surfaces. */
 .dash :where(a, button, input, select, textarea):focus-visible {
-  border-radius: var(--dash-radius-sm);
-  outline: 3px solid var(--dash-accent);
+  border-radius: 12px;
+  outline: 3px solid var(--accent);
   outline-offset: 2px;
 }
 
@@ -133,23 +111,23 @@ html.dark .dash {
    Pages that hardcode white surfaces would otherwise stay bright in dark mode. These overrides
    catch the common cases; anything with an explicit `bg-white` utility becomes the surface token. */
 html.dark .dash .bg-white {
-  background-color: var(--dash-surface);
+  background-color: var(--card);
 }
 
 html.dark .dash .text-gray-900,
 html.dark .dash .text-\[\#171310\] {
-  color: var(--dash-ink);
+  color: var(--ink);
 }
 
 html.dark .dash .text-gray-500,
 html.dark .dash .text-gray-400,
 html.dark .dash .text-\[\#9C968E\] {
-  color: var(--dash-muted);
+  color: var(--mute);
 }
 
 html.dark .dash .border-gray-50,
 html.dark .dash .border-\[\#E7E2DA\] {
-  border-color: var(--dash-line);
+  border-color: var(--line);
 }
 
 /* ─── Reduced motion ─── */
@@ -168,21 +146,21 @@ html.dark .dash .border-\[\#E7E2DA\] {
 .dash input:not([type='checkbox']):not([type='radio']):not([type='range']),
 .dash select,
 .dash textarea {
-  border-radius: var(--dash-radius-sm);
-  border-color: var(--dash-line);
-  background: var(--dash-surface);
-  color: var(--dash-ink);
+  border-radius: 12px;
+  border-color: var(--line);
+  background: var(--card);
+  color: var(--ink);
   font-size: 15px;
 }
 
 .dash input::placeholder,
 .dash textarea::placeholder {
-  color: var(--dash-faint);
+  color: var(--mute);
 }
 
 .dash label,
 .dash legend {
   font-size: 14px;
   font-weight: 700;
-  color: var(--dash-ink);
+  color: var(--ink);
 }

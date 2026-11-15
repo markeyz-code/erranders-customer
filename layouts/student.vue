@@ -615,7 +615,9 @@ const isDark = ref(false);
 const applyTheme = (dark: boolean, persist = true) => {
   isDark.value = dark;
   if (typeof document !== 'undefined') {
+    // Both classes are explicit: theme.css only falls back to the OS when neither is set.
     document.documentElement.classList.toggle('dark', dark);
+    document.documentElement.classList.toggle('light', !dark);
   }
   if (persist && typeof localStorage !== 'undefined') {
     localStorage.setItem('erranders-theme', dark ? 'dark' : 'light');

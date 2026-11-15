@@ -601,16 +601,9 @@ const getInitials = (name: string) => {
 /* STORES — open first, closed on request, one accent. */
 .stores {
   min-height: 100vh;
-  background: #f5f4f0;
-  color: #17130f;
+  background: var(--bg);
+  color: var(--ink);
   padding-bottom: 96px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :global(html.dark) .stores {
-    background: #121010;
-    color: #f5f1ea;
-  }
 }
 
 .top {
@@ -621,14 +614,9 @@ const getInitials = (name: string) => {
   align-items: center;
   gap: 10px;
   padding: 10px 16px;
-  background: rgba(250, 248, 245, 0.92);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
   backdrop-filter: blur(14px);
-  border-bottom: 1px solid #e8e2d9;
-}
-
-:global(html.dark) .top {
-  background: rgba(18, 16, 14, 0.92);
-  border-color: #2c2825;
+  border-bottom: 1px solid var(--line);
 }
 
 .icon-btn {
@@ -637,17 +625,12 @@ const getInitials = (name: string) => {
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  border: 1px solid #e4e1da;
-  background: #fff;
+  border: 1px solid var(--line);
+  background: var(--card);
   color: inherit;
   display: grid;
   place-items: center;
   cursor: pointer;
-}
-
-:global(html.dark) .icon-btn {
-  background: #1c1917;
-  border-color: #2c2825;
 }
 
 .cart-dot {
@@ -657,7 +640,7 @@ const getInitials = (name: string) => {
   min-width: 17px;
   height: 17px;
   border-radius: 999px;
-  background: #f26a2e;
+  background: var(--accent);
   color: #fff;
   font-size: 11px;
   font-weight: 800;
@@ -674,17 +657,12 @@ const getInitials = (name: string) => {
   gap: 9px;
   padding: 4px 4px 4px 14px;
   border-radius: 12px;
-  border: 1px solid #e4e1da;
-  background: #fff;
-}
-
-:global(html.dark) .search {
-  background: #1c1917;
-  border-color: #2c2825;
+  border: 1px solid var(--line);
+  background: var(--card);
 }
 
 .search:focus-within {
-  border-color: #f26a2e;
+  border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(242, 106, 46, 0.16);
 }
 
@@ -721,18 +699,18 @@ const getInitials = (name: string) => {
 .tab {
   padding: 9px 16px;
   border-radius: 999px;
-  border: 1px solid #e4e1da;
+  border: 1px solid var(--line);
   background: transparent;
-  color: #6f6a63;
+  color: var(--mute);
   font-size: 14.5px;
   font-weight: 700;
   cursor: pointer;
 }
 
 .tab.on {
-  background: #141110;
-  border-color: #17130f;
-  color: #faf8f5;
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
 }
 
 .head h1 {
@@ -745,11 +723,7 @@ const getInitials = (name: string) => {
 .head-sub {
   margin: 5px 0 18px;
   font-size: 15px;
-  color: #6f6a63;
-}
-
-:global(html.dark) .head-sub {
-  color: #a39d94;
+  color: var(--mute);
 }
 
 .controls {
@@ -777,22 +751,17 @@ const getInitials = (name: string) => {
   flex: none;
   padding: 9px 15px;
   border-radius: 999px;
-  border: 1px solid #e4e1da;
-  background: #fff;
-  color: #6f6a63;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--mute);
   font-size: 14.5px;
   font-weight: 700;
   cursor: pointer;
 }
 
-:global(html.dark) .chip {
-  background: #1c1917;
-  border-color: #2c2825;
-}
-
 .chip.on {
-  background: #f26a2e;
-  border-color: #f26a2e;
+  background: var(--accent);
+  border-color: var(--accent);
   color: #fff;
 }
 
@@ -807,17 +776,12 @@ const getInitials = (name: string) => {
   gap: 7px;
   padding: 9px 14px;
   border-radius: 12px;
-  border: 1px solid #e4e1da;
-  background: #fff;
+  border: 1px solid var(--line);
+  background: var(--card);
   color: inherit;
   font-size: 14.5px;
   font-weight: 700;
   cursor: pointer;
-}
-
-:global(html.dark) .sort-btn {
-  background: #1c1917;
-  border-color: #2c2825;
 }
 
 .sort-menu {
@@ -827,15 +791,10 @@ const getInitials = (name: string) => {
   z-index: 30;
   min-width: 190px;
   border-radius: 14px;
-  border: 1px solid #e4e1da;
-  background: #fff;
+  border: 1px solid var(--line);
+  background: var(--card);
   padding: 6px;
   box-shadow: 0 18px 40px rgba(20, 17, 16, 0.14);
-}
-
-:global(html.dark) .sort-menu {
-  background: #1c1917;
-  border-color: #2c2825;
 }
 
 .sort-item {
@@ -857,7 +816,7 @@ const getInitials = (name: string) => {
 }
 
 .sort-item.on {
-  color: #f26a2e;
+  color: var(--accent);
   font-weight: 800;
 }
 
@@ -888,19 +847,14 @@ const getInitials = (name: string) => {
 .card {
   position: relative;
   border-radius: 16px;
-  border: 1px solid #e4e1da;
-  background: #fff;
+  border: 1px solid var(--line);
+  background: var(--card);
   overflow: hidden;
   transition: border-color 0.15s ease, transform 0.15s ease;
 }
 
-:global(html.dark) .card {
-  background: #1c1917;
-  border-color: #2c2825;
-}
-
 .card:hover {
-  border-color: #f26a2e;
+  border-color: var(--accent);
   transform: translateY(-1px);
 }
 
@@ -943,8 +897,8 @@ const getInitials = (name: string) => {
   border-radius: 8px;
   font-size: 12.5px;
   font-weight: 750;
-  background: #fff;
-  color: #17130f;
+  background: var(--card);
+  color: var(--ink);
 }
 
 .closed-tag {
@@ -959,7 +913,7 @@ const getInitials = (name: string) => {
 }
 
 .floating-tag.order-ahead {
-  background: #f26a2e;
+  background: var(--accent);
   color: #fff;
 }
 
@@ -986,14 +940,10 @@ const getInitials = (name: string) => {
 .card-meta {
   margin: 4px 0 0;
   font-size: 14px;
-  color: #6f6a63;
+  color: var(--mute);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-:global(html.dark) .card-meta {
-  color: #a39d94;
 }
 
 .rating {
@@ -1003,15 +953,11 @@ const getInitials = (name: string) => {
   flex: none;
   font-size: 14px;
   font-weight: 750;
-  color: #17130f;
-}
-
-:global(html.dark) .rating {
-  color: #f5f1ea;
+  color: var(--ink);
 }
 
 .rating-count {
-  color: #6f6a63;
+  color: var(--mute);
   font-weight: 650;
 }
 
@@ -1034,7 +980,7 @@ const getInitials = (name: string) => {
   border-radius: 999px;
   border: 0;
   background: rgba(255, 255, 255, 0.94);
-  color: #17130f;
+  color: var(--ink);
   display: grid;
   place-items: center;
   cursor: pointer;
@@ -1042,7 +988,7 @@ const getInitials = (name: string) => {
 
 .heart .filled {
   fill: #f26a2e;
-  color: #f26a2e;
+  color: var(--accent);
 }
 
 .closed-line {
@@ -1051,9 +997,9 @@ const getInitials = (name: string) => {
   margin-top: 18px;
   padding: 15px 18px;
   border-radius: 14px;
-  border: 1px dashed #e8e2d9;
+  border: 1px dashed var(--line);
   background: transparent;
-  color: #6f6a63;
+  color: var(--mute);
   font-size: 15px;
   font-weight: 650;
   text-align: left;
@@ -1061,8 +1007,8 @@ const getInitials = (name: string) => {
 }
 
 .closed-line:hover {
-  border-color: #f26a2e;
-  color: #f26a2e;
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .closed-sec {
@@ -1077,7 +1023,7 @@ const getInitials = (name: string) => {
 }
 
 .empty {
-  border: 1px dashed #e8e2d9;
+  border: 1px dashed var(--line);
   border-radius: 16px;
   padding: 40px 20px;
   text-align: center;
@@ -1092,14 +1038,14 @@ const getInitials = (name: string) => {
 .empty-body {
   margin: 6px 0 0;
   font-size: 15px;
-  color: #6f6a63;
+  color: var(--mute);
 }
 
 .skel {
   height: 232px;
   border-radius: 16px;
-  background: #fff;
-  border: 1px solid #e4e1da;
+  background: var(--card);
+  border: 1px solid var(--line);
   animation: pulse 1.5s ease-in-out infinite;
 }
 

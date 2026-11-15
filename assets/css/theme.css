@@ -1,0 +1,104 @@
+/**
+ * Theme tokens.
+ *
+ * One palette, two modes, one place. Every surface in the app reads from these variables, so a
+ * page no longer carries its own idea of what "dark" means.
+ *
+ * Light is the default. Dark arrives two ways:
+ *   - html.dark, set by the in-app switch and remembered per browser
+ *   - the operating system, when the student has not made a choice yet
+ *
+ * Choosing light explicitly adds html.light, which overrides the system preference, so a student on
+ * a dark machine can still use the app in light without fighting their OS.
+ */
+
+:root {
+  /* Surfaces */
+  --bg: #f5f4f0;
+  --card: #ffffff;
+  --line: #e4e1da;
+
+  /* Text */
+  --ink: #17130f;
+  --mute: #6f6a63;
+
+  /* Accents */
+  --orsoft: #fde6da;
+  --green-soft: #dff3e7;
+  --accent: #f26a2e;
+  --accent-ink: #ffffff;
+
+  /* Rail and navigation chrome */
+  --rail: #ffffff;
+  --overlay: rgba(23, 19, 15, 0.5);
+}
+
+html.dark {
+  --bg: #121010;
+  --card: #1c1917;
+  --line: #2c2825;
+
+  --ink: #f5f1ea;
+  --mute: #a39d94;
+
+  --orsoft: #3a2418;
+  --green-soft: #16301f;
+  --accent: #f26a2e;
+  --accent-ink: #ffffff;
+
+  --rail: #1c1917;
+  --overlay: rgba(0, 0, 0, 0.6);
+}
+
+/* System preference, only while no explicit choice has been made. */
+@media (prefers-color-scheme: dark) {
+  html:not(.light) {
+    --bg: #121010;
+    --card: #1c1917;
+    --line: #2c2825;
+
+    --ink: #f5f1ea;
+    --mute: #a39d94;
+
+    --orsoft: #3a2418;
+    --green-soft: #16301f;
+    --accent: #f26a2e;
+    --accent-ink: #ffffff;
+
+    --rail: #1c1917;
+    --overlay: rgba(0, 0, 0, 0.6);
+  }
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* Images keep their own colour in both modes. Vendors upload brand photos; dimming them is not a
+   theme choice, it is a bug. */
+img {
+  filter: none;
+}
+
+/* The notch motif on tickets and stubs is a cut-out of the page behind it. */
+.notch {
+  background: var(--bg);
+}
+
+/* One focus ring, everywhere. */
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

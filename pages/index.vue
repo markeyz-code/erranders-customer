@@ -294,7 +294,10 @@ const startLines = () => {
 const isDark = ref(false);
 const applyTheme = (dark: boolean, persist = true) => {
   isDark.value = dark;
-  if (typeof document !== 'undefined') document.documentElement.classList.toggle('dark', dark);
+  if (typeof document !== 'undefined') {
+    document.documentElement.classList.toggle('dark', dark);
+    document.documentElement.classList.toggle('light', !dark);
+  }
   if (persist && typeof localStorage !== 'undefined') {
     localStorage.setItem('erranders-theme', dark ? 'dark' : 'light');
   }
@@ -359,33 +362,19 @@ useHead({
 
 <style scoped>
 .landing {
-  --accent: #f26a2e;
-  --ink: #17130f;
-  --muted: #6f6a63;
-  --faint: #6f6a63;
-  --line: #e4e1da;
-  --surface: #ffffff;
-  --page: #f5f4f0;
-  --dark: #17130f;
-  --soft-orange: #fde6da;
-  --soft-green: #dff3e7;
+  /* Palette lives in assets/css/theme.css. */
+  --muted: var(--mute);
+  --faint: var(--mute);
+  --surface: var(--card);
+  --page: var(--bg);
+  --dark: var(--ink);
+  --soft-orange: var(--orsoft);
+  --soft-green: var(--green-soft);
 
   background: var(--page);
   color: var(--ink);
   font-size: 15px;
   padding-bottom: 0;
-}
-
-:global(html.dark) .landing {
-  --ink: #f5f1ea;
-  --muted: #a39d94;
-  --faint: #a39d94;
-  --line: #2c2825;
-  --surface: #1c1917;
-  --page: #121010;
-  --dark: #0c0a09;
-  --soft-orange: #3a2418;
-  --soft-green: #16301f;
 }
 
 /* Header */
@@ -405,10 +394,6 @@ useHead({
 .brand-img {
   height: 26px;
   width: auto;
-}
-
-:global(html.dark) .brand-img {
-  filter: invert(1) hue-rotate(180deg);
 }
 
 .nav-links {
@@ -1171,10 +1156,6 @@ useHead({
   outline: 3px solid var(--accent);
   outline-offset: 2px;
   border-radius: 10px;
-}
-
-:global(html.dark) body {
-  background: #121010;
 }
 
 @media (prefers-reduced-motion: reduce) {
