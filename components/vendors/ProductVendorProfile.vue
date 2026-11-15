@@ -66,152 +66,110 @@
 
     <div class="animate-fade-in pb-32 lg:pb-8">
       <!-- ============================================ -->
-      <!-- IMMERSIVE BANNER HERO                        -->
+      <!-- HERO: the shop's own face, then one card that holds everything you can do -->
       <!-- ============================================ -->
-      <section class="relative w-full h-[280px] md:h-[340px] overflow-hidden">
-        <!-- Banner Image -->
-        <video 
-          v-if="vendor.coverVideo || vendor.video || (vendor.banner && vendor.banner.match(/\\.(mp4|webm|ogg|mov)$/i)) || (vendor.logo && vendor.logo.match(/\\.(mp4|webm|ogg|mov)$/i))"
-          :src="vendor.coverVideo || vendor.video || vendor.banner || vendor.logo" 
-          class="absolute inset-0 w-full h-full object-cover"
-          autoplay loop muted playsinline>
-        </video>
-        <img 
-          v-else
-          :src="vendor.banner || vendor.image || vendor.logo || '/placeholder-store.jpg'" 
-          class="absolute inset-0 w-full h-full object-cover"
-          alt="Store Banner"
-        />
-        <!-- Gradient Overlays -->
-        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-gray-900/20 z-[5]"></div>
-        <div v-if="!vendor.isOpen && route.query.schedule !== 'true'" class="absolute inset-0 z-[6] bg-gray-950/45"></div>
-        <div class="absolute inset-0 bg-gradient-to-r from-gray-900/30 to-transparent z-[5]"></div>
-        
-        <!-- Top Navigation -->
-        <div class="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-4 md:px-5 pt-safe-top pb-4 md:pb-6 mt-4 md:mt-6">
-          <button @click="handleBack()" class="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-xl flex items-center justify-center border border-white/20 text-white hover:bg-white/20 transition-all active:scale-95">
-            <ArrowLeft class="w-4 h-4" />
-          </button>
-          <div class="flex items-center gap-2">
-            <button 
-              @click="showGlobalCartModal = true"
-              class="relative w-10 h-10 rounded-2xl backdrop-blur-xl flex items-center justify-center border transition-all active:scale-95 bg-white/10 border-white/20 text-white hover:bg-white/20"
-            >
-              <ShoppingCart class="w-4 h-4" />
-              <div v-if="globalItemCount > 0" class="absolute -top-1 -right-1 w-4 h-4 bg-parentPrimary text-white rounded-full flex items-center justify-center text-[9px] font-bold border border-white/20 shadow-sm">
-                {{ globalItemCount }}
-              </div>
+      <section class="hero">
+        <div class="hero-media">
+          <video
+            v-if="vendor.coverVideo || vendor.video || (vendor.banner && vendor.banner.match(/\.(mp4|webm|ogg|mov)$/i)) || (vendor.logo && vendor.logo.match(/\.(mp4|webm|ogg|mov)$/i))"
+            :src="vendor.coverVideo || vendor.video || vendor.banner || vendor.logo"
+            class="hero-img"
+            autoplay
+            loop
+            muted
+            playsinline
+          />
+          <img
+            v-else
+            :src="vendor.banner || vendor.image || vendor.logo || '/placeholder-store.jpg'"
+            class="hero-img"
+            alt=""
+          />
+
+          <div class="hero-scrim" aria-hidden="true"></div>
+          <div v-if="!vendor.isOpen && route.query.schedule !== 'true'" class="hero-dim" aria-hidden="true"></div>
+
+          <div class="hero-actions">
+            <button type="button" class="hero-btn" aria-label="Back" @click="handleBack()">
+              <ArrowLeft class="w-4 h-4" aria-hidden="true" />
             </button>
-            <button 
-              @click="isShareModalOpen = true"
-              class="w-10 h-10 rounded-2xl backdrop-blur-xl flex items-center justify-center border transition-all active:scale-95 bg-white/10 border-white/20 text-white hover:bg-white/20"
-            >
-              <Share2 class="w-4 h-4" />
-            </button>
-            <button 
-              @click="toggleFavoriteVendor"
-              class="w-10 h-10 rounded-2xl backdrop-blur-xl flex items-center justify-center border transition-all active:scale-95"
-              :class="isFavorited ? 'bg-rose-500/20 border-rose-400/30 text-rose-400' : 'bg-white/10 border-white/20 text-white'"
-            >
-              <Heart class="w-4 h-4" :class="{ 'fill-rose-400': isFavorited }" />
-            </button>
-            <button @click="showStoreInfo = true" class="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-xl flex items-center justify-center border border-white/20 text-white hover:bg-white/20 transition-all active:scale-95">
-              <Info class="w-4 h-4" />
-            </button>
+
+            <div class="hero-actions-right">
+              <button type="button" class="hero-btn" aria-label="Cart" @click="showGlobalCartModal = true">
+                <ShoppingCart class="w-4 h-4" aria-hidden="true" />
+                <span v-if="globalItemCount > 0" class="hero-badge">{{ globalItemCount }}</span>
+              </button>
+              <button type="button" class="hero-btn" aria-label="Share" @click="isShareModalOpen = true">
+                <Share2 class="w-4 h-4" aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                class="hero-btn"
+                :aria-pressed="isFavorited"
+                aria-label="Save store"
+                @click="toggleFavoriteVendor"
+              >
+                <Heart class="w-4 h-4" :class="{ saved: isFavorited }" aria-hidden="true" />
+              </button>
+              <button type="button" class="hero-btn" aria-label="Store information" @click="showStoreInfo = true">
+                <Info class="w-4 h-4" aria-hidden="true" />
+              </button>
+            </div>
           </div>
         </div>
 
-        <!-- Hero Content -->
-        <div class="absolute bottom-0 left-0 right-0 z-10 px-4 md:px-5 pb-6 md:pb-8">
-          <div class="max-w-[1400px] mx-auto flex items-end gap-4">
-            <!-- Vendor Logo -->
-            <div class="w-16 h-16 md:w-20 md:h-20 rounded-2xl border border-white/30 shadow-sm border border-gray-50 overflow-hidden bg-white shrink-0">
-              <video v-if="vendor.logo && vendor.logo.match(/\\.(mp4|webm|ogg|mov)$/i)" :src="vendor.logo" class="w-full h-full object-cover" autoplay loop muted playsinline></video>
-              <img v-else :src="vendor.logo || '/placeholder-store.jpg'" class="w-full h-full object-cover" />
+        <!-- One card under the photo: identity, state, and the things you can do. -->
+        <div class="hero-card">
+          <div class="id-row">
+            <div class="logo">
+              <video v-if="vendor.logo && vendor.logo.match(/\.(mp4|webm|ogg|mov)$/i)" :src="vendor.logo" class="logo-img" autoplay loop muted playsinline />
+              <img v-else :src="vendor.logo || '/placeholder-store.jpg'" class="logo-img" alt="" />
             </div>
-            <!-- Vendor Info -->
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-2 mb-1.5">
-                <span 
-                  class="px-2.5 py-1 rounded-lg text-[10px] font-medium flex items-center gap-1.5"
-                  :class="vendor.isOpen !== false ? 'bg-white/15 text-white border border-white/25' : 'bg-gray-950/70 text-white border border-white/25'"
-                >
-                  <span class="w-1.5 h-1.5 rounded-full" :class="vendor.isOpen !== false ? 'bg-emerald-400 animate-pulse' : 'bg-white/60'"></span>
+
+            <div class="id-main">
+              <h1 class="shop-name">{{ toTitleCase(vendor.storeName) }}</h1>
+              <div class="meta">
+                <span class="state" :class="vendor.isOpen !== false ? 'open' : 'shut'">
+                  <span class="dot" aria-hidden="true"></span>
                   {{ vendor.isOpen !== false ? 'Open now' : 'Closed now' }}
                 </span>
-                <span v-if="vendor.isInsideCampus" class="px-2.5 py-1 rounded-lg bg-white/10 border border-white/10 text-white/70 text-[10px] font-medium shrink-0">
-                  On Campus
-                </span>
-                <span v-if="vendor.preOrderOnly" class="px-2.5 py-1 rounded-lg bg-purple-500/20 border border-purple-400/30 text-purple-300 text-[10px] font-medium shrink-0">
-                  📅 PRE-ORDER ONLY
-                </span>
-              </div>
-              <h1 class="text-2xl md:text-3xl font-medium text-white tracking-tight leading-tight truncate">{{ toTitleCase(vendor.storeName) }}</h1>
-              <!-- Stats Row -->
-              <div class="flex items-center gap-3 mt-2 text-white/70 text-sm font-bold flex-wrap">
-                <button @click="showReviewsModal = true" class="flex items-center gap-1 hover:text-white transition-colors cursor-pointer active:scale-95 bg-white/10 px-2 py-1 rounded-lg border border-white/10">
-                  <Star class="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                  <template v-if="(vendor.totalRatings || 0) > 0">
-                    <span class="text-white font-medium">{{ Number(vendor.rating).toFixed(1) }}</span>
-                    <span>({{ vendor.totalRatings }} {{ vendor.totalRatings === 1 ? 'review' : 'reviews' }})</span>
-                  </template>
-                  <span v-else class="text-white font-medium">New</span>
-                  <ChevronRight class="w-3 h-3 ml-1 opacity-50" />
-                </button>
-                <template v-if="vendor.preparationTime > 0">
-                  <span class="w-1 h-1 rounded-full bg-white/30"></span>
-                  <span class="flex items-center gap-1">
-                    <Clock class="w-3 h-3" />
-                    {{ vendor.preparationTime }} min
-                  </span>
+
+                <template v-if="(vendor.totalRatings || 0) > 0">
+                  <button type="button" class="meta-link" @click="showReviewsModal = true">
+                    <Star class="w-3.5 h-3.5" aria-hidden="true" />
+                    {{ Number(vendor.rating).toFixed(1) }}
+                    <span class="count">({{ vendor.totalRatings }})</span>
+                  </button>
                 </template>
-                <template v-if="lowestProductPrice > 0">
-                  <span class="w-1 h-1 rounded-full bg-white/30"></span>
-                  <span class="flex items-center gap-1">
-                    <Bike class="w-3 h-3" />
-                    From ₦{{ lowestProductPrice.toLocaleString() }}
-                  </span>
-                </template>
+                <span v-else class="meta-plain">New here</span>
+
+                <span v-if="vendor.preparationTime > 0" class="meta-plain">{{ vendor.preparationTime }} min</span>
+                <span v-if="lowestProductPrice > 0" class="meta-plain">From ₦{{ lowestProductPrice.toLocaleString() }}</span>
               </div>
             </div>
+          </div>
+
+          <div class="shop-actions">
+            <button
+              type="button"
+              class="shop-btn"
+              :class="{ on: isGroupOrderActiveForThisVendor }"
+              @click="handleStartGroupOrder"
+            >
+              <Users class="w-4 h-4" aria-hidden="true" />
+              {{ isGroupOrderActiveForThisVendor ? `Group ${activeCode}` : 'Group order' }}
+            </button>
+
+            <button v-if="isPharmacy" type="button" class="shop-btn pharmacist" @click="showPharmacistChat = true">
+              <MessageCircle class="w-4 h-4" aria-hidden="true" />
+              Ask a pharmacist
+            </button>
+
+            <button v-if="vendor.preOrderOnly" type="button" class="shop-tag">Pre-order only</button>
+            <span v-if="vendor.isInsideCampus" class="shop-tag">On campus</span>
           </div>
         </div>
       </section>
-
-      <!-- ============================================ -->
-      <!-- ACTION CHIPS BAR                             -->
-      <!-- ============================================ -->
-      <div class="max-w-[1400px] mx-auto px-4 md:px-4 -mt-4 relative z-20">
-        <div class="flex w-full min-w-0 items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
-          <button 
-            @click="handleStartGroupOrder"
-            class="flex items-center gap-2 px-4 py-2.5 rounded-2xl text-sm font-medium transition-all whitespace-nowrap shrink-0 shadow-sm border border-gray-50 active:scale-95"
-            :class="isGroupOrderActiveForThisVendor ? 'bg-emerald-500 text-white' : 'bg-white text-gray-900 border border-gray-50 shadow-sm border border-gray-50'"
-          >
-            <Users class="w-3.5 h-3.5" />
-            {{ isGroupOrderActiveForThisVendor ? `Group: ${activeCode}` : 'Group Order' }}
-          </button>
-
-          <!-- Ask before you buy: the question behind drug safety is a clinical one. -->
-          <button
-            v-if="isPharmacy"
-            @click="showPharmacistChat = true"
-            class="flex items-center gap-2 px-4 py-2.5 rounded-2xl text-sm font-medium transition-all whitespace-nowrap shrink-0 shadow-sm border border-emerald-100 bg-emerald-50 text-emerald-700 active:scale-95"
-          >
-            <MessageCircle class="w-3.5 h-3.5" />
-            Speak to a pharmacist
-          </button>
-          
-          <button 
-            @click="showMobileCartDrawer = true" 
-            class="lg:hidden flex items-center gap-2 px-4 py-2.5 bg-white text-gray-900 rounded-2xl text-sm font-medium transition-all whitespace-nowrap shadow-sm border border-gray-50 border border-gray-50 shrink-0 active:scale-95"
-          >
-            <ShoppingBag class="w-3.5 h-3.5" />
-            <span v-if="cart.getVendorStats(vendor._id).itemCount > 0" class="bg-parentPrimary text-white px-1.5 py-0.5 rounded-md text-[10px]">{{ cart.getVendorStats(vendor._id).itemCount }}</span>
-            <span v-else>My Cart</span>
-          </button>
-        </div>
-      </div>
 
       <!-- ============================================ -->
       <!-- PROMO BANNERS (Horizontal Scroll)            -->
@@ -271,7 +229,7 @@
       <!-- STICKY CATEGORY PILLS                        -->
       <!-- ============================================ -->
       <div 
-        class="sticky z-30 bg-white/95 backdrop-blur-xl border-b border-gray-50 transition-all duration-300"
+        class="cat-bar"
         :class="scrolled ? 'top-[57px]' : 'top-0'"
       >
         <div class="max-w-[1400px] mx-auto px-4 md:px-4 py-2.5 flex flex-col md:flex-row items-center gap-3">
@@ -284,7 +242,7 @@
               v-model="searchQuery"
               type="text" 
               :placeholder="`Search ${vendor?.storeName || 'Store'}...`"
-              class="block w-full pl-10 pr-3 py-2 border border-gray-50 rounded-lg leading-5 bg-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-parentPrimary focus:border-parentPrimary sm:text-base transition-all shadow-sm"
+              class="cat-search"
             />
           </div>
 
@@ -292,16 +250,16 @@
           <div class="flex-1 w-full overflow-x-auto scrollbar-hide flex items-center gap-2 pb-1">
             <button 
               @click="scrollToCategory('')"
-              class="px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap shrink-0"
-              :class="!activeCategory ? 'bg-parentPrimary/10 text-parentPrimary font-bold' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'"
+              class="cat-chip"
+              :class="{ on: !activeCategory }"
             >
               All
             </button>
             <button 
               v-if="packs.length > 0 && !isMiniMart"
               @click="scrollToCategory('combos-promos')"
-              class="px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap shrink-0"
-              :class="activeCategory === 'combos-promos' ? 'bg-parentPrimary/10 text-parentPrimary font-bold' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'"
+              class="cat-chip"
+              :class="{ on: activeCategory === 'combos-promos' }"
             >
               Combos
             </button>
@@ -309,8 +267,8 @@
               <button
                 v-if="groupedProducts[cat] && groupedProducts[cat].length > 0"
                 @click="scrollToCategory(cat)"
-                class="px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap shrink-0"
-                :class="activeCategory === cat ? 'bg-parentPrimary/10 text-parentPrimary font-bold' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'"
+                class="cat-chip"
+                :class="{ on: activeCategory === cat }"
               >
                 {{ toTitleCase(cat) }}
               </button>
@@ -443,10 +401,9 @@
                 class="scroll-mt-32"
               >
               <!-- Category Header -->
-              <div class="flex items-center gap-3 mb-5">
-                <h2 class="text-lg font-medium text-gray-900 tracking-tight">{{ toTitleCase(cat) }}</h2>
-                <div class="h-px bg-gray-100 flex-1"></div>
-                <span class="text-sm font-bold text-gray-400">{{ groupedProducts[cat]?.length || 0 }} items</span>
+              <div class="cat-head">
+                <h2 class="cat-title">{{ toTitleCase(cat) }}</h2>
+                <span class="cat-count">{{ groupedProducts[cat]?.length || 0 }} items</span>
               </div>
 
               <!-- MOBILE: Horizontal List Cards -->
@@ -526,14 +483,14 @@
                   v-for="product in (isMiniMart && !expandedCategories[cat] ? groupedProducts[cat].slice(0, 10) : groupedProducts[cat])" 
                   :key="product._id"
                   @click="openProductModal(product)"
-                  class="group relative bg-white rounded-2xl border border-gray-50 hover:border-parentPrimary/20 hover:shadow-sm transition-all duration-300 cursor-pointer overflow-hidden flex flex-col"
+                  class="pcard"
                   :class="{ 'opacity-50 grayscale pointer-events-none': isProductOutOfStock(product) }"
                 >
                   <!-- Promo Badge -->
                   <div v-if="product.isPrepaidByPlatform" class="absolute top-3 left-3 z-20 px-2 py-1 bg-indigo-500 text-white border-indigo-600 rounded shadow text-[10px] font-bold uppercase tracking-wider">Promo</div>
                   
                   <!-- Media Carousel (compact & proportional height) -->
-                  <div class="w-full h-44 sm:h-48 overflow-hidden relative bg-gray-50 shrink-0">
+                  <div class="pcard-media">
                     <MediaCarousel 
                       :media-items="getMediaItems(product)" 
                       :default-placeholder="isFoodVendor ? '/placeholder-food.jpg' : '/placeholder-store.jpg'"
@@ -554,7 +511,7 @@
                   
                   
                   <!-- Content -->
-                  <div class="p-4 flex-1 flex flex-col justify-between">
+                  <div class="pcard-body">
                     <div>
                       <div v-if="isPharmacy" class="mb-1.5 flex flex-wrap gap-1">
                         <span v-if="product.requiresPrescription || product.prescriptionType === 'pom' || product.prescriptionType === 'controlled'"
@@ -568,11 +525,11 @@
                           Cold chain
                         </span>
                       </div>
-                      <h3 class="text-sm font-medium text-gray-900 tracking-tight leading-tight mb-1 group-hover:text-parentPrimary transition-colors">{{ product.name }}</h3>
-                      <p class="text-[11px] font-medium text-gray-400 line-clamp-2 leading-relaxed">{{ product.description || defaultProductDescription }}</p>
+                      <h3 class="pcard-name">{{ product.name }}</h3>
+                      <p class="pcard-desc">{{ product.description || defaultProductDescription }}</p>
                     </div>
                     
-                    <div class="flex items-end justify-between mt-4 pt-3 border-t border-gray-50">
+                    <div class="pcard-foot">
                       <div>
                         <span v-if="product.discountPrice" class="text-sm text-gray-300 line-through block mb-0.5">₦{{ (product.pricePerPortion || product.price || 0).toLocaleString() }}</span>
                         <div class="flex items-baseline gap-1">
@@ -2946,5 +2903,419 @@ onUnmounted(() => {
 :deep(.lg\:col-span-4 > div) {
   border-color: var(--line);
   background: var(--card);
+}
+
+/* ─── Hero ───
+   The photo is the shop's; the card is ours. State, rating and actions all live in one place so the
+   banner is not asked to carry text over a photo the vendor chose. */
+.hero {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 12px 16px 0;
+}
+
+.hero-media {
+  position: relative;
+  height: 200px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+@media (min-width: 768px) {
+  .hero-media {
+    height: 260px;
+  }
+}
+
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(23, 19, 15, 0.45), rgba(23, 19, 15, 0.05) 60%);
+}
+
+.hero-dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(18, 16, 16, 0.4);
+}
+
+.hero-actions {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 12px;
+}
+
+.hero-actions-right {
+  display: flex;
+  gap: 8px;
+}
+
+.hero-btn {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(23, 19, 15, 0.38);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.hero-btn:hover {
+  background: rgba(23, 19, 15, 0.6);
+}
+
+.hero-btn .saved {
+  fill: var(--accent);
+  color: var(--accent);
+}
+
+.hero-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  padding: 0 4px;
+}
+
+.hero-card {
+  position: relative;
+  margin: -34px 12px 0;
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: var(--card);
+}
+
+@media (min-width: 768px) {
+  .hero-card {
+    margin-left: 24px;
+    margin-right: 24px;
+    padding: 18px 20px;
+  }
+}
+
+.id-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  overflow: hidden;
+  flex: none;
+  border: 1px solid var(--line);
+  background: var(--bg);
+}
+
+.logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.id-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.shop-name {
+  margin: 0;
+  font-size: clamp(21px, 3.4vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.state {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.state.open {
+  background: var(--green-soft);
+  color: #15803d;
+}
+
+.state.shut {
+  background: var(--bg);
+  color: var(--mute);
+  border: 1px solid var(--line);
+}
+
+.state .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.meta-link,
+.meta-plain {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--mute);
+}
+
+.meta-link {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  color: var(--ink);
+}
+
+.meta-link .count {
+  color: var(--mute);
+  font-weight: 650;
+}
+
+.meta-link :global(svg) {
+  color: #d97706;
+  fill: #d97706;
+}
+
+.shop-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.shop-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 14px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.shop-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.shop-btn.on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.shop-btn.pharmacist {
+  border-color: var(--green-soft);
+  background: var(--green-soft);
+  color: #15803d;
+}
+
+.shop-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--mute);
+  font-size: 13.5px;
+  font-weight: 700;
+  background: transparent;
+}
+
+/* ─── Category chips ─── */
+.cat-chip {
+  flex: none;
+  padding: 9px 15px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--mute);
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cat-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.cat-chip.on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* ─── Category headers ─── */
+.cat-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.cat-title {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+
+.cat-count {
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--mute);
+}
+
+/* ─── Product card ─── */
+.pcard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.pcard:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.pcard-media {
+  position: relative;
+  width: 100%;
+  height: 176px;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+@media (min-width: 640px) {
+  .pcard-media {
+    height: 192px;
+  }
+}
+
+.pcard-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  padding: 14px;
+}
+
+.pcard-name {
+  margin: 0 0 4px;
+  font-size: 15.5px;
+  font-weight: 750;
+  line-height: 1.25;
+  color: var(--ink);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pcard-desc {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--mute);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pcard-foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+/* ─── Sticky category bar ─── */
+.cat-bar {
+  position: sticky;
+  z-index: 30;
+  background: color-mix(in srgb, var(--bg) 94%, transparent);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+
+.cat-search {
+  display: block;
+  width: 100%;
+  padding: 11px 12px 11px 38px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font-size: 15px;
+  outline: none;
+}
+
+.cat-search::placeholder {
+  color: var(--mute);
+}
+
+.cat-search:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(242, 106, 46, 0.16);
 }
 </style>
