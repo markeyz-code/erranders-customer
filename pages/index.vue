@@ -293,13 +293,19 @@
     </main>
 
     <footer class="foot">
-      <div class="foot-top">
+      <div class="foot-inner">
         <div class="foot-brand">
-          <img src="@/assets/img/logo-light.png" alt="Erranders" class="brand-img" />
-          <p class="foot-line">Campus delivery and errands, run by students.</p>
+          <NuxtLink to="/" aria-label="Erranders home">
+            <img src="@/assets/img/logo-light.png" alt="Erranders" class="brand-img" />
+          </NuxtLink>
+          <p class="foot-line">Food, errands, meal plans and swaps for students on campus.</p>
+          <NuxtLink to="/vendors" class="foot-cta">
+            Order something
+            <ArrowRight class="w-4 h-4" aria-hidden="true" />
+          </NuxtLink>
         </div>
 
-        <div class="foot-cols">
+        <nav class="foot-cols" aria-label="Footer">
           <div class="foot-col">
             <p class="foot-title">Platform</p>
             <NuxtLink to="/vendors" class="foot-link">Food</NuxtLink>
@@ -318,10 +324,13 @@
             <NuxtLink to="/vendor-signup" class="foot-link">Sell on Erranders</NuxtLink>
             <NuxtLink to="/dispatch" class="foot-link">Ride with us</NuxtLink>
           </div>
-        </div>
+        </nav>
       </div>
 
-      <p class="foot-copy">© {{ year }} Erranders. All rights reserved.</p>
+      <div class="foot-base">
+        <p class="foot-copy">© {{ year }} Erranders. All rights reserved.</p>
+        <p class="foot-note">Built for campus life.</p>
+      </div>
     </footer>
   </div>
 </template>
@@ -1531,60 +1540,111 @@ useHead({
   text-decoration: none;
 }
 
-/* Footer */
+/* Footer: the page colour, not a white band bolted on the end. */
 .foot {
+  margin-top: 48px;
   border-top: 1px solid var(--line);
-  background: var(--surface);
-  padding: 40px 20px 28px;
+  background: var(--page);
+  padding: 48px 20px 28px;
 }
 
-.foot-top {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 32px;
-  justify-content: space-between;
+.foot-inner {
+  display: grid;
+  gap: 36px;
   max-width: 1120px;
   margin: 0 auto;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 860px) {
+  .foot-inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    align-items: start;
+    gap: 48px;
+  }
+}
+
+.foot-brand {
+  min-width: 0;
 }
 
 .foot-line {
-  margin: 10px 0 0;
+  margin: 14px 0 0;
   font-size: 15px;
+  line-height: 1.55;
   color: var(--muted);
-  max-width: 34ch;
+  max-width: 32ch;
+}
+
+.foot-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+  padding: 11px 15px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 14.5px;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.foot-cta:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .foot-cols {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 40px;
+  display: grid;
+  gap: 28px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 560px) {
+  .foot-cols {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .foot-title {
-  margin: 0 0 10px;
+  margin: 0 0 12px;
   font-size: 14px;
   font-weight: 750;
+  color: var(--ink);
 }
 
 .foot-link {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   color: var(--muted);
-  font-size: 14.5px;
+  font-size: 15px;
   text-decoration: none;
+  width: fit-content;
 }
 
 .foot-link:hover {
   color: var(--accent);
 }
 
-.foot-copy {
+.foot-base {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
   max-width: 1120px;
-  margin: 28px auto 0;
+  margin: 36px auto 0;
   padding-top: 18px;
   border-top: 1px solid var(--line);
+}
+
+.foot-copy,
+.foot-note {
+  margin: 0;
   font-size: 14px;
-  color: var(--faint);
+  color: var(--mute);
 }
 
 .landing :where(a, button, input):focus-visible {
