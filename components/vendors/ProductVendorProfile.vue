@@ -872,7 +872,7 @@
         leave-from-class="translate-y-0"
         leave-to-class="translate-y-full"
       >
-        <div v-if="showMobileCartDrawer" class="fixed inset-0 z-[101] bg-white overflow-y-auto lg:hidden flex flex-col">
+        <div v-if="showMobileCartDrawer" class="sheet-full lg:hidden">
           <!-- Header -->
           <div class="sticky top-0 bg-white border-b border-gray-100 z-10 shadow-sm">
             <div class="flex items-center justify-between px-5 py-4">
@@ -1190,8 +1190,8 @@
         leave-from-class="opacity-100"
         leave-to-class="opacity-0"
       >
-        <div v-if="showStoreInfo" class="fixed inset-0 z-[110] flex items-end md:items-center justify-center p-0 md:p-4 bg-black/50 backdrop-blur-sm" @click.self="showStoreInfo = false">
-          <div class="bg-white w-full md:max-w-lg rounded-t-[2rem] md:rounded-[2rem] shadow-sm border border-gray-50 overflow-hidden animate-slide-up-mobile md:animate-zoom-in">
+        <div v-if="showStoreInfo" class="sheet-overlay" @click.self="showStoreInfo = false">
+          <div class="sheet md:max-w-lg">
             <!-- Banner -->
             <div class="relative h-44">
               <video v-if="(vendor.banner || vendor.logo) && (vendor.banner || vendor.logo).match(/\\.(mp4|webm|ogg|mov)$/i)" :src="vendor.banner || vendor.logo" class="w-full h-full object-cover" autoplay loop muted playsinline></video>
@@ -1389,8 +1389,8 @@
         leave-from-class="opacity-100"
         leave-to-class="opacity-0"
       >
-        <div v-if="selectedProduct" class="fixed inset-0 z-[110] flex flex-col md:items-center md:justify-center p-0 md:p-4 bg-black/50 backdrop-blur-sm" @click.self="selectedProduct = null; editingCartItem = null">
-          <div class="bg-white flex-1 md:flex-initial md:rounded-[2rem] w-full md:max-w-sm overflow-y-auto shadow-sm border border-gray-50 animate-slide-up-mobile md:animate-zoom-in flex flex-col">
+        <div v-if="selectedProduct" class="sheet-overlay tall" @click.self="selectedProduct = null; editingCartItem = null">
+          <div class="sheet md:max-w-sm">
             <!-- Product Media Carousel -->
             <div class="h-56 md:h-64 relative group">
               <div 
@@ -1572,10 +1572,8 @@
         leave-from-class="opacity-100"
         leave-to-class="opacity-0"
       >
-        <div v-if="showVendorNoteModal" class="fixed inset-0 z-[150] bg-black/50 backdrop-blur-sm flex flex-col items-center justify-end sm:justify-center sm:p-4" @click.self="showVendorNoteModal = false">
-          <div 
-            class="bg-white w-full h-full sm:h-auto sm:max-w-md rounded-none sm:rounded-[2rem] shadow-sm border border-gray-50 flex flex-col animate-slide-up-mobile sm:animate-zoom-in relative"
-          >
+        <div v-if="showVendorNoteModal" class="sheet-overlay" @click.self="showVendorNoteModal = false">
+          <div class="sheet sm:max-w-md">
             <!-- Close button floating -->
             <button @click="showVendorNoteModal = false" class="absolute top-4 right-4 w-10 h-10 bg-gray-50 hover:bg-gray-100 transition-colors rounded-full flex items-center justify-center text-gray-500 hover:text-gray-900 shadow-sm z-10 active:scale-95">
               <X class="w-5 h-5" />
@@ -1650,14 +1648,13 @@
   </div>
   <!-- Pharmacist question sheet -->
   <Teleport to="body">
-    <div v-if="showPharmacistChat" class="fixed inset-0 z-[200] flex items-end justify-center sm:items-center">
-      <div class="absolute inset-0 bg-gray-900/50 backdrop-blur-[2px]" @click="showPharmacistChat = false" />
+    <div v-if="showPharmacistChat" class="sheet-overlay">
+      <div class="absolute inset-0 bg-[var(--overlay)]" aria-hidden="true" @click="showPharmacistChat = false" />
 
-      <div class="relative w-full max-w-md rounded-t-2xl bg-white p-5 shadow-2xl sm:rounded-2xl">
+      <div class="sheet sm:max-w-md p-5">
         <div class="mb-3 flex items-start justify-between">
           <div>
-            <p class="text-[10px] font-bold uppercase tracking-wider text-emerald-600">Pharmacist</p>
-            <h3 class="text-base font-black tracking-tight text-gray-900">Ask before you buy</h3>
+            <h3 class="text-lg font-black tracking-tight text-gray-900">Ask a pharmacist</h3>
           </div>
           <button class="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100" @click="showPharmacistChat = false">
             <X class="h-4 w-4" />
@@ -3317,5 +3314,60 @@ onUnmounted(() => {
 .cat-search:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(242, 106, 46, 0.16);
+}
+
+/* ─── Overlay shell ───
+   Every modal and drawer uses this, so they cannot drift apart: one scrim, one radius, one close
+   affordance, one scroll area. */
+.sheet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: var(--overlay);
+  backdrop-filter: blur(4px);
+}
+
+@media (min-width: 768px) {
+  .sheet-overlay {
+    align-items: center;
+    padding: 16px;
+  }
+}
+
+.sheet-overlay.tall {
+  align-items: stretch;
+}
+
+.sheet {
+  position: relative;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 20px 20px 0 0;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+}
+
+@media (min-width: 768px) {
+  .sheet {
+    border-radius: 20px;
+    max-height: 86vh;
+  }
+}
+
+/* Full-height sheet for the phone cart. */
+.sheet-full {
+  position: fixed;
+  inset: 0;
+  z-index: 101;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background: var(--card);
+  color: var(--ink);
 }
 </style>
