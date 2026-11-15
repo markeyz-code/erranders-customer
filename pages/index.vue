@@ -675,19 +675,7 @@ const onTabKey = (e: KeyboardEvent) => {
   el?.focus();
 };
 
-// Light unless the student chose dark. Same key as the dashboard toggle, so the choice follows them.
-const isDark = ref(false);
-const applyTheme = (dark: boolean, persist = true) => {
-  isDark.value = dark;
-  if (typeof document !== 'undefined') {
-    document.documentElement.classList.toggle('dark', dark);
-    document.documentElement.classList.toggle('light', !dark);
-  }
-  if (persist && typeof localStorage !== 'undefined') {
-    localStorage.setItem('erranders-theme', dark ? 'dark' : 'light');
-  }
-};
-const toggleTheme = () => applyTheme(!isDark.value);
+
 const year = new Date().getFullYear();
 
 const openVendors = computed(() =>
@@ -734,8 +722,6 @@ onBeforeUnmount(() => {
 });
 
 onMounted(() => {
-  const saved = typeof localStorage !== 'undefined' ? localStorage.getItem('erranders-theme') : null;
-  applyTheme(saved === 'dark', false);
   startPhrases();
   // The slide carousel stays off while its tabs and pause control are hidden.
   running.value = false;

@@ -777,21 +777,7 @@ const scrolled = ref(false)
 const $route = useRoute()
 const { user, logOut } = useUser()
 
-// Light unless the student chose dark. Same key as the dashboard, so the choice travels with them.
-const isDark = ref(false)
-
-const applyTheme = (dark: boolean, persist = true) => {
-  isDark.value = dark
-  if (typeof document !== 'undefined') {
-    document.documentElement.classList.toggle('dark', dark)
-    document.documentElement.classList.toggle('light', !dark)
-  }
-  if (persist && typeof localStorage !== 'undefined') {
-    localStorage.setItem('erranders-theme', dark ? 'dark' : 'light')
-  }
-}
-
-const toggleTheme = () => applyTheme(!isDark.value)
+const { isDark, toggleTheme } = useTheme()
 const { itemCount: cartItemCount } = useCart()
 const { globalFilter, setFilter, globalFiltersList, fetchCategories } = useGlobalFilter()
 
@@ -850,8 +836,6 @@ const handleScroll = () => {
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
-  const saved = typeof localStorage !== 'undefined' ? localStorage.getItem('erranders-theme') : null
-  applyTheme(saved === 'dark', false)
   fetchCategories()
 })
 

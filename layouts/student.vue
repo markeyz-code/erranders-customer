@@ -610,25 +610,9 @@ const handleLogoutClick = () => {
   logoutModalOpen.value = true
 }
 
-const isDark = ref(false);
-
-const applyTheme = (dark: boolean, persist = true) => {
-  isDark.value = dark;
-  if (typeof document !== 'undefined') {
-    // Both classes are explicit: theme.css only falls back to the OS when neither is set.
-    document.documentElement.classList.toggle('dark', dark);
-    document.documentElement.classList.toggle('light', !dark);
-  }
-  if (persist && typeof localStorage !== 'undefined') {
-    localStorage.setItem('erranders-theme', dark ? 'dark' : 'light');
-  }
-};
-
-const toggleTheme = () => applyTheme(!isDark.value);
+const { isDark, toggleTheme } = useTheme();
 
 onMounted(() => {
-  const saved = typeof localStorage !== 'undefined' ? localStorage.getItem('erranders-theme') : null;
-  applyTheme(saved === 'dark', false);
 });
 
 // The order tracker carries its own status hero; the layout bar would repeat it.
