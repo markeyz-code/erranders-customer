@@ -2,75 +2,83 @@
   <div class="min-h-screen bg-white selection:bg-parentPrimary/10 selection:text-parentPrimary font-sans">
 
     <!-- ===== EMPTY STATE ===== -->
-    <div v-if="cartStore.isEmpty.value" class="min-h-screen flex flex-col">
-      <!-- Header -->
-      <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-gray-50">
-        <div class="max-w-5xl mx-auto flex items-center justify-between px-4 md:px-4 py-4">
-          <NuxtLink to="/" class="flex items-center gap-2.5 group">
-            <!-- <div class="w-9 h-9 bg-gray-900 rounded-xl flex items-center justify-center text-white border border-gray-50 group-hover:bg-parentPrimary transition-all">
-              <ShoppingBag class="w-4 h-4" />
-            </div>
-            <span class="text-lg font-bold text-gray-900 tracking-tighter">Errandr</span> -->
-            <img src="@/assets/img/logo-light.png" class="w-32" />
-          </NuxtLink>
-          
-          <NuxtLink to="/dashboard/search" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center border border-gray-50 hover:bg-gray-100 transition-all active:scale-95 text-gray-900">
-            <Search class="w-4.5 h-4.5" />
-          </NuxtLink>
-        </div>
+    <div v-if="cartStore.isEmpty.value" class="empty-wrap">
+      <header class="empty-head">
+        <h1>Your cart</h1>
+        <p>Nothing here yet, and that is fine.</p>
       </header>
 
-      <div class="flex-1 flex flex-col items-center justify-center p-4 max-w-lg mx-auto text-center">
-        <div class="w-24 h-24 bg-gray-50 rounded-[2rem] flex items-center justify-center text-5xl mb-8 animate-float">🛒</div>
-        <h2 class="text-3xl font-medium text-gray-900 mb-3 tracking-tight">Your cart is empty</h2>
-        <p class="text-sm font-medium text-gray-400 mb-8 leading-relaxed">Discover your favorite campus meals and start building your order.</p>
-        <NuxtLink to="/vendors" class="px-5 py-4 bg-gray-900 text-white rounded-2xl font-medium text-sm tracking-wider hover:bg-parentPrimary transition-all active:scale-95 flex items-center gap-2 border border-gray-50">
-          <ShoppingBag class="w-4 h-4" /> Browse Vendors
+      <!-- One slim dark card instead of a full screen of nothing. -->
+      <section class="empty-card">
+        <div class="empty-card-main">
+          <p class="empty-card-title">Nothing in here yet.</p>
+          <p class="empty-card-sub">
+            {{ openVendors.length }}
+            {{ openVendors.length === 1 ? 'store is' : 'stores are' }} open right now.
+          </p>
+        </div>
+        <NuxtLink to="/vendors" class="empty-btn">
+          Browse open vendors
+          <ArrowRight class="w-4 h-4" aria-hidden="true" />
         </NuxtLink>
-      </div>
+      </section>
 
-      <!-- Campus Favorites -->
-      <div v-if="loadingVendors || popularVendors.length > 0" class="max-w-5xl mx-auto w-full px-4 md:px-4 pb-12">
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-lg font-medium text-gray-900 tracking-tight">Campus Favorites 🔥</h3>
-          <NuxtLink to="/vendors" class="text-sm font-medium text-parentPrimary hover:underline px-3 py-1.5 rounded-lg bg-parentPrimary/5">See all</NuxtLink>
+      <!-- Open now: photos, name, category, time, rating. Closed stores are not cards here. -->
+      <section v-if="loadingVendors || openVendors.length" class="open-sec">
+        <div class="sec-head">
+          <h2>Open right now</h2>
+          <NuxtLink to="/vendors" class="sec-link">See all</NuxtLink>
         </div>
-        <div v-if="loadingVendors" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div v-for="i in 3" :key="i" class="h-48 bg-gray-50 rounded-2xl animate-pulse"></div>
+
+        <div v-if="loadingVendors" class="store-grid">
+          <div v-for="i in 3" :key="i" class="store-skel" />
         </div>
-        <div v-else-if="popularVendors.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        <div v-else class="store-grid">
           <NuxtLink
-            v-for="vendor in popularVendors.slice(0, 6)"
+            v-for="vendor in openVendors"
             :key="vendor._id"
             :to="`/vendors/${vendor._id}`"
-            class="bg-white rounded-2xl border border-gray-50 overflow-hidden transition-all group hover:-translate-y-0.5 hover:shadow-sm border border-gray-50 block"
+            class="store"
           >
-            <div class="h-28 w-full bg-gray-50 relative overflow-hidden">
-              <video v-if="(vendor.banner || vendor.logo) && (vendor.banner || vendor.logo).match(/\\.(mp4|webm|ogg|mov)/i)" :src="vendor.banner || vendor.logo" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" autoplay loop muted playsinline></video>
-              <img v-else :src="vendor.banner || vendor.logo || '/placeholder-store.jpg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-              <!-- Padlock -->
-              <div v-if="vendor.isOpen === false" class="absolute inset-0 bg-black/60 z-10 flex flex-col items-center justify-center">
-                <Lock class="w-6 h-6 text-white mb-1" />
-                <span class="text-white font-bold text-[9px] tracking-wide text-center leading-tight">STORE<br/>CLOSED</span>
-              </div>
-              <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
-              <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center gap-1 z-20">
-                <Star class="w-3 h-3 text-amber-500 fill-current" />
-                <span class="text-sm font-medium text-gray-900">{{ vendor.rating?.toFixed(1) || '5.0' }}</span>
-              </div>
+            <div class="store-media">
+              <video
+                v-if="isVideo(vendor.banner || vendor.logo)"
+                :src="vendor.banner || vendor.logo"
+                class="store-img"
+                autoplay
+                loop
+                muted
+                playsinline
+              />
+              <img v-else :src="vendor.banner || vendor.logo || '/placeholder-store.jpg'" class="store-img" alt="" />
+              <span class="store-rating">
+                <Star class="w-3 h-3" aria-hidden="true" />
+                {{ vendor.rating?.toFixed(1) || '5.0' }}
+              </span>
             </div>
-            <div class="p-4 flex items-center justify-between gap-3">
-              <div class="min-w-0">
-                <h4 class="text-sm font-medium text-gray-900 truncate tracking-tight">{{ vendor.storeName }}</h4>
-                <p class="text-sm font-bold text-gray-400 mt-0.5">{{ vendor.preparationTime || 20 }} min · {{ vendor.category }}</p>
-              </div>
-              <div class="w-7 h-7 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-parentPrimary group-hover:text-white transition-colors shrink-0">
-                <ArrowRight class="w-3.5 h-3.5" />
-              </div>
+            <div class="store-body">
+              <p class="store-name">{{ vendor.storeName }}</p>
+              <p class="store-meta">
+                {{ vendor.preparationTime || 20 }} min
+                <span aria-hidden="true">·</span>
+                {{ vendor.category || 'Store' }}
+              </p>
             </div>
           </NuxtLink>
         </div>
-      </div>
+      </section>
+
+      <!-- Closed: one dashed box of chips. No lock overlays, no dead photo tiles. -->
+      <section v-if="closedVendors.length" class="closed">
+        <p class="closed-title">Closed right now</p>
+        <div class="closed-chips">
+          <span v-for="vendor in closedVendors" :key="vendor._id" class="closed-chip">
+            {{ vendor.storeName }}
+            <span class="closed-when">{{ opensAt(vendor) }}</span>
+          </span>
+        </div>
+      </section>
     </div>
 
     <!-- ===== ACTIVE CART + CHECKOUT ===== -->
@@ -1116,6 +1124,23 @@ const paymentMethod = ref<'card' | 'wallet'>('card');
 const { groupOrder, activeCode, fetchGroupOrder, isHost, isSponsor, getMyStatus, initiateCheckout, checkout: submitGroupCheckout, syncWithCart } = useGroupOrder();
 const { showToast } = useCustomToast();
 const { popularVendors, vendorsMetadata, fetchPopularVendors, fetchBulkMetadata, loading: loadingVendors } = useVendors();
+
+// Open stores earn the space; closed ones collapse to a chip so the page never shows dead photos.
+const openVendors = computed(() => (popularVendors.value || []).filter((v: any) => v?.isOpen !== false));
+const closedVendors = computed(() => (popularVendors.value || []).filter((v: any) => v?.isOpen === false));
+
+const isVideo = (src?: string) => Boolean(src && String(src).match(/\.(mp4|webm|ogg|mov)$/i));
+
+/** Whatever the API calls it, show a time the student can act on. */
+const opensAt = (vendor: any) => {
+  const raw =
+    vendor?.openingTime ||
+    vendor?.opensAt ||
+    vendor?.businessHours?.open ||
+    vendor?.openTime;
+  if (!raw) return 'Opens later';
+  return `Opens ${String(raw)}`;
+};
 const { createOrder } = useStudentOrders();
 const { triggerOrderSuccessChat } = useChat();
 
@@ -2342,4 +2367,215 @@ const preCreateOrders = async (): Promise<string[]> => {
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .animate-zoom-in { animation: zoomIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
 @keyframes zoomIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+</style>
+
+<style scoped>
+/* CART EMPTY STATE — warm page, one dark card, open stores only. */
+.empty-wrap {
+  padding: 24px 16px 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.empty-head h1 {
+  margin: 0;
+  font-size: clamp(26px, 5vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  color: var(--dash-ink, #141110);
+}
+
+.empty-head p {
+  margin: 4px 0 0;
+  font-size: 15px;
+  color: var(--dash-muted, #6b655d);
+}
+
+.empty-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: var(--dash-ink, #141110);
+  color: var(--dash-page, #faf8f5);
+}
+
+.empty-card-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 750;
+}
+
+.empty-card-sub {
+  margin: 3px 0 0;
+  font-size: 15px;
+  opacity: 0.72;
+}
+
+.empty-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 12px 17px;
+  border-radius: 12px;
+  background: #f26a2e;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.sec-head h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--dash-ink, #141110);
+}
+
+.sec-link {
+  font-size: 14.5px;
+  font-weight: 750;
+  color: #f26a2e;
+  text-decoration: none;
+}
+
+.store-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 560px) {
+  .store-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1000px) {
+  .store-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.store {
+  border: 1px solid var(--dash-line, #e8e2d9);
+  border-radius: 16px;
+  background: var(--dash-surface, #fff);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s ease;
+}
+
+.store:hover {
+  border-color: #f26a2e;
+}
+
+.store-media {
+  position: relative;
+  height: 128px;
+  background: var(--dash-page, #faf8f5);
+}
+
+.store-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.store-rating {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #141110;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.store-body {
+  padding: 12px 14px 14px;
+}
+
+.store-name {
+  margin: 0;
+  font-size: 15.5px;
+  font-weight: 750;
+  color: var(--dash-ink, #141110);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.store-meta {
+  margin: 3px 0 0;
+  font-size: 14px;
+  color: var(--dash-muted, #6b655d);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.store-skel {
+  height: 200px;
+  border-radius: 16px;
+  background: var(--dash-surface, #fff);
+  border: 1px solid var(--dash-line, #e8e2d9);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.closed {
+  border: 1px dashed var(--dash-line, #e8e2d9);
+  border-radius: 16px;
+  padding: 16px 18px;
+  background: var(--dash-surface, #fff);
+}
+
+.closed-title {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 750;
+  color: var(--dash-ink, #141110);
+}
+
+.closed-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.closed-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--dash-line, #e8e2d9);
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--dash-ink, #141110);
+}
+
+.closed-when {
+  color: var(--dash-muted, #6b655d);
+  font-weight: 600;
+}
 </style>
