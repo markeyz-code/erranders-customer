@@ -1,1263 +1,1082 @@
 <template>
-  <div class="min-h-screen bg-white font-sans text-gray-900 scroll-smooth pb-24">
-  <!-- <CorePromoBanner /> -->
-  <!-- <CoreExamPromoBanner /> -->
-  <BatchDeliveryBanner />
-  <MarketPoolBanner />
-  <ActivePoolOrdersWidget />
- 
- <!-- Birthday Banner -->
- <div v-if="isBirthday" class="bg-[#FF5C1A] text-white py-3 px-4 text-center shadow-sm border border-gray-50 relative z-[51]">
-   <div class="max-w-7xl mx-auto flex items-center justify-center gap-2 animate-bounce">
-     <span class="text-xl">🎂</span>
-     <p class="text-sm md:text-base font-bold tracking-wide">
-       Happy Birthday, {{ user?.firstName }}! Enjoy <span class="text-[#008950] bg-white px-2 py-0.5 rounded-md mx-1 shadow-sm">100% Free Delivery</span> and 10% off your orders today!
-     </p>
-     <span class="text-xl">🎉</span>
-   </div>
- </div>
+  <div class="landing">
+    <!-- Sticky header: four links, one action. Nothing else. -->
+    <header class="nav">
+      <NuxtLink to="/" class="brand" aria-label="Erranders home">
+        <img src="@/assets/img/logo-light.png" alt="Erranders" class="brand-img" />
+      </NuxtLink>
 
-    <!-- Navbar -->
-    <LandingNavbar />
+      <nav class="nav-links" aria-label="Main">
+        <NuxtLink to="/vendors" class="nav-link">Food</NuxtLink>
+        <NuxtLink to="/errands/custom" class="nav-link">Errands</NuxtLink>
+        <NuxtLink to="/dashboard/recurring-orders" class="nav-link">Meal Autopilot</NuxtLink>
+        <NuxtLink to="/market-pool" class="nav-link">Swap</NuxtLink>
+      </nav>
 
-    <!-- Search Overlay (Invisible, just for catching clicks to close) -->
-    <Teleport to="body">
-      <div 
-        v-if="showSuggestions"
-        class="fixed inset-0 bg-transparent z-[30]"
-        @click="showSuggestions = false"
-      ></div>
-    </Teleport>
-
-    <!-- Network-wide hero: same design as Erranders For Business and Declutter. -->
-    <HeroStage
-      :is-elevated="showSuggestions"
-      title="Erranders"
-      :lines="[
-        'Order food from the vendor next door',
-        'Book a barber, a tutor or a mover',
-        'Get it delivered to your hostel door',
-        'Every campus hustle, one place',
-      ]"
-      subtitle="Campus services, delivery and student vendors in one place. Order from the people closest to you."
-      eyebrow="Now on campus"
-      eyebrow-href="/vendors"
-      primary-label="Browse vendors"
-      primary-to="/vendors"
-      secondary-label="Sell something"
-      secondary-to="/sell"
-    >
-          <!-- Hero Quick Tab Switcher: Food & Stores vs Campus Services -->
-          <div id="marketplace-tabs" class="flex items-center justify-center mt-6 -mb-4 relative z-20">
-            <div class="inline-flex items-center p-1 sm:p-1.5 rounded-full bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-md flex-nowrap shrink-0 max-w-full overflow-x-auto no-scrollbar">
-              <button
-                type="button"
-                @click="landingTab = 'stores'"
-                class="px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-black transition-all flex items-center gap-1.5 sm:gap-2 cursor-pointer whitespace-nowrap shrink-0 select-none"
-                :class="landingTab === 'stores' ? 'bg-[#FF5C1A] text-white shadow-sm scale-[1.02]' : 'text-slate-600 hover:text-slate-900'"
-              >
-                <Store class="w-4 h-4 shrink-0" />
-                <span class="whitespace-nowrap">Food &amp; Stores</span>
-              </button>
-
-              <button
-                type="button"
-                @click="landingTab = 'services'"
-                class="px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-black transition-all flex items-center gap-1.5 sm:gap-2 cursor-pointer relative whitespace-nowrap shrink-0 select-none"
-                :class="landingTab === 'services' ? 'bg-[#FF5C1A] text-white shadow-sm scale-[1.02]' : 'text-slate-600 hover:text-slate-900'"
-              >
-                <Sparkles class="w-4 h-4 shrink-0" />
-                <span class="whitespace-nowrap">Campus Services</span>
-                <span
-                  class="px-1.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider whitespace-nowrap shrink-0"
-                  :class="landingTab === 'services' ? 'bg-white text-[#FF5C1A]' : 'bg-[#FF5C1A] text-white'"
-                >
-                  New
-                </span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Search Bar Redesign -->
-          <div 
-            class="mt-10 max-w-3xl mx-auto group relative transition-all duration-700 w-full px-4 sm:px-0"
-            :class="showSuggestions ? 'z-50' : 'z-20'"
-          >
-            <!-- Search Input Wrapper -->
-            <div class="relative z-[70]">
-              <!-- Main Search Input -->
-            <div class="relative bg-white border border-gray-25 focus-within:border-parentPrimary/50 p-2 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)] focus-within:shadow-[0_20px_50px_rgb(0,0,0,0.12)] transition-all duration-500 flex items-center group-hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)]">
-              <div class="absolute -inset-1 bg-parentPrimary opacity-0 group-focus-within:opacity-10 blur-xl transition-opacity duration-500 rounded-full"></div>
-              <div class="w-12 h-12 flex items-center justify-center text-gray-500 shrink-0 ml-2 relative z-10">
-                <Search class="w-5 h-5 text-gray-400 group-focus-within:text-parentPrimary transition-colors" />
-              </div>
-              <input 
-                type="text" 
-                v-model="heroSearchQuery"
-                @keyup.enter="handleHeroSearch"
-                @focus="showSuggestions = true"
-                @blur="handleSearchBlur"
-                :placeholder="landingTab === 'services' ? 'Search campus services, barbers, tutors, movers, laundry...' : 'Search vendor name, meals, groceries...'" 
-                class="w-full bg-transparent border-none outline-none text-base md:text-lg font-medium text-gray-900 placeholder:text-gray-400 px-2 min-w-0 relative z-10"
-              />
-              <button 
-                @click="handleHeroSearch"
-                class="h-12 md:h-14 px-4 md:px-5 bg-gray-900 text-white rounded-full text-sm md:text-base font-semibold hover:bg-parentPrimary hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 shrink-0 relative z-10 shadow-sm border border-gray-50"
-              >
-                <span>Search</span>
-              </button>
-            </div>
-
-           <Transition name="fade-up">
-  <div
-    v-if="showSuggestions && (heroSearchSuggestions.length > 0 || isSearching || hasSearched || timeOfDaySuggestions.length > 0)"
-    class="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-2xl shadow-gray-900/10 overflow-hidden z-[100]"
-  >
-    <div class="px-4 py-3 border-b border-gray-50 flex justify-between items-center">
-      <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">
-        {{ heroSearchQuery ? 'Results' : suggestionTimeText }}
-      </span>
-      <div class="flex items-center gap-2">
-        <div v-if="isSearching" class="w-3.5 h-3.5 border border-parentPrimary border-t-transparent rounded-full animate-spin"></div>
-        <button
-          v-else
-          type="button"
-          aria-label="Close search results"
-          class="p-1 rounded-full text-gray-300 hover:text-gray-600 hover:bg-gray-50 transition-colors"
-          @mousedown.prevent="showSuggestions = false"
-        >
-          <X class="w-4 h-4" />
-        </button>
+      <div class="nav-actions">
+        <NuxtLink v-if="!isLoggedIn" to="/auth/login" class="ghost">Log in</NuxtLink>
+        <NuxtLink :to="isLoggedIn ? '/dashboard' : '/auth/signup'" class="primary">
+          {{ isLoggedIn ? 'Dashboard' : 'Get started' }}
+        </NuxtLink>
       </div>
-    </div>
+    </header>
 
-    <div class="max-h-[60vh] overflow-y-auto">
+    <main>
+      <!-- Hero: one sentence, one field, one object that explains the product. -->
+      <section class="hero">
+        <div class="hero-copy">
+          <h1>Don't walk down.<br />Errand it.</h1>
+          <p class="hero-sub">
+            Food, laundry, a document, a mattress you no longer need. Someone on campus handles it.
+          </p>
 
-      <!-- Search results -->
-      <div
-        v-for="product in heroSearchSuggestions"
-        :key="product._id"
-        @click="router.push(`/vendors/${product.itemType === 'vendor' ? product._id : (product.vendor._id || product.vendor)}`)"
-        class="flex items-center gap-4 p-4 hover:bg-gray-50 rounded-2xl cursor-pointer transition-all group"
-      >
-        <div class="w-12 h-12 rounded-xl bg-gray-100 overflow-hidden relative border border-gray-50 flex-shrink-0">
-          <img v-if="product.image || product.imageUrl || product.logo" :src="product.image || product.imageUrl || product.logo" class="w-full h-full object-cover group-hover:scale-110 transition-transform" />
-          <div v-else class="w-full h-full flex items-center justify-center bg-parentPrimary/10 text-parentPrimary">
-            <Store class="w-5 h-5" />
+          <div class="switch" role="tablist" aria-label="What do you need">
+            <button type="button" role="tab" :aria-selected="mode === 'food'" class="switch-btn" :class="{ on: mode === 'food' }" @click="mode = 'food'">Food</button>
+            <button type="button" role="tab" :aria-selected="mode === 'errand'" class="switch-btn" :class="{ on: mode === 'errand' }" @click="mode = 'errand'">Errand</button>
           </div>
-        </div>
-        <div class="flex-1 text-left">
-          <h4 class="text-sm font-medium text-gray-900 group-hover:text-parentPrimary transition-colors">{{ product.name || product.storeName }}</h4>
-          <p class="text-sm font-bold text-gray-400">
-            {{ product.itemType === 'vendor' ? (product.category?.name || product.category || 'Vendor') : (product.vendor?.storeName || 'Campus Vendor') }}
+
+          <form class="hero-field" @submit.prevent="go">
+            <input
+              v-model="q"
+              type="search"
+              class="hero-input"
+              :placeholder="mode === 'food' ? 'Jollof, suya, a cold drink' : 'Laundry, printing, a package'"
+              :aria-label="mode === 'food' ? 'Search food' : 'Describe your errand'"
+            />
+            <button type="submit" class="hero-go">
+              {{ mode === 'food' ? 'Order food' : 'Send errand' }}
+              <ArrowRight class="w-4 h-4" aria-hidden="true" />
+            </button>
+          </form>
+
+          <p class="live">
+            <span class="live-dot" aria-hidden="true"></span>
+            {{ openCount }} {{ openCount === 1 ? 'store' : 'stores' }} open now
           </p>
         </div>
-        <div class="text-right" v-if="product.price">
-          <span class="text-sm font-medium text-gray-900">₦{{ product.price?.toLocaleString() }}</span>
-        </div>
-      </div>
 
-      <div
-        v-if="!isSearching && hasSearched && heroSearchSuggestions.length === 0"
-        class="px-6 py-10 text-center"
-      >
-        <SearchX class="mx-auto h-5 w-5 text-gray-300" />
-        <p class="mt-3 text-sm font-semibold text-gray-900">
-          No results for &ldquo;{{ heroSearchQuery }}&rdquo;
-        </p>
-        <p class="mt-1 text-sm text-gray-500">Try a different word, or pick one of these:</p>
-        <div class="mt-4 flex flex-wrap justify-center gap-2">
-          <button
-            v-for="tag in ['Rice & Stew', 'Sharwama', 'Pepper Soup', 'Amala']"
-            :key="tag"
-            type="button"
-            @click="heroSearchQuery = tag; fetchSuggestions()"
-            class="rounded-full bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
-          >
-            {{ tag }}
-          </button>
-        </div>
-      </div>
+        <!-- The ticket. One memorable thing; everything else stays quiet. -->
+        <div class="ticket-wrap" aria-hidden="true">
+          <div class="ticket">
+            <div class="ticket-top">
+              <p class="ticket-status">On the way</p>
+              <p class="ticket-item">Jollof and chicken</p>
+              <p class="ticket-vendor">Waris Kitchen</p>
 
-        <!-- Time-of-day fallback suggestions -->
-        <div v-if="timeOfDaySuggestions.length > 0" class="mt-3">
-          <p class="px-4 pb-2 text-[11px] font-medium text-gray-300  uppercase">Popular for {{ suggestionTimeText }}</p>
-          <div
-            v-for="product in timeOfDaySuggestions.slice(0, 3)"
-            :key="'tod-' + product._id"
-            @click="router.push(`/vendors/${typeof product.vendor === 'string' ? product.vendor : product.vendor?._id}`)"
-            class="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-xl cursor-pointer transition-all group"
-          >
-            <div class="w-9 h-9 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0 border border-gray-50 flex items-center justify-center">
-              <img v-if="product.image" :src="product.image" class="w-full h-full object-cover" />
-              <Store v-else class="w-4 h-4 text-parentPrimary/30" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <h4 class="text-sm font-medium text-gray-900 truncate group-hover:text-parentPrimary transition-colors">{{ product.name }}</h4>
-              <p class="text-[11px] font-bold text-gray-400">{{ product.vendor?.storeName || 'Campus Vendor' }}</p>
-            </div>
-            <span class="text-sm font-medium text-gray-900 flex-shrink-0">₦{{ product.price?.toLocaleString() }}</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Time-of-day suggestions (when no query) -->
-      <div v-if="!heroSearchQuery && timeOfDaySuggestions.length > 0">
-        <div
-          v-for="product in timeOfDaySuggestions"
-          :key="'focus-' + product._id"
-          @click="router.push(`/vendors/${typeof product.vendor === 'string' ? product.vendor : product.vendor?._id}`)"
-          class="flex items-center gap-4 p-4 hover:bg-gray-50 rounded-2xl cursor-pointer transition-all group"
-        >
-          <div class="w-12 h-12 rounded-xl bg-gray-100 overflow-hidden relative border border-gray-50 flex-shrink-0">
-            <img v-if="product.image" :src="product.image" class="w-full h-full object-cover group-hover:scale-110 transition-transform" />
-            <div v-else class="w-full h-full flex items-center justify-center bg-parentPrimary/10 text-parentPrimary">
-              <Store class="w-5 h-5" />
-            </div>
-          </div>
-          <div class="flex-1 text-left">
-            <h4 class="text-sm font-medium text-gray-900 group-hover:text-parentPrimary transition-colors">{{ product.name }}</h4>
-            <p class="text-sm font-bold text-gray-400">{{ product.vendor?.storeName || 'Campus Vendor' }}</p>
-          </div>
-          <div class="text-right">
-            <span class="text-sm font-medium text-gray-900">₦{{ product.price?.toLocaleString() }}</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-</Transition>
-            </div>
-
-            <div class="flex flex-wrap items-center justify-center gap-2 md:gap-3 mt-4 relative z-10">
-              <!-- <div class="relative" ref="categoryDropdownRef">
-                <div 
-                  @click="showCategoryDropdown = !showCategoryDropdown"
-                  class="bg-white/80 backdrop-blur-sm border border-gray-50 rounded-full px-4 py-2 shadow-sm flex items-center gap-2 hover:border-parentPrimary/50 hover:bg-white cursor-pointer transition-all h-10"
-                >
-                  <Filter class="w-4 h-4" :class="globalFilter ? 'text-parentPrimary' : 'text-gray-400'" />
-                  <span class="text-sm md:text-sm font-medium" :class="globalFilter ? 'text-gray-900' : 'text-gray-600'">
-                    {{ globalFilter ? globalFiltersList.find(f => f.keyword === globalFilter)?.label || globalFilter : 'Any category' }}
-                  </span>
-                  <ChevronDown class="w-3.5 h-3.5 text-gray-400 transition-transform ml-0.5" :class="{ 'rotate-180': showCategoryDropdown }" />
-                </div>
-                
-                <Transition name="fade-up">
-                  <div v-if="showCategoryDropdown" class="absolute top-full left-0 sm:left-1/2 sm:-translate-x-1/2 mt-2 bg-white border border-gray-50 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] z-[80] overflow-hidden max-h-[300px] overflow-y-auto w-56">
-                    <button 
-                      @click="setFilter(''); showCategoryDropdown = false; showSuggestions = true"
-                      class="w-full text-left px-4 py-3 text-sm font-medium hover:bg-gray-50 transition-colors flex items-center gap-3"
-                      :class="!globalFilter ? 'text-parentPrimary bg-parentPrimary/5' : 'text-gray-700'"
-                    >
-                      <span class="text-base leading-none">✨</span>
-                      <span>Any category</span>
-                    </button>
-                    <button 
-                      v-for="catFilter in globalFiltersList" 
-                      :key="catFilter.keyword"
-                      @click="setFilter(catFilter.keyword); showCategoryDropdown = false; showSuggestions = true"
-                      class="w-full text-left px-4 py-3 text-sm font-medium hover:bg-gray-50 transition-colors flex items-center gap-3"
-                      :class="globalFilter === catFilter.keyword ? 'text-parentPrimary bg-parentPrimary/5' : 'text-gray-700'"
-                    >
-                      <span class="text-base leading-none">{{ catFilter.icon }}</span>
-                      <span>{{ catFilter.label }}</span>
-                    </button>
-                  </div>
-                </Transition>
-              </div> -->
-
-              <!-- Location Pill (Commented out as per request) -->
-              <!--
-              <div class="relative" ref="locationDropdownRef">
-                <div class="bg-white/80 backdrop-blur-sm border border-gray-25 rounded-full px-4 py-2 shadow-sm flex items-center gap-2 hover:border-parentPrimary/50 hover:bg-white transition-all h-10 group/loc cursor-pointer" @click="showLocationDropdown = !showLocationDropdown">
-                  <MapPin class="w-4 h-4 text-gray-400" />
-                  <input 
-                    type="text" 
-                    v-model="searchLocation"
-                    @keyup.enter="handleHeroSearch"
-                    @focus="showLocationDropdown = true; showSuggestions = true"
-                    @input="showLocationDropdown = true"
-                    placeholder="Current location" 
-                    class="bg-transparent border-none outline-none text-base md:text-sm font-medium text-gray-900 placeholder:text-gray-600 w-24 md:w-28 cursor-pointer group-hover/loc:placeholder:text-gray-900 transition-colors"
-                  />
-                  <ChevronDown class="w-3.5 h-3.5 text-gray-400 transition-transform ml-0.5" :class="{ 'rotate-180': showLocationDropdown }" />
-                </div>
-                
-                <Transition name="fade-up">
-                  <div v-if="showLocationDropdown" class="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white border border-gray-50 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] z-[80] overflow-hidden py-2 w-56">
-                    <div class="px-4 py-2 text-sm font-bold text-gray-400 uppercase tracking-wider">Popular Locations</div>
-                    <button 
-                      @click="searchLocation = 'UNILAG'; showLocationDropdown = false; fetchSuggestions()"
-                      class="w-full text-left px-4 py-3 text-sm font-medium hover:bg-gray-50 transition-colors text-gray-700 flex items-center gap-3"
-                    >
-                      <MapPin class="w-4 h-4 text-gray-400" />
-                      UNILAG
-                    </button>
-                    <button 
-                      @click="searchLocation = 'YABATECH'; showLocationDropdown = false; fetchSuggestions()"
-                      class="w-full text-left px-4 py-3 text-sm font-medium hover:bg-gray-50 transition-colors text-gray-700 flex items-center gap-3"
-                    >
-                      <MapPin class="w-4 h-4 text-gray-400" />
-                      YABATECH
-                    </button>
-                    <button 
-                      @click="searchLocation = 'LUTH'; showLocationDropdown = false; fetchSuggestions()"
-                      class="w-full text-left px-4 py-3 text-sm font-medium hover:bg-gray-50 transition-colors text-gray-700 flex items-center gap-3"
-                    >
-                      <MapPin class="w-4 h-4 text-gray-400" />
-                      LUTH
-                    </button>
-                  </div>
-                </Transition>
+              <div class="progress">
+                <span class="prog done"></span>
+                <span class="prog done"></span>
+                <span class="prog now"></span>
+                <span class="prog"></span>
               </div>
-              -->
-
-              <!-- Time Pill (Commented out as per request) -->
-              <!--
-              <div class="relative" ref="timeDropdownRef">
-                <div 
-                  @click="showTimeDropdown = !showTimeDropdown"
-                  class="bg-white/80 backdrop-blur-sm border border-gray-25 rounded-full px-4 py-2 shadow-sm flex items-center gap-2 hover:border-parentPrimary/50 hover:bg-white cursor-pointer transition-all h-10"
-                >
-                  <Calendar class="w-4 h-4 text-gray-400" />
-                  <span class="text-sm md:text-sm font-medium text-gray-600 whitespace-nowrap">
-                    {{ searchTime === 'any' ? 'Any time' : searchTime === 'now' ? 'Now' : 'Scheduled' }}
-                  </span>
-                  <ChevronDown class="w-3.5 h-3.5 text-gray-400 transition-transform ml-0.5" :class="{ 'rotate-180': showTimeDropdown }" />
-                </div>
-                
-                <Transition name="fade-up">
-                  <div v-if="showTimeDropdown" class="absolute top-full right-0 sm:left-1/2 sm:-translate-x-1/2 mt-2 bg-white border border-gray-50 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] z-[80] overflow-hidden w-48">
-                    <button 
-                      @click="searchTime = 'any'; showTimeDropdown = false; showSuggestions = true"
-                      class="w-full text-left px-4 py-3 text-sm font-medium hover:bg-gray-50 transition-colors"
-                      :class="searchTime === 'any' ? 'text-parentPrimary bg-parentPrimary/5' : 'text-gray-700'"
-                    >
-                      Any time
-                    </button>
-                    <button 
-                      @click="searchTime = 'now'; showTimeDropdown = false; showSuggestions = true"
-                      class="w-full text-left px-4 py-3 text-sm font-medium hover:bg-gray-50 transition-colors"
-                      :class="searchTime === 'now' ? 'text-parentPrimary bg-parentPrimary/5' : 'text-gray-700'"
-                    >
-                      Now
-                    </button>
-                    <button 
-                      @click="searchTime = 'scheduled'; showTimeDropdown = false; showSuggestions = true"
-                      class="w-full text-left px-4 py-3 text-sm font-medium hover:bg-gray-50 transition-colors"
-                      :class="searchTime === 'scheduled' ? 'text-parentPrimary bg-parentPrimary/5' : 'text-gray-700'"
-                    >
-                      Scheduled
-                    </button>
-                  </div>
-                </Transition>
+              <div class="progress-labels">
+                <span>Placed</span><span>Picked up</span><span>On the way</span><span>Arrived</span>
               </div>
-              -->
             </div>
 
-
+            <div class="ticket-stub">
+              <p class="stub-label">Delivery PIN</p>
+              <p class="stub-pin">4 8 2 1</p>
+              <div class="perforation"></div>
+              <p class="stub-note">Give it to your rider when they arrive</p>
+            </div>
           </div>
-
-          <!-- Removed Global Filters Bar (Moved to LandingNavbar.vue) -->
-    </HeroStage>
-
-
-
-    <!-- Tab 2: Campus Services View -->
-    <ServicesShowcase v-if="landingTab === 'services'" />
-
-    <!-- Tab 1: Food & Stores Carousels View -->
-    <div v-else class="space-y-2">
-  <!-- Book Again -->
-  <VendorGroupCarousel
-    v-if="user && bookAgainVendors.length > 0"
-    title="Book again"
-    subtitle="Past Bookings & Orders"
-    :icon="Clock"
-    :vendors="bookAgainVendors"
-    carouselId="carousel-book-again"
-    @select-vendor="navigateToVendor"
-    @notify="handleNotifyVendor"
-    @share-vendor="handleShareVendor"
-  />
-
-  <!-- The one most students use -->
-  <VendorGroupCarousel
-    title="Most Ordered"
-    subtitle="Highest Order Volume"
-    :icon="TrendingUp"
-    :vendors="trendingVendors"
-    :loading="loadingVendors"
-    :showStats="true"
-    carouselId="carousel-trending"
-    @select-vendor="navigateToVendor"
-    @notify="handleNotifyVendor"
-    @share-vendor="handleShareVendor"
-  />
-
-  <!-- Favorites by You -->
-  <VendorGroupCarousel
-    v-if="user && favoriteVendors.length > 0"
-    title="Favorites by You"
-    subtitle="Your Saved Spots"
-    :icon="Heart"
-    :vendors="favoriteVendors"
-    :loading="loadingFavorites"
-    carouselId="carousel-favourites"
-    @select-vendor="navigateToVendor"
-    @notify="handleNotifyVendor"
-    @share-vendor="handleShareVendor"
-  />
-
-  <!-- New to Erranders -->
-  <VendorGroupCarousel
-    title="New to Erranders"
-    subtitle="Fresh Arrivals"
-    :icon="Sparkles"
-    :vendors="newVendors"
-    :loading="loadingVendors"
-    carouselId="carousel-new"
-    @select-vendor="navigateToVendor"
-    @notify="handleNotifyVendor"
-    @share-vendor="handleShareVendor"
-  />
-  <!-- Stores Carousels End -->
-    </div>
-
- <!-- Vendor Closed Modal -->
- <VendorClosedModal 
- :isOpen="isClosedModalOpen" 
- :vendor="selectedVendorForModal" 
- @close="isClosedModalOpen = false" 
- @schedule="handleScheduleVendor"
- @notify="handleNotifyVendor"
- />
-
-  <!-- Share Modal -->
-  <UiShareModal 
-    v-model:isOpen="isShareModalOpen" 
-    :vendor="selectedVendorForShare" 
-  />
-
-  <!-- Barter Campus Trade Advert Banner -->
-  <section class="max-w-7xl mx-auto px-4 lg:px-10 py-8 sm:py-12">
-    <CoreBarterAdBanner />
-  </section>
-
-  <!-- How it works (Redesigned & Condensed) -->
-  <section id="how-it-works" class="py-20 bg-white overflow-hidden border-t border-slate-100">
-    <div class="max-w-7xl mx-auto px-4 lg:px-10">
-      <div class="text-center max-w-2xl mx-auto mb-16 space-y-4">
-        <p class="text-sm font-medium -[0.2em]  text-parentPrimary">How It Works</p>
-        <h2 class="text-3xl md:text-5xl font-medium text-slate-900 -tighter leading-tight">
-          Three steps to <span class="text-parentPrimary">satisfaction.</span>
-        </h2>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto relative">
-        <div class="hidden md:block absolute top-12 left-1/6 right-1/6 h-0.5 bg-slate-100 -z-10"></div>
-        <div v-for="(step, i) in [
-          { title: 'Search & Select', desc: 'Find your favorite campus spot and browse their menu.', icon: '🔍', color: 'bg-emerald-50 text-emerald-600' },
-          { title: 'Order & Pay', desc: 'Securely place your order with a few taps.', icon: '💳', color: 'bg-blue-50 text-blue-600' },
-          { title: 'Receive', desc: 'Your Errander delivers directly to your hostel door.', icon: '📦', color: 'bg-parentPrimary/10 text-parentPrimary' }
-        ]" :key="i" class="text-center space-y-4 bg-white rounded-[2rem] p-5 border border-slate-100 shadow-sm hover:-translate-y-1 transition-transform group">
-          <div :class="`w-16 h-16 mx-auto rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm border border-slate-50 ${step.color} group-hover:scale-110 transition-transform`">
-            {{ step.icon }}
-          </div>
-          <h3 class="text-xl font-medium text-slate-900 -tight">{{ i + 1 }}. {{ step.title }}</h3>
-          <p class="text-sm text-slate-500 font-bold leading-relaxed">{{ step.desc }}</p>
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <!-- Meal Autopilot Section -->
-  <section class="py-20 bg-white overflow-hidden border-t border-slate-100 relative">
-    <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1.5px,transparent_1.5px)] [background-size:24px_24px] opacity-50 z-0 pointer-events-none"></div>
-    <div class="max-w-7xl mx-auto px-4 lg:px-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
-      <!-- Left: Text -->
-      <div class="space-y-6 max-w-xl">
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-parentPrimary/10 border border-parentPrimary/20 text-parentPrimary text-sm font-bold shadow-sm">
-          <Repeat class="w-4 h-4 animate-spin-slow" /> New Feature
+      <!-- Open right now -->
+      <section class="open">
+        <div class="sec-head">
+          <h2>Open right now</h2>
+          <NuxtLink to="/vendors" class="sec-link">All stores</NuxtLink>
         </div>
-        <h2 class="text-3xl md:text-5xl font-medium text-slate-900 -tighter leading-tight">
-          Meal <span class="text-parentPrimary">Autopilot.</span><br/> Set it & forget it.
-        </h2>
-        <p class="text-slate-500 text-lg font-medium leading-relaxed -tight">
-          Tired of deciding what to eat every day? Schedule your weekly meals across different campus vendors. We'll automatically place the orders and deliver them to your hostel, right on schedule. 
-        </p>
-        <div class="pt-4 flex flex-col sm:flex-row gap-4">
-          <NuxtLink to="/dashboard/recurring-orders" class="inline-flex items-center justify-center gap-2 px-5 py-4 bg-parentPrimary text-white rounded-2xl font-bold text-sm -wide hover:bg-orange-600 transition-colors shadow-sm shadow-parentPrimary/20 active:scale-95">
-            Setup Meal Autopilot <ArrowRight class="w-4 h-4" />
+
+        <div v-if="loading" class="grid">
+          <div v-for="i in 3" :key="i" class="skel" />
+        </div>
+
+        <div v-else class="grid">
+          <NuxtLink v-for="vendor in openVendors" :key="vendor._id" :to="`/vendors/${vendor._id}`" class="store">
+            <div class="store-media">
+              <img :src="vendor.banner || vendor.logo || '/placeholder-store.jpg'" class="store-img" alt="" loading="lazy" />
+              <span v-if="vendor.preOrderOnly" class="pill">Pre-order</span>
+            </div>
+            <div class="store-body">
+              <div class="store-row">
+                <p class="store-name">{{ cleanName(vendor.storeName) }}</p>
+                <span v-if="hasReviews(vendor)" class="rating">
+                  <Star class="w-3.5 h-3.5" aria-hidden="true" />{{ vendor.rating?.toFixed(1) }}
+                </span>
+                <span v-else class="new">New</span>
+              </div>
+              <p class="store-meta">{{ vendor.category || 'Store' }} · {{ vendor.preparationTime || 20 }} min</p>
+            </div>
           </NuxtLink>
         </div>
-      </div>
 
-      <!-- Right: Visual -->
-      <div class="relative">
-        <div class="absolute inset-0 bg-parentPrimary/5 rounded-3xl transform rotate-3 scale-105"></div>
-        <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-100 shadow-xl relative z-10 space-y-4">
-          <div class="flex items-center justify-between border-b border-gray-100 pb-4">
-            <div>
-              <p class="text-sm font-bold text-gray-400 uppercase  mb-1">Scheduled for</p>
-              <p class="text-lg font-black text-gray-900">Tomorrow, 1:00 PM</p>
-            </div>
-            <div class="w-10 h-10 bg-green-50 text-green-600 rounded-full flex items-center justify-center">
-              <Check class="w-5 h-5" />
-            </div>
-          </div>
-          <div class="flex items-center gap-4 py-2">
-            <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-2xl">🍛</div>
-            <div class="flex-1">
-              <p class="font-bold text-gray-900">Jollof Rice & Chicken</p>
-              <p class="text-sm font-medium text-gray-500">From Korede Spaghetti</p>
-            </div>
-          </div>
-          <div class="flex items-center gap-4 py-2">
-            <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-2xl">🥤</div>
-            <div class="flex-1">
-              <p class="font-bold text-gray-900">Chilled Coke</p>
-              <p class="text-sm font-medium text-gray-500">Added to order</p>
-            </div>
-          </div>
-          <div class="pt-4 mt-2 border-t border-gray-100 flex items-center justify-between">
-            <span class="text-sm font-bold text-gray-500 flex items-center gap-1">
-              <Repeat class="w-3.5 h-3.5" /> Recurs every Tuesday
-            </span>
-            <span class="px-3 py-1 bg-green-50 text-green-700 text-sm font-bold rounded-full">Active</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Custom Errands + Why Choose Us (Merged & Condensed) -->
-  <section class="py-20 bg-slate-50 overflow-hidden border-t border-slate-100">
-    <div class="max-w-7xl mx-auto px-4 lg:px-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-      <!-- Left: Errands Pitch -->
-      <div class="space-y-6 max-w-xl">
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-parentPrimary/10 border border-parentPrimary/20 text-parentPrimary text-sm font-bold shadow-sm">
-          <Rocket class="w-4 h-4 animate-bounce" /> Now with Negotiable Fees!
-        </div>
-        <h2 class="text-3xl md:text-5xl font-medium text-slate-900 -tighter leading-tight">
-          Set your price. <br/> <span class="text-parentPrimary">Get it done.</span>
-        </h2>
-        <p class="text-slate-500 text-lg font-medium leading-relaxed -tight">
-          Don't just order food. Send an Errander to pick up your laundry, deliver documents to class, or buy groceries. Set the fee you want to pay, let riders accept, and chat with them instantly!
+        <p v-if="closedCount" class="closed-line">
+          Closed now:
+          <span v-for="vendor in closedVendors" :key="vendor._id" class="closed-chip">{{ cleanName(vendor.storeName) }}</span>
         </p>
-        <div class="pt-4 flex flex-col sm:flex-row gap-4">
-          <NuxtLink to="/errands/custom" class="inline-flex items-center justify-center gap-2 px-5 py-4 bg-slate-900 text-white rounded-2xl font-bold text-sm -wide hover:bg-parentPrimary transition-colors shadow-sm border border-gray-50 shadow-slate-900/10 active:scale-95">
-            Request an Errand <ArrowRight class="w-4 h-4" />
-          </NuxtLink>
-        </div>
-      </div>
+      </section>
 
-      <!-- Right: Advantages Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div v-for="feat in [
-          { title: 'Set Your Price', desc: 'You decide how much you want to pay the rider for the trip.', icon: 'CircleDollarSign', color: 'text-emerald-500 bg-emerald-50' },
-          { title: 'Student Riders', desc: 'Dispatchers who know every corner of your campus.', icon: 'Target', color: 'text-parentPrimary bg-parentPrimary/10' },
-          { title: 'Escrow Protected', desc: 'We hold the fee safely until a rider accepts your errand.', icon: 'ShieldCheck', color: 'text-blue-500 bg-blue-50' },
-          { title: 'Real-time Chat', desc: 'Directly chat with your dispatcher to arrange details.', icon: 'MessageCircle', color: 'text-purple-500 bg-purple-50' }
-        ]" :key="feat.title" class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-sm border border-gray-50 hover:-translate-y-1 transition-all group">
-          <div :class="`w-10 h-10 mb-4 rounded-xl flex items-center justify-center ${feat.color}`">
-            <component :is="feat.icon === 'CircleDollarSign' ? CircleDollarSign : feat.icon === 'Target' ? Target : feat.icon === 'ShieldCheck' ? ShieldCheck : MessageCircle" class="w-5 h-5 group-hover:scale-110 transition-transform" />
+      <!-- How it works: a real sequence, so numbers earn their place. -->
+      <section class="how">
+        <h2>How it works</h2>
+        <ol class="steps">
+          <li class="step">
+            <span class="num">1</span>
+            <p class="step-title">Pick</p>
+            <p class="step-body">Food from a campus store, or describe the errand you need run.</p>
+          </li>
+          <li class="step">
+            <span class="num">2</span>
+            <p class="step-title">Pay</p>
+            <p class="step-body">Card or wallet. For errands, your price is held until a rider takes it.</p>
+          </li>
+          <li class="step">
+            <span class="num">3</span>
+            <p class="step-title">Get it</p>
+            <p class="step-body">A student rider brings it to your hostel and asks for your PIN.</p>
+          </li>
+        </ol>
+      </section>
+
+      <!-- More than food: one bento, three ways in. -->
+      <section class="bento">
+        <NuxtLink to="/errands/custom" class="tile tile-errand">
+          <p class="tile-tag">Errands</p>
+          <h3 class="tile-title">Set your price. A student runs it.</h3>
+          <ul class="tile-list">
+            <li>Your fee is held until a rider takes the job</li>
+            <li>Chat with them while they are on the way</li>
+            <li>Laundry, documents, groceries, anything legal</li>
+          </ul>
+          <span class="tile-cta">Request an errand <ArrowUpRight class="w-4 h-4" aria-hidden="true" /></span>
+        </NuxtLink>
+
+        <NuxtLink to="/dashboard/recurring-orders" class="tile tile-meals">
+          <p class="tile-tag">Meal Autopilot</p>
+          <h3 class="tile-title">Lunch, every day, without asking twice.</h3>
+          <div class="sched">
+            <div class="sched-row">
+              <span class="sched-time">Tomorrow, 1:00 pm</span>
+              <span class="sched-check" aria-hidden="true">✓</span>
+            </div>
+            <div class="sched-item">
+              <p>Jollof rice and chicken</p>
+              <span>Waris Kitchen</span>
+            </div>
+            <div class="sched-item">
+              <p>Chilled zobo</p>
+              <span>Drinks</span>
+            </div>
           </div>
-          <h4 class="text-base font-medium text-slate-900 -tight mb-2">{{ feat.title }}</h4>
-          <p class="text-sm text-slate-500 font-medium leading-relaxed">{{ feat.desc }}</p>
+          <span class="tile-cta">Set it up <ArrowUpRight class="w-4 h-4" aria-hidden="true" /></span>
+        </NuxtLink>
+
+        <NuxtLink to="/market-pool" class="tile tile-swap">
+          <p class="tile-tag">Swap</p>
+          <h3 class="tile-title">Sell what you don't use</h3>
+          <p class="tile-body">Fans, textbooks, mattresses. Cash or swap, escrow protected.</p>
+          <span class="tile-cta">Explore swaps <ArrowUpRight class="w-4 h-4" aria-hidden="true" /></span>
+        </NuxtLink>
+      </section>
+
+      <!-- One closing banner, not two. -->
+      <section class="closer">
+        <h2>Running late? Errand it.</h2>
+        <NuxtLink :to="isLoggedIn ? '/dashboard' : '/auth/signup'" class="closer-btn">
+          Get started <ArrowRight class="w-4 h-4" aria-hidden="true" />
+        </NuxtLink>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <img src="@/assets/img/logo-light.png" alt="Erranders" class="brand-img" />
+          <p class="foot-line">Campus delivery and errands, run by students.</p>
+        </div>
+
+        <div class="foot-cols">
+          <div class="foot-col">
+            <p class="foot-title">Platform</p>
+            <NuxtLink to="/vendors" class="foot-link">Food</NuxtLink>
+            <NuxtLink to="/errands/custom" class="foot-link">Errands</NuxtLink>
+            <NuxtLink to="/dashboard/recurring-orders" class="foot-link">Meal Autopilot</NuxtLink>
+            <NuxtLink to="/market-pool" class="foot-link">Swap</NuxtLink>
+          </div>
+          <div class="foot-col">
+            <p class="foot-title">Legal</p>
+            <NuxtLink to="/terms" class="foot-link">Terms</NuxtLink>
+            <NuxtLink to="/privacy" class="foot-link">Privacy</NuxtLink>
+            <NuxtLink to="/refunds" class="foot-link">Refunds</NuxtLink>
+          </div>
+          <div class="foot-col">
+            <p class="foot-title">Partners</p>
+            <NuxtLink to="/vendor-signup" class="foot-link">Sell on Erranders</NuxtLink>
+            <NuxtLink to="/dispatch" class="foot-link">Ride with us</NuxtLink>
+          </div>
         </div>
       </div>
-    </div>
-  </section>  
 
-  <!-- CTA Section — Light Theme -->
-  <section class="relative py-20 overflow-hidden bg-white border-t border-slate-100">
-    <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1.5px,transparent_1.5px)] [background-size:24px_24px] opacity-70 z-0 pointer-events-none"></div>
-    <div class="max-w-3xl mx-auto px-4 lg:px-10 relative z-10 text-center space-y-6">
-      <h2 class="text-4xl md:text-5xl font-medium text-slate-900 -tighter leading-tight">
-        Ready to <span class="text-parentPrimary">chop?</span>
-      </h2>
-      <p class="text-lg text-slate-500 font-medium max-w-xl mx-auto leading-relaxed">
-        Join thousands of students who trust Errander for their daily meals and hostel runs. Zero stress, 100% vibes.
-      </p>
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-        <NuxtLink to="/auth/register" class="px-5 py-4 bg-parentPrimary text-white rounded-2xl font-medium text-sm  -wide shadow-sm border border-gray-50 shadow-parentPrimary/20 hover:scale-105 active:scale-95 transition-all">
-          Join Errander Now
-        </NuxtLink>
-        <NuxtLink to="/auth/login" class="px-5 py-4 bg-white text-slate-600 rounded-2xl font-medium text-sm  -wide border border-slate-200 hover:border-parentPrimary hover:text-parentPrimary transition-all">
-          Login
-        </NuxtLink>
-      </div>
-    </div>
-  </section>
-
-
-
-  <!-- Footer -->
-  <LandingFooter />
-    <!-- NOTIFY MODAL -->
-    <VendorNotifyModal
-      :is-open="isNotifyModalOpen"
-      :vendor="selectedVendorForNotify"
-      @close="isNotifyModalOpen = false"
-    />
- </div>
+      <p class="foot-copy">© {{ year }} Erranders. All rights reserved.</p>
+    </footer>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, onUnmounted, watch } from 'vue'
-import VendorNotifyModal from '@/components/vendors/VendorNotifyModal.vue'
-import { useRouter } from 'vue-router'
-import { onClickOutside } from '@vueuse/core'
-import { useNotifications } from '@/composables/modules/notifications/useNotifications'
-import { useRealtimeNotifications } from '@/composables/core/useRealtimeNotifications'
-import BatchDeliveryBanner from '@/components/BatchDeliveryBanner.vue'
-import { useUser } from "@/composables/modules/auth/user"
-import { 
-  ArrowRight, Twitter, Instagram, Facebook,
-  Utensils, Check,
-  Clock, Star, Store, Bike, ChevronLeft, ChevronRight,
-  ShieldCheck, Rocket, Megaphone,
-  Menu as MenuIcon, X, Search, ArrowUpRight,
-  Layers, Target, MessageCircle, Home, User, Bell, BellOff, LogOut, ChevronDown,
-  Sparkles, TrendingUp, Flame, CircleDollarSign, SearchX, MapPin, Calendar, Heart, Filter, Zap, Repeat
-} from 'lucide-vue-next'
-import { vendors_api } from '@/api_factory/modules/vendors';
-import { products_api } from '@/api_factory/modules/products';
-import { search_api } from '@/api_factory/modules/search';
-import { orders_api } from '@/api_factory/modules/orders';
-import { useFavorites } from '@/composables/modules/favorites';
-import { useRecentlyViewed } from '@/composables/modules/vendors/useRecentlyViewed';
-import { useGlobalFilter } from '@/composables/core/useGlobalFilter';
+import { computed, onMounted, ref } from 'vue';
+import { ArrowRight, ArrowUpRight, Star } from 'lucide-vue-next';
+import { useLandingPage } from '@/composables/modules/landing';
+import { useUser } from '@/composables/modules/auth/user';
 
-import hero1 from '@/assets/img/hero1.webp'
-import hero2 from '@/assets/img/hero2.webp'
-import hero12 from '@/assets/img/hero12.webp'
-import hero14 from '@/assets/img/hero14.webp'
+definePageMeta({ layout: false });
 
-definePageMeta({
- layout: false
-})
+const { loading, onlineVendors, fetchHomeData } = useLandingPage();
+const { isLoggedIn } = useUser();
 
-useHead({
- title: 'Errander - Making Campus Life Easier, One Errand at a time',
- meta: [
-{ name: 'description', content: 'Official Errander Student Portal. Order food, track deliveries, and manage your student campus services.' }
- ]
-})
+const mode = ref<'food' | 'errand'>('food');
+const q = ref('');
+const year = new Date().getFullYear();
 
-import { useCart } from '@/composables/modules/cart';
-import ServicesShowcase from '@/components/services/ServicesShowcase.vue';
+const openVendors = computed(() =>
+  (onlineVendors.value || []).filter((v: any) => v?.isOpen !== false).slice(0, 3),
+);
+const closedVendors = computed(() =>
+  (onlineVendors.value || []).filter((v: any) => v?.isOpen === false),
+);
+const openCount = computed(() => (onlineVendors.value || []).filter((v: any) => v?.isOpen !== false).length);
+const closedCount = computed(() => closedVendors.value.length);
 
-const route = useRoute()
-const router = useRouter()
-const landingTab = ref<'stores' | 'services'>((route.query.tab as string) === 'services' ? 'services' : 'stores')
+const cleanName = (name?: string) => String(name || 'Store').replace(/\s*\(demo\)\s*/i, '').trim();
 
-watch(() => route.query.tab, (newTab) => {
-  if (newTab === 'services') landingTab.value = 'services';
-  else if (newTab === 'stores') landingTab.value = 'stores';
-});
+const reviewCount = (vendor: any) =>
+  Number(vendor?.reviewCount ?? vendor?.totalReviews ?? vendor?.reviewsCount ?? 0);
+const hasReviews = (vendor: any) => reviewCount(vendor) > 0 && Number(vendor?.rating) > 0;
 
-const scrolled = ref(false)
-const showMobileMenu = ref(false)
-
-const { user, isLoggedIn, logOut } = useUser();
-
-const isBirthday = computed(() => {
-  if (!user.value || !user.value.dateOfBirth) return false;
-  const today = new Date();
-  const dob = new Date(user.value.dateOfBirth);
-  return today.getMonth() === dob.getMonth() && today.getDate() === dob.getDate();
-});
-
-const heroSearchQuery = ref('')
-const searchLocation = ref('')
-const searchTime = ref('any')
-const loadingVendors = ref(true)
-const recommendedVendors = ref<any[]>([])
-const trendingVendors = ref<any[]>([]);
-
-const newVendors = ref<any[]>([])
-const topRatedVendors = ref<any[]>([])
-const vendors = ref<any[]>([]) // Combined list for active promotions
-const selectedVendorForModal = ref(null);
-const isClosedModalOpen = ref(false);
-const isShareModalOpen = ref(false);
-const selectedVendorForShare = ref(null);
-const cartStore = useCart()
-const { unreadCount } = useNotifications()
-const { favorites, fetchFavorites, loading: loadingFavorites } = useFavorites()
-const { globalFilter, setFilter, globalFiltersList } = useGlobalFilter();
-
-watch(globalFilter, () => {
-  fetchVendors();
-});
-
-const { recentlyViewedVendors, addRecent } = useRecentlyViewed()
-useRealtimeNotifications() // Listen for real-time updates
-
-const bookAgainVendors = ref<any[]>([])
-
-const favoriteVendors = computed(() => {
-  const map = new Map()
-  favorites.value.forEach((f: any) => {
-    if (f.vendor && !map.has(f.vendor._id || f.vendor)) {
-      map.set(f.vendor._id || f.vendor, f.vendor)
-    }
-  })
-  return Array.from(map.values())
-})
-
-const fetchBookAgain = async () => {
-  if (!user.value) return;
-  try {
-    const res = await orders_api.getOrders();
-    const payload = res.data?.data || res.data;
-    const orders = Array.isArray(payload) ? payload : (Array.isArray(payload?.orders) ? payload.orders : (Array.isArray(payload?.docs) ? payload.docs : []));
-    
-    if (Array.isArray(orders)) {
-      const map = new Map();
-      orders.forEach((o: any) => {
-        if (o.vendor && !map.has(o.vendor._id || o.vendor)) {
-          map.set(o.vendor._id || o.vendor, o.vendor);
-        }
-      });
-      bookAgainVendors.value = Array.from(map.values()).slice(0, 10);
-    }
-  } catch (e) {
-    console.error('Failed to fetch book again vendors:', e);
-  }
-}
-
-const handleLogout = async () => {
-  await logOut()
-  window.location.reload()
-}
-
-// Search Suggestions
-const heroSearchSuggestions = ref<any[]>([])
-const timeOfDaySuggestions = ref<any[]>([])
-const showSuggestions = ref(false)
-const isSearching = ref(false)
-const hasSearched = ref(false)
-
-const showTimeDropdown = ref(false)
-const timeDropdownRef = ref(null)
-
-const showLocationDropdown = ref(false)
-const locationDropdownRef = ref(null)
-
-const showCategoryDropdown = ref(false)
-const categoryDropdownRef = ref(null)
-
-onClickOutside(timeDropdownRef, () => {
-  showTimeDropdown.value = false
-})
-
-onClickOutside(locationDropdownRef, () => {
-  showLocationDropdown.value = false
-})
-
-onClickOutside(categoryDropdownRef, () => {
-  showCategoryDropdown.value = false
-})
-
-
-
-const suggestionTimeText = computed(() => {
-  const hour = new Date().getHours()
-  if (hour >= 5 && hour < 12) return 'Breakfast'
-  if (hour >= 12 && hour < 17) return 'Lunch'
-  if (hour >= 17 && hour < 22) return 'Dinner'
-  return 'Late Night'
-})
-
-const fetchSuggestions = async () => {
-  const hasQuery = heroSearchQuery.value.trim().length > 0;
-  const hasLocation = searchLocation.value.trim().length > 0;
-  const hasTimeFilter = searchTime.value !== 'any';
-
-  if (!hasQuery && !hasLocation && !hasTimeFilter) {
-    hasSearched.value = false
-    // Fetch popular/recommended if empty
-    try {
-      const res = await products_api.getPopular()
-      const data = res.data?.products || res.data?.data || []
-      timeOfDaySuggestions.value = data
-      heroSearchSuggestions.value = []
-    } catch (e) {
-      timeOfDaySuggestions.value = []
-    }
-    return
-  }
-
-  isSearching.value = true
-  try {
-    const res = await search_api.globalSearch({ 
-      q: heroSearchQuery.value, 
-      location: searchLocation.value, 
-      time: searchTime.value 
-    })
-    
-    // Combine vendors, products, menuItems, and services from the new search endpoint
-    const searchData = res.data?.data || res.data || {}
-    const combined = [
-      ...(searchData.vendors || []).map((v: any) => ({ ...v, itemType: 'vendor' })),
-      ...(searchData.menuItems || []).map((m: any) => ({ ...m, itemType: 'menuItem' })),
-      ...(searchData.products || []).map((p: any) => ({ ...p, itemType: 'product' })),
-      ...(searchData.services || []).map((s: any) => ({ ...s, itemType: 'service' }))
-    ]
-    
-    // Limit to 6 items for the dropdown
-    heroSearchSuggestions.value = combined.slice(0, 6)
-  } catch (e) {
-    heroSearchSuggestions.value = []
-  } finally {
-    isSearching.value = false
-    hasSearched.value = true
-  }
-}
-
-const handleSearchBlur = () => {
-  setTimeout(() => {
-    showSuggestions.value = false
-  }, 200)
-}
-
-// Debounce search
-let searchTimeout: any
-watch([heroSearchQuery, searchLocation, searchTime], () => {
-  if (searchTimeout) clearTimeout(searchTimeout)
-  searchTimeout = setTimeout(() => {
-    fetchSuggestions()
-  }, 300)
-})
-
-const navLinks = [
-  { label: 'Featured', href: '#featured' },
-  { label: 'Works', href: '#how-it-works' },
-  { label: 'FAQ', href: '#faq' },
-  { label: 'Contact', href: '#contact' }
-]
-
-const handleHeroSearch = () => {
-  if (!heroSearchQuery.value.trim() && !searchLocation.value.trim()) return
-  
-  let queryUrl = `/vendors?`
-  if (heroSearchQuery.value.trim()) queryUrl += `search=${encodeURIComponent(heroSearchQuery.value.trim())}&`
-  if (searchLocation.value.trim()) queryUrl += `location=${encodeURIComponent(searchLocation.value.trim())}&`
-  if (searchTime.value !== 'any') queryUrl += `time=${encodeURIComponent(searchTime.value)}`
-  
-  if (queryUrl.endsWith('&') || queryUrl.endsWith('?')) {
-    queryUrl = queryUrl.slice(0, -1)
-  }
-  
-  navigateTo(queryUrl)
-}
-
-const handleScroll = () => {
- scrolled.value = window.scrollY > 50
-}
-
-const fetchVendors = async () => {
-  loadingVendors.value = true
-  try {
-    const queryParams: any = { limit: 12 };
-    if (globalFilter.value) {
-      queryParams.search = globalFilter.value;
-    }
-
-    const [trendRes, newRes] = await Promise.all([
-      vendors_api.getAll({ ...queryParams, sortBy: 'trending' }),
-      vendors_api.getAll({ ...queryParams, sortBy: 'newest' })
-    ])
-    
-    trendingVendors.value = trendRes.data?.vendors || trendRes.data?.data?.vendors || trendRes.data || []
-    newVendors.value = newRes.data?.vendors || newRes.data?.data?.vendors || newRes.data || []
-    
-    // Combine for promotions fallback
-    vendors.value = [...trendingVendors.value, ...newVendors.value]
-  } catch (e) {
-    console.error('Failed to fetch vendors:', e)
-  } finally {
-    loadingVendors.value = false
-  }
-}
-
-const isNotifyModalOpen = ref(false)
-const selectedVendorForNotify = ref<any>(null)
-
-const handleNotifyVendor = (vendor: any) => {
-  isClosedModalOpen.value = false;
-  selectedVendorForNotify.value = vendor
-  isNotifyModalOpen.value = true
-}
-
-const activePromotions = computed(() => {
- const promos: any[] = []
- vendors.value.forEach(v => {
- if (v.banners && v.banners.length > 0) {
- v.banners.forEach((b: any) => {
- if (b.isActive) {
- promos.push({
- ...b,
- vendorName: v.storeName,
- vendorId: v._id,
- vendorAvatar: v.owner?.avatar
- })
- }
- })
- }
- })
- // Shuffle items for variety
- return promos.sort(() => Math.random() - 0.5)
-})
-
-const currentSlangIndex = ref(0)
-const currentHeadingIndex = ref(0)
-
-// const heroHeadings = [
-//   { text: '<span class="text-parentPrimary ">Sapa</span> dey finish.<br/>Have you eaten?', lang: '🇳🇬 Pidgin' },
-//   { text: 'Ebi ń pa mí.<br/><span class="text-parentPrimary ">Jẹun</span> ti tó!', lang: '🟢 Yoruba' },
-//   { text: '<span class="text-parentPrimary ">Agụụ</span> na-agụ m.<br/>Kedu ihe ị ga-eri?', lang: '🔴 Igbo' },
-//   { text: 'Yunwa ta kashe ni.<br/><span class="text-parentPrimary ">Abinci</span> ya zo!', lang: '🟡 Hausa' },
-//   { text: 'Hair dey rough?<br/>Book a <span class="text-parentPrimary ">stylist</span> sharp!', lang: '🇳🇬 Pidgin' },
-//   { text: 'Don\'t <span class="text-parentPrimary ">do over!</span><br/>Order sharp sharp.', lang: '🇳🇬 Pidgin' },
-//   { text: 'Oúnjẹ campus...<br/><span class="text-parentPrimary ">zero stress</span> delivery.', lang: '🇳🇬 Pidgin' },
-//   { text: 'Body go tell you<br/>if you <span class="text-parentPrimary ">no chop.</span>', lang: '🇳🇬 Pidgin' },
-//   { text: 'Need groceries?<br/><span class="text-parentPrimary ">We deliver</span> to your hostel.', lang: '🇬🇧 English' },
-//   { text: 'Ẹ̀wà mà jẹ́ <br/>kó <span class="text-parentPrimary ">dùn.</span> Chop now!', lang: '🟢 Yoruba' },
-//   { text: 'Need a fresh <span class="text-parentPrimary ">haircut?</span><br/>Book a barber now.', lang: '🇬🇧 English' },
-//   { text: 'Ciwon <span class="text-parentPrimary ">ciki</span> <br/>ba wasa bane.', lang: '🟡 Hausa' },
-//   { text: 'Laundry piling up?<br/>Get a <span class="text-parentPrimary ">washer</span> sharp!', lang: '🇳🇬 Pidgin' },
-// ]
-
-// const slangSlogans = [
-//   "Sapa is real, but hunger is realer. 💸",
-//   "No leave, no transfer—just chop. 🍽️",
-//   "Awoof dey run belle, but Errander dey save life. 🏃‍♂️",
-//   "Body go tell you if you no chop. 💪",
-//   "E choke! Best meals and services on campus. 🔥",
-//   "Who no chop, no fit read. 📚",
-//   "Fresh cut? Beautiful nails? Errander got you. 💅",
-//   "Ẹ̀wà mà jẹ́ kó dùn. Errander got you. 🫡",
-//   "Nwanne, order nri gị ugbu a! 🍛",
-//   "Abinci mai kyau — cikin dakika! ⚡",
-//   "Level up your food and lifestyle game. No capping. 🧢"
-// ]
-
-// ERRANDERS: UNILAG, YABATECH, CMUL - REAL LANDING PAGE CONTENT
-
-const heroHeadings = [
-  { text: 'Sapa dey choke? 😩<br/>Use Erranders get <span class="text-parentPrimary">cheap chow.</span>', lang: '🇳🇬 Pidgin' },
-  { text: 'Want impress your babe? 😉<br/>Send her food via <span class="text-parentPrimary">Erranders.</span>', lang: '🇳🇬 Pidgin' },
-  { text: 'Agụụ na-egbu gị? 🥘<br/>Order food <span class="text-parentPrimary">sharp sharp!</span>', lang: '🇳🇬 Igbo' },
-  { text: 'Yunwa ta kusa kashe ka? 🏃‍♂️<br/>Your chow <span class="text-parentPrimary">dey on the way.</span>', lang: '🇳🇬 Hausa' },
-  { text: 'Dirty clothes full corner? 👕<br/>Book <span class="text-parentPrimary">laundry pickup</span> now.', lang: '🇬🇧 English' },
-  { text: 'Hair dey rough? 💈<br/>Bring <span class="text-parentPrimary">barber</span> to your hostel.', lang: '🇳🇬 Pidgin' },
-  { text: 'Reading for exams? 📚<br/>Make we run your <span class="text-parentPrimary">errands!</span>', lang: '🇬🇧 English' },
-  { text: 'Ebi n pa e? 😋<br/>Chop life, <span class="text-parentPrimary">forget sapa.</span>', lang: '🇳🇬 Yoruba' },
-  { text: 'Need a nail tech? 💅<br/>Book a pro <span class="text-parentPrimary">to your room.</span>', lang: '🇬🇧 English' },
-  { text: 'Tired of trekking? 🚶‍♂️<br/>Relax, just use <span class="text-parentPrimary">Erranders.</span>', lang: '🇳🇬 Pidgin' }
-]
-
-const slangSlogans = [
-  // PIDGIN / SLANG
-  "Sapa hold you? ₦500 chow dey here. 🚀",
-  "Nails need doing? Book a Nail Tech on Erranders now. 💅",
-  "Dirty laundry? Schedule a pickup instantly. 🧺",
-  "No capping. We deliver food, services & more. 💯",
-  "Stop WhatsApp-ing 10 vendors. Use Erranders. 📱",
-  "Group order? Use Market Pool to save delivery fees! 🤝",
-  "Hostel kitchen ban? We dey your back. 🔐",
-  "Roommate fighting over chop? Order 5 vendors at once. 🍽️",
-  "Money drop? Chop life with proper chow. 🎉",
-  "Awoof deals everywhere. Don't dull. 💸",
-  
-  // YORUBA
-  "Ebi n pa e? Order now. 🏃‍♂️",
-  "Sise logun ise. Food logun sapa. 🍲",
-  "Set Meal Autopilot and relax! We feed you all week. 🤖",
-  "O ti lo! Your order is on the way. ⚡",
-  
-  // IGBO
-  "Agụụ na-agụ gị? Get chow fast. 🏃‍♂️",
-  "Nri dị ụtọ. Fresh food delivery. 🍛",
-  "Ngwa ngwa! 30 mins delivery. ⚡",
-  
-  // HAUSA
-  "Kuna jin yunwa? Food is ready. 🏃‍♂️",
-  "Abinci mai dadi. Sweet food inside. 🍛",
-  "Maza maza! Fast delivery. ⚡",
-
-  // WEB APP VIBE
-  "Just login. Order. Chop. Repeat. 🔄",
-  "From Meal Autopilot to Nail Techs, we got it all. ✨",
-  "No space for apps? Our web app is super light. 🌐",
-  "From browser to your door. Real quick. ⚡"
-]
-
-
-
-const floatingSlang = [
-  "DON'T DO OVER", "SAPA NICE ONE", "NO CAPPING", "CHOP LIFE", "E CHOKE", "AWOOF"
-]
-
-const slangStyle = (i: number) => {
-  const positions = [
-    { top: '15%', left: '5%' },
-    { top: '25%', right: '8%' },
-    { bottom: '20%', left: '10%' },
-    { bottom: '15%', right: '12%' },
-    { top: '60%', left: '2%' },
-    { top: '50%', right: '4%' }
-  ]
-  return positions[i]
-}
-
-const quickTags = [
-  { label: 'Sapa Friendly', icon: '💸', desc: 'Meals under ₦1,500' },
-  { label: 'Awoof Deals', icon: '🎁', desc: 'Buy 1 Get 1 Free' },
-  { label: 'Fast Dispatch', icon: '⚡', desc: 'Delivery in < 15 mins' },
-  { label: 'Late Night', icon: '🌙', desc: 'Open till 2AM' },
-]
-
-const heroVisuals = [hero1, hero14, hero12, hero2]
-
-
-
-const handlePromoClick = async (promo: any) => {
-  // If promo has a link to a specific product (format: product:ID)
-  if (promo.link && promo.link.startsWith('product:')) {
-    const productId = promo.link.split(':')[1];
-
-/**
- * Plain-text lines for the shared hero.
- *
- * The original headings carried markup and emoji; the network-wide hero renders text, so
- * they are stripped here rather than inline in the template.
- */
-
-    try {
-      const res = await products_api.getProduct(productId);
-      const product = res.data?.data || res.data;
-      if (product) {
-        // Clear cart for "Special Direct Order"
-        cartStore.clearCart();
-        cartStore.addItem({
-          productId: product._id,
-          vendorId: promo.vendorId,
-          name: product.name,
-          price: product.price,
-          image: product.image,
-          quantity: 1,
-          customizations: []
-        });
-        navigateTo('/cart');
-        return;
-      }
-    } catch (e) {
-      console.error('Failed to quick-buy product', e);
-    }
-  }
-  
-  // Default: Go to vendor
-  const mockVendor = { _id: promo.vendorId, storeName: promo.vendorName, image: promo.image };
-  addRecent(mockVendor);
-  navigateTo(`/vendors/${promo.vendorId}`);
-}
-
-const handleScheduleVendor = (vendor: any) => {
-  isClosedModalOpen.value = false;
-  const vendorId = typeof vendor === 'string' ? vendor : vendor?._id || vendor?.id;
-  if (!vendorId) return;
-  navigateTo({ path: `/vendors/${vendorId}`, query: { schedule: 'true' } });
-};
-
-const navigateToVendor = (vendor: any) => {
-  const vendorId = typeof vendor === 'string' ? vendor : vendor?._id || vendor?.id;
-  if (!vendorId) return;
-
-  if (typeof vendor === 'object' && vendor.isOpen === false && vendor.statusMessage !== 'open') {
-    selectedVendorForModal.value = vendor;
-    isClosedModalOpen.value = true;
-    return;
-  }
-  
-  if (typeof vendor === 'object') {
-    addRecent(vendor);
+const go = () => {
+  if (mode.value === 'food') {
+    navigateTo({ path: '/vendors', query: q.value ? { q: q.value } : {} });
   } else {
-    addRecent({ _id: vendorId });
+    navigateTo('/errands/custom');
   }
-  
-  router.push(`/vendors/${vendorId}`);
-};
-
-const handleShareVendor = (vendor: any) => {
-  selectedVendorForShare.value = vendor;
-  isShareModalOpen.value = true;
 };
 
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-  fetchVendors()
-  fetchSuggestions()
-  if (user.value) {
-    fetchFavorites()
-    fetchBookAgain()
-  }
-})
+  fetchHomeData();
+});
 
-onUnmounted(() => {
- window.removeEventListener('scroll', handleScroll)
-})
-
-const scrollCarousel = (direction: 'left' | 'right', id: string) => {
- const container = document.getElementById(id)
- if (container) {
- const scrollAmount = direction === 'left' ? -340 : 340
- container.scrollBy({ left: scrollAmount, behavior: 'smooth' })
- }
-}
-
-// Data
-const getVendorColor = (name: string) => {
- if (!name) return 'bg-gray-400';
- const colors = ['bg-parentPrimary', 'bg-accent', 'bg-secondary', 'bg-gray-900', 'bg-parentPrimary', 'bg-emerald-500', 'bg-rose-500', 'bg-blue-800', 'bg-indigo-900'];
- let hash = 0;
- for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
- return colors[Math.abs(hash) % colors.length];
-};
-
-const getInitials = (name: string) => {
- if (!name) return '??';
- return name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
-};
-
+useHead({
+  title: 'Erranders - food, errands and swaps on campus',
+  meta: [{ name: 'description', content: 'Order food, send an errand, set up meal autopilot or swap what you do not use. Run by students on your campus.' }],
+});
 </script>
 
 <style scoped>
-.hide-scrollbar::-webkit-scrollbar {
- display: none;
-}
-.hide-scrollbar {
- -ms-overflow-style: none;
- scrollbar-width: none;
-}
-.animate-float {
- animation: float 6s ease-in-out infinite;
-}
-@keyframes float {
- 0%, 100% { transform: translateY(0) rotate(0); }
- 50% { transform: translateY(-20px) rotate(5deg); }
-}
-.animate-spin-slow {
- animation: spin 8s linear infinite;
-}
-@keyframes spin {
- from { transform: rotate(0deg); }
- to { transform: rotate(360deg); }
+.landing {
+  --accent: #f26a2e;
+  --ink: #141110;
+  --muted: #6b655d;
+  --faint: #97908a;
+  --line: #e8e2d9;
+  --surface: #ffffff;
+  --page: #faf8f5;
+  --dark: #16120f;
+
+  background: var(--page);
+  color: var(--ink);
+  font-size: 15px;
+  padding-bottom: 0;
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 1s ease;
-}
-.fade-enter-from, .fade-leave-to {
-  opacity: 0;
-}
-
-/* New Modern Transitions */
-.fade-up-enter-active, .fade-up-leave-active {
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.fade-up-enter-from { opacity: 0; transform: translateY(20px); }
-.fade-up-leave-to { opacity: 0; transform: translateY(-20px); }
-
-.scale-fade-enter-active, .scale-fade-leave-active {
-  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.scale-fade-enter-from { opacity: 0; transform: scale(0.95) rotate(-2deg); }
-.scale-fade-leave-to { opacity: 0; transform: scale(1.05) rotate(2deg); }
-
-.fade-slide-enter-active, .fade-slide-leave-active {
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.fade-slide-enter-from { opacity: 0; transform: translateX(100%); }
-.fade-slide-leave-to { opacity: 0; transform: translateX(100%); }
-
-.animate-pulse-slow {
-  animation: pulse-slow 8s ease-in-out infinite;
-}
-@keyframes pulse-slow {
-  0%, 100% { opacity: 0.1; transform: scale(1); }
-  50% { opacity: 0.3; transform: scale(1.1); }
+:global(html.dark) .landing {
+  --ink: #f6f2ec;
+  --muted: #b3aca3;
+  --faint: #8b847c;
+  --line: #2c2721;
+  --surface: #1b1713;
+  --page: #12100e;
+  --dark: #0c0a09;
 }
 
-.animate-vertical-marquee {
+/* Header */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 12px 20px;
+  background: color-mix(in srgb, var(--page) 92%, transparent);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+
+.brand-img {
+  height: 26px;
+  width: auto;
+}
+
+:global(html.dark) .brand-img {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+.nav-links {
+  display: none;
+  gap: 4px;
+  margin-left: 10px;
+}
+
+@media (min-width: 860px) {
+  .nav-links {
+    display: flex;
+  }
+}
+
+.nav-link {
+  padding: 9px 12px;
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.nav-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ghost {
+  display: none;
+  padding: 10px 14px;
+  border-radius: 11px;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+@media (min-width: 640px) {
+  .ghost {
+    display: inline-flex;
+  }
+}
+
+.primary {
+  padding: 10px 16px;
+  border-radius: 11px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+/* Hero */
+.hero {
+  display: grid;
+  gap: 40px;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 48px 20px 24px;
+}
+
+@media (min-width: 960px) {
+  .hero {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    align-items: center;
+    padding: 72px 20px 40px;
+  }
+}
+
+.hero-copy h1 {
+  margin: 0;
+  font-size: clamp(38px, 7vw, 64px);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+
+.hero-sub {
+  margin: 16px 0 0;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--muted);
+  max-width: 46ch;
+}
+
+.switch {
+  display: inline-flex;
+  gap: 4px;
+  margin-top: 26px;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.switch-btn {
+  padding: 8px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.switch-btn.on {
+  background: var(--ink);
+  color: var(--page);
+}
+
+.hero-field {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 6px 6px 6px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  max-width: 560px;
+}
+
+.hero-field:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(242, 106, 46, 0.16);
+}
+
+.hero-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: 16px;
+  padding: 12px 0;
+  outline: none;
+}
+
+.hero-input::placeholder {
+  color: var(--faint);
+}
+
+.hero-go {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.live {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 0;
+  font-size: 14.5px;
+  color: var(--muted);
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #16a34a;
+}
+
+/* Ticket */
+.ticket-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.ticket {
+  width: 100%;
+  max-width: 380px;
+  transform: rotate(-2deg);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 26px 60px rgba(20, 17, 16, 0.22);
+}
+
+.ticket-top {
+  background: var(--dark);
+  color: #fff;
+  padding: 22px;
+}
+
+.ticket-status {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #4ade80;
+}
+
+.ticket-item {
+  margin: 8px 0 0;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.ticket-vendor {
+  margin: 2px 0 0;
+  font-size: 14.5px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.progress {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  margin-top: 18px;
+}
+
+.prog {
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.prog.done,
+.prog.now {
+  background: var(--accent);
+}
+
+.progress-labels {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  margin-top: 8px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.ticket-stub {
+  position: relative;
+  background: var(--accent);
+  color: #fff;
+  padding: 20px 22px 22px;
+  -webkit-mask:
+    radial-gradient(13px at 0 0, transparent 98%, #000) left top / 51% 51% no-repeat,
+    radial-gradient(13px at 100% 0, transparent 98%, #000) right top / 51% 51% no-repeat;
+  mask:
+    radial-gradient(13px at 0 0, transparent 98%, #000) left top / 51% 51% no-repeat,
+    radial-gradient(13px at 100% 0, transparent 98%, #000) right top / 51% 51% no-repeat;
+}
+
+.stub-label {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 650;
+  opacity: 0.9;
+}
+
+.stub-pin {
+  margin: 6px 0 14px;
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.perforation {
+  border-top: 2px dashed rgba(0, 0, 0, 0.28);
+}
+
+.stub-note {
+  margin: 12px 0 0;
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+/* Sections */
+.open,
+.how,
+.bento,
+.closer {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 44px 20px 0;
+}
+
+.sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.sec-head h2,
+.how h2 {
+  margin: 0;
+  font-size: clamp(22px, 3.4vw, 30px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.sec-link {
+  color: var(--accent);
+  font-size: 14.5px;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 700px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.store {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+}
+
+.store:hover {
+  border-color: var(--accent);
+}
+
+.store-media {
+  position: relative;
+  height: 150px;
+  background: var(--page);
+}
+
+.store-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pill {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: #fff;
+  color: #141110;
+  font-size: 12.5px;
+  font-weight: 750;
+}
+
+.store-body {
+  padding: 12px 14px 14px;
+}
+
+.store-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.store-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 750;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.store-meta {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.new {
+  flex: none;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(242, 106, 46, 0.12);
+  color: #b3400b;
+  font-size: 12.5px;
+  font-weight: 750;
+}
+
+.closed-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 14px 16px;
+  border: 1px dashed var(--line);
+  border-radius: 14px;
+  font-size: 14.5px;
+  color: var(--muted);
+}
+
+.closed-chip {
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-size: 13.5px;
+  font-weight: 650;
+  color: var(--ink);
+}
+
+.skel {
+  height: 220px;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* How it works */
+.steps {
+  list-style: none;
+  display: grid;
+  gap: 20px;
+  margin: 18px 0 0;
+  padding: 0;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 760px) {
+  .steps {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.step {
+  position: relative;
+  padding-top: 54px;
+}
+
+@media (min-width: 760px) {
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 22px;
+    left: 46px;
+    right: 0;
+    border-top: 2px dotted var(--line);
+  }
+}
+
+.num {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.step-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.step-body {
+  margin: 6px 0 0;
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.5;
+  max-width: 40ch;
+}
+
+/* Bento */
+.bento {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 860px) {
+  .bento {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-areas:
+      'errand meals meals'
+      'errand swap swap';
+  }
+
+  .tile-errand {
+    grid-area: errand;
+  }
+
+  .tile-meals {
+    grid-area: meals;
+  }
+
+  .tile-swap {
+    grid-area: swap;
+  }
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.tile:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+}
+
+.tile-tag {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.tile-title {
+  margin: 0;
+  font-size: clamp(19px, 2.6vw, 24px);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.tile-body {
+  margin: 0;
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.tile-list {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  color: var(--muted);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+.tile-cta {
+  margin-top: auto;
+  padding-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 750;
+  color: var(--accent);
+}
+
+.tile-errand {
+  background: var(--dark);
+  border-color: var(--dark);
+  color: #fff;
+}
+
+.tile-errand .tile-tag,
+.tile-errand .tile-body,
+.tile-errand .tile-list {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.sched {
+  margin-top: 6px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--page);
+  padding: 14px;
+}
+
+.sched-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.sched-check {
+  color: #16a34a;
+}
+
+.sched-item {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.sched-item p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.sched-item span {
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+/* Closing banner */
+.closer {
+  margin-top: 44px;
+  padding-bottom: 44px;
+}
+
+.closer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 1080px;
+  margin: 44px auto 0;
+  padding: 28px;
+  border-radius: 20px;
+  background: var(--accent);
+  color: #fff;
+}
+
+.closer h2 {
+  margin: 0;
+  font-size: clamp(24px, 4vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.closer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 14px 22px;
+  border-radius: 13px;
+  background: var(--dark);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+/* Footer */
+.foot {
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+  padding: 40px 20px 28px;
+}
+
+.foot-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: space-between;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.foot-line {
+  margin: 10px 0 0;
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 34ch;
+}
+
+.foot-cols {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.foot-title {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.foot-link {
   display: block;
-  animation: vertical-marquee 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 14.5px;
+  text-decoration: none;
 }
 
-@keyframes vertical-marquee {
-  0% { transform: translateY(100%); opacity: 0; }
-  10%, 90% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(-100%); opacity: 0; }
+.foot-link:hover {
+  color: var(--accent);
 }
 
-.animate-draw {
-  stroke-dasharray: 100;
-  stroke-dashoffset: 100;
-  animation: draw 1.5s ease-out forwards 1s;
+.foot-copy {
+  max-width: 1120px;
+  margin: 28px auto 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  color: var(--faint);
 }
 
-@keyframes draw {
-  to { stroke-dashoffset: 0; }
+.landing :where(a, button, input):focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 10px;
 }
 
-.animate-float-various {
-  animation: float-various 10s ease-in-out infinite alternate;
-}
+@media (prefers-reduced-motion: reduce) {
+  .landing * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 
-@keyframes float-various {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  33% { transform: translate(20px, -10px) rotate(2deg); }
-  66% { transform: translate(-10px, 20px) rotate(-2deg); }
-  100% { transform: translate(0, 0) rotate(0deg); }
+  .ticket {
+    transform: none;
+  }
 }
-
-.animate-fade-in-up {
-  animation: fade-in-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes fade-in-up {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-/* Hero Heading Rotation */
-.hero-slide-enter-active,
-.hero-slide-leave-active {
-  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.hero-slide-enter-from {
-  opacity: 0;
-  transform: translateY(40px);
-}
-.hero-slide-leave-to {
-  opacity: 0;
-  transform: translateY(-40px);
-}
-
-@keyframes wiggle {
-  0%, 100% { transform: rotate(0deg); }
-  20% { transform: rotate(-8deg); }
-  40% { transform: rotate(8deg); }
-  60% { transform: rotate(-4deg); }
-  80% { transform: rotate(4deg); }
-}
-
-@keyframes moonPulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 0 8px rgba(30,30,46,0.08); }
-  50% { transform: scale(1.04); box-shadow: 0 0 0 16px rgba(30,30,46,0.04); }
-}
-
 </style>
