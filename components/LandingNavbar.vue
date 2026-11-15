@@ -13,7 +13,7 @@
         <!-- Logo & Features Dropdown -->
         <div class="flex items-center gap-3 sm:gap-6">
           <NuxtLink to="/" class="flex items-center gap-3 group">
-            <img src="@/assets/img/logo-light.png" alt="Errander Logo" class="h-8 lg:h-8 w-auto object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3" />
+            <img src="@/assets/img/logo-light.png" alt="Errander Logo" class="landing-logo h-8 lg:h-8 w-auto object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3" />
           </NuxtLink>
 
           <!-- Features Dropdown (Desktop) -->
@@ -847,3 +847,48 @@ onUnmounted(() => {
 })
 </script>
 
+<style scoped>
+/*
+ * NAVBAR — dark mode.
+ *
+ * The bar was built for a light page: a dark logo, near-white buttons, a black Sign Up pill. On a dark
+ * background the logo disappeared, the pill buttons matched the page, and the labels went grey.
+ */
+html.dark .landing-logo {
+  filter: brightness(0) invert(1);
+}
+
+/* Pill actions read as surfaces, not as holes in the page. */
+html.dark nav a.rounded-full,
+html.dark nav button.rounded-full {
+  background: var(--card) !important;
+  border-color: var(--line) !important;
+  color: var(--ink) !important;
+}
+
+html.dark nav a.rounded-full:hover,
+html.dark nav button.rounded-full:hover {
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+}
+
+/* The black Sign Up pill is invisible on near-black; the accent carries it instead. */
+html.dark nav a.bg-gray-900 {
+  background: var(--accent) !important;
+  color: #fff !important;
+}
+
+/* Plain text links. */
+html.dark nav a {
+  color: var(--ink);
+}
+
+/* The Features and Campus Services pills keep their tint but need a readable label. */
+html.dark nav a.bg-gray-50\/90,
+html.dark nav button.bg-gray-50\/90,
+html.dark nav a.bg-emerald-50\/70 {
+  background: var(--card) !important;
+  border-color: var(--line) !important;
+  color: var(--ink) !important;
+}
+</style>

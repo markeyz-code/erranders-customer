@@ -53,25 +53,8 @@ html.dark {
   --overlay: rgba(0, 0, 0, 0.6);
 }
 
-/* System preference, only while no explicit choice has been made. */
-@media (prefers-color-scheme: dark) {
-  html:not(.light) {
-    --bg: #121010;
-    --card: #1c1917;
-    --line: #2c2825;
-
-    --ink: #f5f1ea;
-    --mute: #a39d94;
-
-    --orsoft: #3a2418;
-    --green-soft: #16301f;
-    --accent: #f26a2e;
-    --accent-ink: #ffffff;
-
-    --rail: #1c1917;
-    --overlay: rgba(0, 0, 0, 0.6);
-  }
-}
+/* No system-preference branch: light is the default until the student chooses dark. A site that
+   follows the OS looks broken to anyone whose machine is dark and who has not touched the switch. */
 
 body {
   background: var(--bg);
