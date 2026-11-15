@@ -877,4 +877,12 @@ html.dark .side-rail a.\!bg-white,
 html.dark .side-rail a.bg-white {
   background: #1b1713 !important;
 }
+
+/* ── Logo in dark mode ──
+   The only logo asset is dark ink, which vanishes on a dark rail and header. Until a white file
+   exists, it is drawn as a white mark. */
+html.dark .logo-dark-fallback,
+html.dark img[src*='logo-light'] {
+  filter: brightness(0) invert(1);
+}
 </style>

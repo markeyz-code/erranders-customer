@@ -774,6 +774,13 @@ useHead({
   width: auto;
 }
 
+/* There is one logo asset and it is dark ink. On a dark bar it disappears, so in dark mode it is
+   drawn as a white mark. A proper white logo file would be better than a filter; this is the
+   fallback until one exists. */
+:global(html.dark) .brand-img {
+  filter: brightness(0) invert(1);
+}
+
 .nav-links {
   display: none;
   gap: 2px;
