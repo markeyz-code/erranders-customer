@@ -338,7 +338,7 @@
     <main class="dash flex-1 w-full lg:w-auto lg:ml-[108px] transition-all duration-700 py-2.5 px-0 sm:p-4 lg:p-10 pb-28 lg:pb-32 overflow-x-hidden">
 
       <!-- Desktop manifest header -->
-      <div v-if="!route.path.startsWith('/vendors')" class="hidden lg:block mb-8 animate-fade-in">
+      <div v-if="!route.path.startsWith('/vendors') && !isOrderTracker" class="hidden lg:block mb-8 animate-fade-in">
         <div class="app-bar flex items-center justify-between bg-white rounded-2xl px-5 py-4 border border-[#E7E2DA]">
           <div class="flex items-center gap-5">
             <button v-if="!isDashboard" @click="router.back()" class="w-10 h-10 rounded-lg bg-[#FAF8F5] flex items-center justify-center border border-[#E7E2DA] hover:bg-[#171310] hover:text-white hover:border-[#171310] transition-all group">
@@ -628,6 +628,9 @@ onMounted(() => {
   const saved = typeof localStorage !== 'undefined' ? localStorage.getItem('erranders-theme') : null;
   applyTheme(saved === 'dark', false);
 });
+
+// The order tracker carries its own status hero; the layout bar would repeat it.
+const isOrderTracker = computed(() => /^\/dashboard\/orders\/[^/]+$/.test(route.path));
 
 const isActive = (path: string) => {
   if (path === '/dashboard') return route.path === '/dashboard' || route.path === '/';

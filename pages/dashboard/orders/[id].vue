@@ -2,54 +2,36 @@
   <div class="min-h-screen w-full bg-white pb-24 font-sans" v-if="order">
     <div class="w-full max-w-7xl mx-auto px-4 md:px-4 pt-8">
 
-      <!-- Header -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <div>
-          <div class="inline-flex items-center gap-1.5 mb-2">
-            <span class="w-1.5 h-1.5 rounded-full bg-[#FF5C1A] animate-pulse"></span>
-            <span class="text-[11px] font-bold  uppercase text-[#FF5C1A]">Order #{{ order._id?.slice(-8) }}</span>
-          </div>
-          <h1 class="text-xl font-bold text-gray-900 tracking-tight capitalize leading-none">
-            {{ order.status?.replace(/_/g, ' ') }}
-          </h1>
-          <p class="text-gray-400 text-sm mt-1">We're updating your delivery status in real-time.</p>
+      <!-- Status hero: one surface that says what is happening, coloured by state. -->
+      <section class="hero" :class="heroTone">
+        <div class="hero-top">
+          <p class="hero-id">Order #{{ order._id?.slice(-8) }}</p>
+          <span class="hero-state">{{ heroLabel }}</span>
         </div>
 
-        <div v-if="order.status !== 'pending' && order.status !== 'delivered' && order.status !== 'cancelled' && order.status !== 'awaiting_payment' && order.status !== 'negotiating'" class="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-[#FF5C1A] text-white self-start sm:self-auto">
-           <Clock class="w-5 h-5 text-white/80" />
-           <div>
-             <p class="text-[9px] font-bold text-white/70 uppercase  leading-none mb-1">Status</p>
-             <p class="text-base font-bold tracking-tight leading-none capitalize">{{ order.status?.replace(/_/g, ' ') }}</p>
-           </div>
-        </div>
-      </div>
+        <h1 class="hero-title">{{ heroTitle }}</h1>
+        <p class="hero-sub">{{ heroSubtitle }}</p>
 
-      <!-- Stepper -->
-      <div class="border border-gray-50 rounded-2xl p-4 mb-6">
-        <div class="flex items-center justify-between min-w-full gap-2 overflow-x-auto hide-scrollbar">
-           <template v-for="(step, idx) in orderSteps" :key="idx">
-             <div class="flex flex-col items-center gap-2 relative z-10 flex-1 min-w-[86px]">
-               <div :class="[
-                 'w-8 h-8 rounded-full flex items-center justify-center transition-colors shrink-0',
-                 step._completed ? 'bg-gray-900 text-white' :
-                 step._current ? 'bg-[#FF5C1A] text-white' : 'bg-gray-100 text-gray-400'
-               ]">
-                 <Check v-if="step._completed" class="w-3.5 h-3.5" />
-                 <Loader2 v-else-if="step._current" class="w-3.5 h-3.5 animate-spin" />
-                 <span v-else class="text-[11px] font-bold">{{ idx + 1 }}</span>
-               </div>
-               <h4 :class="[
-                 'text-[11px] font-bold text-center leading-tight transition-colors',
-                 (step._completed || step._current) ? 'text-gray-900' : 'text-gray-300'
-               ]">{{ step.label }}</h4>
-             </div>
+        <p v-if="isCancelled && refundNote" class="hero-refund">{{ refundNote }}</p>
 
-             <div v-if="idx < orderSteps.length - 1" class="flex-1 h-0.5 w-full hidden md:block rounded-full bg-gray-100 -mt-6">
-                <div class="h-full transition-all duration-700 bg-[#FF5C1A]" :style="{ width: (orderSteps[idx + 1]._completed || orderSteps[idx + 1]._current) ? '100%' : '0%' }"></div>
-             </div>
-           </template>
-        </div>
-      </div>
+        <!-- Stepper lives inside the hero so status and progress never disagree. -->
+        <ol v-if="!isCancelled" class="steps">
+          <li
+            v-for="(step, idx) in orderSteps"
+            :key="idx"
+            class="step"
+            :class="{ done: step._completed, current: step._current }"
+            :aria-current="step._current ? 'step' : undefined"
+          >
+            <span class="step-dot">
+              <Check v-if="step._completed" class="w-3 h-3" aria-hidden="true" />
+              <Loader2 v-else-if="step._current" class="w-3 h-3 animate-spin" aria-hidden="true" />
+              <span v-else class="step-num">{{ idx + 1 }}</span>
+            </span>
+            <span class="step-label">{{ step.label }}</span>
+          </li>
+        </ol>
+      </section>
 
       <!-- Main Content -->
       <div class="space-y-5">
@@ -396,7 +378,7 @@
                       <MapPin class="w-4 h-4 text-[#FF5C1A]" />
                       <h4 class="text-[11px] font-bold text-white/50 uppercase ">Delivery Address</h4>
                    </div>
-                   <h3 class="text-base font-bold leading-snug mb-4">{{ order.deliveryAddress || 'Campus Residency' }}</h3>
+                   <h3 class="keep-type text-base font-bold leading-snug mb-4 text-white" style="color:#fff">{{ order.deliveryAddress || 'Campus Residency' }}</h3>
 
                    <div class="inline-flex items-center gap-2">
                       <div class="relative flex h-1.5 w-1.5">
@@ -408,7 +390,7 @@
                 </div>
 
                 <!-- Errandr Tracking (Live Location) -->
-                <div v-if="order.status !== 'pending' && order.status !== 'awaiting_payment'" class="bg-gray-50 rounded-2xl border border-gray-50 overflow-hidden relative group h-[300px]">
+                <div v-if="riderEnRoute" class="bg-gray-50 rounded-2xl border border-gray-50 overflow-hidden relative group h-[300px]">
                    <MapboxMap 
                       v-if="mapboxToken" 
                       :order="order"
@@ -422,7 +404,7 @@
                 </div>
 
                 <!-- Verification Code -->
-                <div v-if="order.status !== 'pending' && order.status !== 'awaiting_payment'" class="p-5 rounded-2xl border border-gray-50 flex flex-col">
+                <div v-if="riderEnRoute" class="p-5 rounded-2xl border border-gray-50 flex flex-col">
                    <div class="flex items-center justify-between mb-5">
                       <div class="flex items-center gap-2">
                          <ShieldCheck class="w-4 h-4 text-emerald-600" />
@@ -2039,6 +2021,60 @@ const isStepCurrentCustom = (stepStatus: string) => {
   return stepStatus === currentMappedStatus;
 };
 
+
+// ─── Hero state ───
+// One source of truth for the hero copy, so the title, subtitle and colour can never disagree.
+const STATUS_COPY: Record<string, { title: string; sub: string }> = {
+  pending: { title: 'Order received', sub: 'We are passing it to the store now.' },
+  negotiating: { title: 'Finding you a rider', sub: 'A rider is reviewing the fee you proposed.' },
+  awaiting_payment: { title: 'Waiting for payment', sub: 'A rider can only be sent once this is paid.' },
+  awaiting_payment_confirmation: { title: 'Checking your payment', sub: 'This usually takes a minute.' },
+  confirmed: { title: 'Order confirmed', sub: 'The store has accepted your order.' },
+  preparing: { title: 'Being prepared', sub: 'The store is putting your order together.' },
+  ready_for_pickup: { title: 'Ready for pickup', sub: 'A rider is on the way to collect it.' },
+  picked_up: { title: 'On the way to you', sub: 'Your rider has it and is heading over.' },
+  in_transit: { title: 'On the way to you', sub: 'Your rider has it and is heading over.' },
+  interception_in_progress: { title: 'Handing over', sub: 'Another rider is taking it the rest of the way.' },
+  delivered: { title: 'Delivered', sub: 'That is done. Thanks for ordering.' },
+  cancelled: { title: 'Order cancelled', sub: 'This order was cancelled and will not be delivered.' },
+  refunded: { title: 'Refunded', sub: 'The money has been returned to your wallet.' },
+};
+
+const isCancelled = computed(() => ['cancelled', 'refunded'].includes(String(order.value?.status || '').toLowerCase()));
+
+const heroCopy = computed(() => STATUS_COPY[String(order.value?.status || '').toLowerCase()] || {
+  title: String(order.value?.status || 'Order').replace(/_/g, ' '),
+  sub: 'We are updating this as it moves.',
+});
+
+const heroTitle = computed(() => heroCopy.value.title);
+const heroSubtitle = computed(() => heroCopy.value.sub);
+const heroLabel = computed(() => String(order.value?.status || '').replace(/_/g, ' '));
+
+/** Colour follows the state: live is orange, done is green, cancelled is red, waiting is amber. */
+const heroTone = computed(() => {
+  const st = String(order.value?.status || '').toLowerCase();
+  if (['cancelled', 'refunded', 'failed', 'disputed'].includes(st)) return 'tone-cancel';
+  if (st === 'delivered') return 'tone-done';
+  if (['awaiting_payment', 'awaiting_payment_confirmation', 'pending', 'negotiating'].includes(st)) return 'tone-wait';
+  return 'tone-live';
+});
+
+/** A refund note only when there is something real to say. */
+const refundNote = computed(() => {
+  const amount = Number((order.value as any)?.refundAmount || 0);
+  if (amount > 0) return `₦${amount.toLocaleString()} has been returned to your wallet.`;
+  const st = String(order.value?.status || '').toLowerCase();
+  if (st === 'refunded') return 'The money has been returned to your wallet.';
+  return '';
+});
+
+/** Map and delivery code are only useful while someone is actually carrying the order. */
+const riderEnRoute = computed(() => {
+  const st = String(order.value?.status || '').toLowerCase();
+  return ['picked_up', 'in_transit', 'interception_in_progress'].includes(st);
+});
+
 const orderSteps = computed(() => {
   if (order.value?.type === 'custom_errand') {
     return CUSTOM_ERRAND_STEPS.map(s => ({
@@ -2100,5 +2136,177 @@ useHead({ title: 'Order Details - Errandr' });
 .hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+</style>
+
+<style scoped>
+/* TRACKER — one hero that carries status, colour and progress. */
+
+.hero {
+  border-radius: var(--dash-radius);
+  padding: 22px;
+  margin-bottom: 18px;
+  border: 1px solid var(--dash-line);
+  background: var(--dash-surface);
+  --hero-accent: var(--dash-accent);
+  --hero-ink: var(--dash-ink);
+}
+
+.hero.tone-live {
+  background: var(--dash-ink);
+  border-color: var(--dash-ink);
+  --hero-ink: #fff;
+  --hero-accent: #f26a2e;
+}
+
+.hero.tone-done {
+  background: rgba(22, 163, 74, 0.08);
+  border-color: rgba(22, 163, 74, 0.32);
+  --hero-accent: #16a34a;
+}
+
+.hero.tone-cancel {
+  background: rgba(220, 38, 38, 0.07);
+  border-color: rgba(220, 38, 38, 0.3);
+  --hero-accent: #dc2626;
+}
+
+.hero.tone-wait {
+  background: rgba(217, 119, 6, 0.08);
+  border-color: rgba(217, 119, 6, 0.3);
+  --hero-accent: #d97706;
+}
+
+.hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.hero-id {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--hero-ink);
+  opacity: 0.65;
+}
+
+.hero-state {
+  font-size: 13px;
+  font-weight: 750;
+  text-transform: capitalize;
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--hero-accent);
+}
+
+.hero-title {
+  margin: 10px 0 0;
+  font-size: clamp(24px, 5vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--hero-ink);
+}
+
+.hero-sub {
+  margin: 6px 0 0;
+  font-size: 15px;
+  color: var(--hero-ink);
+  opacity: 0.72;
+  max-width: 60ch;
+}
+
+.hero-refund {
+  margin: 12px 0 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.16);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--hero-ink);
+}
+
+.steps {
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+.step {
+  position: relative;
+  padding-top: 22px;
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--hero-ink);
+  opacity: 0.42;
+}
+
+.step::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.28;
+}
+
+.step:first-child::before {
+  border-radius: 999px 0 0 999px;
+}
+
+.step:last-child::before {
+  border-radius: 0 999px 999px 0;
+}
+
+.step.done,
+.step.current {
+  opacity: 1;
+}
+
+.step.done::before,
+.step.current::before {
+  background: var(--hero-accent);
+  opacity: 1;
+}
+
+.step-dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: currentColor;
+  opacity: 0.3;
+  color: inherit;
+}
+
+.step.done .step-dot {
+  background: var(--hero-accent);
+  color: #fff;
+  opacity: 1;
+}
+
+.step.current .step-dot {
+  background: var(--hero-accent);
+  color: #fff;
+  opacity: 1;
+  box-shadow: 0 0 0 4px rgba(242, 106, 46, 0.22);
+}
+
+.step-num {
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1;
 }
 </style>
