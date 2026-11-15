@@ -163,11 +163,11 @@
           <button
             type="button"
             @click="toggleTheme"
-            class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-50 flex items-center justify-center border border-gray-50 hover:bg-gray-100 transition-all active:scale-95"
-            :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+            class="theme-switch w-9 h-9 sm:w-10 sm:h-10"
+            aria-label="Switch between light and dark"
           >
-            <Sun v-if="isDark" class="w-4 h-4 sm:w-[18px] sm:h-[18px] text-gray-700" />
-            <Moon v-else class="w-4 h-4 sm:w-[18px] sm:h-[18px] text-gray-700" />
+            <Moon class="glyph-moon w-4 h-4 sm:w-[18px] sm:h-[18px]" />
+            <Sun class="glyph-sun w-4 h-4 sm:w-[18px] sm:h-[18px]" />
           </button>
 
           <!-- Search Icon -->
@@ -379,12 +379,12 @@
             <button
               type="button"
               @click="toggleTheme"
-              class="w-11 h-11 bg-[#FAF8F5] rounded-lg flex items-center justify-center text-[#9C968E] hover:bg-[#171310] hover:text-white transition-all border border-[#E7E2DA]"
-              :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
-              :title="isDark ? 'Light mode' : 'Dark mode'"
+              class="theme-switch w-11 h-11"
+              aria-label="Switch between light and dark"
+              title="Light or dark"
             >
-              <Sun v-if="isDark" class="w-[18px] h-[18px]" />
-              <Moon v-else class="w-[18px] h-[18px]" />
+              <Moon class="glyph-moon w-[18px] h-[18px]" />
+              <Sun class="glyph-sun w-[18px] h-[18px]" />
             </button>
 
             <div class="w-px h-8 border-l border-dashed border-[#E7E2DA]"></div>
@@ -868,5 +868,34 @@ html.dark .side-rail a.bg-white {
 html.dark .logo-dark-fallback,
 html.dark img[src*='logo-light'] {
   filter: brightness(0) invert(1);
+}
+
+/* Theme switch: both glyphs present, CSS shows one. No reactive value in the render path. */
+.theme-switch {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.theme-switch:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.theme-switch .glyph-sun {
+  display: none;
+}
+
+html.dark .theme-switch .glyph-moon {
+  display: none;
+}
+
+html.dark .theme-switch .glyph-sun {
+  display: block;
 }
 </style>

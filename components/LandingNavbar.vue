@@ -216,15 +216,20 @@
           </div>
 
           <!-- Theme switch -->
+          <!--
+            Both glyphs are in the DOM and CSS picks one. The switch no longer depends on a reactive
+            value, so a problem in that value cannot blank the page; the class toggle is the only thing
+            that has to work.
+          -->
           <button
             type="button"
-            class="ml-2 flex h-10 w-10 items-center justify-center rounded-full border border-gray-25 bg-white transition-all hover:border-gray-300 hover:shadow-sm"
-            :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
-            :title="isDark ? 'Light mode' : 'Dark mode'"
+            class="theme-switch ml-2"
+            aria-label="Switch between light and dark"
+            title="Light or dark"
             @click="toggleTheme"
           >
-            <Sun v-if="isDark" class="h-5 w-5 text-gray-900" />
-            <Moon v-else class="h-5 w-5 text-gray-900" />
+            <Moon class="glyph-moon h-5 w-5" />
+            <Sun class="glyph-sun h-5 w-5" />
           </button>
 
           <!-- Cart Icon -->
@@ -890,5 +895,37 @@ html.dark nav a.bg-emerald-50\/70 {
   background: var(--card) !important;
   border-color: var(--line) !important;
   color: var(--ink) !important;
+}
+
+/* The switch: one button, both glyphs, CSS decides which is visible. */
+.theme-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.theme-switch:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.theme-switch .glyph-sun {
+  display: none;
+}
+
+html.dark .theme-switch .glyph-moon {
+  display: none;
+}
+
+html.dark .theme-switch .glyph-sun {
+  display: block;
 }
 </style>

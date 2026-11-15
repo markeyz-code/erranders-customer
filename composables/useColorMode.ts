@@ -30,7 +30,6 @@ const readStored = (): boolean | null => {
 };
 
 const apply = (dark: boolean, persist: boolean) => {
-  isDark.value = dark;
   try {
     if (typeof document !== 'undefined') {
       const root = document.documentElement;
@@ -45,6 +44,7 @@ const apply = (dark: boolean, persist: boolean) => {
   } catch {
     // A failed class write must never take the page down.
   }
+  isDark.value = dark;
 };
 
 export const setTheme = (dark: boolean, persist = true) => apply(dark, persist);
@@ -55,7 +55,17 @@ export const useColorMode = () => {
     apply(stored ?? false, false);
   });
 
-  const toggleTheme = () => apply(!isDark.value, true);
+  const toggleTheme = () => {
+    let currentlyDark = isDark.value;
+    try {
+      if (typeof document !== 'undefined') {
+        currentlyDark = document.documentElement.classList.contains('dark');
+      }
+    } catch {
+      /* fall back to the ref */
+    }
+    apply(!currentlyDark, true);
+  };
 
   return {
     isDark: computed(() => isDark.value),
