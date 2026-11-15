@@ -439,6 +439,69 @@ const slides: Slide[] = [
     },
   },
   {
+    key: 'group',
+    tab: 'Group',
+    line1: 'Eating alone?',
+    line2: 'Split it.',
+    sub: 'One cart, many people. Everyone adds their own food and the host pays once.',
+    placeholder: 'Start a group order',
+    button: 'Start a group',
+    route: '/dashboard/group-orders',
+    hint: 'Everyone pays their own share',
+    ticket: {
+      status: 'Waiting on 2 people',
+      title: 'Room 342 lunch',
+      sub: '4 people, one cart',
+      steps: ['Opened', 'Joined', 'Ready', 'Paid'],
+      at: 1,
+      stubLabel: 'Invite code',
+      stubValue: '4 B 2 K',
+      stubNote: 'Share it with your roommates',
+    },
+  },
+  {
+    key: 'pharmacy',
+    tab: 'Pharmacy',
+    line1: 'Not feeling well?',
+    line2: 'We bring it.',
+    sub: 'Upload a prescription. A pharmacist checks it before anything leaves the counter.',
+    placeholder: 'Paracetamol, cough syrup, plasters',
+    button: 'Order medicine',
+    route: '/vendors?category=pharmacy',
+    hint: 'A pharmacist reviews every order',
+    ticket: {
+      status: 'Pharmacist reviewing',
+      title: 'Amoxicillin 500mg',
+      sub: 'Prescription uploaded',
+      steps: ['Sent', 'Reviewed', 'Packed', 'Delivered'],
+      at: 1,
+      stubLabel: 'Order',
+      stubValue: 'RX 2401',
+      stubNote: 'Checked before it is dispatched',
+    },
+  },
+  {
+    key: 'market',
+    tab: 'Market',
+    line1: 'Shopping for many?',
+    line2: 'Buy in bulk.',
+    sub: 'Pool an order with other students and pay wholesale prices on the staples you share.',
+    placeholder: 'Rice, oil, beans',
+    button: 'Start a pool',
+    route: '/market-pool',
+    hint: 'Pay your share when the pool closes',
+    ticket: {
+      status: 'Pool filling',
+      title: 'Rice, 50kg bag',
+      sub: '6 of 10 joining',
+      steps: ['Opened', 'Filling', 'Ordered', 'Shared'],
+      at: 1,
+      stubLabel: 'Your share',
+      stubValue: '4,200',
+      stubNote: 'Charged when the pool closes',
+    },
+  },
+  {
     key: 'swap',
     tab: 'Swap',
     line1: "Don't dump it.",
@@ -530,10 +593,19 @@ const select = (i: number) => {
 const go = () => {
   const slide = current.value;
   if (!slide.placeholder) return;
+  const term = q.value?.trim();
+
+  // Food and pharmacy both end up in the store list, so the typed term is carried through.
   if (slide.key === 'food') {
-    navigateTo({ path: '/vendors', query: q.value ? { q: q.value } : {} });
+    navigateTo({ path: '/vendors', query: term ? { q: term } : {} });
     return;
   }
+
+  if (slide.key === 'pharmacy') {
+    navigateTo({ path: '/vendors', query: { category: 'pharmacy', ...(term ? { q: term } : {}) } });
+    return;
+  }
+
   navigateTo(slide.route);
 };
 
