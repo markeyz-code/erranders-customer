@@ -1,7 +1,8 @@
 <template>
   <div class="landing">
     <!-- Sticky header: four links, one action. Nothing else. -->
-    <header class="nav">
+    <header class="nav-shell">
+      <div class="nav">
       <NuxtLink to="/" class="brand" aria-label="Erranders home">
         <img src="@/assets/img/logo-light.png" alt="Erranders" class="brand-img" />
       </NuxtLink>
@@ -35,6 +36,7 @@
           {{ isLoggedIn ? 'Dashboard' : 'Get started' }}
           <ArrowRight class="w-4 h-4" aria-hidden="true" />
         </NuxtLink>
+      </div>
       </div>
     </header>
 
@@ -576,7 +578,7 @@ const route = useRoute();
 
 const navLinks = [
   { to: '/vendors', label: 'Food' },
-  { to: '/errands/custom', label: 'Errands' },
+  { to: '/errands/custom', label: 'Custom errands' },
   { to: '/dashboard/recurring-orders', label: 'Meal Autopilot' },
   { to: '/market-pool', label: 'Swap' },
 ];
@@ -655,19 +657,37 @@ useHead({
   padding-bottom: 0;
 }
 
-/* Header: one line, tight, with the current section marked. */
-.nav {
+/* Header: a floating bar with margins, so it never touches the edges. */
+.nav-shell {
   position: sticky;
   top: 0;
   z-index: 50;
+  padding: 10px 16px;
+  background: color-mix(in srgb, var(--page) 82%, transparent);
+  backdrop-filter: saturate(1.2) blur(14px);
+}
+
+.nav {
   display: flex;
   align-items: center;
   gap: 10px;
-  height: 64px;
-  padding: 0 20px;
-  background: color-mix(in srgb, var(--page) 88%, transparent);
-  backdrop-filter: saturate(1.2) blur(16px);
-  border-bottom: 1px solid var(--line);
+  height: 60px;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 10px 0 14px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+@media (min-width: 960px) {
+  .nav {
+    padding: 0 12px 0 16px;
+  }
+
+  .nav-link {
+    padding: 9px 13px;
+  }
 }
 
 .brand {
@@ -696,7 +716,7 @@ useHead({
 
 .nav-link {
   position: relative;
-  padding: 9px 13px;
+  padding: 9px 11px;
   border-radius: 10px;
   color: var(--muted);
   font-size: 15px;
