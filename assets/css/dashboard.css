@@ -158,3 +158,27 @@ html.dark .dash .border-\[\#E7E2DA\] {
     scroll-behavior: auto !important;
   }
 }
+
+/* ─── FORMS ───
+   Profile and Settings are mostly fields. One radius, one border, one focus ring, 15px text. */
+.dash input:not([type='checkbox']):not([type='radio']):not([type='range']),
+.dash select,
+.dash textarea {
+  border-radius: var(--dash-radius-sm);
+  border-color: var(--dash-line);
+  background: var(--dash-surface);
+  color: var(--dash-ink);
+  font-size: 15px;
+}
+
+.dash input::placeholder,
+.dash textarea::placeholder {
+  color: var(--dash-faint);
+}
+
+.dash label,
+.dash legend {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--dash-ink);
+}

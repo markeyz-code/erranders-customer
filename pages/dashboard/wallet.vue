@@ -2,29 +2,21 @@
   <main class="min-h-screen pb-20">
     <div class="max-w-3xl mx-auto px-3 pt-0 md:pt-2 space-y-6">
 
-      <!-- Wallet Balance Card -->
-      <div class="relative overflow-hidden bg-gray-900 rounded-2xl p-4 md:p-5 text-white">
-        <div class="absolute top-0 right-0 w-48 h-48 bg-parentPrimary/15 rounded-full blur-[80px] -mr-20 -mt-20"></div>
-        <div class="absolute bottom-0 left-0 w-40 h-40 bg-emerald-500/10 rounded-full blur-[60px] -ml-16 -mb-16"></div>
-        
-        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div>
-            <p class="text-sm font-medium text-white/40  mb-2">Available Balance</p>
-            <div class="flex items-baseline gap-2">
-              <span class="text-4xl md:text-5xl font-medium tracking-tighter">₦{{ (balance || 0).toLocaleString() }}</span>
-              <button @click="handleFetchWallet" class="p-1.5 hover:bg-white/10 rounded-lg transition-colors">
-                <RefreshCw :class="loading ? 'animate-spin' : ''" class="w-3.5 h-3.5 text-white/40" />
-              </button>
-            </div>
+      <!-- Balance: the one dark surface on this page, same language as the live order card. -->
+      <div class="bal">
+        <div class="bal-main">
+          <p class="bal-label">Available balance</p>
+          <div class="bal-row">
+            <p class="bal-amount">₦{{ (balance || 0).toLocaleString() }}</p>
+            <button type="button" class="bal-refresh" aria-label="Refresh balance" @click="handleFetchWallet">
+              <RefreshCw :class="loading ? 'animate-spin' : ''" class="w-4 h-4" />
+            </button>
           </div>
-          <button 
-            @click="showTopup = true"
-            class="px-4 py-3.5 bg-parentPrimary text-white rounded-xl text-sm font-medium tracking-wider hover:bg-parentPrimary/90 active:scale-95 transition-all shadow-sm border border-gray-50 shadow-parentPrimary/30 flex items-center gap-2 self-start md:self-center"
-          >
-            <Plus class="w-4 h-4" />
-            Add Money
-          </button>
         </div>
+        <button type="button" class="bal-add" @click="showTopup = true">
+          <Plus class="w-4 h-4" aria-hidden="true" />
+          Add money
+        </button>
       </div>
 
       <!-- Instant Virtual Account -->
@@ -59,39 +51,36 @@
       <!-- Recent Transactions -->
       <div class="space-y-4">
         <div class="flex items-center justify-between px-1">
-          <h2 class="text-sm font-medium text-gray-900 tracking-tight">Recent Activity</h2>
-          <button class="text-sm font-medium text-parentPrimary hover:underline">View All</button>
+          <h2 class="act-title">Recent activity</h2>
+          <NuxtLink to="/dashboard/wallet/transactions" class="act-link">View all</NuxtLink>
         </div>
 
         <div v-if="loadingTransactions" class="space-y-3">
           <div v-for="i in 3" :key="i" class="h-16 bg-gray-50 rounded-xl animate-pulse"></div>
         </div>
 
-        <div v-else-if="transactions.length" class="bg-white rounded-2xl border border-gray-50 overflow-hidden divide-y divide-gray-50">
+        <div v-else-if="transactions.length" class="act-list">
           <div 
             v-for="tx in transactions" 
             :key="tx._id"
             @click="openDetails(tx)"
-            class="flex items-center gap-3 p-4 hover:bg-gray-50/50 transition-colors cursor-pointer group"
+            class="act-row"
           >
-            <div 
-              :class="tx.type === 'credit' ? 'bg-emerald-50 text-emerald-500' : 'bg-rose-50 text-rose-500'"
-              class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform"
-            >
+            <div class="act-icon" :class="tx.type === 'credit' ? 'in' : 'out'">
               <ArrowUpRight v-if="tx.type === 'debit'" class="w-4 h-4" />
               <ArrowDownLeft v-else class="w-4 h-4" />
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-sm font-medium text-gray-900 truncate leading-tight">{{ tx.description }}</p>
-              <p class="text-sm text-gray-400 font-medium mt-0.5">
+              <p class="act-desc">{{ tx.description }}</p>
+              <p class="act-date">
                 {{ new Date(tx.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) }}
               </p>
             </div>
             <div class="text-right shrink-0">
-              <p :class="tx.type === 'credit' ? 'text-emerald-500' : 'text-gray-900'" class="font-medium text-sm tracking-tight">
+              <p class="act-amount" :class="tx.type === 'credit' ? 'in' : ''">
                 {{ tx.type === 'credit' ? '+' : '-' }}₦{{ tx.amount.toLocaleString() }}
               </p>
-              <div class="flex items-center justify-end gap-1 text-[9px] font-bold mt-0.5" :class="tx.status === 'completed' ? 'text-emerald-400' : 'text-amber-400'">
+              <div class="act-status" :class="tx.status === 'completed' ? 'ok' : 'wait'">
                 <div class="w-1 h-1 rounded-full bg-current"></div>
                 {{ tx.status }}
               </div>
@@ -632,5 +621,183 @@ onMounted(async () => {
     border: none !important;
   }
   .print\:hidden { display: none !important; }
+}
+</style>
+
+<style scoped>
+/* WALLET — tokens come from assets/css/dashboard.css. */
+
+.bal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px;
+  border-radius: var(--dash-radius);
+  background: var(--dash-ink);
+  color: var(--dash-page);
+}
+
+.bal-main {
+  min-width: 0;
+}
+
+.bal-label {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+.bal-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bal-amount {
+  margin: 2px 0 0;
+  font-size: clamp(32px, 6vw, 44px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+
+.bal-refresh {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 0;
+  background: rgba(255, 255, 255, 0.12);
+  color: inherit;
+  cursor: pointer;
+}
+
+.bal-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 13px 18px;
+  border-radius: 12px;
+  border: 0;
+  background: var(--dash-accent);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.bal-add:active {
+  transform: scale(0.98);
+}
+
+.act-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--dash-ink);
+}
+
+.act-link {
+  font-size: 14.5px;
+  font-weight: 750;
+  color: var(--dash-accent);
+  text-decoration: none;
+}
+
+.act-list {
+  border: 1px solid var(--dash-line);
+  border-radius: var(--dash-radius);
+  background: var(--dash-surface);
+  overflow: hidden;
+}
+
+.act-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--dash-line);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.act-row:last-child {
+  border-bottom: 0;
+}
+
+.act-row:hover {
+  background: var(--dash-page);
+}
+
+.act-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.act-icon.in {
+  background: rgba(22, 163, 74, 0.12);
+  color: #15803d;
+}
+
+.act-icon.out {
+  background: rgba(220, 38, 38, 0.1);
+  color: #b91c1c;
+}
+
+.act-desc {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 650;
+  color: var(--dash-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.act-date {
+  margin: 2px 0 0;
+  font-size: 13.5px;
+  color: var(--dash-muted);
+}
+
+.act-amount {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 750;
+  color: var(--dash-ink);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.act-amount.in {
+  color: #15803d;
+}
+
+.act-status {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  margin-top: 2px;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.act-status.ok {
+  color: #16a34a;
+}
+
+.act-status.wait {
+  color: #d97706;
 }
 </style>
