@@ -310,7 +310,7 @@
           <NuxtLink to="/" aria-label="Erranders home">
             <img src="@/assets/img/logo-light.png" alt="Erranders" class="brand-img" />
           </NuxtLink>
-          <p class="foot-line">Food, errands, meal plans and swaps for students on campus.</p>
+          <p class="foot-line">Food, errands, meal plans and a place to sell what you no longer need.</p>
           <NuxtLink to="/vendors" class="foot-cta">
             Order something
             <ArrowRight class="w-4 h-4" aria-hidden="true" />
@@ -323,7 +323,7 @@
             <NuxtLink to="/vendors" class="foot-link">Food</NuxtLink>
             <NuxtLink to="/errands/custom" class="foot-link">Errands</NuxtLink>
             <NuxtLink to="/dashboard/recurring-orders" class="foot-link">Meal Autopilot</NuxtLink>
-            <NuxtLink to="/market-pool" class="foot-link">Swap</NuxtLink>
+            <NuxtLink to="/market-pool" class="foot-link">Declutter</NuxtLink>
           </div>
           <div class="foot-col">
             <p class="foot-title">Legal</p>
@@ -1802,17 +1802,18 @@ useHead({
   text-decoration: none;
 }
 
-/* Footer: the page colour, not a white band bolted on the end. */
+
+/* Footer, phone first: one column, tight rows, and room for the floating buttons. */
 .foot {
-  margin-top: 48px;
+  margin-top: 40px;
   border-top: 1px solid var(--line);
   background: var(--page);
-  padding: 48px 20px 28px;
+  padding: 32px 16px calc(96px + env(safe-area-inset-bottom));
 }
 
 .foot-inner {
   display: grid;
-  gap: 36px;
+  gap: 28px;
   max-width: 1120px;
   margin: 0 auto;
   grid-template-columns: 1fr;
@@ -1824,25 +1825,25 @@ useHead({
     align-items: start;
     gap: 48px;
   }
-}
 
-.foot-brand {
-  min-width: 0;
+  .foot {
+    padding: 48px 20px 28px;
+  }
 }
 
 .foot-line {
-  margin: 14px 0 0;
+  margin: 12px 0 0;
   font-size: 15px;
-  line-height: 1.55;
-  color: var(--muted);
-  max-width: 32ch;
+  line-height: 1.5;
+  color: var(--mute);
+  max-width: 34ch;
 }
 
 .foot-cta {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: 16px;
+  margin-top: 14px;
   padding: 11px 15px;
   border-radius: 11px;
   border: 1px solid var(--line);
@@ -1858,20 +1859,29 @@ useHead({
   color: var(--accent);
 }
 
+/* Two even columns on a phone, three from 560px, so no column is left in a wide empty row. */
 .foot-cols {
   display: grid;
-  gap: 28px;
+  gap: 24px 20px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.foot-col:last-child {
+  grid-column: 1 / -1;
 }
 
 @media (min-width: 560px) {
   .foot-cols {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
+  .foot-col:last-child {
+    grid-column: auto;
+  }
 }
 
 .foot-title {
-  margin: 0 0 12px;
+  margin: 0 0 10px;
   font-size: 14px;
   font-weight: 750;
   color: var(--ink);
@@ -1879,8 +1889,8 @@ useHead({
 
 .foot-link {
   display: block;
-  margin-bottom: 10px;
-  color: var(--muted);
+  margin-bottom: 8px;
+  color: var(--mute);
   font-size: 15px;
   text-decoration: none;
   width: fit-content;
@@ -1892,14 +1902,20 @@ useHead({
 
 .foot-base {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  flex-direction: column;
+  gap: 6px;
   max-width: 1120px;
-  margin: 36px auto 0;
-  padding-top: 18px;
+  margin: 28px auto 0;
+  padding-top: 16px;
   border-top: 1px solid var(--line);
+}
+
+@media (min-width: 560px) {
+  .foot-base {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
 }
 
 .foot-copy,
