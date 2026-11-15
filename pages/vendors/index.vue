@@ -733,6 +733,7 @@ const getInitials = (name: string) => {
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 18px;
+  min-width: 0;
 }
 
 .chips {
@@ -741,6 +742,10 @@ const getInitials = (name: string) => {
   overflow-x: auto;
   scrollbar-width: none;
   padding-bottom: 2px;
+  /* Without this the row forces the toolbar wider than the screen, and the sort menu ends up
+     positioned against an edge that is off-canvas. */
+  min-width: 0;
+  flex: 1 1 auto;
 }
 
 .chips::-webkit-scrollbar {
@@ -768,6 +773,7 @@ const getInitials = (name: string) => {
 .sort-wrap {
   position: relative;
   flex: none;
+  z-index: 20;
 }
 
 .sort-btn {
@@ -787,9 +793,12 @@ const getInitials = (name: string) => {
 .sort-menu {
   position: absolute;
   right: 0;
+  left: auto;
   top: calc(100% + 6px);
-  z-index: 30;
-  min-width: 190px;
+  z-index: 40;
+  min-width: 100%;
+  width: max-content;
+  max-width: min(260px, calc(100vw - 32px));
   border-radius: 14px;
   border: 1px solid var(--line);
   background: var(--card);
