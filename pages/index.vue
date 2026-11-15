@@ -14,6 +14,16 @@
       </nav>
 
       <div class="nav-actions">
+        <button
+          type="button"
+          class="icon-toggle"
+          :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+          :title="isDark ? 'Light mode' : 'Dark mode'"
+          @click="toggleTheme"
+        >
+          <Sun v-if="isDark" class="w-5 h-5" aria-hidden="true" />
+          <Moon v-else class="w-5 h-5" aria-hidden="true" />
+        </button>
         <NuxtLink v-if="!isLoggedIn" to="/auth/login" class="ghost">Log in</NuxtLink>
         <NuxtLink :to="isLoggedIn ? '/dashboard' : '/auth/signup'" class="primary">
           {{ isLoggedIn ? 'Dashboard' : 'Get started' }}
@@ -114,10 +124,24 @@
           </NuxtLink>
         </div>
 
-        <p v-if="closedCount" class="closed-line">
-          Closed now:
-          <span v-for="vendor in closedVendors" :key="vendor._id" class="closed-chip">{{ cleanName(vendor.storeName) }}</span>
-        </p>
+        <div v-if="closedCount" class="closed-box">
+          <button v-if="!showClosed" type="button" class="closed-toggle" :aria-expanded="false" @click="showClosed = true">
+            {{ closedCount }} closed {{ closedCount === 1 ? 'store' : 'stores' }}. Show them
+          </button>
+
+          <template v-else>
+            <div class="closed-head">
+              <p class="closed-title">Closed now</p>
+              <button type="button" class="closed-toggle quiet" :aria-expanded="true" @click="showClosed = false">Hide</button>
+            </div>
+            <div class="closed-chips">
+              <span v-for="vendor in closedVendors" :key="vendor._id" class="closed-chip">
+                {{ cleanName(vendor.storeName) }}
+                <span class="closed-when">{{ opensAt(vendor) }}</span>
+              </span>
+            </div>
+          </template>
+        </div>
       </section>
 
       <!-- How it works: a real sequence, so numbers earn their place. -->
@@ -228,7 +252,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import { ArrowRight, ArrowUpRight, Star } from 'lucide-vue-next';
+import { ArrowRight, ArrowUpRight, Moon, Star, Sun } from 'lucide-vue-next';
 import { useLandingPage } from '@/composables/modules/landing';
 import { useUser } from '@/composables/modules/auth/user';
 
@@ -238,6 +262,17 @@ const { loading, onlineVendors, fetchHomeData } = useLandingPage();
 const { isLoggedIn } = useUser();
 
 const mode = ref<'food' | 'errand'>('food');
+
+// Light unless the student chose dark. Same key as the dashboard toggle, so the choice follows them.
+const isDark = ref(false);
+const applyTheme = (dark: boolean, persist = true) => {
+  isDark.value = dark;
+  if (typeof document !== 'undefined') document.documentElement.classList.toggle('dark', dark);
+  if (persist && typeof localStorage !== 'undefined') {
+    localStorage.setItem('erranders-theme', dark ? 'dark' : 'light');
+  }
+};
+const toggleTheme = () => applyTheme(!isDark.value);
 const q = ref('');
 const year = new Date().getFullYear();
 
@@ -249,6 +284,13 @@ const closedVendors = computed(() =>
 );
 const openCount = computed(() => (onlineVendors.value || []).filter((v: any) => v?.isOpen !== false).length);
 const closedCount = computed(() => closedVendors.value.length);
+const showClosed = ref(false);
+
+/** Whatever the API calls it, show a time a student can act on. */
+const opensAt = (vendor: any) => {
+  const raw = vendor?.openingTime || vendor?.opensAt || vendor?.businessHours?.open || vendor?.openTime;
+  return raw ? `Opens ${String(raw)}` : 'Opens later';
+};
 
 const cleanName = (name?: string) => String(name || 'Store').replace(/\s*\(demo\)\s*/i, '').trim();
 
@@ -265,6 +307,8 @@ const go = () => {
 };
 
 onMounted(() => {
+  const saved = typeof localStorage !== 'undefined' ? localStorage.getItem('erranders-theme') : null;
+  applyTheme(saved === 'dark', false);
   fetchHomeData();
 });
 
@@ -511,11 +555,11 @@ useHead({
 }
 
 .ticket {
+  position: relative;
   width: 100%;
   max-width: 380px;
   transform: rotate(-2deg);
   border-radius: 20px;
-  overflow: hidden;
   box-shadow: 0 26px 60px rgba(20, 17, 16, 0.22);
 }
 
@@ -523,6 +567,7 @@ useHead({
   background: var(--dark);
   color: #fff;
   padding: 22px;
+  border-radius: 20px 20px 0 0;
 }
 
 .ticket-status {
@@ -572,17 +617,33 @@ useHead({
   color: rgba(255, 255, 255, 0.5);
 }
 
+/* Notches are drawn as page-coloured circles on the seam rather than a mask.
+   A mask clipped the note and the bottom edge of the stub. */
 .ticket-stub {
   position: relative;
   background: var(--accent);
   color: #fff;
-  padding: 20px 22px 22px;
-  -webkit-mask:
-    radial-gradient(13px at 0 0, transparent 98%, #000) left top / 51% 51% no-repeat,
-    radial-gradient(13px at 100% 0, transparent 98%, #000) right top / 51% 51% no-repeat;
-  mask:
-    radial-gradient(13px at 0 0, transparent 98%, #000) left top / 51% 51% no-repeat,
-    radial-gradient(13px at 100% 0, transparent 98%, #000) right top / 51% 51% no-repeat;
+  padding: 22px 22px 24px;
+  border-radius: 0 0 20px 20px;
+}
+
+.ticket-stub::before,
+.ticket-stub::after {
+  content: '';
+  position: absolute;
+  top: -11px;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--page);
+}
+
+.ticket-stub::before {
+  left: -11px;
+}
+
+.ticket-stub::after {
+  right: -11px;
 }
 
 .stub-label {
@@ -1069,6 +1130,10 @@ useHead({
   border-radius: 10px;
 }
 
+:global(html.dark) body {
+  background: #12100e;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .landing * {
     animation-duration: 0.01ms !important;
@@ -1078,5 +1143,75 @@ useHead({
   .ticket {
     transform: none;
   }
+}
+
+.icon-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.icon-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.closed-box {
+  margin-top: 16px;
+  border: 1px dashed var(--line);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+
+.closed-toggle {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 14.5px;
+  font-weight: 650;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+}
+
+.closed-toggle:hover {
+  color: var(--accent);
+}
+
+.closed-toggle.quiet {
+  color: var(--accent);
+  font-weight: 750;
+}
+
+.closed-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.closed-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 750;
+  color: var(--ink);
+}
+
+.closed-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.closed-when {
+  color: var(--muted);
+  font-weight: 600;
 }
 </style>
