@@ -79,12 +79,14 @@
             muted
             playsinline
           />
+          <!-- A shop with no banner gets a calm panel, not its own logo stretched across the top. -->
           <img
-            v-else
-            :src="vendor.banner || vendor.image || vendor.logo || '/placeholder-store.jpg'"
+            v-else-if="vendor.banner || vendor.image"
+            :src="vendor.banner || vendor.image"
             class="hero-img"
             alt=""
           />
+          <div v-else class="hero-plain" aria-hidden="true"></div>
 
           <div class="hero-scrim" aria-hidden="true"></div>
           <div v-if="!vendor.isOpen && route.query.schedule !== 'true'" class="hero-dim" aria-hidden="true"></div>
@@ -3437,6 +3439,82 @@ onUnmounted(() => {
   /* The add-to-cart bar sits above the home indicator, not under it. */
   .sheet-overlay.tall .sheet > :last-child {
     padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+}
+
+/* ─── Hero on a phone ─── */
+.hero-plain {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--orsoft), var(--bg) 70%);
+}
+
+@media (max-width: 640px) {
+  /* Shallower banner: the shop's name is the subject, not the photo. */
+  .hero-media {
+    height: 150px;
+    border-radius: 16px;
+  }
+
+  .hero-actions {
+    padding: 10px;
+  }
+
+  .hero-actions-right {
+    gap: 6px;
+  }
+
+  .hero-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+  }
+
+  .hero-card {
+    margin: -22px 8px 0;
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  .logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+  }
+
+  .shop-name {
+    font-size: 20px;
+    line-height: 1.15;
+  }
+
+  /* State, rating and time wrap onto their own lines rather than being squeezed into one. */
+  .meta {
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .state,
+  .meta-link,
+  .meta-plain {
+    font-size: 13px;
+  }
+
+  .shop-actions {
+    gap: 6px;
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+
+  .shop-btn {
+    flex: 1 1 auto;
+    justify-content: center;
+    padding: 11px 12px;
+    font-size: 14px;
+  }
+
+  .shop-tag {
+    padding: 7px 11px;
+    font-size: 12.5px;
   }
 }
 </style>
