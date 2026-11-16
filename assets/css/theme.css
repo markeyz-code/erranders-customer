@@ -1,15 +1,11 @@
 /**
- * Theme tokens.
+ * Theme tokens & Universal Dark Mode Engine
  *
- * One palette, two modes, one place. Every surface in the app reads from these variables, so a
- * page no longer carries its own idea of what "dark" means.
+ * One palette, two modes, one place. Every surface across every student flow
+ * (landing, stores, products, services, cart, checkout, tracker, orders, wallet, profile, chat)
+ * reads from these variables and maps cleanly without color clashes.
  *
- * Light is the default. Dark arrives two ways:
- *   - html.dark, set by the in-app switch and remembered per browser
- *   - the operating system, when the student has not made a choice yet
- *
- * Choosing light explicitly adds html.light, which overrides the system preference, so a student on
- * a dark machine can still use the app in light without fighting their OS.
+ * Light is the default. Dark is toggled explicitly via html.dark and remembered in localStorage.
  */
 
 :root {
@@ -20,6 +16,7 @@
   --bg: #f5f4f0;
   --card: #ffffff;
   --line: #e4e1da;
+  --page: var(--bg);
 
   /* Text */
   --ink: #17130f;
@@ -34,12 +31,17 @@
   /* Rail and navigation chrome */
   --rail: #ffffff;
   --overlay: rgba(23, 19, 15, 0.5);
+
+  accent-color: var(--accent);
 }
 
 html.dark {
+  color-scheme: dark;
+
   --bg: #121010;
   --card: #1c1917;
   --line: #2c2825;
+  --page: var(--bg);
 
   --ink: #f5f1ea;
   --mute: #a39d94;
@@ -50,19 +52,21 @@ html.dark {
   --accent-ink: #ffffff;
 
   --rail: #1c1917;
-  --overlay: rgba(0, 0, 0, 0.6);
+  --overlay: rgba(0, 0, 0, 0.7);
+
+  accent-color: var(--accent);
 }
 
-/* No system-preference branch: light is the default until the student chooses dark. A site that
-   follows the OS looks broken to anyone whose machine is dark and who has not touched the switch. */
+html.light {
+  color-scheme: light;
+}
 
 body {
   background: var(--bg);
   color: var(--ink);
 }
 
-/* Images keep their own colour in both modes. Vendors upload brand photos; dimming them is not a
-   theme choice, it is a bug. */
+/* Images keep their natural colors in both modes. */
 img {
   filter: none;
 }
@@ -72,15 +76,14 @@ img {
   background: var(--bg);
 }
 
-/* Lucide draws with stroke, not fill. Pinning both to the text colour stops an icon from picking up
-   the colour of the surface behind it and disappearing into the button. */
+/* Lucide icons draw with stroke, not fill. */
 svg.lucide {
   color: inherit;
   stroke: currentColor;
   fill: none;
 }
 
-/* Brand marks are illustrations, not icons: they keep their own fills. */
+/* Brand marks are illustrations, not icons: keep their own fills. */
 svg[data-brand] {
   fill: currentColor;
   stroke: none;
@@ -103,107 +106,326 @@ svg[data-brand] {
   }
 }
 
-/* ─── Tailwind utility bridge ───
-   Older components paint with utilities (bg-white, text-gray-900) rather than tokens. In dark mode
-   those literals would stay bright, so they are mapped once here instead of being hunted down in
-   three thousand lines of markup. Light mode is untouched. */
+/* ─── Universal Theme Switch Component ─── */
+.theme-switch {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--ink);
+  cursor: pointer;
+  display: inline-grid;
+  place-items: center;
+  position: relative;
+  transition: border-color 0.15s, color 0.15s, background-color 0.15s;
+}
+
+.theme-switch:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.theme-switch .glyph-sun { display: none; }
+.theme-switch .glyph-moon { display: block; }
+html.dark .theme-switch .glyph-sun { display: block; }
+html.dark .theme-switch .glyph-moon { display: none; }
+
+/* ─── Dark Mode Universal Bridge ───
+   Normalizes legacy hardcoded Tailwind utility classes (bg-white, text-gray-900, hexes)
+   so every page and flow looks seamless without individual re-writes. */
+
+/* 1. Surfaces & Backgrounds */
 html.dark .bg-white,
 html.dark .bg-gray-50,
+html.dark .bg-slate-50,
+html.dark .bg-zinc-50,
+html.dark .bg-neutral-50,
 html.dark .bg-\[\#FAF8F5\],
-html.dark .bg-\[\#FDFCFB\] {
+html.dark .bg-\[\#FDFCFB\],
+html.dark .bg-\[\#FDFBF8\],
+html.dark .bg-\[\#FBFAF6\],
+html.dark .bg-\[\#F7F4EC\],
+html.dark .bg-\[\#FAF7F2\],
+html.dark .bg-\[\#FBF9F4\],
+html.dark .bg-\[\#EFEAE3\] {
   background-color: var(--card) !important;
 }
 
-html.dark body,
-html.dark .bg-gray-100 {
-  background-color: var(--bg);
+/* Translucent surfaces: sticky bars, mobile headers, bottom navigation, popups */
+html.dark .bg-white\/95,
+html.dark .bg-white\/90,
+html.dark .bg-white\/85,
+html.dark .bg-white\/80 {
+  background-color: rgba(28, 25, 23, 0.94) !important;
 }
 
-html.dark .text-gray-900,
+html.dark .bg-white\/70,
+html.dark .bg-white\/60,
+html.dark .bg-white\/50 {
+  background-color: rgba(28, 25, 23, 0.75) !important;
+}
+
+/* Page canvas & deep layers */
+html.dark body,
+html.dark .bg-gray-100,
+html.dark .bg-slate-100,
+html.dark .bg-zinc-100,
+html.dark .bg-neutral-100 {
+  background-color: var(--bg) !important;
+}
+
+/* Slightly elevated surfaces, chips, secondary buttons */
+html.dark .bg-gray-200,
+html.dark .bg-gray-300,
+html.dark .bg-slate-200,
+html.dark .bg-slate-300 {
+  background-color: #2c2825 !important;
+}
+
+/* Formerly black/dark badges in light mode */
+html.dark .bg-\[\#171310\],
+html.dark .bg-\[\#170D08\],
+html.dark .bg-black,
+html.dark .bg-gray-900,
+html.dark .bg-slate-900 {
+  background-color: #2c2825 !important;
+}
+
+/* 2. Text Colors */
+/* Primary text & titles */
 html.dark .text-gray-950,
+html.dark .text-gray-900,
+html.dark .text-gray-800,
+html.dark .text-gray-700,
+html.dark .text-slate-950,
+html.dark .text-slate-900,
+html.dark .text-slate-800,
+html.dark .text-slate-700,
+html.dark .text-zinc-950,
+html.dark .text-zinc-900,
+html.dark .text-zinc-800,
+html.dark .text-zinc-700,
+html.dark .text-black,
 html.dark .text-\[\#171310\],
-html.dark .text-black {
+html.dark .text-\[\#170D08\],
+html.dark .text-\[\#14110F\],
+html.dark .text-\[\#202124\],
+html.dark .text-\[\#12300F\],
+html.dark .text-\[\#111B21\],
+html.dark .text-\[\#3A352E\] {
   color: var(--ink) !important;
 }
 
-html.dark .text-gray-400,
-html.dark .text-gray-500,
+/* Secondary & muted text */
 html.dark .text-gray-600,
+html.dark .text-gray-500,
+html.dark .text-gray-400,
+html.dark .text-slate-600,
+html.dark .text-slate-500,
+html.dark .text-slate-400,
+html.dark .text-zinc-600,
+html.dark .text-zinc-500,
+html.dark .text-zinc-400,
+html.dark .text-\[\#766A61\],
 html.dark .text-\[\#9C968E\],
+html.dark .text-\[\#9A9284\],
+html.dark .text-\[\#5F6368\],
+html.dark .text-\[\#6B6558\],
+html.dark .text-\[\#9C9584\],
+html.dark .text-\[\#54656F\],
 html.dark .text-\[\#6B655D\] {
   color: var(--mute) !important;
 }
 
+/* 3. Borders & Dividers */
 html.dark .border-gray-50,
 html.dark .border-gray-100,
 html.dark .border-gray-200,
+html.dark .border-gray-300,
+html.dark .border-gray-25,
+html.dark .border-slate-50,
+html.dark .border-slate-100,
+html.dark .border-slate-200,
+html.dark .border-slate-300,
+html.dark .border-zinc-100,
+html.dark .border-zinc-200,
 html.dark .border-\[\#E7E2DA\],
-html.dark .border-\[\#EDE9E3\] {
+html.dark .border-\[\#EDE9E3\],
+html.dark .border-\[\#D8D2C4\],
+html.dark .border-\[\#ECE6DC\],
+html.dark .border-\[\#E7E2D4\],
+html.dark .border-\[\#DADCE0\],
+html.dark .border-\[\#E2DCD1\],
+html.dark .border-\[\#D8D0C2\],
+html.dark .border-\[\#D9D2C7\],
+html.dark .border-white {
   border-color: var(--line) !important;
 }
 
 html.dark .divide-gray-50 > :not([hidden]) ~ :not([hidden]),
-html.dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]) {
+html.dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]),
+html.dark .divide-gray-200 > :not([hidden]) ~ :not([hidden]),
+html.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+html.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]),
+html.dark .divide-\[\#ECE6DC\] > :not([hidden]) ~ :not([hidden]),
+html.dark .divide-\[\#E7E2DA\] > :not([hidden]) ~ :not([hidden]) {
   border-color: var(--line) !important;
 }
 
-/* Opacity variants were the ones still showing as grey slabs in dark mode: a translucent light grey
-   over a dark page is neither. They resolve to the card surface, and the soft tints resolve to the
-   soft orange, so a pack panel reads as a panel rather than a hole. */
-html.dark .bg-gray-50\/50,
-html.dark .bg-gray-50\/60,
-html.dark .bg-gray-50\/80,
-html.dark .bg-gray-100\/50,
-html.dark .bg-gray-100\/60,
-html.dark .bg-slate-50\/60,
-html.dark .bg-slate-50\/70 {
-  background-color: color-mix(in srgb, var(--card) 88%, var(--ink)) !important;
-}
-
+/* 4. Soft Color Badges & Tints */
+/* Amber / Orange soft surfaces */
+html.dark .bg-amber-50,
+html.dark .bg-amber-100,
 html.dark .bg-amber-50\/60,
 html.dark .bg-amber-50\/80,
+html.dark .bg-orange-50,
 html.dark .bg-orange-50\/60,
-html.dark .bg-emerald-50\/90,
+html.dark .bg-orange-100,
 html.dark .bg-parentPrimary\/5,
-html.dark .bg-parentPrimary\/10 {
+html.dark .bg-parentPrimary\/10,
+html.dark .bg-parentPrimary\/15 {
   background-color: var(--orsoft) !important;
 }
-
-html.dark .bg-gray-200,
-html.dark .bg-gray-300 {
-  background-color: #2c2825 !important;
-}
-
 html.dark .text-amber-700,
 html.dark .text-amber-800,
-html.dark .text-amber-900 {
+html.dark .text-amber-900,
+html.dark .text-orange-700,
+html.dark .text-orange-800 {
   color: #f0b37e !important;
 }
+html.dark .border-amber-100,
+html.dark .border-amber-200,
+html.dark .border-amber-100\/50,
+html.dark .border-orange-100,
+html.dark .border-orange-200 {
+  border-color: #5c301a !important;
+}
 
+/* Emerald / Green soft surfaces */
+html.dark .bg-emerald-50,
+html.dark .bg-emerald-100,
+html.dark .bg-emerald-50\/80,
+html.dark .bg-emerald-50\/90,
+html.dark .bg-green-50,
+html.dark .bg-green-100 {
+  background-color: var(--green-soft) !important;
+}
 html.dark .text-emerald-600,
 html.dark .text-emerald-700,
-html.dark .text-emerald-800 {
+html.dark .text-emerald-800,
+html.dark .text-green-600,
+html.dark .text-green-700 {
   color: #6ee7a8 !important;
 }
+html.dark .border-emerald-100,
+html.dark .border-emerald-200,
+html.dark .border-green-100 {
+  border-color: #1a4228 !important;
+}
 
+/* Rose / Red soft surfaces */
+html.dark .bg-rose-50,
+html.dark .bg-rose-100,
+html.dark .bg-rose-50\/50,
+html.dark .bg-rose-50\/80,
+html.dark .bg-red-50,
+html.dark .bg-red-100 {
+  background-color: #3b1419 !important;
+}
 html.dark .text-rose-500,
-html.dark .text-red-500 {
+html.dark .text-rose-600,
+html.dark .text-red-500,
+html.dark .text-red-600 {
   color: #fda4af !important;
 }
-
-html.dark .border-amber-100\/50,
-html.dark .border-amber-100,
-html.dark .border-amber-200 {
-  border-color: var(--line) !important;
+html.dark .border-rose-100,
+html.dark .border-rose-200,
+html.dark .border-red-100 {
+  border-color: #5c1d24 !important;
 }
 
-html.dark .border-gray-25,
-html.dark .border-gray-300 {
-  border-color: var(--line) !important;
+/* Blue / Sky / Purple soft surfaces */
+html.dark .bg-blue-50,
+html.dark .bg-blue-100,
+html.dark .bg-sky-50,
+html.dark .bg-sky-100,
+html.dark .bg-purple-50,
+html.dark .bg-purple-100 {
+  background-color: #17253d !important;
+}
+html.dark .text-blue-600,
+html.dark .text-blue-700,
+html.dark .text-sky-600,
+html.dark .text-purple-600,
+html.dark .text-purple-700 {
+  color: #93c5fd !important;
+}
+html.dark .border-blue-100,
+html.dark .border-blue-200,
+html.dark .border-purple-100 {
+  border-color: #1e3a5f !important;
 }
 
-/* A checkbox on a dark surface needs its own edge, or it reads as an empty hole. */
+/* 5. Inputs, Textareas, Selects & Native Controls */
+html.dark input:not([type='checkbox']):not([type='radio']):not([type='submit']):not([type='button']),
+html.dark textarea,
+html.dark select {
+  background-color: var(--card) !important;
+  color: var(--ink) !important;
+  border-color: var(--line) !important;
+  color-scheme: dark;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: var(--mute) !important;
+}
+
 html.dark input[type='checkbox'],
-html.dark .border-white {
+html.dark input[type='radio'] {
   border-color: var(--line) !important;
+  accent-color: var(--accent);
+}
+
+/* 6. Inversion Fixes (Cart, Tabs, Action buttons) */
+html.dark .empty-card,
+html.dark .promo-apply {
+  background: var(--card) !important;
+  border: 1px solid var(--line) !important;
+  color: var(--ink) !important;
+}
+
+html.dark .tab.on {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: #ffffff !important;
+}
+
+html.dark .btn-dark {
+  background: #2c2825 !important;
+  color: var(--ink) !important;
+  border-color: var(--line) !important;
+}
+
+/* 7. Modal Backdrops & Overlays */
+html.dark .backdrop-blur-sm,
+html.dark .backdrop-blur-md,
+html.dark [class*='bg-black/'],
+html.dark [class*='bg-slate-900/'] {
+  background-color: rgba(0, 0, 0, 0.75) !important;
+}
+
+/* 8. App Rail & Mobile Bottom Bar */
+html.dark .app-bar,
+html.dark .app-aside,
+html.dark nav[aria-label='Primary'] {
+  background-color: #1b1713 !important;
+  border-color: var(--line) !important;
+  color: var(--ink) !important;
+}
+
+/* 9. Brand Graphics & Logo Inversion */
+html.dark .landing-logo img,
+html.dark .logo-dark-fallback,
+html.dark img[src*='logo-light'] {
+  filter: brightness(0) invert(1);
 }

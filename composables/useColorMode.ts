@@ -77,3 +77,6 @@ export const useColorMode = () => {
 export const useColorModeState = () => ({
   isDark: computed(() => isDark.value),
 });
+
+export const useTheme = useColorMode;
+export const useThemeState = useColorModeState;

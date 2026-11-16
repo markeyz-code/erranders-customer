@@ -1,5 +1,5 @@
-// composables/core/useTheme.ts
-export const useTheme = () => {
+// composables/core/useStorefrontBrandTheme.ts
+export const useStorefrontBrandTheme = () => {
     const applyTheme = (theme: any) => {
         const root = document.documentElement
 
