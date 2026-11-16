@@ -43,6 +43,55 @@
         </div>
       </section>
 
+      <!-- Earnings: what has landed, and where it can go. -->
+      <section class="card earn">
+        <div class="earn-top">
+          <div>
+            <p class="earn-label">Earned so far</p>
+            <p class="earn-value">₦{{ earnings.toLocaleString() }}</p>
+          </div>
+          <button v-if="account.verified" type="button" class="btn-primary" :disabled="withdrawing" @click="withdraw">
+            {{ withdrawing ? 'Sending…' : 'Withdraw' }}
+          </button>
+        </div>
+
+        <div v-if="account.verified" class="bank">
+          <p class="bank-line">
+            Paying into <strong>{{ account.bankName || 'your bank' }}</strong> ·
+            {{ mask(account.accountNumber) }}
+          </p>
+          <p class="bank-name">{{ account.accountName }}</p>
+          <button type="button" class="link" @click="editingBank = true">Change account</button>
+        </div>
+
+        <div v-else-if="!editingBank" class="bank-missing">
+          <p class="bank-line">Add a bank account so your pay can be sent to you.</p>
+          <button type="button" class="btn-primary" @click="editingBank = true">Add bank account</button>
+        </div>
+
+        <form v-if="editingBank || !account.verified" class="bank-form" @submit.prevent="saveBank">
+          <label class="field">
+            <span class="flabel">Bank</span>
+            <select v-model="bank.bankCode" required>
+              <option value="">Choose your bank</option>
+              <option v-for="b in banks" :key="b.code" :value="b.code">{{ b.name }}</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span class="flabel">Account number</span>
+            <input v-model="bank.accountNumber" inputmode="numeric" maxlength="10" placeholder="0123456789" required />
+          </label>
+
+          <button type="submit" class="btn-primary" :disabled="savingBank">
+            {{ savingBank ? 'Checking…' : 'Save account' }}
+          </button>
+
+          <p v-if="bankError" class="error">{{ bankError }}</p>
+          <p v-if="bankSaved" class="ok">Saved. Payouts will go to {{ bankSaved }}.</p>
+        </form>
+      </section>
+
       <section class="list-wrap">
         <h2 class="section-title">Assigned to you</h2>
 
@@ -75,7 +124,18 @@ import { GATEWAY_ENDPOINT_WITH_AUTH } from '@/api_factory/axios.config';
 definePageMeta({ layout: 'student' });
 useHead({ title: 'My jobs - Erranders' });
 
+import { payout_api } from '@/api_factory/modules/payout';
+
 const memberships = ref<any[]>([]);
+const earnings = ref(0);
+const banks = ref<any[]>([]);
+const account = ref<any>({ verified: false });
+const editingBank = ref(false);
+const bank = ref({ bankCode: '', accountNumber: '' });
+const savingBank = ref(false);
+const bankError = ref('');
+const bankSaved = ref('');
+const withdrawing = ref(false);
 const jobs = ref<any[]>([]);
 const loading = ref(true);
 const accepting = ref(false);
@@ -116,7 +176,60 @@ const accept = async () => {
   }
 };
 
-onMounted(load);
+const mask = (n?: string) => (n ? `••••${n.slice(-4)}` : '');
+
+const loadMoney = async () => {
+  try {
+    const [acc, list]: any = await Promise.all([payout_api.account(), payout_api.banks()]);
+    const accData = acc?.data || {};
+    account.value = accData;
+    earnings.value = Number(accData.balance || 0);
+    const bankData = list?.data?.data || list?.data || [];
+    banks.value = Array.isArray(bankData) ? bankData : [];
+  } catch {
+    banks.value = [];
+  }
+};
+
+const saveBank = async () => {
+  savingBank.value = true;
+  bankError.value = '';
+  bankSaved.value = '';
+  try {
+    const chosen = banks.value.find((b) => b.code === bank.value.bankCode);
+    const res: any = await payout_api.saveAccount({
+      accountNumber: bank.value.accountNumber,
+      bankCode: bank.value.bankCode,
+      bankName: chosen?.name,
+    });
+    const saved = res?.data || {};
+    account.value = { ...saved, verified: true };
+    bankSaved.value = saved.accountName || 'that account';
+    editingBank.value = false;
+  } catch (e: any) {
+    bankError.value = e?.response?.data?.message || 'That account could not be confirmed';
+  } finally {
+    savingBank.value = false;
+  }
+};
+
+const withdraw = async () => {
+  withdrawing.value = true;
+  bankError.value = '';
+  try {
+    await payout_api.withdraw(earnings.value);
+    await loadMoney();
+  } catch (e: any) {
+    bankError.value = e?.response?.data?.message || 'Could not start the withdrawal';
+  } finally {
+    withdrawing.value = false;
+  }
+};
+
+onMounted(async () => {
+  await load();
+  await loadMoney();
+});
 </script>
 
 <style scoped>
@@ -335,5 +448,139 @@ h1 {
   font-size: 14px;
   font-weight: 650;
   color: #b91c1c;
+}
+
+.earn {
+  margin-bottom: 24px;
+}
+
+.earn-top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.earn-label {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--mute);
+}
+
+.earn-value {
+  margin: 4px 0 0;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.btn-primary {
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 11px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+}
+
+.bank {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.bank-line {
+  margin: 0;
+  font-size: 14.5px;
+  color: var(--ink);
+}
+
+.bank-name {
+  margin: 3px 0 0;
+  font-size: 13.5px;
+  color: var(--mute);
+}
+
+.bank-missing {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.link {
+  margin-top: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.bank-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+@media (min-width: 560px) {
+  .bank-form {
+    grid-template-columns: 1fr 1fr auto;
+    align-items: end;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.flabel {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.bank-form select,
+.bank-form input {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font-size: 15px;
+  outline: none;
+}
+
+.bank-form select:focus,
+.bank-form input:focus {
+  border-color: var(--accent);
+}
+
+.ok {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 650;
+  color: #15803d;
 }
 </style>
