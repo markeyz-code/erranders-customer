@@ -453,6 +453,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
+import { GATEWAY_ENDPOINT_WITH_AUTH } from '@/api_factory/axios.config'
 import { useUser } from '@/composables/modules/auth/user'
 import { useRouter, useRoute } from 'vue-router'
 import ExamPromoBanner from '@/components/core/ExamPromoBanner.vue'
@@ -548,12 +549,26 @@ const servicesNavItems = [
   { path: '/dashboard/forms', label: 'Forms', icon: ClipboardList, code: 'FR' },
 ]
 
-const sharedNavItems = [
+const onTeam = ref(false);
+
+// The My jobs entry only appears for someone a shop has actually added, so it is fetched once here
+// rather than offered to everyone and empty.
+const checkTeam = async () => {
+  try {
+    const res: any = await GATEWAY_ENDPOINT_WITH_AUTH.get('/team/me');
+    onTeam.value = (res?.data?.memberships || []).length > 0;
+  } catch {
+    onTeam.value = false;
+  }
+};
+
+const sharedNavItems = computed(() => [
   { path: '/dashboard/prime', label: 'Campus Prime', icon: Sparkles, code: 'CP' },
+  ...(onTeam.value ? [{ path: '/dashboard/my-jobs', label: 'My jobs', icon: Users, code: 'MJ' }] : []),
   { path: '/dashboard/profile', label: 'Profile', icon: User, code: 'PR' },
   { path: '/dashboard/wallet', label: 'Wallet', icon: Wallet, code: 'WL' },
   { path: '/dashboard/settings', label: 'Settings', icon: Settings, code: 'ST' },
-]
+]);
 
 const activeNavItems = computed(() => {
   return mode.value === 'errands' ? errandsNavItems : servicesNavItems
@@ -613,6 +628,7 @@ const handleLogoutClick = () => {
 const { isDark, toggleTheme } = useColorMode();
 
 onMounted(() => {
+  checkTeam();
 });
 
 // The order tracker carries its own status hero; the layout bar would repeat it.
