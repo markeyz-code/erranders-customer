@@ -55,13 +55,24 @@
           </button>
         </div>
 
+        <p v-if="withdrawError" class="error">{{ withdrawError }}</p>
+
         <div v-if="account.verified" class="bank">
           <p class="bank-line">
-            Paying into <strong>{{ account.bankName || 'your bank' }}</strong> ·
-            {{ mask(account.accountNumber) }}
+            Money from this shop goes to
+            <strong v-if="account.accountName">{{ account.accountName }}</strong>
+            <strong v-else>your bank account</strong>
           </p>
-          <p class="bank-name">{{ account.accountName }}</p>
-          <button type="button" class="link" @click="editingBank = true">Change account</button>
+          <p v-if="account.bankName || account.accountNumber" class="bank-name">
+            {{ account.bankName || 'Your bank' }}
+            <template v-if="account.accountNumber"> · {{ mask(account.accountNumber) }}</template>
+          </p>
+          <p v-else class="bank-name warn">
+            The bank name and number are missing. Add the account again so your pay can be sent.
+          </p>
+          <button type="button" class="link" @click="editingBank = true">
+            {{ account.accountNumber ? 'Change account' : 'Add account details' }}
+          </button>
         </div>
 
         <div v-else-if="!editingBank" class="bank-missing">
@@ -136,6 +147,7 @@ const savingBank = ref(false);
 const bankError = ref('');
 const bankSaved = ref('');
 const withdrawing = ref(false);
+const withdrawError = ref('');
 const jobs = ref<any[]>([]);
 const loading = ref(true);
 const accepting = ref(false);
@@ -215,12 +227,12 @@ const saveBank = async () => {
 
 const withdraw = async () => {
   withdrawing.value = true;
-  bankError.value = '';
+  withdrawError.value = '';
   try {
     await payout_api.withdraw(earnings.value);
     await loadMoney();
   } catch (e: any) {
-    bankError.value = e?.response?.data?.message || 'Could not start the withdrawal';
+    withdrawError.value = e?.response?.data?.message || 'Could not start the withdrawal';
   } finally {
     withdrawing.value = false;
   }
@@ -501,6 +513,11 @@ h1 {
   margin: 0;
   font-size: 14.5px;
   color: var(--ink);
+}
+
+.bank-name.warn {
+  color: #b45309;
+  font-weight: 650;
 }
 
 .bank-name {
