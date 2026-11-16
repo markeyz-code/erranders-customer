@@ -1008,8 +1008,9 @@ useHead({
 /* Hero: fixed heights so switching slides never moves the page. */
 .hero {
   display: grid;
-  gap: 36px;
-  max-width: 1120px;
+  gap: 40px;
+  /* Matched to the Decluttered hero: the same container, the same two-column rhythm. */
+  max-width: 1240px;
   margin: 0 auto;
   padding: 32px 20px 32px;
   min-width: 0;
@@ -1021,8 +1022,9 @@ useHead({
 
 @media (min-width: 960px) {
   .hero {
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
     align-items: center;
+    gap: 56px;
     padding: 24px 20px 32px;
   }
 }
