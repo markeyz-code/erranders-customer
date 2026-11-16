@@ -1,7 +1,7 @@
 <template>
   <!-- Navbar Wrapper -->
   <nav 
-    class="fixed top-0 left-1/2 -translate-x-1/2 z-[60] w-[95%] transition-all duration-500 rounded-b-[2rem]"
+    class="fixed top-3 left-1/2 -translate-x-1/2 z-[60] w-[95%] transition-all duration-500 rounded-[2rem]"
     :class="[
       scrolled
         ? 'bg-white border border-gray-50 shadow-[0_8px_30px_rgb(0,0,0,0.08)] py-2.5'
