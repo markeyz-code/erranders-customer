@@ -29,7 +29,11 @@ const readStored = (): boolean | null => {
   }
 };
 
-const apply = (dark: boolean, persist: boolean) => {
+const apply = (_dark: boolean, _persist: boolean) => {
+  // Dark mode is off. The switch is gone from the interface, and a value left in storage from an earlier build
+  // could otherwise bring the dark theme back on a device nobody can change it on.
+  const dark = false;
+  const persist = true;
   try {
     if (typeof document !== 'undefined') {
       const root = document.documentElement;

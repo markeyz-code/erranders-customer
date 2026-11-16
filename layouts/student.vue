@@ -160,15 +160,7 @@
           </button>
 
           <!-- Theme toggle: on phones too, since the OS setting no longer decides. -->
-          <button
-            type="button"
-            @click="toggleTheme"
-            class="theme-switch w-9 h-9 sm:w-10 sm:h-10"
-            aria-label="Switch between light and dark"
-          >
-            <Moon class="glyph-moon w-4 h-4 sm:w-[18px] sm:h-[18px]" />
-            <Sun class="glyph-sun w-4 h-4 sm:w-[18px] sm:h-[18px]" />
-          </button>
+          
 
           <!-- Search Icon -->
           <NuxtLink to="/dashboard/search" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-50 flex items-center justify-center border border-gray-50 hover:bg-gray-100 transition-all active:scale-95">
@@ -376,16 +368,7 @@
               <div v-if="unreadCount > 0" class="absolute top-2.5 right-2.5 w-2 h-2 bg-[#FF5C1A] border border-white rounded-full"></div>
             </NuxtLink>
 
-            <button
-              type="button"
-              @click="toggleTheme"
-              class="theme-switch w-11 h-11"
-              aria-label="Switch between light and dark"
-              title="Light or dark"
-            >
-              <Moon class="glyph-moon w-[18px] h-[18px]" />
-              <Sun class="glyph-sun w-[18px] h-[18px]" />
-            </button>
+            
 
             <div class="w-px h-8 border-l border-dashed border-[#E7E2DA]"></div>
 
@@ -625,7 +608,6 @@ const handleLogoutClick = () => {
   logoutModalOpen.value = true
 }
 
-const { isDark, toggleTheme } = useColorMode();
 
 onMounted(() => {
   checkTeam();

@@ -215,22 +215,7 @@
             </template>
           </div>
 
-          <!-- Theme switch -->
-          <!--
-            Both glyphs are in the DOM and CSS picks one. The switch no longer depends on a reactive
-            value, so a problem in that value cannot blank the page; the class toggle is the only thing
-            that has to work.
-          -->
-          <button
-            type="button"
-            class="theme-switch ml-2"
-            aria-label="Switch between light and dark"
-            title="Light or dark"
-            @click="toggleTheme"
-          >
-            <Moon class="glyph-moon h-5 w-5" />
-            <Sun class="glyph-sun h-5 w-5" />
-          </button>
+
 
           <!-- Cart Icon -->
           <NuxtLink to="/cart" class="relative p-2.5 rounded-full bg-white border border-gray-25 hover:shadow-sm hover:border-gray-300 transition-all flex items-center justify-center ml-2">
@@ -782,7 +767,6 @@ const scrolled = ref(false)
 const $route = useRoute()
 const { user, logOut } = useUser()
 
-const { isDark, toggleTheme } = useColorMode()
 const { itemCount: cartItemCount } = useCart()
 const { globalFilter, setFilter, globalFiltersList, fetchCategories } = useGlobalFilter()
 
