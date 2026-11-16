@@ -81,21 +81,58 @@
         </div>
 
         <form v-if="editingBank || !account.verified" class="bank-form" @submit.prevent="saveBank">
-          <label class="field">
+          <!-- Bank: searchable, because the list runs to hundreds of entries. -->
+          <div class="field bank-field">
             <span class="flabel">Bank</span>
-            <select v-model="bank.bankCode" required>
-              <option value="">Choose your bank</option>
-              <option v-for="b in banks" :key="b.code" :value="b.code">{{ b.name }}</option>
-            </select>
-          </label>
+            <button type="button" class="bank-trigger" :aria-expanded="bankOpen" @click="bankOpen = !bankOpen; bankQuery = ''">
+              <span :class="{ placeholder: !selectedBankName }">{{ selectedBankName || 'Choose your bank' }}</span>
+              <ChevronDown class="w-4 h-4" aria-hidden="true" />
+            </button>
 
-          <label class="field">
+            <div v-if="bankOpen" class="bank-menu">
+              <input
+                v-model="bankQuery"
+                type="text"
+                class="bank-search"
+                placeholder="Search your bank"
+                aria-label="Search banks"
+              />
+              <div class="bank-list">
+                <button
+                  v-for="b in filteredBanks"
+                  :key="b.code"
+                  type="button"
+                  class="bank-option"
+                  :class="{ on: bank.bankCode === b.code }"
+                  @click="pickBank(b)"
+                >
+                  {{ b.name }}
+                  <Check v-if="bank.bankCode === b.code" class="w-4 h-4" aria-hidden="true" />
+                </button>
+                <p v-if="!filteredBanks.length" class="bank-empty">No bank matches "{{ bankQuery }}".</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
             <span class="flabel">Account number</span>
-            <input v-model="bank.accountNumber" inputmode="numeric" maxlength="10" placeholder="0123456789" required />
-          </label>
+            <input
+              v-model="bank.accountNumber"
+              inputmode="numeric"
+              maxlength="10"
+              placeholder="0123456789"
+              required
+            />
+            <span v-if="resolving" class="resolve-note">Checking that account…</span>
+            <span v-else-if="resolvedName" class="resolve-ok">Confirmed: {{ resolvedName }}</span>
+            <span v-else-if="accountNumber.length === 10 && !resolvedName" class="resolve-note">
+              {{ resolveError || 'Enter the bank first' }}
+            </span>
+          </div>
 
-          <button type="submit" class="btn-primary" :disabled="savingBank">
-            {{ savingBank ? 'Checking…' : 'Save account' }}
+          <!-- Saving waits for the bank to confirm the name. -->
+          <button type="submit" class="btn-primary" :disabled="!canSave">
+            {{ savingBank ? 'Saving…' : 'Save account' }}
           </button>
 
           <p v-if="bankError" class="error">{{ bankError }}</p>
@@ -128,8 +165,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { Wallet, Users, Calendar } from 'lucide-vue-next';
+import { ref, computed, watch, onMounted } from 'vue';
+import { Wallet, Users, Calendar, ChevronDown, Check } from 'lucide-vue-next';
 import { GATEWAY_ENDPOINT_WITH_AUTH } from '@/api_factory/axios.config';
 
 definePageMeta({ layout: 'student' });
@@ -145,6 +182,11 @@ const editingBank = ref(false);
 const bank = ref({ bankCode: '', accountNumber: '' });
 const savingBank = ref(false);
 const bankError = ref('');
+const bankOpen = ref(false);
+const bankQuery = ref('');
+const resolvedName = ref('');
+const resolving = ref(false);
+const resolveError = ref('');
 const bankSaved = ref('');
 const withdrawing = ref(false);
 const withdrawError = ref('');
@@ -190,6 +232,59 @@ const accept = async () => {
 
 const mask = (n?: string) => (n ? `••••${n.slice(-4)}` : '');
 
+const accountNumber = computed(() => String(bank.value.accountNumber || '').replace(/\D/g, ''));
+const selectedBankName = computed(() => banks.value.find((b) => b.code === bank.value.bankCode)?.name || '');
+
+const filteredBanks = computed(() => {
+  const q = bankQuery.value.trim().toLowerCase();
+  if (!q) return banks.value;
+  return banks.value.filter((b) => String(b.name).toLowerCase().includes(q));
+});
+
+/**
+ * The name on the account, confirmed by the bank before anything is saved.
+ *
+ * This runs the moment the tenth digit is typed, so the person is not left pressing Save to find out the
+ * number was wrong. Save stays disabled until the bank answers with a name.
+ */
+watch(
+  [accountNumber, () => bank.value.bankCode],
+  async ([num, code]) => {
+    resolvedName.value = '';
+    resolveError.value = '';
+
+    if (num.length !== 10) return;
+    if (!code) {
+      resolveError.value = 'Choose your bank first.';
+      return;
+    }
+
+    resolving.value = true;
+    try {
+      const res: any = await payout_api.resolveAccount(num, code);
+      const data = res?.data || {};
+      const name = data?.account_name || data?.data?.account_name || '';
+      if (name) resolvedName.value = name;
+      else resolveError.value = 'That account could not be confirmed.';
+    } catch (e: any) {
+      resolveError.value =
+        e?.response?.data?.message || 'That account could not be confirmed. Check the number and bank.';
+    } finally {
+      resolving.value = false;
+    }
+  },
+);
+
+const canSave = computed(
+  () => Boolean(resolvedName.value) && accountNumber.value.length === 10 && Boolean(bank.value.bankCode) && !savingBank.value,
+);
+
+const pickBank = (b: any) => {
+  bank.value.bankCode = b.code;
+  bankOpen.value = false;
+  bankQuery.value = '';
+};
+
 const loadMoney = async () => {
   try {
     const [acc, list]: any = await Promise.all([payout_api.account(), payout_api.banks()]);
@@ -204,15 +299,16 @@ const loadMoney = async () => {
 };
 
 const saveBank = async () => {
+  if (!canSave.value) return;
   savingBank.value = true;
   bankError.value = '';
   bankSaved.value = '';
   try {
-    const chosen = banks.value.find((b) => b.code === bank.value.bankCode);
     const res: any = await payout_api.saveAccount({
-      accountNumber: bank.value.accountNumber,
+      accountNumber: accountNumber.value,
       bankCode: bank.value.bankCode,
-      bankName: chosen?.name,
+      bankName: selectedBankName.value,
+      accountName: resolvedName.value,
     });
     const saved = res?.data || {};
     account.value = { ...saved, verified: true };
@@ -598,6 +694,115 @@ h1 {
   margin: 0;
   font-size: 13.5px;
   font-weight: 650;
+  color: #15803d;
+}
+
+/* Searchable bank picker */
+.bank-field {
+  position: relative;
+}
+
+.bank-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 650;
+  text-align: left;
+  cursor: pointer;
+}
+
+.bank-trigger:hover,
+.bank-trigger[aria-expanded='true'] {
+  border-color: var(--accent);
+}
+
+.bank-trigger .placeholder {
+  color: var(--mute);
+  font-weight: 600;
+}
+
+.bank-menu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 30;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  box-shadow: 0 20px 44px rgba(23, 19, 15, 0.18);
+}
+
+.bank-search {
+  width: 100%;
+  padding: 11px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font-size: 15px;
+  outline: none;
+}
+
+.bank-list {
+  max-height: 264px;
+  overflow-y: auto;
+}
+
+.bank-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  font-size: 14.5px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.bank-option:last-child {
+  border-bottom: 0;
+}
+
+.bank-option:hover {
+  background: var(--orsoft);
+}
+
+.bank-option.on {
+  color: var(--accent);
+  font-weight: 750;
+}
+
+.bank-empty {
+  margin: 0;
+  padding: 16px 14px;
+  font-size: 14px;
+  color: var(--mute);
+}
+
+.resolve-note {
+  font-size: 13px;
+  color: var(--mute);
+}
+
+.resolve-ok {
+  font-size: 13.5px;
+  font-weight: 700;
   color: #15803d;
 }
 </style>

@@ -11,6 +11,13 @@ export const payout_api = {
 
   account: () => GATEWAY_ENDPOINT_WITH_AUTH.get('/wallets/payout-account'),
 
+  /** Ask Paystack who owns a number, before anything is saved. */
+  resolveAccount: (accountNumber: string, bankCode: string) =>
+    GATEWAY_ENDPOINT_WITH_AUTH.post('/payments/resolve-account', {
+      account_number: accountNumber,
+      bank_code: bankCode,
+    }),
+
   saveAccount: (data: { accountNumber: string; bankCode: string; bankName?: string }) =>
     GATEWAY_ENDPOINT_WITH_AUTH.put('/wallets/payout-account', data),
 
