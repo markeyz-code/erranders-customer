@@ -121,10 +121,9 @@ export default defineNuxtConfig({
             if (!id.includes('node_modules')) return;
             if (id.includes('firebase')) return 'firebase-vendor';
             // Mapbox is 2 MB and only used on the order tracker; keep it out of the shared bundle.
+            // Nothing else is split: separating vue or @vue from the entry broke initialisation order and
+            // the app rendered a blank page.
             if (id.includes('mapbox-gl')) return 'mapbox-vendor';
-            if (id.includes('lucide')) return 'icons-vendor';
-            if (id.includes('chart.js') || id.includes('echarts')) return 'charts-vendor';
-            if (id.includes('vue') || id.includes('pinia') || id.includes('@vue')) return 'vue-vendor';
           }
         }
       }
