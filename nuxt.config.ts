@@ -118,9 +118,13 @@ export default defineNuxtConfig({
       rollupOptions: {
         output: {
           manualChunks(id) {
-            if (id.includes('node_modules/firebase')) {
-              return 'firebase-vendor';
-            }
+            if (!id.includes('node_modules')) return;
+            if (id.includes('firebase')) return 'firebase-vendor';
+            // Mapbox is 2 MB and only used on the order tracker; keep it out of the shared bundle.
+            if (id.includes('mapbox-gl')) return 'mapbox-vendor';
+            if (id.includes('lucide')) return 'icons-vendor';
+            if (id.includes('chart.js') || id.includes('echarts')) return 'charts-vendor';
+            if (id.includes('vue') || id.includes('pinia') || id.includes('@vue')) return 'vue-vendor';
           }
         }
       }
@@ -164,28 +168,56 @@ export default defineNuxtConfig({
       ]
     },
     workbox: {
-      // There is no precached '/' to fall back to — globPatterns only covers js, css and images —
-      // so workbox threw 'non-precached-url: /' on every navigation and the page could not
-      // settle. Navigation is already handled by the NetworkFirst rule below, so the fallback
-      // is not needed.
+      /*
+       * Nothing is precached.
+       *
+       * globPatterns used to cover every js, css and image, so a first visit downloaded the whole build —
+       * 262 chunks and 12 MB — before the page could settle, and the cache grew with every deploy. Hashed
+       * files are already served with immutable headers, so the browser caches them on demand instead.
+       */
+      globPatterns: [],
       navigateFallback: null,
-      globPatterns: ['**/*.{js,css,png,svg,ico,webp,woff2}'],
       cleanupOutdatedCaches: true,
       skipWaiting: true,
       clientsClaim: true,
       runtimeCaching: [
         {
+          // Pages: network first, but keep only a small window so the cache cannot grow unbounded.
           urlPattern: ({ request }) => request.mode === 'navigate',
           handler: 'NetworkFirst',
           options: {
-            cacheName: 'student-pages-cache-v3',
+            cacheName: 'student-pages-cache-v4',
             networkTimeoutSeconds: 3,
             expiration: {
-              maxEntries: 50,
-              maxAgeSeconds: 24 * 60 * 60,
+              maxEntries: 12,
+              maxAgeSeconds: 60 * 60,
             },
             cacheableResponse: {
               statuses: [0, 200],
+            },
+          },
+        },
+        {
+          // Hashed build files never change, so a cache hit is always correct.
+          urlPattern: /\/_nuxt\/.*\.(js|css|woff2)$/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'student-build-v1',
+            expiration: {
+              maxEntries: 120,
+              maxAgeSeconds: 60 * 60 * 24 * 30,
+            },
+          },
+        },
+        {
+          // Images: capped, because these are what actually filled the cache before.
+          urlPattern: /\.(png|jpg|jpeg|webp|svg|gif)$/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'student-images-v1',
+            expiration: {
+              maxEntries: 80,
+              maxAgeSeconds: 60 * 60 * 24 * 7,
             },
           },
         },
@@ -196,7 +228,6 @@ export default defineNuxtConfig({
     },
     client: {
       installPrompt: true,
-      periodicSyncForUpdates: 60
     },
     devOptions: {
       enabled: false,
