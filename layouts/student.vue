@@ -335,7 +335,7 @@
     </Teleport>
 
     <!-- Main Content -->
-    <main class="dash flex-1 w-full lg:w-auto lg:ml-[108px] transition-all duration-700 py-2.5 px-0 sm:p-4 lg:p-10 pb-28 lg:pb-32 overflow-x-hidden">
+    <main class="dash flex-1 w-full lg:w-auto lg:ml-[108px] transition-all duration-700 py-2.5 px-4 sm:p-4 lg:p-10 pb-28 lg:pb-32 overflow-x-hidden">
 
       <!-- Desktop manifest header -->
       <div v-if="!route.path.startsWith('/vendors') && !isOrderTracker" class="hidden lg:block mb-8 animate-fade-in">
